@@ -25,6 +25,17 @@ Data can be found in the folder data/.
 
 ### Instructions to run the code
 
+You will need to have maven installed in your system. To download the 
+dependencies, run
+
+    mvn dependency:copy-dependencies
+        
+Next compile using : 
+    
+    mvn compile     
+
+Finally, here are the options:
+
 1. sh run.sh Rel : Trains and tests the relevance classifier. Output file log/Rel.out
 
 2. sh run.sh Pair : Trains and tests the LCA classifier. Output file log/Pair.out
