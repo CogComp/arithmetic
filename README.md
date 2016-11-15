@@ -6,14 +6,14 @@
 Code and data used for the paper
 
 Subhro Roy and Dan Roth.
-Unit Dependency Graph and its Application to Arithmetic Word Problem Solving
-AAAI 2017
+Unit Dependency Graph and its Application to Arithmetic Word Problem Solving.
+AAAI 2017.
 
 Also includes a cleaner implementation of our solver described in
 
-Subhro Roy and Dan Roth
-Solving General Arithmetic Word Problems
-EMNLP 2015
+Subhro Roy and Dan Roth.
+Solving General Arithmetic Word Problems.
+EMNLP 2015.
 
 If you use the code or data, please cite the above publications.
 
