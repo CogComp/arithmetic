@@ -1,0 +1,43 @@
+Dataset : allArith
+Size : 415
+ReduceLexicalOverlap : true
+ReduceTemplateOverlap : false
+Grammatically Correct : false
+
+Lexical Overlap : 0.053077201909194335
+Template Overlap : 0.15979279343581404
+
+Kushman Performance :
+
+==> log/0.out <==
+FINAL TOTAL TEST STATS:   All Total   MargCorrNumerical: 0.5542168674698795 MargCorrEquations: 0.5542168674698795
+
+==> log/1.out <==
+FINAL TOTAL TEST STATS:   All Total   MargCorrNumerical: 0.6987951807228916 MargCorrEquations: 0.6987951807228916
+
+==> log/2.out <==
+FINAL TOTAL TEST STATS:   All Total   MargCorrNumerical: 0.6144578313253012 MargCorrEquations: 0.6024096385542169
+
+==> log/3.out <==
+FINAL TOTAL TEST STATS:   All Total   MargCorrNumerical: 0.6867469879518072 MargCorrEquations: 0.6626506024096386
+
+==> log/4.out <==
+FINAL TOTAL TEST STATS:   All Total   MargCorrNumerical: 0.7228915662650602 MargCorrEquations: 0.6987951807228916
+
+Alges Performance : 
+
+==> results/fold0.txt <==
+(46, 35, 0.5679012345679012)
+
+==> results/fold1.txt <==
+(48, 34, 0.5853658536585366)
+
+==> results/fold2.txt <==
+(39, 43, 0.47560975609756095)
+
+==> results/fold3.txt <==
+(41, 41, 0.5)
+
+==> results/fold4.txt <==
+(38, 47, 0.4470588235294118)
+

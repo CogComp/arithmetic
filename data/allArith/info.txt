@@ -1,0 +1,33 @@
+Kushman Performance : 
+
+==> log/0.out <==
+FINAL TOTAL TEST STATS:   All Total   MargCorrNumerical: 0.7650602409638554 MargCorrEquations: 0.7469879518072289
+
+==> log/1.out <==
+FINAL TOTAL TEST STATS:   All Total   MargCorrNumerical: 0.7289156626506024 MargCorrEquations: 0.7289156626506024
+
+==> log/2.out <==
+FINAL TOTAL TEST STATS:   All Total   MargCorrNumerical: 0.7108433734939759 MargCorrEquations: 0.6867469879518072
+
+==> log/3.out <==
+FINAL TOTAL TEST STATS:   All Total   MargCorrNumerical: 0.7951807228915663 MargCorrEquations: 0.7771084337349398
+
+==> log/4.out <==
+FINAL TOTAL TEST STATS:   All Total   MargCorrNumerical: 0.6826347305389222 MargCorrEquations: 0.6826347305389222
+
+Alges Performance : 
+
+==> results/fold0.txt <==
+(97, 67, 0.5914634146341463)
+
+==> results/fold1.txt <==
+(93, 71, 0.5670731707317073)
+
+==> results/fold2.txt <==
+(102, 61, 0.6257668711656442)
+
+==> results/fold3.txt <==
+(101, 63, 0.6158536585365854)
+
+==> results/fold4.txt <==
+(103, 63, 0.6204819277108434)

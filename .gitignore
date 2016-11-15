@@ -1,0 +1,15 @@
+target/*
+.*
+log/*
+data/vector*
+data/train*
+data/test*
+/target
+*~
+models/*
+*cache*
+dependencyOld/*
+src/main/resources/*
+data_nn/*
+*.pyc
+*.iml

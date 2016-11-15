@@ -1,0 +1,42 @@
+// Addition patterns
+
+EXPR1 added EXPR2 --> EXPR1 + EXPR2
+EXPR1 add EXPR2 --> EXPR1 + EXPR2
+sum EXPR1 EXPR2 --> EXPR1 + EXPR2 REPEAT
+added EXPR1 EXPR2 --> EXPR1 + EXPR2 REPEAT
+add EXPR1 EXPR2 --> EXPR1 + EXPR2 REPEAT
+EXPR1 plus EXPR2 --> EXPR1 + EXPR2
+
+
+// Subtraction
+
+difference EXPR1 EXPR2 --> EXPR1 - EXPR2
+EXPR1 minus EXPR2 --> EXPR1 - EXPR2
+subtracted EXPR1 EXPR2 --> EXPR2 - EXPR1 
+subtract EXPR1 EXPR2 --> EXPR2 - EXPR1 
+EXPR1 subtracted EXPR2 --> EXPR2 + EXPR1
+EXPR1 subtract EXPR2 --> EXPR2 + EXPR1
+
+
+// Multiplication
+
+product EXPR1 EXPR2 --> EXPR1 * EXPR2 REPEAT
+multiplied EXPR1 EXPR2 --> EXPR1 * EXPR2 REPEAT
+multiply EXPR1 EXPR2 --> EXPR1 * EXPR2 REPEAT
+EXPR1 times EXPR2 --> EXPR1 * EXPR2
+EXPR1 multiplied EXPR2 --> EXPR1 * EXPR2
+EXPR1 multiply EXPR2 --> EXPR1 * EXPR2
+
+
+// Division
+
+divided EXPR1 EXPR2 --> EXPR1 / EXPR2
+divide EXPR1 EXPR2 --> EXPR1 / EXPR2
+EXPR1 divided EXPR2 --> EXPR1 / EXPR2
+EXPR1 fraction EXPR2 --> EXPR1 / EXPR2
+fraction EXPR1 EXPR2 --> EXPR2 / EXPR1
+EXPR1 percentage EXPR2 --> EXPR1 / EXPR2
+percentage EXPR1 EXPR2 --> EXPR2 / EXPR1
+ratio EXPR1 EXPR2 --> EXPR1 / EXPR2
+
+
