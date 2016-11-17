@@ -55,9 +55,23 @@ public class Node implements Serializable {
 		case "MUL" : labelSym = "*"; break;
 		case "DIV" : labelSym = "/"; break;
 		}
-		return "("+children.get(0).toString() + labelSym + children.get(1).toString()+")";
+		return "("+children.get(0).toString() + labelSym +
+				children.get(1).toString()+")";
 	}
-	
+
+	public String toStringForPython() {
+		if(children.size() == 0) return "" + qs.val + "||" + quantIndex;
+		String labelSym = null;
+		switch(label) {
+			case "ADD" : labelSym = "+"; break;
+			case "SUB" : labelSym = "-"; break;
+			case "MUL" : labelSym = "*"; break;
+			case "DIV" : labelSym = "/"; break;
+		}
+		return "("+children.get(0).toStringForPython() + labelSym +
+				children.get(1).toStringForPython()+")";
+	}
+
 	public List<Node> getLeaves() {
 		List<Node> leaves = new ArrayList<Node>();
 		if(children.size() == 0) {

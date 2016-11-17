@@ -17,10 +17,63 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import structure.KushmanFormat;
-import structure.Node;
-import structure.Problem;
+import structure.*;
 import utils.Tools;
+
+class QuantSchemaPython {
+	List<String> unit;
+	List<String> rate;
+	String verb;
+
+	public QuantSchemaPython(QuantitySchema qs) {
+		if(qs.unit != null) {
+			unit = Arrays.asList(qs.unit.trim().split(" "));
+		} else {
+			unit = new ArrayList<>();
+		}
+		if(qs.rateUnit != null) {
+			rate = Arrays.asList(qs.rateUnit.getTokenizedSurfaceForm().trim().split(" "));
+		} else {
+			rate = new ArrayList<>();
+		}
+		if(qs.verb != null) {
+			verb = qs.verb;
+		} else {
+			verb = "";
+		}
+	}
+}
+
+class ProblemPython {
+	int id;
+	List<String> tokens, lemmas, posTags, tokenIdToNum, questionTokens;
+	List<QuantSchemaPython> quantSchemas;
+	String expression;
+	Double solution;
+
+	public ProblemPython(Problem prob) {
+		id = prob.id;
+		tokens = new ArrayList<>();
+		lemmas = new ArrayList<>();
+		posTags = new ArrayList<>();
+		tokenIdToNum = new ArrayList<>();
+		quantSchemas = new ArrayList<>();
+		for(int i=0; i<prob.ta.size(); ++i) {
+			tokens.add(prob.ta.getToken(i));
+			posTags.add(prob.posTags.get(i).getLabel());
+			lemmas.add(prob.lemmas.get(i));
+		}
+		for(QuantSpan qs : prob.quantities) {
+			tokenIdToNum.add(prob.ta.getTokenIdFromCharacterOffset(qs.start)+"||"+qs.val);
+		}
+		for(QuantitySchema qs : prob.schema.quantSchemas) {
+			quantSchemas.add(new QuantSchemaPython(qs));
+		}
+		questionTokens = prob.schema.questionTokens;
+		expression = prob.expr.toStringForPython();
+		solution = prob.answer;
+	}
+}
 
 public class Reader {
 	
@@ -172,7 +225,18 @@ public class Reader {
 
 
 	}
-	
+
+	public static void printQuestionsForPython(String dir, String outputFile) throws Exception {
+		List<Problem> probs = readProblemsFromJson(dir);
+		List<ProblemPython> probsPython = new ArrayList<>();
+		for(Problem prob : probs) {
+			probsPython.add(new ProblemPython(prob));
+		}
+		Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+		String json = gson.toJson(probsPython);
+		FileUtils.writeStringToFile(new File(outputFile), json);
+	}
+
 	public static void main(String args[]) throws Exception {
 //		performConsistencyChecks(Params.allArithDir);
 //		performConsistencyChecks(Params.allArithDirLex);
@@ -192,7 +256,9 @@ public class Reader {
 //			System.out.println("Answer : "+prob.answer);
 //		}
 
-		analyzeResults("log/InfLCA_v2.out", "log/InfAll_v2.out");
+//		analyzeResults("log/InfLCA_v2.out", "log/InfAll_v2.out");
+
+		printQuestionsForPython("data/allArith/", "allArithPython.txt");
 	}
 
 }
