@@ -7,7 +7,6 @@ import rate.RateDriver;
 import relevance.RelDriver;
 import run.Annotations;
 import run.RunDriver;
-import structure.ExtractRate;
 import structure.Problem;
 import utils.Folds;
 import utils.Params;
@@ -33,7 +32,7 @@ public class ConsDriver {
 		double bestRun = 0.0;
 		double bestRel = 0.0;
 		double bestAcc = 0.0;
-		if(Params.killRun) {
+		if(Params.noUDG) {
 			for(int c=0; c<vals.length; ++c) {
 				ConsInfSolver.wRel = vals[c];
 				double acc = ConsInfSolver.constrainedInf(validation, relModel, 
@@ -77,7 +76,8 @@ public class ConsDriver {
 		tune(split.get(1), relModel, pairModel, runModel, rateModel);
 	}
 	
-	public static void tunedCrossValAndRetrain(String dataset) throws Exception {
+	public static void tunedCrossValAndRetrain(String dataset, String noUDG) throws Exception {
+		Params.noUDG = Boolean.parseBoolean(noUDG);
 		double acc = 0.0;
 		int numFolds = Folds.getNumFolds(dataset);
 		for(int i=0;i<numFolds;i++) {

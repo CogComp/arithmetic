@@ -92,7 +92,7 @@ public class Trainer {
 			str = str.substring(0, str.length()-1)+"},";
 		}
 		str = str.substring(0, str.length()-1)+"}}";
-		if(!Params.killRun) {
+		if(!Params.noUDG) {
 			// TODO : Implementation for rate and run tables
 //			for(int i=-1; i<prob.quantities.size(); ++i) {
 //				str += rateModel.infSolver.getBestStructure(rateModel.wv, new RateX(prob, i)) + "  ";

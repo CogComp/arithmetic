@@ -1,10 +1,7 @@
 package utils;
 
 public class Params {
-	
-	public static String ai2Dir = "data/ai2/";
-	public static String ilDir = "data/illinois/";
-	public static String ccDir = "data/commoncore/";
+
 	public static String singleEqDir = "data/singleeq/";
 	public static String allArithDir = "data/allArith/";
 	public static String allArithDirLex = "data/allArithLex/";
@@ -17,7 +14,7 @@ public class Params {
 	public static String patternsFile = "data/patterns.txt";
 	
 	public static double validationFrac;
-	
-	public static boolean killRun = false;
+
+	public static boolean noUDG;
 	
 }

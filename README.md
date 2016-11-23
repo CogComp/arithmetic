@@ -5,22 +5,26 @@
 
 Code and data used for the paper
 
-Subhro Roy and Dan Roth.
-Unit Dependency Graph and its Application to Arithmetic Word Problem Solving.
-AAAI 2017.
+  Subhro Roy and Dan Roth.
+  Unit Dependency Graph and its Application to Arithmetic Word Problem Solving.
+  AAAI 2017.
 
 Also includes a cleaner implementation of our solver described in
 
-Subhro Roy and Dan Roth.
-Solving General Arithmetic Word Problems.
-EMNLP 2015.
+  Subhro Roy and Dan Roth.
+  Solving General Arithmetic Word Problems.
+  EMNLP 2015.
 
 If you use the code or data, please cite the above publications.
 
 
 ### Data
 
-Data can be found in the folder data/.
+Data can be found in the folders data/allArith, data/allArithLex, and data/allArithTmpl. Each data folder contains the following :
+
+* questions.json :  file with all questions and corresponding answers
+* rateAnnotations.txt : file containing annotations for vertex labels of UDG. Each line contains a question id, and indices of the quantities which are rates. The index -1 refers to the question part, indicating that the question is asking for a rate.
+* fold<i>.txt : where i=0, ..., <num_folds> - 1. Each fold file contains indices of the problems belonging to the fold. Each problem from questions.json should be present in one of the fold files.   
 
 
 ### Instructions to run the code
@@ -34,19 +38,22 @@ Next compile using :
     
     mvn compile     
 
-Finally, here are the options:
+Finally, run the following:
 
-1. sh run.sh Rel : Trains and tests the relevance classifier. Output file log/Rel.out
+  sh run.sh <dataset_folder> <mode>
 
-2. sh run.sh Pair : Trains and tests the LCA classifier. Output file log/Pair.out
-
-3. sh run.sh Vertex : Trains and tests the vertex label classifier. Output file log/Vertex.out
-
-4. sh run.sh Edge : Trains and tests the edge label classifier. Output file log/Edge.out
-
-5. sh run.sh LCA : Trains and tests the LCA++ solver (EMNLP 2015)
-
-6. sh run.sh UnitDep : Trains and tests the UnitDep solver (AAAI 2017)
+where 
+  
+  * dataset_folder : folder with questions.json, rateAnnotations.txt, and fold files, as described above.
+  * mode : takes one of the following options
+    * Rel : Trains and tests the relevance classifier. Output file log/Rel.out
+    * Pair : Trains and tests the LCA classifier. Output file log/Pair.out
+    * Vertex : Trains and tests the vertex label classifier. Output file log/Vertex.out
+    * Edge : Trains and tests the edge label classifier. Output file log/Edge.out
+    * GraphDecompose : Trains and tests the decomposed UDG prediction model. Output file log/GraphDecompose.out
+    * GraphJoint : Trains and tests the joint UDG prediction model. Output file log/GraphJoint.out
+    * LCA : Trains and tests the LCA++ solver (EMNLP 2015). Output file log/LCA.out
+    * UnitDep : Trains and tests the UnitDep solver (AAAI 2017). Output file log/UnitDep.out
 
 
 ### Other issues
