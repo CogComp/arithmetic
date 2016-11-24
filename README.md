@@ -5,14 +5,14 @@
 
 Code and data used for the paper
 
-  Subhro Roy and Dan Roth.
-  Unit Dependency Graph and its Application to Arithmetic Word Problem Solving.
+  Subhro Roy and Dan Roth.  
+  Unit Dependency Graph and its Application to Arithmetic Word Problem Solving.  
   AAAI 2017.
 
 Also includes a cleaner implementation of our solver described in
 
-  Subhro Roy and Dan Roth.
-  Solving General Arithmetic Word Problems.
+  Subhro Roy and Dan Roth.  
+  Solving General Arithmetic Word Problems.  
   EMNLP 2015.
 
 If you use the code or data, please cite the above publications.
@@ -24,7 +24,7 @@ Data can be found in the folders data/allArith, data/allArithLex, and data/allAr
 
 * questions.json :  file with all questions and corresponding answers
 * rateAnnotations.txt : file containing annotations for vertex labels of UDG. Each line contains a question id, and indices of the quantities which are rates. The index -1 refers to the question part, indicating that the question is asking for a rate.
-* fold<i>.txt : where i=0, ..., <num_folds> - 1. Each fold file contains indices of the problems belonging to the fold. Each problem from questions.json should be present in one of the fold files.   
+* fold\<i\>.txt : where i=0, ..., \<num_folds\> - 1. Each fold file contains indices of the problems belonging to the fold. Each problem from questions.json should be present in one of the fold files.   
 
 
 ### Instructions to run the code
@@ -40,7 +40,7 @@ Next compile using :
 
 Finally, run the following:
 
-  sh run.sh <dataset_folder> <mode>
+  sh run.sh \<dataset_folder\> \<mode\>
 
 where 
   
