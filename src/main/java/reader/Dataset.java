@@ -97,16 +97,16 @@ public class Dataset {
 		return newProbs;
 	}
 	
-	public static void computeProbOverlapStat() throws Exception {
-		String[] dirs = {Params.ai2Dir, Params.ilDir, Params.ccDir, Params.singleEqDir};
-		Set<String> uniqueQuestions = new HashSet<String>();	
-		for(String dir1 : dirs) {
-			uniqueQuestions.clear();
-			List<KushmanFormat> probs1 = readNumNormProblemsFromJsonWithoutAnn(dir1); 
-			for(KushmanFormat prob : probs1) {
-				String str = getNormalizedText(prob.sQuestion);
-				uniqueQuestions.add(str);
-			}
+//	public static void computeProbOverlapStat() throws Exception {
+//		String[] dirs = {Params.ai2Dir, Params.ilDir, Params.ccDir, Params.singleEqDir};
+//		Set<String> uniqueQuestions = new HashSet<String>();
+//		for(String dir1 : dirs) {
+//			uniqueQuestions.clear();
+//			List<KushmanFormat> probs1 = readNumNormProblemsFromJsonWithoutAnn(dir1);
+//			for(KushmanFormat prob : probs1) {
+//				String str = getNormalizedText(prob.sQuestion);
+//				uniqueQuestions.add(str);
+//			}
 //			for(String dir2 : dirs) {
 //				List<KushmanFormat> probs2 = readNumNormProblemsFromJsonWithoutAnn(dir2); 
 //				int repitition = 0;
@@ -118,7 +118,7 @@ public class Dataset {
 //				}
 //				System.out.println(dir1 +" "+dir2+" "+repitition);
 //			}
-		}
+//		}
 //		for(String dir1 : dirs) {
 //			uniqueQuestions.clear();
 //			List<KushmanFormat> probs1 = readNumNormProblemsFromJsonWithoutAnn(dir1); 
@@ -132,115 +132,115 @@ public class Dataset {
 //			}
 //			System.out.println(dir1+" "+repitition);
 //		}
-		System.out.println(uniqueQuestions.size());
-	}
+//		System.out.println(uniqueQuestions.size());
+//	}
 	
-	public static void createPooledDataset() throws Exception {
-		List<KushmanFormat> pooled = new ArrayList<>();
-		List<KushmanFormat> probs = readNumNormProblemsFromJsonWithoutAnn(Params.ai2Dir);
-		probs.addAll(readNumNormProblemsFromJsonWithoutAnn(Params.ilDir));
-		probs.addAll(readNumNormProblemsFromJsonWithoutAnn(Params.ccDir));
-		Set<String> uniqueProbs = new HashSet<>();
-		int index = 0;
-		for(KushmanFormat prob : probs) {
-			if(uniqueProbs.contains(getNormalizedText(prob.sQuestion))) continue;
-			uniqueProbs.add(getNormalizedText(prob.sQuestion));
-			KushmanFormat ks = new KushmanFormat();
-			index ++;
-			if(index <= 1575) continue;
-			ks.iIndex = index;
-			ks.sQuestion = prob.sQuestion;
-			ks.quantities = prob.quantities;
-			ks.lEquations = prob.lEquations;
-			ks.lSolutions = prob.lSolutions;
-			ks.lAlignments = new ArrayList<>();
-			Problem p = new Problem(ks.iIndex, ks.sQuestion, ks.lSolutions.get(0));
-			p.extractQuantities();
-			p.expr = Node.parseNode(prob.lEquations.get(0));
-			List<Node> leaves = p.expr.getLeaves();
-			Set<Integer> matchedQuantIndices = new HashSet<>();
-			for(int j=0; j<leaves.size(); ++j) {
-				Node leaf = leaves.get(j);
-				int quantIndex = -1;
-				int numMatches = 0;
-				for(int i=0; i<ks.quantities.size(); ++i) {
-					QuantSpan qs = ks.quantities.get(i);
-					if(Tools.safeEquals(qs.val, leaf.val) && !matchedQuantIndices.contains(i)) {
-						quantIndex = i;
-						numMatches++;
-					}
-				}
-				if(numMatches > 1) {
-					// Ask for annotation
-					quantIndex = askForAlignmentAnnotation(ks.sQuestion, ks.lEquations, ks.quantities, j);
-				}
-				matchedQuantIndices.add(quantIndex);
-				leaf.quantIndex = quantIndex;
-				leaf.qs = ks.quantities.get(leaf.quantIndex);
-				ks.lAlignments.add(quantIndex);
-			}
-			pooled.add(ks);
-			if(index % 5 == 0) {
-				Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
-				String json = gson.toJson(pooled);
-				FileUtils.writeStringToFile(new File(Params.allArithDir+"questions"+index+".json"), json);
-			}
-		}
-		System.out.println("Now SingleEq");
-		probs.clear();
-		probs.addAll(readNumNormProblemsFromJsonWithoutAnn(Params.singleEqDir));
-		for(KushmanFormat prob : probs) {
-			if(uniqueProbs.contains(getNormalizedText(prob.sQuestion))) continue;
-			uniqueProbs.add(getNormalizedText(prob.sQuestion));
-			KushmanFormat ks = new KushmanFormat();
-			index ++;
-			if(index <= 1575) continue;
-			ks.iIndex = index;
-			ks.sQuestion = prob.sQuestion;
-			ks.quantities = prob.quantities;
-			ks.lSolutions = prob.lSolutions;
-			ks.lEquations = new ArrayList<>();
-			ks.lAlignments = new ArrayList<>();
-			Problem p = new Problem(ks.iIndex, ks.sQuestion, ks.lSolutions.get(0));
-			// Ask for equation annotation
-			String eq = askForEquationAnnotation(ks.sQuestion, prob.lEquations, ks.quantities);
-			if(eq.trim().equals("")) continue;
-			ks.lEquations.add(eq);
-			p.expr = Node.parseNode(ks.lEquations.get(0));
-			List<Node> leaves = p.expr.getLeaves();
-			Set<Integer> matchedQuantIndices = new HashSet<>();
-			for(int j=0; j<leaves.size(); ++j) {
-				Node leaf = leaves.get(j);
-				int quantIndex = -1;
-				int numMatches = 0;
-				for(int i=0; i<ks.quantities.size(); ++i) {
-					QuantSpan qs = ks.quantities.get(i);
-					if(Tools.safeEquals(qs.val, leaf.val) && !matchedQuantIndices.contains(i)) {
-						quantIndex = i;
-						numMatches++;
-					}
-				}
-				if(numMatches > 1) {
-					// Ask for annotation
-					quantIndex = askForAlignmentAnnotation(ks.sQuestion, ks.lEquations, ks.quantities, j);
-				}
-				matchedQuantIndices.add(quantIndex);
-				leaf.quantIndex = quantIndex;
-				leaf.qs = ks.quantities.get(leaf.quantIndex);
-				ks.lAlignments.add(quantIndex);
-			}
-			pooled.add(ks);
-			if(index % 5 == 0) {
-				Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
-				String json = gson.toJson(pooled);
-				FileUtils.writeStringToFile(new File(Params.allArithDir+"questions"+index+".json"), json);
-			}
-		}
-		Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
-		String json = gson.toJson(pooled);
-		FileUtils.writeStringToFile(new File(Params.allArithDir+"questions"+index+".json"), json);
-		
-	}
+//	public static void createPooledDataset() throws Exception {
+//		List<KushmanFormat> pooled = new ArrayList<>();
+//		List<KushmanFormat> probs = readNumNormProblemsFromJsonWithoutAnn(Params.ai2Dir);
+//		probs.addAll(readNumNormProblemsFromJsonWithoutAnn(Params.ilDir));
+//		probs.addAll(readNumNormProblemsFromJsonWithoutAnn(Params.ccDir));
+//		Set<String> uniqueProbs = new HashSet<>();
+//		int index = 0;
+//		for(KushmanFormat prob : probs) {
+//			if(uniqueProbs.contains(getNormalizedText(prob.sQuestion))) continue;
+//			uniqueProbs.add(getNormalizedText(prob.sQuestion));
+//			KushmanFormat ks = new KushmanFormat();
+//			index ++;
+//			if(index <= 1575) continue;
+//			ks.iIndex = index;
+//			ks.sQuestion = prob.sQuestion;
+//			ks.quantities = prob.quantities;
+//			ks.lEquations = prob.lEquations;
+//			ks.lSolutions = prob.lSolutions;
+//			ks.lAlignments = new ArrayList<>();
+//			Problem p = new Problem(ks.iIndex, ks.sQuestion, ks.lSolutions.get(0));
+//			p.extractQuantities();
+//			p.expr = Node.parseNode(prob.lEquations.get(0));
+//			List<Node> leaves = p.expr.getLeaves();
+//			Set<Integer> matchedQuantIndices = new HashSet<>();
+//			for(int j=0; j<leaves.size(); ++j) {
+//				Node leaf = leaves.get(j);
+//				int quantIndex = -1;
+//				int numMatches = 0;
+//				for(int i=0; i<ks.quantities.size(); ++i) {
+//					QuantSpan qs = ks.quantities.get(i);
+//					if(Tools.safeEquals(qs.val, leaf.val) && !matchedQuantIndices.contains(i)) {
+//						quantIndex = i;
+//						numMatches++;
+//					}
+//				}
+//				if(numMatches > 1) {
+//					// Ask for annotation
+//					quantIndex = askForAlignmentAnnotation(ks.sQuestion, ks.lEquations, ks.quantities, j);
+//				}
+//				matchedQuantIndices.add(quantIndex);
+//				leaf.quantIndex = quantIndex;
+//				leaf.qs = ks.quantities.get(leaf.quantIndex);
+//				ks.lAlignments.add(quantIndex);
+//			}
+//			pooled.add(ks);
+//			if(index % 5 == 0) {
+//				Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+//				String json = gson.toJson(pooled);
+//				FileUtils.writeStringToFile(new File(Params.allArithDir+"questions"+index+".json"), json);
+//			}
+//		}
+//		System.out.println("Now SingleEq");
+//		probs.clear();
+//		probs.addAll(readNumNormProblemsFromJsonWithoutAnn(Params.singleEqDir));
+//		for(KushmanFormat prob : probs) {
+//			if(uniqueProbs.contains(getNormalizedText(prob.sQuestion))) continue;
+//			uniqueProbs.add(getNormalizedText(prob.sQuestion));
+//			KushmanFormat ks = new KushmanFormat();
+//			index ++;
+//			if(index <= 1575) continue;
+//			ks.iIndex = index;
+//			ks.sQuestion = prob.sQuestion;
+//			ks.quantities = prob.quantities;
+//			ks.lSolutions = prob.lSolutions;
+//			ks.lEquations = new ArrayList<>();
+//			ks.lAlignments = new ArrayList<>();
+//			Problem p = new Problem(ks.iIndex, ks.sQuestion, ks.lSolutions.get(0));
+//			// Ask for equation annotation
+//			String eq = askForEquationAnnotation(ks.sQuestion, prob.lEquations, ks.quantities);
+//			if(eq.trim().equals("")) continue;
+//			ks.lEquations.add(eq);
+//			p.expr = Node.parseNode(ks.lEquations.get(0));
+//			List<Node> leaves = p.expr.getLeaves();
+//			Set<Integer> matchedQuantIndices = new HashSet<>();
+//			for(int j=0; j<leaves.size(); ++j) {
+//				Node leaf = leaves.get(j);
+//				int quantIndex = -1;
+//				int numMatches = 0;
+//				for(int i=0; i<ks.quantities.size(); ++i) {
+//					QuantSpan qs = ks.quantities.get(i);
+//					if(Tools.safeEquals(qs.val, leaf.val) && !matchedQuantIndices.contains(i)) {
+//						quantIndex = i;
+//						numMatches++;
+//					}
+//				}
+//				if(numMatches > 1) {
+//					// Ask for annotation
+//					quantIndex = askForAlignmentAnnotation(ks.sQuestion, ks.lEquations, ks.quantities, j);
+//				}
+//				matchedQuantIndices.add(quantIndex);
+//				leaf.quantIndex = quantIndex;
+//				leaf.qs = ks.quantities.get(leaf.quantIndex);
+//				ks.lAlignments.add(quantIndex);
+//			}
+//			pooled.add(ks);
+//			if(index % 5 == 0) {
+//				Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+//				String json = gson.toJson(pooled);
+//				FileUtils.writeStringToFile(new File(Params.allArithDir+"questions"+index+".json"), json);
+//			}
+//		}
+//		Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+//		String json = gson.toJson(pooled);
+//		FileUtils.writeStringToFile(new File(Params.allArithDir+"questions"+index+".json"), json);
+//
+//	}
 	
 	
 	public static void createDatasetFromOldFormat(String dir) throws Exception {
