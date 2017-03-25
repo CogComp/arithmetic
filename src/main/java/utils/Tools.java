@@ -379,4 +379,10 @@ public class Tools {
 		}
 		return tokens;
 	}
+
+	public static <K> void addToHighestMap(Map<K, Double> map, K key, Double val) {
+		if(!map.containsKey(key) || (map.get(key) < val)) {
+			map.put(key, val);
+		}
+	}
 }

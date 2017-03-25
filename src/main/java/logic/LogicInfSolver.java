@@ -29,7 +29,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		double bestScore = -Double.MAX_VALUE;
 		LogicY best = null;
 		for(String label : Logic.labels) {
-			for(int infRule=0; infRule<4; infRule++) {
+			for(int infRule=0; infRule<Logic.maxNumInferenceTypes; infRule++) {
 				double score = weight.dotProduct(featGen.getFeatureVector(
 						ins, new LogicY(label, infRule)));
 				if (bestScore < score) {
@@ -49,7 +49,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 	public LogicY getLatentBestStructure(LogicX ins, LogicY gold, WeightVector weight) {
 		double bestScore = -Double.MAX_VALUE;
 		LogicY best = null;
-		for(int infRule=0; infRule<4; infRule++) {
+		for(int infRule=0; infRule<Logic.maxNumInferenceTypes; infRule++) {
 			double score = weight.dotProduct(featGen.getFeatureVector(
 					ins, new LogicY(gold.label, infRule)));
 			if (bestScore < score) {
