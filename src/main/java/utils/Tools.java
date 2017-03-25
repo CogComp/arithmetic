@@ -337,4 +337,46 @@ public class Tools {
 			System.out.println(cons.getLabel()+" : "+cons.getSurfaceForm()+" : "+cons.getSpan());
 		}
 	}
+
+	public static double jaccardSim(List<String> phrase1, List<String> phrase2) {
+		Set<String> tokens1 = new HashSet<>();
+		tokens1.addAll(phrase1);
+		Set<String> tokens2 = new HashSet<>();
+		tokens2.addAll(phrase2);
+		int union = tokens1.size(), intersection = 0;
+		for (String token : tokens2) {
+			if (tokens1.contains(token)) {
+				intersection++;
+			} else {
+				union++;
+			}
+		}
+		return intersection*1.0/union;
+
+	}
+
+	public static double jaccardEntail(List<String> phrase1, List<String> phrase2) {
+		Set<String> tokens1 = new HashSet<>();
+		tokens1.addAll(phrase1);
+		Set<String> tokens2 = new HashSet<>();
+		tokens2.addAll(phrase2);
+		int intersection = 0;
+		for (String token : tokens2) {
+			if (tokens1.contains(token)) {
+				intersection++;
+			}
+		}
+		return intersection*1.0/tokens2.size();
+	}
+
+	public static List<String> consToList(Constituent cons) {
+		List<String> tokens = new ArrayList<>();
+		if (cons == null) {
+			return tokens;
+		}
+		for(int i=cons.getStartSpan(); i<cons.getEndSpan(); ++i) {
+			tokens.add(cons.getTextAnnotation().getToken(i));
+		}
+		return tokens;
+	}
 }

@@ -1,7 +1,6 @@
 package structure;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,6 +21,7 @@ public class QuantitySchema {
 	public String verbLemma;
 	public List<Constituent> connectedNPs;
 	public Constituent subject;
+	public Constituent object;
 	public Constituent rateUnit;
 	
 	public QuantitySchema(QuantSpan qs) {
@@ -32,7 +32,7 @@ public class QuantitySchema {
 	@Override
 	public String toString() {
 		return "Num: "+qs.val+" Subject: "+subject+" Verb: "+verb+" Unit: "+unit +
-				" NPs: "+Arrays.asList(connectedNPs) + " Rate : "+rateUnit;
+				" Object: "+object+" Rate : "+rateUnit;
 	}
 	
 	public List<Constituent> getConnectedNPs(Problem prob) {
@@ -62,6 +62,21 @@ public class QuantitySchema {
 						npList.add(cons);
 						subject = cons;
 						break;
+					}
+				}
+			}
+			// Added for object detection
+			for(Relation relation : relations) {
+				if(relation.getRelationName().equals("iobj") ||
+						relation.getRelationName().equals("nmod")) {
+					Constituent dst = relation.getTarget();
+					for (Constituent cons : prob.chunks) {
+						if (cons.getStartSpan() <= dst.getStartSpan() &&
+								cons.getEndSpan() > dst.getStartSpan() &&
+								cons.getLabel().equals("NP")) {
+							object = cons;
+							break;
+						}
 					}
 				}
 			}
@@ -146,7 +161,7 @@ public class QuantitySchema {
 		}
 		return result;
 	}
-	
+
 	public Pair<String, Constituent> getUnit(Problem prob, int quantIndex) {
 		String unit = "";
 		int tokenId = prob.ta.getTokenIdFromCharacterOffset(
@@ -204,7 +219,7 @@ public class QuantitySchema {
 		return new Pair<String, Constituent>(unit, quantPhrase);
 	}
 	
-	public Constituent getDependencyConstituentCoveringTokenId(
+	public static Constituent getDependencyConstituentCoveringTokenId(
 			Problem prob, int tokenId) {
 		for(int i=0; i<=2; ++i) {
 			for(Constituent cons : prob.dependency) {

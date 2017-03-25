@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import utils.Tools;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
@@ -19,6 +20,7 @@ public class Schema {
 	public Map<Integer, IntPair> coref;
 	public List<String> questionTokens;
 	public List<QuantitySchema> quantSchemas;
+	public QuantitySchema questionSchema;
 	
 	public Schema(Problem prob) {
 		problemId = prob.id;
@@ -71,31 +73,94 @@ public class Schema {
 				qs.unit = quantSchemas.get(i+1).unit;
 			}
 		}
+		createQuestionSchema(prob);
 	}
-	
-	public List<String> getQuestionTokens(Problem prob) {
-		List<String> questionTokens = new ArrayList<>();
-		// NPs from question
+
+	public IntPair getQuestionSpan(Problem prob) {
 		int questionSentId = Tools.getQuestionSentenceId(prob.ta);
 		int start = -1, end = -1;
-		for(int i=prob.ta.getSentence(questionSentId).getStartSpan(); 
-				i<prob.ta.getSentence(questionSentId).getEndSpan(); ++i) {
+		for(int i=prob.ta.getSentence(questionSentId).getStartSpan();
+			i<prob.ta.getSentence(questionSentId).getEndSpan(); ++i) {
 			if(prob.ta.getToken(i).equalsIgnoreCase("how")) {
 				start = i;
 				end = prob.ta.getSentence(questionSentId).getEndSpan();
 				for(int j=start; j<prob.ta.getSentence(questionSentId).getEndSpan(); ++j) {
-					if(prob.ta.getToken(j).contains(",") || 
+					if(prob.ta.getToken(j).contains(",") ||
 							prob.ta.getToken(j).contains("if")) {
 						end = j;
 						break;
 					}
 				}
-				for(int j=start; j<end; ++j) {
-					questionTokens.add(prob.lemmas.get(j));
+				return new IntPair(start, end);
+			}
+		}
+		return new IntPair(start, end);
+	}
+
+	public List<String> getQuestionTokens(Problem prob) {
+		List<String> questionTokens = new ArrayList<>();
+		IntPair quesSpan = getQuestionSpan(prob);
+		for(int j=quesSpan.getFirst(); j<quesSpan.getSecond(); ++j) {
+			questionTokens.add(prob.lemmas.get(j));
+		}
+		return questionTokens;
+	}
+
+	public void createQuestionSchema(Problem prob) {
+		IntPair quesSpan = getQuestionSpan(prob);
+		Constituent result = QuantitySchema.getDependencyConstituentCoveringTokenId(
+				prob, quesSpan.getFirst());
+		while(result != null) {
+			if(result.getIncomingRelations().size() == 0) break;
+			result = result.getIncomingRelations().get(0).getSource();
+			if(prob.posTags.get(result.getStartSpan()).getLabel().startsWith("VB")) {
+				questionSchema.verbPhrase = result;
+				questionSchema.verbLemma = prob.lemmas.get(questionSchema.verbPhrase.getEndSpan()-1);
+				questionSchema.verb = prob.ta.getToken(questionSchema.verbPhrase.getEndSpan()-1);
+			}
+		}
+		List<Relation> relations = questionSchema.verbPhrase.getOutgoingRelations();
+		for(Relation relation : relations) {
+			if(!relation.getRelationName().equals("nsubj")) continue;
+			Constituent dst = relation.getTarget();
+			for(Constituent cons : prob.chunks) {
+				if(cons.getStartSpan() <= dst.getStartSpan() &&
+						cons.getEndSpan() > dst.getStartSpan() &&
+						cons.getLabel().equals("NP")) {
+					questionSchema.subject = cons;
+					break;
 				}
 			}
 		}
-		return questionTokens;
+		// Added for object detection
+		for(Relation relation : relations) {
+			if(relation.getRelationName().equals("iobj") ||
+					relation.getRelationName().equals("nmod")) {
+				Constituent dst = relation.getTarget();
+				for (Constituent cons : prob.chunks) {
+					if (cons.getStartSpan() <= dst.getStartSpan() &&
+							cons.getEndSpan() > dst.getStartSpan() &&
+							cons.getLabel().equals("NP")) {
+						questionSchema.object = cons;
+						break;
+					}
+				}
+			}
+		}
+		questionSchema.unit = "";
+		int chunkId = QuantitySchema.getChunkIndex(prob, quesSpan.getFirst());
+		Constituent unitCons = prob.chunks.get(chunkId);
+		for(int i=unitCons.getStartSpan(); i<unitCons.getEndSpan(); ++i) {
+			questionSchema.unit += prob.lemmas.get(i) + " ";
+		}
+		for(int i=quesSpan.getFirst(); i<quesSpan.getSecond(); ++i) {
+			if(prob.ta.getToken(i).equalsIgnoreCase("each") ||
+					prob.ta.getToken(i).equalsIgnoreCase("per") ||
+					prob.ta.getToken(i).equalsIgnoreCase("every")) {
+				chunkId = QuantitySchema.getChunkIndex(prob, i+1);
+				questionSchema.rateUnit = prob.chunks.get(chunkId);
+			}
+		}
 	}
 		
 	@Override
@@ -104,17 +169,16 @@ public class Schema {
 		str += "Problem : " + problemId + "\n";
 		str += "QuestionNPs : " + Arrays.asList(questionTokens) + "\n";
 		str += "QuantSchema :\n";
-		for(QuantitySchema qs : quantSchemas) { 
-			str+=qs+"\n";
+		for (QuantitySchema qs : quantSchemas) {
+			str += qs + "\n";
 		}
 		str += "Coref : ";
-		for(Integer index : coref.keySet()) {
-			 str += index + ":" + coref.get(index)+" ";
+		for (Integer index : coref.keySet()) {
+			str += index + ":" + coref.get(index) + " ";
 		}
-		str+="\n";
+		str += "\n";
 		return str;
 	}
-	
 	
 	public Map<Integer, IntPair> simpleCoref(Problem prob) {
 		Map<Integer, IntPair> coref = new HashMap<Integer, IntPair>();
@@ -132,8 +196,5 @@ public class Schema {
 		}
 		return coref;
 	}
-	
-	
-	public static void main(String args[]) throws Exception {
-	}
+
 }
