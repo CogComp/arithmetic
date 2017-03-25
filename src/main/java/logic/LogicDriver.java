@@ -54,7 +54,7 @@ public class LogicDriver {
 				for(int j=i+1; j<prob.quantities.size(); ++j) {
 					String label = prob.expr.findLabelofLCA(i, j);
 					LogicX x = new LogicX(prob, i, j);
-					LogicY y = new LogicY(label, -1);
+					LogicY y = new LogicY(label, -1, null, null, null);
 					problem.addExample(x, y);
 				}
 			}
@@ -86,15 +86,13 @@ public class LogicDriver {
 				System.out.println("Gold : "+gold);
 				System.out.println("Pred : "+pred);
 				System.out.println("Loss : "+ LogicY.getLoss(gold, pred));
-//				System.out.println("Labels : "+Arrays.asList(getLabelsWithScores(prob, model)));
 				System.out.println();
 			}
 		}
 		System.out.println("Accuracy : = " + acc + " / " + sp.instanceList.size()
 				+ " = " + (acc/sp.instanceList.size()));
 		System.out.println("Strict Accuracy : ="+ (1-1.0*incorrect.size()/total.size()));
-		return new Pair<Double, Double>(acc/sp.instanceList.size(),
-				1-1.0*incorrect.size()/total.size());
+		return new Pair<>(acc/sp.instanceList.size(), 1-1.0*incorrect.size()/total.size());
 	}
 
 	public static void trainModel(String modelPath, SLProblem train)
@@ -137,7 +135,7 @@ public class LogicDriver {
 	}
 
 	public static void main(String[] args) throws Exception {
-		InteractiveShell<LogicDriver> tester = new InteractiveShell<LogicDriver>(LogicDriver.class);
+		InteractiveShell<LogicDriver> tester = new InteractiveShell<>(LogicDriver.class);
 		if (args.length == 0) {
 			tester.showDocumentation();
 		} else {

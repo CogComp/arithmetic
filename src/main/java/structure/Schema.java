@@ -108,6 +108,7 @@ public class Schema {
 
 	public void createQuestionSchema(Problem prob) {
 		IntPair quesSpan = getQuestionSpan(prob);
+		questionSchema = new QuantitySchema(null);
 		Constituent result = QuantitySchema.getDependencyConstituentCoveringTokenId(
 				prob, quesSpan.getFirst());
 		while(result != null) {
@@ -119,30 +120,32 @@ public class Schema {
 				questionSchema.verb = prob.ta.getToken(questionSchema.verbPhrase.getEndSpan()-1);
 			}
 		}
-		List<Relation> relations = questionSchema.verbPhrase.getOutgoingRelations();
-		for(Relation relation : relations) {
-			if(!relation.getRelationName().equals("nsubj")) continue;
-			Constituent dst = relation.getTarget();
-			for(Constituent cons : prob.chunks) {
-				if(cons.getStartSpan() <= dst.getStartSpan() &&
-						cons.getEndSpan() > dst.getStartSpan() &&
-						cons.getLabel().equals("NP")) {
-					questionSchema.subject = cons;
-					break;
-				}
-			}
-		}
-		// Added for object detection
-		for(Relation relation : relations) {
-			if(relation.getRelationName().equals("iobj") ||
-					relation.getRelationName().equals("nmod")) {
+		if(questionSchema.verbPhrase != null) {
+			List<Relation> relations = questionSchema.verbPhrase.getOutgoingRelations();
+			for (Relation relation : relations) {
+				if (!relation.getRelationName().equals("nsubj")) continue;
 				Constituent dst = relation.getTarget();
 				for (Constituent cons : prob.chunks) {
 					if (cons.getStartSpan() <= dst.getStartSpan() &&
 							cons.getEndSpan() > dst.getStartSpan() &&
 							cons.getLabel().equals("NP")) {
-						questionSchema.object = cons;
+						questionSchema.subject = cons;
 						break;
+					}
+				}
+			}
+			// Added for object detection
+			for (Relation relation : relations) {
+				if (relation.getRelationName().equals("iobj") ||
+						relation.getRelationName().equals("nmod")) {
+					Constituent dst = relation.getTarget();
+					for (Constituent cons : prob.chunks) {
+						if (cons.getStartSpan() <= dst.getStartSpan() &&
+								cons.getEndSpan() > dst.getStartSpan() &&
+								cons.getLabel().equals("NP")) {
+							questionSchema.object = cons;
+							break;
+						}
 					}
 				}
 			}

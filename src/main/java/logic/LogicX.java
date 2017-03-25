@@ -5,6 +5,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import structure.Problem;
 import structure.QuantSpan;
+import structure.QuantitySchema;
 import structure.Schema;
 
 import java.util.List;

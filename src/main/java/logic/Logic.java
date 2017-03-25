@@ -1,6 +1,7 @@
 package logic;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import structure.QuantitySchema;
 import utils.Tools;
 import java.util.*;
 
@@ -18,6 +19,15 @@ class LogicInput {
         this.unit = unit;
         this.rate = rate;
         this.verbLemma = verbLemma;
+        this.math = math;
+    }
+
+    public LogicInput(QuantitySchema quantSchema) {
+        subject = Tools.consToList(quantSchema.subject);
+        object = Tools.consToList(quantSchema.object);
+        unit = Arrays.asList(quantSchema.unit.split(" "));
+        rate = Tools.consToList(quantSchema.rateUnit);
+        verbLemma = quantSchema.verbLemma;
     }
 }
 
@@ -31,7 +41,7 @@ public class Logic {
     public static List<String> subTokens = Arrays.asList("shorter", "less", "younger", "slower");
     public static List<String> mulTokens = Arrays.asList("times");
 
-    public Map<String, Double> containerCoref(LogicInput num1, LogicInput num2) {
+    public static Map<String, Double> containerCoref(LogicInput num1, LogicInput num2) {
         Map<String, Double> map = new HashMap<>();
         map.put("0_0", Tools.jaccardSim(num1.subject, num2.subject));
         map.put("0_1", Tools.jaccardSim(num1.subject, num2.object));
@@ -40,11 +50,15 @@ public class Logic {
         return map;
     }
 
-    public Map<String, Double> verbClassify(LogicInput num) {
-        return null;
+    public static Map<String, Double> verbClassify(LogicInput num) {
+        Map<String, Double> map = new HashMap<>();
+        map.put("STATE", 0.0);
+        map.put("POSITIVE", 0.0);
+        map.put("NEGATIVE", 0.0);
+        return map;
     }
 
-    public Map<String, Double> unitDependency(LogicInput num1, LogicInput num2) {
+    public static Map<String, Double> unitDependency(LogicInput num1, LogicInput num2) {
         int isRate1 = 0, isRate2 = 0;
         if (num1.rate != null && num1.rate.size() > 0) {
             isRate1 = 1;
@@ -62,7 +76,7 @@ public class Logic {
         return map;
     }
 
-    public Map<String, Double> partition(LogicInput num1, LogicInput num2) {
+    public static Map<String, Double> partition(LogicInput num1, LogicInput num2) {
         Map<String, Double> map = new HashMap<>();
         map.put("0_HYPO", Tools.jaccardEntail(num1.subject, num2.subject));
         map.put("0_HYPER", Tools.jaccardEntail(num2.subject, num1.subject));
@@ -82,7 +96,7 @@ public class Logic {
         return map;
     }
 
-    public Map<String, Double> math(LogicInput num) {
+    public static Map<String, Double> math(LogicInput num) {
         Map<String, Double> map = new HashMap<>();
         map.put("ADD", 0.0);
         map.put("SUB", 0.0);
@@ -99,7 +113,7 @@ public class Logic {
         return map;
     }
 
-    public Map<Pair<String, Integer>, Double> logicSolver(
+    public static Map<Pair<String, Integer>, Double> logicSolver(
             LogicInput num1, LogicInput num2, LogicInput ques) {
 
         Map<Pair<String, Integer>, Double> scores = new HashMap<>();

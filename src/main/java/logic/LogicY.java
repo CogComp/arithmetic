@@ -7,15 +7,23 @@ public class LogicY implements IStructure {
 	
 	public String label;
 	public int inferenceRule;
+	public LogicInput num1, num2, ques;
 	
-	public LogicY(String label, int inferenceRule) {
+	public LogicY(String label, int inferenceRule, LogicInput num1,
+				  LogicInput num2, LogicInput ques) {
 		this.label = label;
 		this.inferenceRule = inferenceRule;
+		this.num1 = num1;
+		this.num2 = num2;
+		this.ques = ques;
 	}
 	
 	public LogicY(LogicY other) {
 		this.label = other.label;
 		this.inferenceRule = other.inferenceRule;
+		this.num1 = other.num1;
+		this.num2 = other.num2;
+		this.ques = other.ques;
 	}
 	
 	@Override

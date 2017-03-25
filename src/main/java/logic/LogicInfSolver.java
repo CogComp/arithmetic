@@ -1,5 +1,7 @@
 package logic;
 
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.core.datastructures.Triple;
 import edu.illinois.cs.cogcomp.sl.core.AbstractFeatureGenerator;
 import edu.illinois.cs.cogcomp.sl.core.AbstractInferenceSolver;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
@@ -7,6 +9,9 @@ import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class LogicInfSolver extends AbstractInferenceSolver implements Serializable {
 
@@ -28,13 +33,20 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 			IInstance ins, IStructure goldStructure) throws Exception {
 		double bestScore = -Double.MAX_VALUE;
 		LogicY best = null;
-		for(String label : Logic.labels) {
-			for(int infRule=0; infRule<Logic.maxNumInferenceTypes; infRule++) {
-				double score = weight.dotProduct(featGen.getFeatureVector(
-						ins, new LogicY(label, infRule)));
-				if (bestScore < score) {
-					best = new LogicY(label, infRule);
-					bestScore = score;
+		LogicX logicX = (LogicX) ins;
+		for(Triple<LogicInput, LogicInput, LogicInput> logicInput : enumerateLogicInputs(logicX)) {
+			Map<Pair<String, Integer>, Double> logicOutput = Logic.logicSolver(
+					logicInput.getFirst(), logicInput.getSecond(), logicInput.getThird());
+			for (String label : Logic.labels) {
+				for (int infRule = 0; infRule < Logic.maxNumInferenceTypes; infRule++) {
+					LogicY logicY = new LogicY(label, infRule, logicInput.getFirst(),
+							logicInput.getSecond(), logicInput.getThird());
+					double score = weight.dotProduct(featGen.getFeatureVector(ins, logicY)) +
+							logicOutput.getOrDefault(new Pair<>(label, infRule), 0.0);
+					if (bestScore < score) {
+						best = logicY;
+						bestScore = score;
+					}
 				}
 			}
 		}
@@ -49,14 +61,27 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 	public LogicY getLatentBestStructure(LogicX ins, LogicY gold, WeightVector weight) {
 		double bestScore = -Double.MAX_VALUE;
 		LogicY best = null;
-		for(int infRule=0; infRule<Logic.maxNumInferenceTypes; infRule++) {
-			double score = weight.dotProduct(featGen.getFeatureVector(
-					ins, new LogicY(gold.label, infRule)));
-			if (bestScore < score) {
-				best = new LogicY(gold.label, infRule);
-				bestScore = score;
+		for(Triple<LogicInput, LogicInput, LogicInput> logicInput : enumerateLogicInputs(ins)){
+			for (int infRule = 0; infRule < Logic.maxNumInferenceTypes; infRule++) {
+				LogicY logicY = new LogicY(gold.label, infRule, logicInput.getFirst(),
+						logicInput.getSecond(), logicInput.getThird());
+				double score = weight.dotProduct(featGen.getFeatureVector(ins, logicY));
+				if (bestScore < score) {
+					best = logicY;
+					bestScore = score;
+				}
 			}
 		}
 		return best;
+	}
+
+	public static List<Triple<LogicInput, LogicInput, LogicInput>> enumerateLogicInputs(LogicX x) {
+		List<Triple<LogicInput, LogicInput, LogicInput>> inputs = new ArrayList<>();
+		inputs.add(new Triple<>(
+				new LogicInput(x.schema.quantSchemas.get(x.quantIndex1)),
+				new LogicInput(x.schema.quantSchemas.get(x.quantIndex1)),
+				new LogicInput(x.schema.questionSchema)
+		));
+		return inputs;
 	}
 }
