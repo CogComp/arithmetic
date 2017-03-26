@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import logic.Logic;
 import utils.Tools;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
@@ -23,6 +24,7 @@ public class QuantitySchema {
 	public Constituent subject;
 	public Constituent object;
 	public Constituent rateUnit;
+	public String math;
 	
 	public QuantitySchema(QuantSpan qs) {
 		this.qs= qs; 
@@ -357,6 +359,26 @@ public class QuantitySchema {
 						return prob.chunks.get(chunkId-i);
 					}
 				}
+			}
+		}
+		return null;
+	}
+
+	public String getMath(Problem prob) {
+		int window = 5;
+		int tokenId = prob.ta.getTokenIdFromCharacterOffset(qs.start);
+		Sentence sentence = prob.ta.getSentenceFromToken(tokenId);
+		for(int i=Math.max(sentence.getStartSpan(), tokenId - window);
+			i<Math.min(sentence.getStartSpan(), tokenId + window + 1);
+			++i) {
+			if(Logic.addTokens.contains(prob.ta.getToken(i))) {
+				return "ADD";
+			}
+			if(Logic.subTokens.contains(prob.ta.getToken(i))) {
+				return "SUB";
+			}
+			if(Logic.mulTokens.contains(prob.ta.getToken(i))) {
+				return "MUL";
 			}
 		}
 		return null;

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
+import logic.Logic;
 import utils.Tools;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
@@ -50,6 +51,7 @@ public class Schema {
 			// Find related NPs, subject of verb and NP PP NP connections
 			schema.connectedNPs = schema.getConnectedNPs(prob);
 			schema.rateUnit = schema.getRateUnit(prob);
+			schema.math = schema.getMath(prob);
 			quantSchemas.add(schema);
 		}
 		// Fill up missing units 
@@ -162,6 +164,18 @@ public class Schema {
 					prob.ta.getToken(i).equalsIgnoreCase("every")) {
 				chunkId = QuantitySchema.getChunkIndex(prob, i+1);
 				questionSchema.rateUnit = prob.chunks.get(chunkId);
+			}
+		}
+
+		for(int i=quesSpan.getFirst(); i<quesSpan.getSecond(); ++i) {
+			if(Logic.addTokens.contains(prob.ta.getToken(i))) {
+				questionSchema.math = "ADD";
+			}
+			if(Logic.subTokens.contains(prob.ta.getToken(i))) {
+				questionSchema.math = "SUB";
+			}
+			if(Logic.mulTokens.contains(prob.ta.getToken(i))) {
+				questionSchema.math = "MUL";
 			}
 		}
 	}

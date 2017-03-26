@@ -1,14 +1,18 @@
 package utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
+import net.didion.jwnl.JWNL;
+import net.didion.jwnl.JWNLException;
+import net.didion.jwnl.data.*;
+import net.didion.jwnl.data.list.*;
+import net.didion.jwnl.data.relationship.Relationship;
+import net.didion.jwnl.data.relationship.RelationshipFinder;
+import net.didion.jwnl.data.relationship.RelationshipList;
+import net.didion.jwnl.dictionary.Dictionary;
+import org.apache.commons.io.FileUtils;
 import structure.QuantSpan;
 import structure.Schema;
 import structure.SimpleQuantifier;
@@ -37,6 +41,8 @@ public class Tools {
 	
 	public static SimpleQuantifier quantifier;
 	public static AnnotatorService pipeline;
+	public static Map<String, double[]> vectors;
+
 	static {
 		try {
 			ResourceManager rm = new ResourceManager(Params.pipelineConfig);
@@ -73,6 +79,14 @@ public class Tools {
 
 	        pipeline =  new SimpleCachingPipeline(taBuilder, extraViewGenerators, rm);
 			quantifier = new SimpleQuantifier();
+
+			System.out.println("Reading vectors ...");
+			vectors = readVectors(Params.vectorsFile);
+
+			System.out.println("Initializing Wordnet ...");
+			JWNL.initialize();
+
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -384,5 +398,196 @@ public class Tools {
 		if(!map.containsKey(key) || (map.get(key) < val)) {
 			map.put(key, val);
 		}
+	}
+
+	public static Map<String, double[]> readVectors(String vectorFile) throws IOException {
+		Map<String, double[]> vectors = new HashMap<>();
+		for(String line : FileUtils.readLines(new File(vectorFile))) {
+			String strArr[] = line.split(" ");
+			double d[] = new double[strArr.length-1];
+			for(int i=1; i<strArr.length; ++i) {
+				d[i-1] = Double.parseDouble(strArr[i]);
+			}
+			vectors.put(strArr[0].trim(), d);
+		}
+		return vectors;
+	}
+
+	public static double getVectorSim(String word1, String word2) {
+		if (word1 == null || word2 == null) {
+			return 0.0;
+		}
+		if(vectors.containsKey(word1) && vectors.containsKey(word2)) {
+			double[] v1 = vectors.get(word1);
+			double[] v2 = vectors.get(word2);
+			double dot = 0.0, norm1 = 0.0, norm2 = 0.0;
+			for (int i=0; i<v1.length; ++i) {
+				dot += (v1[i]*v2[i]);
+				norm1 += (v1[i]*v1[i]);
+				norm2 += (v2[i]*v2[i]);
+			}
+			return dot / (norm1 * norm2);
+		}
+		return 0.0;
+	}
+
+	public static List<String> populatePos(List<String> seq,
+										   TextAnnotation ta,
+										   List<Constituent> posTags,
+										   List<String> lemmas) {
+		List<String> seqPos = new ArrayList<>();
+		boolean flag;
+		for(String item : seq) {
+			flag = false;
+			for (int i=0; i<ta.size(); ++i) {
+				if (ta.getToken(i).equalsIgnoreCase(item)) {
+					seqPos.add(posTags.get(i).getLabel());
+					flag = true;
+					break;
+				}
+			}
+			if (flag) continue;
+			for (int i=0; i<lemmas.size(); ++i) {
+				if (lemmas.get(i).equalsIgnoreCase(item)) {
+					seqPos.add(posTags.get(i).getLabel());
+					flag = true;
+					break;
+				}
+			}
+			if (flag) continue;
+			seqPos.add("UNK");
+		}
+		if(seqPos.size() != seq.size()) {
+			System.out.println("Problem in populatePos");
+		}
+		return seqPos;
+	}
+
+	public static IndexWord getIndexWord(String token, String posTag) {
+		POS pos= null;
+		if (posTag.startsWith("N")) {
+			pos = POS.NOUN;
+		}
+		if (posTag.startsWith("J")) {
+			pos = POS.ADJECTIVE;
+		}
+		if (posTag.startsWith("V")) {
+			pos = POS.VERB;
+		}
+		if(pos == null) {
+			return null;
+		}
+		IndexWord word = null;
+		try {
+			word = Dictionary.getInstance().lookupIndexWord(pos, token);
+		} catch (JWNLException e) {
+			e.printStackTrace();
+		}
+		return word;
+	}
+
+	public static String wordnetIndicator(List<String> tokens1, List<String> tokens2,
+										  List<String> posTags1, List<String> posTags2) {
+		List<String> colors = Arrays.asList("white", "black", "red", "green", "yellow", "brown", "blue", "gray");
+		for (int i=0; i<tokens1.size(); ++i) {
+			IndexWord word1 = getIndexWord(tokens1.get(i), posTags1.get(i));
+			if (word1 == null) continue;
+			for (int j=0; j<tokens2.size(); ++j) {
+				if (colors.contains(tokens1.get(i)) && colors.contains(tokens1.get(j))) {
+					return "Siblings";
+				}
+				IndexWord word2 = getIndexWord(tokens2.get(j), posTags2.get(j));
+				if (word2 == null) continue;
+				String wn = wordNetIndicator(word1, word2);
+				if (wn != null) {
+					return wn;
+				}
+			}
+		}
+		return null;
+	}
+
+	public static String wordNetIndicator(IndexWord word1, IndexWord word2) {
+		try {
+			for(Synset synset1 : word1.getSenses()) {
+                PointerTargetNodeList list = PointerUtils.getInstance().getAntonyms(synset1);
+                for (Iterator itr = list.iterator(); itr.hasNext(); ) {
+					Synset antonym = ((PointerTargetNode) itr.next()).getSynset();
+                    for (Synset synset2 : word2.getSenses()) {
+                        if (synset2.equals(antonym)) {
+                            return "Antonyms";
+                        }
+                    }
+                }
+            }
+			for(Synset synset1 : word1.getSenses()) {
+				PointerTargetNodeList list = PointerUtils.getInstance().getDirectHypernyms(synset1);
+				for (Iterator itr = list.iterator(); itr.hasNext(); ) {
+					Synset hypernym1 = ((PointerTargetNode) itr.next()).getSynset();
+					for (Synset synset2 : word2.getSenses()) {
+						if (synset2.equals(hypernym1)) {
+							return "Hyponyms";
+						}
+					}
+					PointerTargetNodeList list1 = PointerUtils.getInstance().getDirectHypernyms(hypernym1);
+					for (Iterator itr1 = list1.iterator(); itr1.hasNext(); ) {
+						Synset hypernym2 = ((PointerTargetNode) itr1.next()).getSynset();
+						for (Synset synset2 : word2.getSenses()) {
+							if (synset2.equals(hypernym2)) {
+								return "Hyponyms";
+							}
+						}
+					}
+				}
+			}
+			for(Synset synset1 : word1.getSenses()) {
+				PointerTargetNodeList list = PointerUtils.getInstance().getDirectHyponyms(synset1);
+				for (Iterator itr = list.iterator(); itr.hasNext(); ) {
+					Synset hyponym1 = ((PointerTargetNode) itr.next()).getSynset();
+					for (Synset synset2 : word2.getSenses()) {
+						if (synset2.equals(hyponym1)) {
+							return "Hypernyms";
+						}
+					}
+					PointerTargetNodeList list1 = PointerUtils.getInstance().getDirectHyponyms(hyponym1);
+					for (Iterator itr1 = list1.iterator(); itr1.hasNext(); ) {
+						Synset hyponym2 = ((PointerTargetNode) itr1.next()).getSynset();
+						for (Synset synset2 : word2.getSenses()) {
+							if (synset2.equals(hyponym2)) {
+								return "Hypernyms";
+							}
+						}
+					}
+				}
+			}
+			for(Synset synset1 : word1.getSenses()) {
+				PointerTargetNodeList list =  PointerUtils.getInstance().getDirectHypernyms(synset1);
+				for (Iterator itr = list.iterator(); itr.hasNext();) {
+					Synset hyper = ((PointerTargetNode) itr.next()).getSynset();
+					PointerTargetNodeList list1 =  PointerUtils.getInstance().getDirectHyponyms(hyper);
+					for (Iterator itr1 = list1.iterator(); itr1.hasNext();) {
+						Synset sibling = ((PointerTargetNode) itr1.next()).getSynset();
+						for (Synset synset2 : word2.getSenses()) {
+							if (synset2.equals(sibling) && !synset2.equals(synset1)) {
+								return "Siblings";
+							}
+						}
+					}
+				}
+			}
+		} catch (JWNLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static void main(String args[]) {
+		String wn = wordnetIndicator(Arrays.asList("red", "apples"),
+				Arrays.asList("green", "apples"), Arrays.asList("N", "N"),
+				Arrays.asList("N", "N"));
+		System.out.println("Wordnet says "+wn);
+		wn = wordnetIndicator(Arrays.asList("win"), Arrays.asList("lose"),
+				Arrays.asList("V"), Arrays.asList("V"));
+		System.out.println("Wordnet says "+wn);
 	}
 }

@@ -41,7 +41,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				for (int infRule = 0; infRule < Logic.maxNumInferenceTypes; infRule++) {
 					LogicY logicY = new LogicY(label, infRule, logicInput.getFirst(),
 							logicInput.getSecond(), logicInput.getThird());
-					double score = weight.dotProduct(featGen.getFeatureVector(ins, logicY)) +
+					double score = weight.dotProduct(featGen.getFeatureVector(ins, logicY)) *
 							logicOutput.getOrDefault(new Pair<>(label, infRule), 0.0);
 					if (bestScore < score) {
 						best = logicY;
@@ -62,10 +62,13 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		double bestScore = -Double.MAX_VALUE;
 		LogicY best = null;
 		for(Triple<LogicInput, LogicInput, LogicInput> logicInput : enumerateLogicInputs(ins)){
+			Map<Pair<String, Integer>, Double> logicOutput = Logic.logicSolver(
+					logicInput.getFirst(), logicInput.getSecond(), logicInput.getThird());
 			for (int infRule = 0; infRule < Logic.maxNumInferenceTypes; infRule++) {
 				LogicY logicY = new LogicY(gold.label, infRule, logicInput.getFirst(),
 						logicInput.getSecond(), logicInput.getThird());
-				double score = weight.dotProduct(featGen.getFeatureVector(ins, logicY));
+				double score = weight.dotProduct(featGen.getFeatureVector(ins, logicY)) *
+						logicOutput.getOrDefault(new Pair<>(gold.label, infRule), 0.0);
 				if (bestScore < score) {
 					best = logicY;
 					bestScore = score;
@@ -78,9 +81,9 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 	public static List<Triple<LogicInput, LogicInput, LogicInput>> enumerateLogicInputs(LogicX x) {
 		List<Triple<LogicInput, LogicInput, LogicInput>> inputs = new ArrayList<>();
 		inputs.add(new Triple<>(
-				new LogicInput(x.schema.quantSchemas.get(x.quantIndex1)),
-				new LogicInput(x.schema.quantSchemas.get(x.quantIndex1)),
-				new LogicInput(x.schema.questionSchema)
+				new LogicInput(x.schema.quantSchemas.get(x.quantIndex1), x),
+				new LogicInput(x.schema.quantSchemas.get(x.quantIndex1), x),
+				new LogicInput(x.schema.questionSchema, x)
 		));
 		return inputs;
 	}

@@ -8,7 +8,7 @@ import java.util.*;
 
 class LogicInput {
 
-    public List<String> subject, object, unit, rate;
+    public List<String> subject, subjectPos, object, objectPos, unit, unitPos, rate;
     public String verbLemma, math;
 
     public LogicInput(List<String> subject, List<String> object,
@@ -22,12 +22,15 @@ class LogicInput {
         this.math = math;
     }
 
-    public LogicInput(QuantitySchema quantSchema) {
+    public LogicInput(QuantitySchema quantSchema, LogicX x) {
         subject = Tools.consToList(quantSchema.subject);
         object = Tools.consToList(quantSchema.object);
         unit = Arrays.asList(quantSchema.unit.split(" "));
         rate = Tools.consToList(quantSchema.rateUnit);
         verbLemma = quantSchema.verbLemma;
+        subjectPos = Tools.populatePos(subject, x.ta, x.posTags, x.lemmas);
+        objectPos = Tools.populatePos(object, x.ta, x.posTags, x.lemmas);
+        unitPos = Tools.populatePos(unit, x.ta, x.posTags, x.lemmas);
     }
 }
 
@@ -35,11 +38,15 @@ public class Logic {
 
     public static List<String> labels = Arrays.asList(
             "ADD", "SUB", "SUB_REV", "MUL", "DIV", "DIV_REV", "NONE");
-    public static int maxNumInferenceTypes = 4;
+    public static List<String> state = Arrays.asList("is", "have", "own");
+    public static List<String> positive = Arrays.asList("got", "gain", "borrow");
+    public static List<String> negative = Arrays.asList("give", "lost", "lend");
 
     public static List<String> addTokens = Arrays.asList("taller", "more", "older", "higher", "faster");
     public static List<String> subTokens = Arrays.asList("shorter", "less", "younger", "slower");
     public static List<String> mulTokens = Arrays.asList("times");
+
+    public static int maxNumInferenceTypes = 4;
 
     public static Map<String, Double> containerCoref(LogicInput num1, LogicInput num2) {
         Map<String, Double> map = new HashMap<>();
@@ -55,6 +62,18 @@ public class Logic {
         map.put("STATE", 0.0);
         map.put("POSITIVE", 0.0);
         map.put("NEGATIVE", 0.0);
+        for (String verb : state) {
+            map.put("STATE", map.get("STATE") + Tools.getVectorSim(verb, num.verbLemma));
+        }
+        map.put("STATE", map.get("STATE") / state.size());
+        for (String verb : positive) {
+            map.put("POSITIVE", map.get("POSITIVE") + Tools.getVectorSim(verb, num.verbLemma));
+        }
+        map.put("POSITIVE", map.get("POSITIVE") / positive.size());
+        for (String verb : negative) {
+            map.put("NEGATIVE", map.get("NEGATIVE") + Tools.getVectorSim(verb, num.verbLemma));
+        }
+        map.put("NEGATIVE", map.get("NEGATIVE") / negative.size());
         return map;
     }
 
@@ -84,15 +103,19 @@ public class Logic {
         map.put("1_HYPER", Tools.jaccardEntail(num2.unit, num1.unit));
         map.put("1_SIBLING", 0.0);
 
-        // TODO: Add wordnet
-//        wn_check = wordnet_check_spans(problem.doc, unit1, unit2)
-//        if wn_check == 'Hyponyms':
-//        part['1_HYPO'] = 1.0
-//        if wn_check == 'Hypernyms':
-//        part['1_HYPER'] = 1.0
-//        if wn_check == 'Siblings':
-//        part['1_SIBLING'] = 1.0
-
+        String wordnetIndicator = Tools.wordnetIndicator(num1.unit, num2.unit, num1.unitPos, num2.unitPos);
+        if (wordnetIndicator == null) {
+            return map;
+        }
+        if (wordnetIndicator.equals("Hyponyms")) {
+            map.put("1_HYPO", 1.0);
+        }
+        if (wordnetIndicator.equals("Hypernyms")) {
+            map.put("1_HYPER", 1.0);
+        }
+        if (wordnetIndicator.equals("Siblings") || wordnetIndicator.equals("Antonyms")) {
+            map.put("1_SIBLING", 1.0);
+        }
         return map;
     }
 

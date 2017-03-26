@@ -3,7 +3,6 @@ package utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import pair.PairX;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;

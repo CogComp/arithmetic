@@ -73,6 +73,11 @@
     <artifactId>javatools</artifactId>
     <version>20120110</version>
   </dependency>
+   <dependency>
+     <groupId>edu.illinois.cs.cogcomp</groupId>
+     <artifactId>jwnl-prime</artifactId>
+     <version>1.0.3</version>
+   </dependency>
  </dependencies>
  <!-- needed for lbj plugin -->
  <pluginRepositories>
