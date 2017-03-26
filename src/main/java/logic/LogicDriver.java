@@ -11,6 +11,7 @@ import edu.illinois.cs.cogcomp.sl.learner.Learner;
 import edu.illinois.cs.cogcomp.sl.learner.LearnerFactory;
 import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
+import reader.Reader;
 import structure.Problem;
 import utils.Folds;
 import utils.Params;
@@ -95,6 +96,50 @@ public class LogicDriver {
 		return new Pair<>(acc/sp.instanceList.size(), 1-1.0*incorrect.size()/total.size());
 	}
 
+	public static void testLogicSolver(String dataset) throws Exception {
+		Set<Integer> incorrect = new HashSet<>();
+		Set<Integer> total = new HashSet<>();
+		List<Problem> probs = Reader.readProblemsFromJson(dataset);
+		SLProblem sp = getSP(probs);
+		double acc = 0.0;
+		for (int i = 0; i < sp.instanceList.size(); i++) {
+			LogicX x = (LogicX) sp.instanceList.get(i);
+			LogicY gold = (LogicY) sp.goldStructureList.get(i);
+			Map<Pair<String, Integer>, Double> scores = Logic.logicSolver(
+					new LogicInput(x.schema.quantSchemas.get(x.quantIndex1), x),
+					new LogicInput(x.schema.quantSchemas.get(x.quantIndex2), x),
+					new LogicInput(x.schema.questionSchema, x));
+			LogicY pred = null;
+			double maxScore = Double.NEGATIVE_INFINITY;
+			for(Pair<String, Integer> key : scores.keySet()) {
+				if(scores.get(key) > maxScore) {
+					maxScore = scores.get(key);
+					pred = new LogicY(key.getFirst(), key.getSecond(), null, null, null);
+				}
+			}
+			total.add(x.problemId);
+			if(LogicY.getLoss(gold, pred) < 0.0001) {
+				acc += 1;
+			} else {
+				incorrect.add(x.problemId);
+				System.out.println(x.problemId+" : "+x.ta.getText());
+				System.out.println();
+				System.out.println("Schema : "+x.schema);
+				System.out.println();
+				System.out.println("Quantities : "+x.quantities);
+				System.out.println("Quant of Interest: "+x.quantIndex1+" "+x.quantIndex2);
+				System.out.println("Gold : "+gold);
+				System.out.println("Pred : "+pred);
+				System.out.println("Loss : "+ LogicY.getLoss(gold, pred));
+				System.out.println();
+			}
+		}
+		System.out.println("Accuracy : = " + acc + " / " + sp.instanceList.size()
+				+ " = " + (acc/sp.instanceList.size()));
+		System.out.println("Strict Accuracy : = 1 - " + incorrect.size() + " / " +
+				total.size() + " = " + (1-1.0*incorrect.size()/total.size()));
+	}
+
 	public static void trainModel(String modelPath, SLProblem train)
 			throws Exception {
 		SLModel model = new SLModel();
@@ -133,6 +178,7 @@ public class LogicDriver {
 		}
 		return wv;
 	}
+
 
 	public static void main(String[] args) throws Exception {
 		InteractiveShell<LogicDriver> tester = new InteractiveShell<>(LogicDriver.class);

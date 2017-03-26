@@ -32,6 +32,9 @@ public class LogicY implements IStructure {
 	}
 	
 	public static float getLoss(LogicY gold, LogicY pred) {
+		if(gold == null || pred == null) {
+			return 1.0f;
+		}
 		if(gold.label.equals(pred.label)) {
 			return 0.0f;
 		}

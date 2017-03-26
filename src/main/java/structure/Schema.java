@@ -189,10 +189,6 @@ public class Schema {
 		for (QuantitySchema qs : quantSchemas) {
 			str += qs + "\n";
 		}
-		str += "Coref : ";
-		for (Integer index : coref.keySet()) {
-			str += index + ":" + coref.get(index) + " ";
-		}
 		str += "\n";
 		return str;
 	}
