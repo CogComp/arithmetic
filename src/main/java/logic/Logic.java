@@ -1,5 +1,6 @@
 package logic;
 
+import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import structure.QuantitySchema;
 import utils.Tools;
@@ -10,10 +11,25 @@ class LogicInput {
 
     public List<String> subject, subjectPos, object, objectPos, unit, unitPos, rate;
     public String verbLemma, math;
+    public int mode; // 0 for ques, 1 for quantity1, 2 for quantity2
+    public IntPair subjSpan, objSpan, unitSpan, rateSpan;
+    public int verbIndex;
 
-    public LogicInput(List<String> subject, List<String> object,
-                      List<String> unit, List<String> rate,
-                      String verbLemma, String math) {
+    public LogicInput(int mode) {
+        this.mode = mode;
+        subject = new ArrayList<>();
+        subjectPos = new ArrayList<>();
+        object = new ArrayList<>();
+        objectPos = new ArrayList<>();
+        unit = new ArrayList<>();
+        unitPos = new ArrayList<>();
+        rate = new ArrayList<>();
+    }
+
+    public LogicInput(int mode, List<String> subject, List<String> object,
+                      List<String> unit, List<String> rate, String verbLemma,
+                      String math) {
+        this.mode = mode;
         this.subject = subject;
         this.object = object;
         this.unit = unit;
@@ -22,7 +38,8 @@ class LogicInput {
         this.math = math;
     }
 
-    public LogicInput(QuantitySchema quantSchema, LogicX x) {
+    public LogicInput(int mode, QuantitySchema quantSchema, LogicX x) {
+        this.mode = mode;
         subject = Tools.consToList(quantSchema.subject);
         object = Tools.consToList(quantSchema.object);
         unit = Arrays.asList(quantSchema.unit.split(" "));

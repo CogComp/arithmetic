@@ -105,10 +105,10 @@ public class LogicDriver {
 		for (int i = 0; i < sp.instanceList.size(); i++) {
 			LogicX x = (LogicX) sp.instanceList.get(i);
 			LogicY gold = (LogicY) sp.goldStructureList.get(i);
-			Map<Pair<String, Integer>, Double> scores = Logic.logicSolver(
-					new LogicInput(x.schema.quantSchemas.get(x.quantIndex1), x),
-					new LogicInput(x.schema.quantSchemas.get(x.quantIndex2), x),
-					new LogicInput(x.schema.questionSchema, x));
+			LogicInput num1 = new LogicInput(1, x.schema.quantSchemas.get(x.quantIndex1), x);
+			LogicInput num2 = new LogicInput(2, x.schema.quantSchemas.get(x.quantIndex2), x);
+			LogicInput ques = new LogicInput(0, x.schema.questionSchema, x);
+			Map<Pair<String, Integer>, Double> scores = Logic.logicSolver(num1, num2, ques);
 			LogicY pred = null;
 			double maxScore = Double.NEGATIVE_INFINITY;
 			for(Pair<String, Integer> key : scores.keySet()) {
@@ -128,6 +128,9 @@ public class LogicDriver {
 				System.out.println();
 				System.out.println("Quantities : "+x.quantities);
 				System.out.println("Quant of Interest: "+x.quantIndex1+" "+x.quantIndex2);
+				System.out.println("Verb Similarity : "+Arrays.asList(Logic.verbClassify(num1))+" || "+
+						Arrays.asList(Logic.verbClassify(num2))+" || "+Arrays.asList(Logic.verbClassify(ques)));
+				System.out.println();
 				System.out.println("Gold : "+gold);
 				System.out.println("Pred : "+pred);
 				System.out.println("Loss : "+ LogicY.getLoss(gold, pred));

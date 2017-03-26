@@ -22,6 +22,7 @@ public class Schema {
 	public List<String> questionTokens;
 	public List<QuantitySchema> quantSchemas;
 	public QuantitySchema questionSchema;
+	public IntPair questionSpan;
 	
 	public Schema(Problem prob) {
 		problemId = prob.id;
@@ -30,7 +31,7 @@ public class Schema {
 		// Simple Coreference
 		coref = simpleCoref(prob);
 		// QuestionNPs
-		questionTokens = getQuestionTokens(prob);
+		questionTokens = getQuestionTokensOld(prob);
 		// Quantity Schemas
 		for(int i=0; i<prob.quantities.size(); ++i) {
 			QuantSpan qs = prob.quantities.get(i);
@@ -76,6 +77,7 @@ public class Schema {
 			}
 		}
 		createQuestionSchema(prob);
+		questionSpan = getQuestionSpan(prob);
 	}
 
 	public IntPair getQuestionSpan(Problem prob) {
@@ -183,13 +185,11 @@ public class Schema {
 	@Override
 	public String toString() {
 		String str = "\n";
-		str += "Problem : " + problemId + "\n";
-		str += "QuestionNPs : " + Arrays.asList(questionTokens) + "\n";
-		str += "QuantSchema :\n";
 		for (QuantitySchema qs : quantSchemas) {
-			str += qs + "\n";
+			str += "QuantSchema :" + qs + "\n";
 		}
-		str += "\n";
+		str += "QuestionNPs : " + Arrays.asList(questionTokens) + "\n";
+		str += "QuestionSchema : "+questionSchema+"\n";
 		return str;
 	}
 	
@@ -208,6 +208,31 @@ public class Schema {
 			}
 		}
 		return coref;
+	}
+
+	public List<String> getQuestionTokensOld(Problem prob) {
+		List<String> questionTokens = new ArrayList<>();
+		// NPs from question
+		int questionSentId = Tools.getQuestionSentenceId(prob.ta);
+		int start = -1, end = -1;
+		for(int i=prob.ta.getSentence(questionSentId).getStartSpan();
+			i<prob.ta.getSentence(questionSentId).getEndSpan(); ++i) {
+			if(prob.ta.getToken(i).equalsIgnoreCase("how")) {
+				start = i;
+				end = prob.ta.getSentence(questionSentId).getEndSpan();
+				for(int j=start; j<prob.ta.getSentence(questionSentId).getEndSpan(); ++j) {
+					if(prob.ta.getToken(j).contains(",") ||
+							prob.ta.getToken(j).contains("if")) {
+						end = j;
+						break;
+					}
+				}
+				for(int j=start; j<end; ++j) {
+					questionTokens.add(prob.lemmas.get(j));
+				}
+			}
+		}
+		return questionTokens;
 	}
 
 }

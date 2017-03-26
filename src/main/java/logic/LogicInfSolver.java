@@ -1,5 +1,6 @@
 package logic;
 
+import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.Triple;
 import edu.illinois.cs.cogcomp.sl.core.AbstractFeatureGenerator;
@@ -81,10 +82,45 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 	public static List<Triple<LogicInput, LogicInput, LogicInput>> enumerateLogicInputs(LogicX x) {
 		List<Triple<LogicInput, LogicInput, LogicInput>> inputs = new ArrayList<>();
 		inputs.add(new Triple<>(
-				new LogicInput(x.schema.quantSchemas.get(x.quantIndex1), x),
-				new LogicInput(x.schema.quantSchemas.get(x.quantIndex1), x),
-				new LogicInput(x.schema.questionSchema, x)
+				new LogicInput(1, x.schema.quantSchemas.get(x.quantIndex1), x),
+				new LogicInput(2, x.schema.quantSchemas.get(x.quantIndex1), x),
+				new LogicInput(0, x.schema.questionSchema, x)
 		));
 		return inputs;
+	}
+
+	public static List<IntPair> enumerateSubjects(LogicX x, int mode) {
+		List<IntPair> candidates = new ArrayList<>();
+		int tokenId = -1;
+		IntPair span = new IntPair(-1, -1);
+		if(mode == 0) {
+			span = x.schema.questionSpan;
+		} else if(mode == 1) {
+			tokenId = x.ta.getTokenIdFromCharacterOffset(x.quantities.get(x.quantIndex1).start);
+			span = new IntPair(x.ta.getSentenceFromToken(tokenId).getStartSpan(),
+					x.ta.getSentenceFromToken(tokenId).getEndSpan());
+		}
+
+		return candidates;
+	}
+
+	public static List<IntPair> enumerateObjects(LogicInput x) {
+		List<IntPair> candidates = new ArrayList<>();
+		return candidates;
+	}
+
+	public static List<IntPair> enumerateUnits(LogicInput x) {
+		List<IntPair> candidates = new ArrayList<>();
+		return candidates;
+	}
+
+	public static List<IntPair> enumerateRates(LogicInput x) {
+		List<IntPair> candidates = new ArrayList<>();
+		return candidates;
+	}
+
+	public static List<Integer> enumerateVerbs(LogicInput x) {
+		List<Integer> candidates = new ArrayList<>();
+		return candidates;
 	}
 }

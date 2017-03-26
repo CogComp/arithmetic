@@ -33,8 +33,8 @@ public class QuantitySchema {
 	
 	@Override
 	public String toString() {
-		return "Num: "+qs.val+" Subject: "+subject+" Verb: "+verb+" Unit: "+unit +
-				" Object: "+object+" Rate : "+rateUnit;
+		return "(Num: "+(qs!=null?""+qs.val:"Null")+") (Subj: "+subject+") (Verb: "+verb+") (Unit: "+unit +
+				") (Obj: "+object+") (Rate : "+rateUnit+")";
 	}
 	
 	public List<Constituent> getConnectedNPs(Problem prob) {

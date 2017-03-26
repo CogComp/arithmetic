@@ -28,7 +28,17 @@ public class LogicY implements IStructure {
 	
 	@Override
 	public String toString() {
-		return label+" "+inferenceRule;
+		String inference = "No Reason";
+		if (inferenceRule == 0) {
+			inference = "Verb Interaction";
+		} else if (inferenceRule == 1) {
+			inference = "Partition";
+		} else if (inferenceRule == 2) {
+			inference = "Math";
+		} else if (inferenceRule == 3) {
+			inference = "Rate";
+		}
+		return label+" "+inference;
 	}
 	
 	public static float getLoss(LogicY gold, LogicY pred) {

@@ -426,7 +426,7 @@ public class Tools {
 				norm1 += (v1[i]*v1[i]);
 				norm2 += (v2[i]*v2[i]);
 			}
-			return dot / (norm1 * norm2);
+			return dot / (Math.sqrt(norm1 * norm2));
 		}
 		return 0.0;
 	}
