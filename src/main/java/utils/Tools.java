@@ -394,6 +394,14 @@ public class Tools {
 		return tokens;
 	}
 
+	public static List<String> spanToList(List<String> lemmas, IntPair span) {
+		List<String> tokens = new ArrayList<>();
+		for(int i=span.getFirst(); i<span.getSecond(); ++i) {
+			tokens.add(lemmas.get(i));
+		}
+		return tokens;
+	}
+
 	public static <K> void addToHighestMap(Map<K, Double> map, K key, Double val) {
 		if(!map.containsKey(key) || (map.get(key) < val)) {
 			map.put(key, val);

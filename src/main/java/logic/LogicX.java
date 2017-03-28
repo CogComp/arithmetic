@@ -5,7 +5,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import structure.Problem;
 import structure.QuantSpan;
-import structure.QuantitySchema;
 import structure.Schema;
 
 import java.util.List;
@@ -33,5 +32,6 @@ public class LogicX implements IInstance {
 		this.chunks = prob.chunks;
 		this.schema = prob.schema;
 		this.lemmas = prob.lemmas;
+		this.dependency = prob.dependency;
 	}
 }

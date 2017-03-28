@@ -149,7 +149,7 @@ public class LogicDriver {
 		Lexiconer lm = new Lexiconer();
 		lm.setAllowNewFeatures(true);
 		model.lm = lm;
-		AbstractFeatureGenerator fg = new LogicFeatGen(lm);
+		LogicFeatGen fg = new LogicFeatGen(lm);
 		model.featureGenerator = fg;
 		model.infSolver = new LogicInfSolver(fg);
 		SLParameters para = new SLParameters();

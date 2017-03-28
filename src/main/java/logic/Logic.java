@@ -28,7 +28,7 @@ class LogicInput {
 
     public LogicInput(int mode, List<String> subject, List<String> object,
                       List<String> unit, List<String> rate, String verbLemma,
-                      String math) {
+                      String math, LogicX x) {
         this.mode = mode;
         this.subject = subject;
         this.object = object;
@@ -36,6 +36,9 @@ class LogicInput {
         this.rate = rate;
         this.verbLemma = verbLemma;
         this.math = math;
+        subjectPos = Tools.populatePos(subject, x.ta, x.posTags, x.lemmas);
+        objectPos = Tools.populatePos(object, x.ta, x.posTags, x.lemmas);
+        unitPos = Tools.populatePos(unit, x.ta, x.posTags, x.lemmas);
     }
 
     public LogicInput(int mode, QuantitySchema quantSchema, LogicX x) {
@@ -45,6 +48,7 @@ class LogicInput {
         unit = Arrays.asList(quantSchema.unit.split(" "));
         rate = Tools.consToList(quantSchema.rateUnit);
         verbLemma = quantSchema.verbLemma;
+        math = quantSchema.math;
         subjectPos = Tools.populatePos(subject, x.ta, x.posTags, x.lemmas);
         objectPos = Tools.populatePos(object, x.ta, x.posTags, x.lemmas);
         unitPos = Tools.populatePos(unit, x.ta, x.posTags, x.lemmas);
