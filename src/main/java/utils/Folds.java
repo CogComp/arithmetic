@@ -12,6 +12,7 @@ import org.apache.commons.io.FileUtils;
 
 import reader.Reader;
 import structure.Problem;
+import structure.StanfordProblem;
 
 public class Folds {
 	
@@ -26,9 +27,9 @@ public class Folds {
 		}
 		return fold;
 	}
-	
+
 	// Returns List of 3 elements : train, val, test
-	public static List<List<Problem>> getDataSplit(String dir, int fold) 
+	public static List<List<Problem>> getDataSplit(String dir, int fold)
 			throws Exception {
 		List<Problem> allTrain = new ArrayList<Problem>();
 		List<Problem> train = new ArrayList<Problem>();
@@ -51,6 +52,36 @@ public class Folds {
 		val.addAll(allTrain.subList(0, (int)(Params.validationFrac*allTrain.size())));
 		train.addAll(allTrain.subList((int)(Params.validationFrac*allTrain.size()), allTrain.size()));
 		List<List<Problem>> splits = new ArrayList<>();
+		splits.add(train);
+		splits.add(val);
+		splits.add(test);
+		return splits;
+	}
+
+	// Returns List of 3 elements : train, val, test
+	public static List<List<StanfordProblem>> getDataSplitForStanford(String dir, int fold)
+			throws Exception {
+		List<StanfordProblem> allTrain = new ArrayList<>();
+		List<StanfordProblem> train = new ArrayList<>();
+		List<StanfordProblem> val = new ArrayList<>();
+		List<StanfordProblem> test = new ArrayList<>();
+		List<StanfordProblem> probs = Reader.readStanfordProblemsFromJson(dir);
+		String str = FileUtils.readFileToString(new File(dir+"/fold"+fold+".txt"));
+		Set<Integer> foldIndices = new HashSet<>();
+		for(String index : str.split("\n")) {
+			foldIndices.add(Integer.parseInt(index));
+		}
+		for(StanfordProblem prob : probs) {
+			if(foldIndices.contains(prob.id)) {
+				test.add(prob);
+			} else {
+				allTrain.add(prob);
+			}
+		}
+		Collections.shuffle(allTrain, new Random(0));
+		val.addAll(allTrain.subList(0, (int)(Params.validationFrac*allTrain.size())));
+		train.addAll(allTrain.subList((int)(Params.validationFrac*allTrain.size()), allTrain.size()));
+		List<List<StanfordProblem>> splits = new ArrayList<>();
 		splits.add(train);
 		splits.add(val);
 		splits.add(test);

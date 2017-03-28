@@ -4,13 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+import edu.stanford.nlp.ling.CoreLabel;
+import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import net.didion.jwnl.JWNL;
 import net.didion.jwnl.JWNLException;
 import net.didion.jwnl.data.*;
 import net.didion.jwnl.data.list.*;
-import net.didion.jwnl.data.relationship.Relationship;
-import net.didion.jwnl.data.relationship.RelationshipFinder;
-import net.didion.jwnl.data.relationship.RelationshipList;
 import net.didion.jwnl.dictionary.Dictionary;
 import org.apache.commons.io.FileUtils;
 import structure.QuantSpan;
@@ -32,7 +31,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
-import edu.illinois.cs.cogcomp.nlp.util.SimpleCachingPipeline;
 import edu.illinois.cs.cogcomp.nlp.utility.CcgTextAnnotationBuilder;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
@@ -41,43 +39,48 @@ public class Tools {
 	
 	public static SimpleQuantifier quantifier;
 	public static AnnotatorService pipeline;
+	public static StanfordCoreNLP stanfordPipeline;
 	public static Map<String, double[]> vectors;
 
 	static {
 		try {
-			ResourceManager rm = new ResourceManager(Params.pipelineConfig);
-			
-	        IllinoisTokenizer tokenizer = new IllinoisTokenizer();
-	        TextAnnotationBuilder taBuilder = new CcgTextAnnotationBuilder( tokenizer );
-	        IllinoisPOSHandler pos = new IllinoisPOSHandler();
-	        IllinoisChunkerHandler chunk = new IllinoisChunkerHandler();
-	        IllinoisNerHandler nerConll = new IllinoisNerHandler( rm, ViewNames.NER_CONLL );
-	        IllinoisLemmatizerHandler lemma = new IllinoisLemmatizerHandler( rm );
+//			ResourceManager rm = new ResourceManager(Params.pipelineConfig);
+//
+//	        IllinoisTokenizer tokenizer = new IllinoisTokenizer();
+//	        TextAnnotationBuilder taBuilder = new CcgTextAnnotationBuilder( tokenizer );
+//	        IllinoisPOSHandler pos = new IllinoisPOSHandler();
+//	        IllinoisChunkerHandler chunk = new IllinoisChunkerHandler();
+//	        IllinoisNerHandler nerConll = new IllinoisNerHandler( rm, ViewNames.NER_CONLL );
+//	        IllinoisLemmatizerHandler lemma = new IllinoisLemmatizerHandler( rm );
+//
+//	        Properties stanfordProps = new Properties();
+//	        stanfordProps.put( "annotators", "pos, parse") ;
+//	        stanfordProps.put("parse.originalDependencies", true);
+//
+//	        POSTaggerAnnotator posAnnotator = new POSTaggerAnnotator( "pos", stanfordProps );
+//	        ParserAnnotator parseAnnotator = new ParserAnnotator( "parse", stanfordProps );
+//
+//	        StanfordParseHandler parser = new StanfordParseHandler( posAnnotator, parseAnnotator );
+//	        StanfordDepHandler depParser = new StanfordDepHandler( posAnnotator, parseAnnotator );
+//
+//	        Map< String, Annotator> extraViewGenerators = new HashMap<String, Annotator>();
+//
+//	        extraViewGenerators.put( ViewNames.POS, pos );
+//	        extraViewGenerators.put( ViewNames.SHALLOW_PARSE, chunk );
+//	        extraViewGenerators.put( ViewNames.LEMMA, lemma );
+//	        extraViewGenerators.put( ViewNames.NER_CONLL, nerConll );
+//	        extraViewGenerators.put( ViewNames.PARSE_STANFORD, parser );
+//	        extraViewGenerators.put( ViewNames.DEPENDENCY_STANFORD, depParser );
+//
+//	        Map< String, Boolean > requestedViews = new HashMap<String, Boolean>();
+//	        for ( String view : extraViewGenerators.keySet() )
+//	            requestedViews.put( view, false );
 
-	        Properties stanfordProps = new Properties();
-	        stanfordProps.put( "annotators", "pos, parse") ;
-	        stanfordProps.put("parse.originalDependencies", true);
+//	        pipeline =  new SimpleCachingPipeline(taBuilder, extraViewGenerators, rm);
+			Properties props = new Properties();
+			props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse");
+			stanfordPipeline = new StanfordCoreNLP(props);
 
-	        POSTaggerAnnotator posAnnotator = new POSTaggerAnnotator( "pos", stanfordProps );
-	        ParserAnnotator parseAnnotator = new ParserAnnotator( "parse", stanfordProps );
-
-	        StanfordParseHandler parser = new StanfordParseHandler( posAnnotator, parseAnnotator );
-	        StanfordDepHandler depParser = new StanfordDepHandler( posAnnotator, parseAnnotator );
-
-	        Map< String, Annotator> extraViewGenerators = new HashMap<String, Annotator>();
-
-	        extraViewGenerators.put( ViewNames.POS, pos );
-	        extraViewGenerators.put( ViewNames.SHALLOW_PARSE, chunk );
-	        extraViewGenerators.put( ViewNames.LEMMA, lemma );
-	        extraViewGenerators.put( ViewNames.NER_CONLL, nerConll );
-	        extraViewGenerators.put( ViewNames.PARSE_STANFORD, parser );
-	        extraViewGenerators.put( ViewNames.DEPENDENCY_STANFORD, depParser );
-
-	        Map< String, Boolean > requestedViews = new HashMap<String, Boolean>();
-	        for ( String view : extraViewGenerators.keySet() )
-	            requestedViews.put( view, false );
-
-	        pipeline =  new SimpleCachingPipeline(taBuilder, extraViewGenerators, rm);
 			quantifier = new SimpleQuantifier();
 
 			System.out.println("Reading vectors ...");
@@ -353,6 +356,9 @@ public class Tools {
 	}
 
 	public static double jaccardSim(List<String> phrase1, List<String> phrase2) {
+		if(phrase1 == null || phrase2 == null) {
+			return 0.0;
+		}
 		Set<String> tokens1 = new HashSet<>();
 		tokens1.addAll(phrase1);
 		Set<String> tokens2 = new HashSet<>();
@@ -370,6 +376,9 @@ public class Tools {
 	}
 
 	public static double jaccardEntail(List<String> phrase1, List<String> phrase2) {
+		if(phrase1 == null || phrase2 == null) {
+			return 0.0;
+		}
 		Set<String> tokens1 = new HashSet<>();
 		tokens1.addAll(phrase1);
 		Set<String> tokens2 = new HashSet<>();
@@ -400,6 +409,17 @@ public class Tools {
 			tokens.add(lemmas.get(i));
 		}
 		return tokens;
+	}
+
+	public static List<String> spanToLemmaList(List<CoreLabel> tokens, IntPair span) {
+		List<String> lemmas = new ArrayList<>();
+		if (span.getFirst() == -1) {
+			return lemmas;
+		}
+		for(int i=span.getFirst(); i<span.getSecond(); ++i) {
+			lemmas.add(tokens.get(i).lemma());
+		}
+		return lemmas;
 	}
 
 	public static <K> void addToHighestMap(Map<K, Double> map, K key, Double val) {
@@ -471,6 +491,14 @@ public class Tools {
 		return seqPos;
 	}
 
+	public static List<String> populatePos(List<CoreLabel> tokens, IntPair span) {
+		List<String> seqPos = new ArrayList<>();
+		for(int i=span.getFirst(); i<span.getSecond(); ++i) {
+			seqPos.add(tokens.get(i).tag());
+		}
+		return seqPos;
+	}
+
 	public static IndexWord getIndexWord(String token, String posTag) {
 		POS pos= null;
 		if (posTag.startsWith("N")) {
@@ -496,6 +524,9 @@ public class Tools {
 
 	public static String wordnetIndicator(List<String> tokens1, List<String> tokens2,
 										  List<String> posTags1, List<String> posTags2) {
+		if (tokens1 == null || tokens2 == null || posTags1 == null || posTags2 == null) {
+			return null;
+		}
 		List<String> colors = Arrays.asList("white", "black", "red", "green", "yellow", "brown", "blue", "gray");
 		for (int i=0; i<tokens1.size(); ++i) {
 			IndexWord word1 = getIndexWord(tokens1.get(i), posTags1.get(i));
@@ -587,6 +618,26 @@ public class Tools {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public static int getSentenceIdFromCharOffset(List<List<CoreLabel>> tokens, int charOffset) {
+		for(int i=0; i<tokens.size(); ++i) {
+			if (charOffset >= tokens.get(i).get(0).beginPosition() &&
+					charOffset <= tokens.get(i).get(tokens.get(i).size()-1).endPosition()) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	public static int getTokenIdFromCharOffset(List<CoreLabel> tokens, int charOffset) {
+		for(int i=0; i<tokens.size(); ++i) {
+			if (charOffset >= tokens.get(i).beginPosition() &&
+					charOffset <= tokens.get(i).endPosition()) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	public static void main(String args[]) {

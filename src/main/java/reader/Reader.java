@@ -101,6 +101,34 @@ public class Reader {
 		}
 		return problemList;
 	}
+
+	public static List<StanfordProblem> readStanfordProblemsFromJson(String dir)
+			throws Exception {
+		String json = FileUtils.readFileToString(new File(dir+"/questions.json"));
+		List<KushmanFormat> kushmanProbs = new Gson().fromJson(json,
+				new TypeToken<List<KushmanFormat>>(){}.getType());
+		List<StanfordProblem> problemList = new ArrayList<>();
+		for(KushmanFormat kushmanProb : kushmanProbs) {
+//			System.out.println(kushmanProb.iIndex);
+//			System.out.println(kushmanProb.sQuestion);
+//			System.out.println(Arrays.asList(kushmanProb.lSolutions));
+			StanfordProblem prob = new StanfordProblem(
+					kushmanProb.iIndex,
+					kushmanProb.sQuestion,
+					kushmanProb.lSolutions.get(0));
+			prob.quantities = kushmanProb.quantities;
+			prob.expr = Node.parseNode(kushmanProb.lEquations.get(0));
+			assert prob.expr.getLeaves().size() == kushmanProb.lAlignments.size();
+			for(int j=0; j<prob.expr.getLeaves().size(); ++j) {
+				Node node = prob.expr.getLeaves().get(j);
+				node.quantIndex = kushmanProb.lAlignments.get(j);
+				node.qs = prob.quantities.get(node.quantIndex);
+			}
+			prob.extractAnnotations();
+			problemList.add(prob);
+		}
+		return problemList;
+	}
 	
 	public static void performConsistencyChecks(String dir) throws Exception {
 		List<Problem> probs = Reader.readProblemsFromJson(dir);

@@ -4,15 +4,14 @@ import com.google.common.collect.MinMaxPriorityQueue;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.Triple;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.sl.core.AbstractInferenceSolver;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
+import edu.stanford.nlp.ling.CoreLabel;
+import edu.stanford.nlp.semgraph.SemanticGraph;
 import structure.PairComparator;
-import structure.QuantitySchema;
-import utils.Tools;
+import structure.StanfordSchema;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -80,7 +79,8 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				LogicY logicY = new LogicY(gold.label, infRule, logicInput.getFirst(),
 						logicInput.getSecond(), logicInput.getThird());
 				double score = weight.dotProduct(featGen.getFeatureVector(ins, logicY)) *
-						logicOutput.getOrDefault(new Pair<>(gold.label, infRule), 0.0) + extractionScore;
+						logicOutput.getOrDefault(new Pair<>(gold.label, infRule), 0.0) +
+						extractionScore;
 				if (bestScore < score) {
 					best = logicY;
 					bestScore = score;
@@ -99,7 +99,8 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		for(Pair<LogicInput, Double> pair1 : enumerateLogicInputs(x, 0, wv)) {
 			for(Pair<LogicInput, Double> pair2 : enumerateLogicInputs(x, 1, wv)) {
 				for(Pair<LogicInput, Double> pair3 : enumerateLogicInputs(x, 2, wv)) {
-					inputs.add(new Pair<>(new Triple<>(pair1.getFirst(), pair2.getFirst(), pair3.getFirst()),
+					inputs.add(new Pair<>(new Triple<>(pair1.getFirst(),
+							pair2.getFirst(), pair3.getFirst()),
 							pair1.getSecond() + pair2.getSecond() + pair3.getSecond()));
 				}
 			}
@@ -116,12 +117,12 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 			for(IntPair subj : enumerateSubjects(x, mode, verbIndex)) {
 				for(IntPair obj : enumerateObjects(x, mode, verbIndex)) {
 					for(IntPair unit : enumerateUnits(x, mode)) {
-						for(IntPair rate : enumerateRates(x, mode, verbIndex, subj)) {
+						for(IntPair rate : enumerateRates(x, mode, subj)) {
 							for(Integer mathIndex : enumerateMath(x, mode)) {
-								LogicInput logicInput = new LogicInput(mode, Tools.spanToList(x.lemmas, subj),
-										Tools.spanToList(x.lemmas, obj), Tools.spanToList(x.lemmas, unit),
-										Tools.spanToList(x.lemmas, rate), x.lemmas.get(verbIndex),
-										mathIndex>=0?x.lemmas.get(mathIndex):null, x);
+								LogicInput logicInput = new LogicInput(
+										mode, subj, obj, unit, rate, verbIndex, mathIndex,
+										x.sentIds.get(mode) >= 0 ?
+												x.tokens.get(x.sentIds.get(mode)) : null);
 								double score = wv.dotProduct(featGen.getVerbFeatureVector(x, verbIndex)) +
 										wv.dotProduct(featGen.getSubjectFeatureVector(x, subj)) +
 										wv.dotProduct(featGen.getObjectFeatureVector(x, obj)) +
@@ -139,35 +140,24 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 
 	public static List<IntPair> enumerateSubjects(LogicX x, int mode, int verbIndex) {
 		List<IntPair> candidates = new ArrayList<>();
-		Triple<Integer, IntPair, QuantitySchema> triple = getSpanAndSchema(x, mode);
-		int tokenId = triple.getFirst();
-		IntPair span = triple.getSecond();
-		QuantitySchema qSchema = triple.getThird();
-		Constituent verbPhrase = null;
-		for(Constituent dep : x.dependency) {
-			if (verbIndex >= dep.getStartSpan() && verbIndex < dep.getEndSpan()) {
-				verbPhrase = dep;
-				break;
+		if (x.sentIds.get(mode) < 0) {
+			candidates.add(new IntPair(-1, -1));
+			return candidates;
+		}
+		List<CoreLabel> tokens = x.tokens.get(x.sentIds.get(mode));
+		IntPair span = (mode == 0) ? x.questionSpan : new IntPair(0, tokens.size());
+		SemanticGraph dependency = x.dependencies.get(x.sentIds.get(mode));
+		if (verbIndex != -1) {
+			IntPair subj = StanfordSchema.getSubject(tokens, dependency, verbIndex);
+			if (subj.getSecond() != -1) {
+				candidates.add(subj);
 			}
 		}
-		if (verbPhrase != null) {
-			List<Relation> relations = verbPhrase.getOutgoingRelations();
-			for (Relation relation : relations) {
-				if (!relation.getRelationName().equals("nsubj")) continue;
-				Constituent dst = relation.getTarget();
-				int index = dst.getStartSpan();
-				if (index >= 1 && x.posTags.get(index - 1).getLabel().startsWith("J")) {
-					candidates.add(new IntPair(index - 1, index + 1));
-				} else {
-					candidates.add(new IntPair(index, index + 1));
-				}
-			}
-		}
-		if(candidates.size() == 0) {
+		if(candidates.size() == 0 && span.getFirst() != -1) {
 			for(int i=verbIndex - 1; i>=span.getFirst(); --i) {
-				if(x.posTags.get(i).getLabel().startsWith("N") ||
-						x.posTags.get(i).getLabel().equals("PRP")) {
-					if(i >= 1 && x.posTags.get(i-1).getLabel().startsWith("J")) {
+				if(tokens.get(i).tag().startsWith("N") ||
+						tokens.get(i).tag().equals("PRP")) {
+					if(i >= 1 && tokens.get(i-1).tag().startsWith("J")) {
 						candidates.add(new IntPair(i-1, i+1));
 					} else {
 						candidates.add(new IntPair(i, i+1));
@@ -183,37 +173,26 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 
 	public static List<IntPair> enumerateObjects(LogicX x, int mode, int verbIndex) {
 		List<IntPair> candidates = new ArrayList<>();
-		Triple<Integer, IntPair, QuantitySchema> triple = getSpanAndSchema(x, mode);
-		int tokenId = triple.getFirst();
-		IntPair span = triple.getSecond();
-		QuantitySchema qSchema = triple.getThird();
-		Constituent verbPhrase = null;
-		for(Constituent dep : x.dependency) {
-			if (verbIndex >= dep.getStartSpan() && verbIndex < dep.getEndSpan()) {
-				verbPhrase = dep;
-				break;
-			}
+		if (x.sentIds.get(mode) < 0) {
+			candidates.add(new IntPair(-1, -1));
+			return candidates;
 		}
-		if (verbPhrase != null) {
-			List<Relation> relations = verbPhrase.getOutgoingRelations();
-			for (Relation relation : relations) {
-				if (!relation.getRelationName().equals("iobj") &&
-						!relation.getRelationName().equals("nmod")) continue;
-				Constituent dst = relation.getTarget();
-				int index = dst.getStartSpan();
-				if (index >= 1 && x.posTags.get(index - 1).getLabel().startsWith("J")) {
-					candidates.add(new IntPair(index - 1, index + 1));
-				} else {
-					candidates.add(new IntPair(index, index + 1));
-				}
+		List<CoreLabel> tokens = x.tokens.get(x.sentIds.get(mode));
+		IntPair span = (mode == 0) ? x.questionSpan : new IntPair(0, tokens.size());
+		int tokenId = x.tokenIds.get(mode);
+		SemanticGraph dependency = x.dependencies.get(x.sentIds.get(mode));
+		if (verbIndex != -1) {
+			IntPair subj = StanfordSchema.getSubject(tokens, dependency, verbIndex);
+			if (subj.getSecond() != -1) {
+				candidates.add(subj);
 			}
 		}
 		if(candidates.size() == 0) {
 			for(int i=verbIndex + 1; i<span.getSecond(); ++i) {
-				if(x.posTags.get(i).getLabel().startsWith("N") ||
-						x.posTags.get(i).getLabel().equals("PRP")) {
+				if(tokens.get(i).tag().startsWith("N") ||
+						tokens.get(i).tag().equals("PRP")) {
 					if(tokenId == i || tokenId == (i-1)) continue;
-					if(i >= 1 && x.posTags.get(i-1).getLabel().startsWith("J")) {
+					if(i >= 1 && tokens.get(i-1).tag().startsWith("J")) {
 						candidates.add(new IntPair(i-1, i+1));
 					} else {
 						candidates.add(new IntPair(i, i+1));
@@ -229,22 +208,25 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 
 	public static List<IntPair> enumerateUnits(LogicX x, int mode) {
 		List<IntPair> candidates = new ArrayList<>();
-		Triple<Integer, IntPair, QuantitySchema> triple = getSpanAndSchema(x, mode);
-		int tokenId = triple.getFirst();
-		IntPair span = triple.getSecond();
-		QuantitySchema qSchema = triple.getThird();
-		if (tokenId >= 0 && x.ta.getToken(tokenId).contains("$")) {
+		if (x.sentIds.get(mode) < 0) {
+			candidates.add(new IntPair(-1, -1));
+			return candidates;
+		}
+		List<CoreLabel> tokens = x.tokens.get(x.sentIds.get(mode));
+		IntPair span = (mode == 0) ? x.questionSpan : new IntPair(0, tokens.size());
+		int tokenId = x.tokenIds.get(mode);
+		if (tokenId >= 0 && tokens.get(tokenId).word().contains("$")) {
 			candidates.add(new IntPair(tokenId, tokenId+1));
 			return candidates;
 		}
-		if (tokenId >= 1 && x.ta.getToken(tokenId-1).contains("$")) {
+		if (tokenId >= 1 && tokens.get(tokenId-1).word().contains("$")) {
 			candidates.add(new IntPair(tokenId-1, tokenId));
 			return candidates;
 		}
 		for(int i=tokenId + 1; i<span.getSecond(); ++i) {
-			if(x.posTags.get(i).getLabel().startsWith("N") ||
-					x.posTags.get(i).getLabel().equals("PRP")) {
-				if(i >= 1 && x.posTags.get(i-1).getLabel().startsWith("J")) {
+			if(tokens.get(i).tag().startsWith("N") ||
+					tokens.get(i).tag().equals("PRP")) {
+				if(i >= 1 && tokens.get(i-1).tag().startsWith("J")) {
 					candidates.add(new IntPair(i-1, i+1));
 				} else {
 					candidates.add(new IntPair(i, i+1));
@@ -257,20 +239,22 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		return candidates;
 	}
 
-	public static List<IntPair> enumerateRates(LogicX x, int mode, int verbIndex, IntPair subject) {
+	public static List<IntPair> enumerateRates(LogicX x, int mode, IntPair subject) {
 		List<IntPair> candidates = new ArrayList<>();
-		Triple<Integer, IntPair, QuantitySchema> triple = getSpanAndSchema(x, mode);
-		int tokenId = triple.getFirst();
-		IntPair span = triple.getSecond();
-		QuantitySchema qSchema = triple.getThird();
+		if (x.sentIds.get(mode) < 0) {
+			candidates.add(new IntPair(-1, -1));
+			return candidates;
+		}
+		List<CoreLabel> tokens = x.tokens.get(x.sentIds.get(mode));
+		IntPair span = (mode == 0) ? x.questionSpan : new IntPair(0, tokens.size());
 		for(int i=span.getFirst(); i<span.getSecond(); ++i) {
-			if(x.ta.getToken(i).equalsIgnoreCase("per") ||
-					x.ta.getToken(i).equalsIgnoreCase("each") ||
-					x.ta.getToken(i).equalsIgnoreCase("every")) {
+			if(tokens.get(i).word().equalsIgnoreCase("per") ||
+					tokens.get(i).word().equalsIgnoreCase("each") ||
+					tokens.get(i).word().equalsIgnoreCase("every")) {
 				for(int j=i+1; j<span.getSecond(); ++j) {
-					if(x.posTags.get(j).getLabel().startsWith("N") ||
-							x.posTags.get(j).getLabel().equals("PRP")) {
-						if(x.posTags.get(j-1).getLabel().startsWith("J")) {
+					if(tokens.get(j).tag().startsWith("N") ||
+							tokens.get(j).tag().equals("PRP")) {
+						if(tokens.get(j-1).tag().startsWith("J")) {
 							candidates.add(new IntPair(j-1, j+1));
 						} else {
 							candidates.add(new IntPair(j, j+1));
@@ -289,77 +273,91 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 
 	public static List<Integer> enumerateVerbs(LogicX x, int mode) {
 		List<Integer> candidates = new ArrayList<>();
-		Triple<Integer, IntPair, QuantitySchema> triple = getSpanAndSchema(x, mode);
-		int tokenId = triple.getFirst();
-		IntPair span = triple.getSecond();
-		QuantitySchema qSchema = triple.getThird();
-		int verbTokenIndex = -1;
-		if (qSchema.verbPhrase != null) {
-			verbTokenIndex = qSchema.verbPhrase.getEndSpan() - 1;
+		if (x.sentIds.get(mode) < 0) {
+			candidates.add(-1);
+			return candidates;
 		}
-		if (verbTokenIndex >= 0 && x.posTags.get(verbTokenIndex).getLabel().startsWith("V")) {
+		int tokenId = x.tokenIds.get(mode);
+		List<CoreLabel> tokens = x.tokens.get(x.sentIds.get(mode));
+//		for(CoreLabel token : tokens) {
+//			System.out.print(token+" ");
+//		}
+//		System.out.println();
+//		System.out.println("Tokens size : "+tokens.size());
+		StanfordSchema qSchema = x.relevantSchemas.get(mode);
+		int verbTokenIndex;
+		if (qSchema.verb != -1) {
+			verbTokenIndex = qSchema.verb;
+//			System.out.println("Verb from schema : "+verbTokenIndex);
+//			System.out.println("Mode: "+mode);
+//			System.out.println("LogicX: "+x);
 			candidates.add(verbTokenIndex);
 			return candidates;
 		}
-		if (tokenId == -1) {
-			for(int i=span.getFirst(); i<span.getSecond(); ++i) {
-				if(x.posTags.get(i).getLabel().startsWith("V")) {
-					if(i+1<span.getSecond() && x.posTags.get(i+1).getLabel().startsWith("V")) {
+		if (mode == 0) {
+			for(int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
+				if(tokens.get(i).tag().startsWith("V")) {
+					if(i+1<x.questionSpan.getSecond() && tokens.get(i+1).tag().startsWith("V")) {
 						continue;
 					}
+//					System.out.println("Verb from Ques: "+i);
 					candidates.add(i);
 				}
 			}
 		} else {
-			for(int i=tokenId+1; i<span.getSecond(); ++i) {
-				if(x.posTags.get(i).getLabel().startsWith("V")) {
-					if(i+1<span.getSecond() && x.posTags.get(i+1).getLabel().startsWith("V")) {
+			for(int i=tokenId+1; i<tokens.size(); ++i) {
+				if(tokens.get(i).tag().startsWith("V")) {
+					if(i+1<tokens.size() && tokens.get(i+1).tag().startsWith("V")) {
 						continue;
 					}
+//					System.out.println("Verb from right: "+i);
 					candidates.add(i);
 					break;
 				}
 			}
-			for(int i=tokenId - 1; i>=span.getFirst(); --i) {
-				if(x.posTags.get(i).getLabel().startsWith("V")) {
+			for(int i=tokenId - 1; i>=0; --i) {
+				if(tokens.get(i).tag().startsWith("V")) {
+//					System.out.println("Verb from Ques: "+i);
 					candidates.add(i);
 					break;
 				}
 			}
 		}
 		if (candidates.size() == 0) {
+			candidates.add(-1);
 			System.out.println("Verb candidates : " + candidates.size());
-			for(int i=span.getFirst(); i<span.getSecond(); ++i) {
-				System.out.print("["+x.ta.getToken(i)+" "+x.posTags.get(i).getLabel()+"] ");
+			for(int i=0; i<tokens.size(); ++i) {
+				System.out.print("["+tokens.get(i).word()+" "+tokens.get(i).tag()+"] ");
 			}
 			System.out.println();
 		}
-
 		return candidates;
 	}
 
 	public static List<Integer> enumerateMath(LogicX x, int mode) {
 		List<Integer> candidates = new ArrayList<>();
+		if (x.sentIds.get(mode) < 0) {
+			candidates.add(-1);
+			return candidates;
+		}
 		int window = 5;
-		Triple<Integer, IntPair, QuantitySchema> triple = getSpanAndSchema(x, mode);
-		int tokenId = triple.getFirst();
-		IntPair span = triple.getSecond();
-		QuantitySchema qSchema = triple.getThird();
+		List<CoreLabel> tokens = x.tokens.get(x.sentIds.get(mode));
+		int tokenId = x.tokenIds.get(mode);
 		if(tokenId >= 0) {
-			for (int i = Math.max(span.getFirst(), tokenId - window);
-				 i < Math.min(span.getSecond(), tokenId + window + 1);
+			for (int i = Math.max(0, tokenId - window);
+				 i < Math.min(tokens.size(), tokenId + window + 1);
 				 ++i) {
-				if (Logic.addTokens.contains(x.ta.getToken(i)) ||
-						Logic.subTokens.contains(x.ta.getToken(i)) ||
-						Logic.mulTokens.contains(x.ta.getToken(i))) {
+				if (Logic.addTokens.contains(tokens.get(i)) ||
+						Logic.subTokens.contains(tokens.get(i)) ||
+						Logic.mulTokens.contains(tokens.get(i))) {
 					candidates.add(i);
 				}
 			}
 		} else {
-			for (int i = span.getFirst(); i < span.getSecond(); ++i) {
-				if (Logic.addTokens.contains(x.ta.getToken(i)) ||
-						Logic.subTokens.contains(x.ta.getToken(i)) ||
-						Logic.mulTokens.contains(x.ta.getToken(i))) {
+			for (int i = x.questionSpan.getFirst(); i < x.questionSpan.getSecond(); ++i) {
+				if (Logic.addTokens.contains(tokens.get(i)) ||
+						Logic.subTokens.contains(tokens.get(i)) ||
+						Logic.mulTokens.contains(tokens.get(i))) {
 					candidates.add(i);
 				}
 			}
@@ -367,26 +365,4 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		if (candidates.size() == 0) candidates.add(-1);
 		return candidates;
 	}
-
-	public static Triple<Integer, IntPair, QuantitySchema> getSpanAndSchema(LogicX x, int mode) {
-		int tokenId = -1;
-		IntPair span = new IntPair(-1, -1);
-		QuantitySchema qSchema = null;
-		if(mode == 0) {
-			span = x.schema.questionSpan;
-			qSchema = x.schema.questionSchema;
-		} else if(mode == 1) {
-			tokenId = x.ta.getTokenIdFromCharacterOffset(x.quantities.get(x.quantIndex1).start);
-			span = new IntPair(x.ta.getSentenceFromToken(tokenId).getStartSpan(),
-					x.ta.getSentenceFromToken(tokenId).getEndSpan());
-			qSchema = x.schema.quantSchemas.get(x.quantIndex1);
-		} else if(mode == 2) {
-			tokenId = x.ta.getTokenIdFromCharacterOffset(x.quantities.get(x.quantIndex2).start);
-			span = new IntPair(x.ta.getSentenceFromToken(tokenId).getStartSpan(),
-					x.ta.getSentenceFromToken(tokenId).getEndSpan());
-			qSchema = x.schema.quantSchemas.get(x.quantIndex2);
-		}
-		return new Triple<>(tokenId, span, qSchema);
-	}
-
 }

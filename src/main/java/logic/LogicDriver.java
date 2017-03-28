@@ -3,7 +3,6 @@ package logic;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.utilities.commands.CommandDescription;
 import edu.illinois.cs.cogcomp.core.utilities.commands.InteractiveShell;
-import edu.illinois.cs.cogcomp.sl.core.AbstractFeatureGenerator;
 import edu.illinois.cs.cogcomp.sl.core.SLModel;
 import edu.illinois.cs.cogcomp.sl.core.SLParameters;
 import edu.illinois.cs.cogcomp.sl.core.SLProblem;
@@ -12,7 +11,7 @@ import edu.illinois.cs.cogcomp.sl.learner.LearnerFactory;
 import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 import reader.Reader;
-import structure.Problem;
+import structure.StanfordProblem;
 import utils.Folds;
 import utils.Params;
 
@@ -36,9 +35,9 @@ public class LogicDriver {
 	@CommandDescription(description = "Params : testFold, train (true/false), dataset_folder")
 	public static Pair<Double, Double> doTrainTest(int testFold, String isTrain, String dataset) 
 			throws Exception {
-		List<List<Problem>> split = Folds.getDataSplit(dataset, testFold);
-		List<Problem> trainProbs = split.get(0);
-		List<Problem> testProbs = split.get(2);
+		List<List<StanfordProblem>> split = Folds.getDataSplitForStanford(dataset, testFold);
+		List<StanfordProblem> trainProbs = split.get(0);
+		List<StanfordProblem> testProbs = split.get(2);
 		SLProblem train = getSP(trainProbs);
 		SLProblem test = getSP(testProbs);
 		System.out.println("Train : "+train.instanceList.size()+" Test : "+test.instanceList.size());
@@ -48,9 +47,9 @@ public class LogicDriver {
 		return testModel("models/Logic"+testFold+".save", test);
 	}
 	
-	public static SLProblem getSP(List<Problem> problemList) throws Exception{
+	public static SLProblem getSP(List<StanfordProblem> problemList) throws Exception{
 		SLProblem problem = new SLProblem();
-		for(Problem prob : problemList){
+		for(StanfordProblem prob : problemList){
 			for(int i=0; i<prob.quantities.size(); ++i) {
 				for(int j=i+1; j<prob.quantities.size(); ++j) {
 					String label = prob.expr.findLabelofLCA(i, j);
@@ -78,7 +77,6 @@ public class LogicDriver {
 				acc += 1;
 			} else {
 				incorrect.add(prob.problemId);
-				System.out.println(prob.problemId+" : "+prob.ta.getText());
 				System.out.println();
 				System.out.println("Schema : "+prob.schema);
 				System.out.println();
@@ -99,15 +97,18 @@ public class LogicDriver {
 	public static void testLogicSolver(String dataset) throws Exception {
 		Set<Integer> incorrect = new HashSet<>();
 		Set<Integer> total = new HashSet<>();
-		List<Problem> probs = Reader.readProblemsFromJson(dataset);
+		List<StanfordProblem> probs = Reader.readStanfordProblemsFromJson(dataset);
 		SLProblem sp = getSP(probs);
 		double acc = 0.0;
 		for (int i = 0; i < sp.instanceList.size(); i++) {
 			LogicX x = (LogicX) sp.instanceList.get(i);
 			LogicY gold = (LogicY) sp.goldStructureList.get(i);
-			LogicInput num1 = new LogicInput(1, x.schema.quantSchemas.get(x.quantIndex1), x);
-			LogicInput num2 = new LogicInput(2, x.schema.quantSchemas.get(x.quantIndex2), x);
-			LogicInput ques = new LogicInput(0, x.schema.questionSchema, x);
+			LogicInput num1 = new LogicInput(1, x.schema.get(x.quantIndex1),
+					x.tokens.get(x.schema.get(x.quantIndex1).sentId));
+			LogicInput num2 = new LogicInput(2, x.schema.get(x.quantIndex2),
+					x.tokens.get(x.schema.get(x.quantIndex2).sentId));
+			LogicInput ques = new LogicInput(0, x.questionSchema,
+					x.questionSchema.sentId >= 0 ? x.tokens.get(x.questionSchema.sentId): null);
 			Map<Pair<String, Integer>, Double> scores = Logic.logicSolver(num1, num2, ques);
 			LogicY pred = null;
 			double maxScore = Double.NEGATIVE_INFINITY;
@@ -122,7 +123,6 @@ public class LogicDriver {
 				acc += 1;
 			} else {
 				incorrect.add(x.problemId);
-				System.out.println(x.problemId+" : "+x.ta.getText());
 				System.out.println();
 				System.out.println("Schema : "+x.schema);
 				System.out.println();
