@@ -111,9 +111,6 @@ public class Logic {
 
     public static List<String> labels = Arrays.asList(
             "ADD", "SUB", "SUB_REV", "MUL", "DIV", "DIV_REV", "NONE");
-    public static List<String> state = Arrays.asList("is", "have", "own");
-    public static List<String> positive = Arrays.asList("got", "gain", "borrow");
-    public static List<String> negative = Arrays.asList("give", "lost", "lend");
 
     public static List<String> addTokens = Arrays.asList("taller", "more", "older", "higher", "faster");
     public static List<String> subTokens = Arrays.asList("shorter", "less", "younger", "slower");
@@ -127,26 +124,6 @@ public class Logic {
         map.put("0_1", Tools.jaccardSim(num1.subject, num2.object));
         map.put("1_0", Tools.jaccardSim(num1.object, num2.subject));
         map.put("1_1", Tools.jaccardSim(num1.object, num2.object));
-        return map;
-    }
-
-    public static Map<String, Double> verbClassify(LogicInput num) {
-        Map<String, Double> map = new HashMap<>();
-        map.put("STATE", 0.0);
-        map.put("POSITIVE", 0.0);
-        map.put("NEGATIVE", 0.0);
-        for (String verb : state) {
-            map.put("STATE", map.get("STATE") + Tools.getVectorSim(verb, num.verbLemma));
-        }
-        map.put("STATE", map.get("STATE") / state.size());
-        for (String verb : positive) {
-            map.put("POSITIVE", map.get("POSITIVE") + Tools.getVectorSim(verb, num.verbLemma));
-        }
-        map.put("POSITIVE", map.get("POSITIVE") / positive.size());
-        for (String verb : negative) {
-            map.put("NEGATIVE", map.get("NEGATIVE") + Tools.getVectorSim(verb, num.verbLemma));
-        }
-        map.put("NEGATIVE", map.get("NEGATIVE") / negative.size());
         return map;
     }
 
@@ -219,9 +196,9 @@ public class Logic {
         Map<String, Double> cc1ques = containerCoref(num1, ques);
         Map<String, Double> cc2ques = containerCoref(num2, ques);
 
-        Map<String, Double> vc1 = verbClassify(num1);
-        Map<String, Double> vc2 = verbClassify(num2);
-        Map<String, Double> vc_ques = verbClassify(ques);
+        Map<String, Double> vc1 = Verbs.verbClassify(num1);
+        Map<String, Double> vc2 = Verbs.verbClassify(num2);
+        Map<String, Double> vc_ques = Verbs.verbClassify(ques);
 
         Map<String, Double> ud12 = unitDependency(num1, num2);
         Map<String, Double> ud1ques = unitDependency(num1, ques);

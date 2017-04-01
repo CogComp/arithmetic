@@ -138,9 +138,9 @@ public class LogicDriver {
 				System.out.println("Quantities : "+x.quantities);
 				System.out.println("Quant of Interest: "+x.quantIndex1+" "+x.quantIndex2);
 				System.out.println();
-				System.out.println("Verb1 : "+Arrays.asList(Logic.verbClassify(num1)));
-				System.out.println("Verb2 : "+Arrays.asList(Logic.verbClassify(num2)));
-				System.out.println("VerbQues : "+Arrays.asList(Logic.verbClassify(ques)));
+				System.out.println("Verb1 : "+Arrays.asList(Verbs.verbClassify(num1)));
+				System.out.println("Verb2 : "+Arrays.asList(Verbs.verbClassify(num2)));
+				System.out.println("VerbQues : "+Arrays.asList(Verbs.verbClassify(ques)));
 				System.out.println();
 				System.out.println("Part12 : "+Arrays.asList(Logic.partition(num1, num2)));
 				System.out.println("Part1Ques : "+Arrays.asList(Logic.partition(num1, ques)));

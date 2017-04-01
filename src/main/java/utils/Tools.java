@@ -45,7 +45,6 @@ public class Tools {
 	public static SimpleQuantifier quantifier;
 	public static AnnotatorService pipeline;
 	public static StanfordCoreNLP stanfordPipeline;
-	public static Map<String, double[]> vectors;
 	public static Map<String, List<CoreMap>> cache;
 
 	static {
@@ -94,9 +93,6 @@ public class Tools {
 
 			quantifier = new SimpleQuantifier();
 			cache = MapDB.newDefaultDb("cache", "cache").make().getHashMap("cache");
-
-			System.out.println("Reading vectors ...");
-			vectors = readVectors(Params.vectorsFile);
 
 			System.out.println("Initializing Wordnet ...");
 			JWNL.initialize();
@@ -424,37 +420,6 @@ public class Tools {
 		if(!map.containsKey(key) || (map.get(key) < val)) {
 			map.put(key, val);
 		}
-	}
-
-	public static Map<String, double[]> readVectors(String vectorFile) throws IOException {
-		Map<String, double[]> vectors = new HashMap<>();
-		for(String line : FileUtils.readLines(new File(vectorFile))) {
-			String strArr[] = line.split(" ");
-			double d[] = new double[strArr.length-1];
-			for(int i=1; i<strArr.length; ++i) {
-				d[i-1] = Double.parseDouble(strArr[i]);
-			}
-			vectors.put(strArr[0].trim(), d);
-		}
-		return vectors;
-	}
-
-	public static double getVectorSim(String word1, String word2) {
-		if (word1 == null || word2 == null) {
-			return 0.0;
-		}
-		if(vectors.containsKey(word1) && vectors.containsKey(word2)) {
-			double[] v1 = vectors.get(word1);
-			double[] v2 = vectors.get(word2);
-			double dot = 0.0, norm1 = 0.0, norm2 = 0.0;
-			for (int i=0; i<v1.length; ++i) {
-				dot += (v1[i]*v2[i]);
-				norm1 += (v1[i]*v1[i]);
-				norm2 += (v2[i]*v2[i]);
-			}
-			return dot / (Math.sqrt(norm1 * norm2));
-		}
-		return 0.0;
 	}
 
 	public static List<String> populatePos(List<String> seq,
