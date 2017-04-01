@@ -4,8 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+import edu.illinois.cs.cogcomp.bigdata.mapdb.MapDB;
+import edu.illinois.cs.cogcomp.nlp.util.SimpleCachingPipeline;
+import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
+import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import edu.stanford.nlp.util.CoreMap;
 import net.didion.jwnl.JWNL;
 import net.didion.jwnl.JWNLException;
 import net.didion.jwnl.data.*;
@@ -41,47 +46,54 @@ public class Tools {
 	public static AnnotatorService pipeline;
 	public static StanfordCoreNLP stanfordPipeline;
 	public static Map<String, double[]> vectors;
+	public static Map<String, List<CoreMap>> cache;
 
 	static {
 		try {
-//			ResourceManager rm = new ResourceManager(Params.pipelineConfig);
-//
-//	        IllinoisTokenizer tokenizer = new IllinoisTokenizer();
-//	        TextAnnotationBuilder taBuilder = new CcgTextAnnotationBuilder( tokenizer );
-//	        IllinoisPOSHandler pos = new IllinoisPOSHandler();
-//	        IllinoisChunkerHandler chunk = new IllinoisChunkerHandler();
-//	        IllinoisNerHandler nerConll = new IllinoisNerHandler( rm, ViewNames.NER_CONLL );
-//	        IllinoisLemmatizerHandler lemma = new IllinoisLemmatizerHandler( rm );
-//
-//	        Properties stanfordProps = new Properties();
-//	        stanfordProps.put( "annotators", "pos, parse") ;
-//	        stanfordProps.put("parse.originalDependencies", true);
-//
-//	        POSTaggerAnnotator posAnnotator = new POSTaggerAnnotator( "pos", stanfordProps );
-//	        ParserAnnotator parseAnnotator = new ParserAnnotator( "parse", stanfordProps );
-//
-//	        StanfordParseHandler parser = new StanfordParseHandler( posAnnotator, parseAnnotator );
-//	        StanfordDepHandler depParser = new StanfordDepHandler( posAnnotator, parseAnnotator );
-//
-//	        Map< String, Annotator> extraViewGenerators = new HashMap<String, Annotator>();
-//
-//	        extraViewGenerators.put( ViewNames.POS, pos );
-//	        extraViewGenerators.put( ViewNames.SHALLOW_PARSE, chunk );
-//	        extraViewGenerators.put( ViewNames.LEMMA, lemma );
-//	        extraViewGenerators.put( ViewNames.NER_CONLL, nerConll );
-//	        extraViewGenerators.put( ViewNames.PARSE_STANFORD, parser );
-//	        extraViewGenerators.put( ViewNames.DEPENDENCY_STANFORD, depParser );
-//
-//	        Map< String, Boolean > requestedViews = new HashMap<String, Boolean>();
-//	        for ( String view : extraViewGenerators.keySet() )
-//	            requestedViews.put( view, false );
+			if (Params.useIllinoisTools) {
+				ResourceManager rm = new ResourceManager(Params.pipelineConfig);
 
-//	        pipeline =  new SimpleCachingPipeline(taBuilder, extraViewGenerators, rm);
-			Properties props = new Properties();
-			props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse");
-			stanfordPipeline = new StanfordCoreNLP(props);
+				IllinoisTokenizer tokenizer = new IllinoisTokenizer();
+				TextAnnotationBuilder taBuilder = new CcgTextAnnotationBuilder(tokenizer);
+				IllinoisPOSHandler pos = new IllinoisPOSHandler();
+				IllinoisChunkerHandler chunk = new IllinoisChunkerHandler();
+				IllinoisNerHandler nerConll = new IllinoisNerHandler(rm, ViewNames.NER_CONLL);
+				IllinoisLemmatizerHandler lemma = new IllinoisLemmatizerHandler(rm);
+
+				Properties stanfordProps = new Properties();
+				stanfordProps.put("annotators", "pos, parse");
+				stanfordProps.put("parse.originalDependencies", true);
+
+				POSTaggerAnnotator posAnnotator = new POSTaggerAnnotator("pos", stanfordProps);
+				ParserAnnotator parseAnnotator = new ParserAnnotator("parse", stanfordProps);
+
+				StanfordParseHandler parser = new StanfordParseHandler(posAnnotator, parseAnnotator);
+				StanfordDepHandler depParser = new StanfordDepHandler(posAnnotator, parseAnnotator);
+
+				Map<String, Annotator> extraViewGenerators = new HashMap<>();
+
+				extraViewGenerators.put(ViewNames.POS, pos);
+				extraViewGenerators.put(ViewNames.SHALLOW_PARSE, chunk);
+				extraViewGenerators.put(ViewNames.LEMMA, lemma);
+				extraViewGenerators.put(ViewNames.NER_CONLL, nerConll);
+				extraViewGenerators.put(ViewNames.PARSE_STANFORD, parser);
+				extraViewGenerators.put(ViewNames.DEPENDENCY_STANFORD, depParser);
+
+				Map<String, Boolean> requestedViews = new HashMap<>();
+				for (String view : extraViewGenerators.keySet())
+					requestedViews.put(view, false);
+
+				pipeline = new SimpleCachingPipeline(taBuilder, extraViewGenerators, rm);
+			}
+
+			if(Params.useStanfordTools) {
+				Properties props = new Properties();
+				props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse");
+				stanfordPipeline = new StanfordCoreNLP(props);
+			}
 
 			quantifier = new SimpleQuantifier();
+			cache = MapDB.newDefaultDb("cache", "cache").make().getHashMap("cache");
 
 			System.out.println("Reading vectors ...");
 			vectors = readVectors(Params.vectorsFile);
@@ -94,7 +106,19 @@ public class Tools {
 			e.printStackTrace();
 		}
 	}
-	
+
+	public static List<CoreMap> annotateWithStanfordCoreNLP(String text) {
+		if (cache.containsKey(text)) {
+			return cache.get(text);
+		} else {
+			Annotation annotation = new Annotation(text);
+			stanfordPipeline.annotate(annotation);
+			List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
+			cache.put(text, sentences);
+			return sentences;
+		}
+	}
+
 	public static double sigmoid(double x) {
 		return 1.0/(1+Math.pow(Math.E, -x))*2.0-1.0;
 	}
@@ -261,42 +285,6 @@ public class Tools {
 		}
 		return sim;
 	}
-
-	public static int editDist(String[] str1 , String[] str2 , int m ,int n) {
-		// Create a table to store results of subproblems
-		int dp[][] = new int[m+1][n+1];
-		// Fill d[][] in bottom up manner
-		for (int i=0; i<=m; i++)
-		{
-			for (int j=0; j<=n; j++)
-			{
-				// If first string is empty, only option is to
-				// isnert all characters of second string
-				if (i==0)
-					dp[i][j] = j;  // Min. operations = j
-
-					// If second string is empty, only option is to
-					// remove all characters of second string
-				else if (j==0)
-					dp[i][j] = i; // Min. operations = i
-
-					// If last characters are same, ignore last char
-					// and recur for remaining string
-				else if (str1[i-1].equalsIgnoreCase(str2[j-1]))
-					dp[i][j] = dp[i-1][j-1];
-
-					// If last character are different, consider all
-					// possibilities and find minimum
-				else
-					dp[i][j] = 1 + Math.min(Math.min(
-							dp[i][j-1],  // Insert
-							dp[i-1][j]),  // Remove
-							dp[i-1][j-1]); // Replace
-			}
-		}
-
-		return dp[m][n];
-	}
 	
 	public static List<String> getTokensListWithCorefReplacements(
 			Constituent cons, Schema schema) {
@@ -356,8 +344,16 @@ public class Tools {
 	}
 
 	public static double jaccardSim(List<String> phrase1, List<String> phrase2) {
-		if(phrase1 == null || phrase2 == null) {
+		if(phrase1 == null || phrase2 == null || phrase1.size() == 0 ||
+				phrase2.size() == 0) {
 			return 0.0;
+		}
+		if(phrase1.get(phrase1.size()-1).equalsIgnoreCase("her") ||
+				phrase2.get(phrase2.size()-1).equalsIgnoreCase("her") ||
+				phrase1.contains("him") || phrase1.contains("them") ||
+				phrase2.contains("him") || phrase2.contains("them") ||
+				phrase2.contains("they")) {
+			return 1.0;
 		}
 		Set<String> tokens1 = new HashSet<>();
 		tokens1.addAll(phrase1);
@@ -372,11 +368,13 @@ public class Tools {
 			}
 		}
 		return intersection*1.0/union;
-
 	}
 
 	public static double jaccardEntail(List<String> phrase1, List<String> phrase2) {
 		if(phrase1 == null || phrase2 == null) {
+			return 0.0;
+		}
+		if(phrase1.size() == phrase2.size()) {
 			return 0.0;
 		}
 		Set<String> tokens1 = new HashSet<>();
@@ -413,7 +411,7 @@ public class Tools {
 
 	public static List<String> spanToLemmaList(List<CoreLabel> tokens, IntPair span) {
 		List<String> lemmas = new ArrayList<>();
-		if (span.getFirst() == -1) {
+		if (span == null || span.getFirst() == -1) {
 			return lemmas;
 		}
 		for(int i=span.getFirst(); i<span.getSecond(); ++i) {
@@ -532,7 +530,8 @@ public class Tools {
 			IndexWord word1 = getIndexWord(tokens1.get(i), posTags1.get(i));
 			if (word1 == null) continue;
 			for (int j=0; j<tokens2.size(); ++j) {
-				if (colors.contains(tokens1.get(i)) && colors.contains(tokens1.get(j))) {
+				if (colors.contains(tokens1.get(i)) && colors.contains(tokens1.get(j)) &&
+						!tokens1.get(i).equalsIgnoreCase(tokens2.get(j))) {
 					return "Siblings";
 				}
 				IndexWord word2 = getIndexWord(tokens2.get(j), posTags2.get(j));
@@ -547,6 +546,9 @@ public class Tools {
 	}
 
 	public static String wordNetIndicator(IndexWord word1, IndexWord word2) {
+		if (word1.getLemma().equalsIgnoreCase(word2.getLemma())) {
+			return null;
+		}
 		try {
 			for(Synset synset1 : word1.getSenses()) {
                 PointerTargetNodeList list = PointerUtils.getInstance().getAntonyms(synset1);
@@ -623,7 +625,7 @@ public class Tools {
 	public static int getSentenceIdFromCharOffset(List<List<CoreLabel>> tokens, int charOffset) {
 		for(int i=0; i<tokens.size(); ++i) {
 			if (charOffset >= tokens.get(i).get(0).beginPosition() &&
-					charOffset <= tokens.get(i).get(tokens.get(i).size()-1).endPosition()) {
+					charOffset < tokens.get(i).get(tokens.get(i).size()-1).endPosition()) {
 				return i;
 			}
 		}
@@ -633,7 +635,7 @@ public class Tools {
 	public static int getTokenIdFromCharOffset(List<CoreLabel> tokens, int charOffset) {
 		for(int i=0; i<tokens.size(); ++i) {
 			if (charOffset >= tokens.get(i).beginPosition() &&
-					charOffset <= tokens.get(i).endPosition()) {
+					charOffset < tokens.get(i).endPosition()) {
 				return i;
 			}
 		}

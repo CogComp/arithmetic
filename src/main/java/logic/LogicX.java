@@ -18,6 +18,7 @@ public class LogicX implements IInstance {
 	public int problemId;
 	public int quantIndex1;
 	public int quantIndex2;
+	public String text;
 	public List<QuantSpan> quantities;
 	public List<List<CoreLabel>> tokens;
 	public List<SemanticGraph> dependencies;
@@ -37,6 +38,7 @@ public class LogicX implements IInstance {
 		this.problemId = prob.id;
 		this.quantIndex1 = quantIndex1;
 		this.quantIndex2 = quantIndex2;
+		this.text = prob.question;
 		this.quantities = prob.quantities;
 		this.tokens = prob.tokens;
 		this.dependencies = prob.dependencies;

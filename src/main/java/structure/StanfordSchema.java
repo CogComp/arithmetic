@@ -8,10 +8,12 @@ import edu.stanford.nlp.semgraph.SemanticGraphEdge;
 import logic.Logic;
 import utils.Tools;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class StanfordSchema {
 
+	List<List<CoreLabel>> tokens;
 	public int sentId;
 	public QuantSpan qs;
 	public IntPair unit;
@@ -25,6 +27,7 @@ public class StanfordSchema {
 		this.qs = null;
 		sentId = -1;
 		verb = -1;
+		math = -1;
 		subject = new IntPair(-1, -1);
 		object = new IntPair(-1, -1);
 		unit = new IntPair(-1, -1);
@@ -33,6 +36,7 @@ public class StanfordSchema {
 
 	public StanfordSchema(StanfordProblem prob, QuantSpan qs) {
 		this.qs = qs;
+		this.tokens = prob.tokens;
 		sentId = Tools.getSentenceIdFromCharOffset(prob.tokens, qs.start);
 		verb = getDependentVerb(prob.dependencies.get(sentId),
 				Tools.getTokenIdFromCharOffset(prob.tokens.get(sentId), qs.start));
@@ -47,14 +51,21 @@ public class StanfordSchema {
 
 	@Override
 	public String toString() {
+		if (sentId == -1) return "No schema found";
 		return "(Num: " + (qs != null ? "" + qs.val : "Null") + ") (Subj: " +
-				subject + ") (Verb: " + verb + ") (Unit: " + unit +
-				") (Obj: " + object + ") (Rate : " + rate + ")" +
-				") (Math: " + math + ")";
+				Arrays.asList(Tools.spanToLemmaList(tokens.get(sentId), subject)) +
+				") (Verb: " +
+				Arrays.asList(Tools.spanToLemmaList(tokens.get(sentId), new IntPair(verb, verb+1))) +
+				") (Unit: " + Arrays.asList(Tools.spanToLemmaList(tokens.get(sentId), unit)) +
+				") (Obj: " + Arrays.asList(Tools.spanToLemmaList(tokens.get(sentId), object)) +
+				") (Rate : " + Arrays.asList(Tools.spanToLemmaList(tokens.get(sentId), rate)) +
+				") (Math: " +
+				Arrays.asList(Tools.spanToLemmaList(tokens.get(sentId), new IntPair(math, math+1))) +
+				")";
 	}
 
 	public static int getDependentVerb(SemanticGraph dependency, int tokenId) {
-		IndexedWord word = dependency.getNodeByIndex(tokenId+1);
+		IndexedWord word = dependency.getNodeByIndexSafe(tokenId+1);
 		IndexedWord prev;
 		while(true) {
 			if (word.tag().startsWith("V")) {
@@ -69,11 +80,12 @@ public class StanfordSchema {
 	}
 
 	public static IntPair getUnit(List<CoreLabel> tokens, int tokenId) {
-		if (tokenId >= 1 && tokens.get(tokenId-1).equals("$")) {
+		if (tokenId >= 1 && tokens.get(tokenId-1).word().equals("$")) {
 			return new IntPair(tokenId-1, tokenId);
 		}
 		for(int i=tokenId + 1; i<tokens.size(); ++i) {
-			if (tokens.get(i).tag().startsWith("N")) {
+			if (tokens.get(i).tag().startsWith("N") ||
+					tokens.get(i).tag().startsWith("PRP")) {
 				if (tokens.get(i-1).tag().startsWith("J")) {
 					return new IntPair(i-1, i+1);
 				} else{
@@ -90,7 +102,8 @@ public class StanfordSchema {
 					tokens.get(i).lemma().equals("every") ||
 					tokens.get(i).lemma().equals("each")) {
 				for(int j=i+1; j<tokens.size(); ++j) {
-					if (tokens.get(j).tag().startsWith("N")) {
+					if (tokens.get(j).tag().startsWith("N") ||
+							tokens.get(j).tag().startsWith("PRP")) {
 						if (tokens.get(j-1).tag().startsWith("J")) {
 							return new IntPair(j-1, j+1);
 						} else{

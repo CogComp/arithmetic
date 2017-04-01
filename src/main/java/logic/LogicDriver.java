@@ -12,6 +12,7 @@ import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 import reader.Reader;
 import structure.StanfordProblem;
+import structure.StanfordSchema;
 import utils.Folds;
 import utils.Params;
 
@@ -77,8 +78,12 @@ public class LogicDriver {
 				acc += 1;
 			} else {
 				incorrect.add(prob.problemId);
+				System.out.println(prob.problemId+" : "+prob.text);
 				System.out.println();
-				System.out.println("Schema : "+prob.schema);
+				for(StanfordSchema schema : prob.schema) {
+					System.out.println(schema);
+				}
+				System.out.println(prob.questionSchema);
 				System.out.println();
 				System.out.println("Quantities : "+prob.quantities);
 				System.out.println("Quant of Interest: "+prob.quantIndex1+" "+prob.quantIndex2);
@@ -123,13 +128,31 @@ public class LogicDriver {
 				acc += 1;
 			} else {
 				incorrect.add(x.problemId);
+				System.out.println(x.problemId+" : "+x.text);
 				System.out.println();
-				System.out.println("Schema : "+x.schema);
+				for(StanfordSchema schema : x.schema) {
+					System.out.println(schema);
+				}
+				System.out.println(x.questionSchema);
 				System.out.println();
 				System.out.println("Quantities : "+x.quantities);
 				System.out.println("Quant of Interest: "+x.quantIndex1+" "+x.quantIndex2);
-				System.out.println("Verb Similarity : "+Arrays.asList(Logic.verbClassify(num1))+" || "+
-						Arrays.asList(Logic.verbClassify(num2))+" || "+Arrays.asList(Logic.verbClassify(ques)));
+				System.out.println();
+				System.out.println("Verb1 : "+Arrays.asList(Logic.verbClassify(num1)));
+				System.out.println("Verb2 : "+Arrays.asList(Logic.verbClassify(num2)));
+				System.out.println("VerbQues : "+Arrays.asList(Logic.verbClassify(ques)));
+				System.out.println();
+				System.out.println("Part12 : "+Arrays.asList(Logic.partition(num1, num2)));
+				System.out.println("Part1Ques : "+Arrays.asList(Logic.partition(num1, ques)));
+				System.out.println("Part2Ques : "+Arrays.asList(Logic.partition(num2, ques)));
+				System.out.println();
+				System.out.println("UD12 : "+Arrays.asList(Logic.unitDependency(num1, num2)));
+				System.out.println("UD1Ques : "+Arrays.asList(Logic.unitDependency(num1, ques)));
+				System.out.println("UD2Ques : "+Arrays.asList(Logic.unitDependency(num2, ques)));
+				System.out.println();
+				System.out.println("Math1 : "+Arrays.asList(Logic.math(num1)));
+				System.out.println("Math2 : "+Arrays.asList(Logic.math(num2)));
+				System.out.println("Math3 : "+Arrays.asList(Logic.math(ques)));
 				System.out.println();
 				System.out.println("Gold : "+gold);
 				System.out.println("Pred : "+pred);

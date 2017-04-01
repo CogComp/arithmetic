@@ -11,6 +11,8 @@ public class Params {
 	public static String patternsFile = "data/patterns.txt";
 	public static String vectorsFile = "/shared/austen/sroy9/paragram/paragram_300_sl999/filtered_300_sl999.txt";
 
+	public static boolean useIllinoisTools = false, useStanfordTools = true;
+
 	public static double validationFrac;
 
 	public static boolean noUDG;

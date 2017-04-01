@@ -92,6 +92,8 @@ class LogicInput {
         this.subject = Tools.spanToLemmaList(tokens, schema.subject);
         this.object = Tools.spanToLemmaList(tokens, schema.object);
         this.unit = Tools.spanToLemmaList(tokens, schema.unit);
+        this.unit.remove("many");
+        this.unit.remove("much");
         this.rate = Tools.spanToLemmaList(tokens, schema.rate);
         if (schema.verb >= 0) {
             this.verbLemma = tokens.get(schema.verb).lemma();
@@ -174,7 +176,8 @@ public class Logic {
         map.put("1_HYPER", Tools.jaccardEntail(num2.unit, num1.unit));
         map.put("1_SIBLING", 0.0);
 
-        String wordnetIndicator = Tools.wordnetIndicator(num1.unit, num2.unit, num1.unitPos, num2.unitPos);
+        String wordnetIndicator = Tools.wordnetIndicator(
+                num1.unit, num2.unit, num1.unitPos, num2.unitPos);
         if (wordnetIndicator == null) {
             return map;
         }
@@ -315,8 +318,12 @@ public class Logic {
         // Unit dep
         Tools.addToHighestMap(scores, new Pair<>("MUL", 3),
                 Math.max(ud12.get("0_DEN"), ud12.get("1_DEN")));
-        Tools.addToHighestMap(scores, new Pair<>("DIV_REV", 3), ud12.get("0_NUM"));
-        Tools.addToHighestMap(scores, new Pair<>("DIV", 3), ud12.get("1_NUM"));
+        if (num1.rate != null && num1.rate.size() > 0) {
+            Tools.addToHighestMap(scores, new Pair<>("DIV_REV", 3), ud12.get("0_NUM"));
+        }
+        if (num2.rate != null && num2.rate.size() > 0) {
+            Tools.addToHighestMap(scores, new Pair<>("DIV", 3), ud12.get("1_NUM"));
+        }
         Tools.addToHighestMap(scores, new Pair<>("DIV", 3),
                 (ud1ques.get("1_NUM") + ud2ques.get("1_DEN"))/2.0);
         Tools.addToHighestMap(scores, new Pair<>("DIV_REV", 3),

@@ -4,11 +4,10 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.ling.IndexedWord;
-import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
+import logic.Logic;
 import reader.Reader;
 import utils.Params;
 import utils.Tools;
@@ -69,9 +68,7 @@ public class StanfordProblem {
 	}
 	
 	public void extractAnnotations() throws Exception {
-		Annotation document = new Annotation(question);
-		Tools.stanfordPipeline.annotate(document);
-		List<CoreMap> sentences = document.get(CoreAnnotations.SentencesAnnotation.class);
+		List<CoreMap> sentences = Tools.annotateWithStanfordCoreNLP(question);
 		tokens = new ArrayList<>();
 		dependencies = new ArrayList<>();
 		for(CoreMap sentence: sentences) {
@@ -88,43 +85,50 @@ public class StanfordProblem {
 
 	public StanfordSchema getQuestionSchema(StanfordProblem prob) {
 		StanfordSchema schema = new StanfordSchema();
+		List<String> whWords = Arrays.asList("what", "how", "when");
+		schema.tokens = prob.tokens;
 		List<CoreLabel> tokens = null;
 		for(int i=0; i<prob.tokens.size(); ++i) {
 			List<CoreLabel> sentence = prob.tokens.get(i);
-			if (sentence.get(sentence.size()-1).equals("?")) {
-				tokens = sentence;
-				schema.sentId = i;
-				break;
+			for(CoreLabel token : sentence) {
+				if(token.word().equals("?") || whWords.contains(token.lemma())) {
+					tokens = sentence;
+					schema.sentId = i;
+					break;
+				}
 			}
 		}
 		if (tokens == null) {
 			return schema;
 		}
-		IntPair quesSpan = getQuestionSpan(prob.tokens.get(schema.sentId));
+		IntPair quesSpan = getQuestionSpan(tokens);
 		SemanticGraph dependency = prob.dependencies.get(schema.sentId);
-		schema.verb = schema.getDependentVerb(dependency, quesSpan.getFirst()+1);
+		schema.verb = schema.getDependentVerb(dependency, quesSpan.getFirst());
 		schema.unit = schema.getUnit(tokens, quesSpan.getFirst());
 		schema.rate = schema.getRate(tokens);
 		schema.subject = schema.getSubject(tokens, dependency, schema.verb);
 		schema.object = schema.getObject(tokens, dependency, schema.verb);
+		for(int i=quesSpan.getFirst(); i<quesSpan.getSecond(); ++i) {
+			if (Logic.addTokens.contains(tokens.get(i).lemma()) ||
+					Logic.subTokens.contains(tokens.get(i).lemma()) ||
+					Logic.mulTokens.contains(tokens.get(i).lemma())) {
+				schema.math = i;
+				break;
+			}
+		}
 		return schema;
 	}
 
 	public static IntPair getQuestionSpan(List<CoreLabel> tokens) {
-		int start = -1, end = -1;
-		for(int i=0; i<tokens.size()-1; ++i) {
-			if (tokens.get(i).lemma().equals("how") &&
-					(tokens.get(i+1).lemma().equals("many") ||
-							tokens.get(i+1).lemma().equals("much"))) {
-				start = i+1;
-				end = tokens.size();
-				for(int j=start+1; j<tokens.size(); ++j) {
-					if(tokens.get(j).equals(",") || tokens.get(j).equals("if")) {
-						end = j;
-						break;
-					}
-				}
-				break;
+		List<String> whWords = Arrays.asList("what", "how", "when");
+		int start = 0, end = tokens.size();
+		for(int i=0; i<tokens.size(); ++i) {
+			if(tokens.get(i).word().equals("?") || tokens.get(i).word().equals("if") ||
+					tokens.get(i).word().equals(",")) {
+				end = i;
+			}
+			if(whWords.contains(tokens.get(i).lemma())) {
+				start = i;
 			}
 		}
 		return new IntPair(start, end);
@@ -134,8 +138,16 @@ public class StanfordProblem {
 		List<StanfordProblem> probs =
 				Reader.readStanfordProblemsFromJson(Params.allArithDir);
 		for(StanfordProblem prob : probs) {
-			System.out.println(prob);
-			System.out.print(prob.schema);
+			for(List<CoreLabel> cl1 : prob.tokens) {
+				for(CoreLabel cl2 : cl1) {
+					System.out.println(cl2.word()+" "+cl2.beginPosition()+" "+cl2.endPosition());
+				}
+			}
+//			System.out.println(prob);
+//			for(StanfordSchema schema : prob.schema) {
+//				System.out.println(schema);
+//			}
+//			System.out.println(prob.questionSchema);
 			System.out.println();
 		}
 	}
