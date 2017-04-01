@@ -67,34 +67,35 @@ public class Verbs {
         }
     }
 
-    public static String verbCategory(String v) {
-        List<String> state = Arrays.asList("is", "have", "own");
-        List<String> positive = Arrays.asList("got", "gain", "borrow");
-        List<String> negative = Arrays.asList("give", "lost", "lend");
+    public static String verbCategory(String verb) {
+        List<String> state = Arrays.asList("be", "have", "own");
+        List<String> positive = Arrays.asList("get", "gain", "borrow");
+        List<String> negative = Arrays.asList("give", "lose", "lend");
         Map<String, Double> map = new HashMap<>();
         map.put("STATE", 0.0);
         map.put("POSITIVE", 0.0);
         map.put("NEGATIVE", 0.0);
-        for (String verb : state) {
-            map.put("STATE", map.get("STATE") + getVectorSim(verb, v));
-        }
-        map.put("STATE", map.get("STATE") / state.size());
-        for (String verb : positive) {
-            map.put("POSITIVE", map.get("POSITIVE") + getVectorSim(verb, v));
-        }
-        map.put("POSITIVE", map.get("POSITIVE") / positive.size());
-        for (String verb : negative) {
-            map.put("NEGATIVE", map.get("NEGATIVE") + getVectorSim(verb, v));
-        }
-        map.put("NEGATIVE", map.get("NEGATIVE") / negative.size());
+        map.put("STATE", Collections.max(Arrays.asList(
+                getVectorSim(verb, state.get(0)),
+                getVectorSim(verb, state.get(1)),
+                getVectorSim(verb, state.get(2)))));
+        map.put("POSITIVE", Collections.max(Arrays.asList(
+                getVectorSim(verb, positive.get(0)),
+                getVectorSim(verb, positive.get(1)),
+                getVectorSim(verb, positive.get(2)))));
+        map.put("NEGATIVE", Collections.max(Arrays.asList(
+                getVectorSim(verb, negative.get(0)),
+                getVectorSim(verb, negative.get(1)),
+                getVectorSim(verb, negative.get(2)))));
         return maxWeightCategory(map);
     }
 
     public static String maxWeightCategory(Map<String, Double> map) {
-        if(map.get("NEGATIVE") > map.get("POSITIVE") && map.get("NEGATIVE") > map.get("STATE")) {
+        if(map.get("NEGATIVE") > map.get("POSITIVE") &&
+                map.get("NEGATIVE") > map.get("STATE")) {
             return "NEGATIVE";
         }
-        if(map.get("POSITIVE") > map.get("NEGATIVE")) {
+        if(map.get("POSITIVE") > map.get("STATE")) {
             return "POSITIVE";
         }
         return "STATE";
@@ -105,16 +106,35 @@ public class Verbs {
         map.put("STATE", 0.0);
         map.put("POSITIVE", 0.0);
         map.put("NEGATIVE", 0.0);
+
         // Hard decision for now
         if(verbCluster.containsKey(num.verbLemma)) {
-            int vc = verbCluster.get(num.verbLemma);
-            String vcc = verbClusterCategory.get(vc);
+            if (num.verbLemma.equals("buy") || num.verbLemma.equals("purchase")) {
+                if (num.unit != null && num.unit.contains("$")) {
+                    map.put("NEGATIVE", 1.0);
+                } else {
+                    map.put("POSITIVE", 1.0);
+                }
+                return map;
+            }
+            if (num.verbLemma.equals("sell")) {
+                if (num.unit != null && num.unit.contains("$")) {
+                    map.put("POSITIVE", 1.0);
+                } else {
+                    map.put("NEGATIVE", 1.0);
+                }
+                return map;
+            }
+//            int vc = verbCluster.get(num.verbLemma);
+//            String vcc = verbClusterCategory.get(vc);
+            String vcc = verbCategory(num.verbLemma);
             map.put(vcc, 1.0);
         }
         return map;
     }
 
     public static double getVectorSim(String word1, String word2) {
+//        System.out.println("Running vector similarity on "+word1+" and "+word2);
         if (word1 == null || word2 == null) {
             return 0.0;
         }
@@ -127,7 +147,9 @@ public class Verbs {
                 norm1 += (v1[i]*v1[i]);
                 norm2 += (v2[i]*v2[i]);
             }
-            return dot / (Math.sqrt(norm1 * norm2));
+            double sim = dot / (Math.sqrt(norm1 * norm2));
+//            System.out.println("Returned "+sim);
+            return sim;
         }
         return 0.0;
     }
@@ -149,5 +171,12 @@ public class Verbs {
         }
         br.close();
         return vectors;
+    }
+
+    public static void main(String args[]) {
+        LogicInput inp = new LogicInput(0);
+        inp.verbLemma = "have";
+        inp.unit = Arrays.asList("");
+        System.out.println(Arrays.asList(verbClassify(inp)));
     }
 }
