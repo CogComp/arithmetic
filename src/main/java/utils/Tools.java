@@ -346,9 +346,11 @@ public class Tools {
 		}
 		if(phrase1.get(phrase1.size()-1).equalsIgnoreCase("her") ||
 				phrase2.get(phrase2.size()-1).equalsIgnoreCase("her") ||
-				phrase1.contains("him") || phrase1.contains("them") ||
-				phrase2.contains("him") || phrase2.contains("them") ||
-				phrase2.contains("they")) {
+				phrase1.contains("him")  || phrase2.contains("him") ||
+				phrase1.contains("them") || phrase2.contains("them") ||
+				phrase1.contains("they") || phrase2.contains("they") ||
+				phrase1.contains("he") || phrase2.contains("he") ||
+				phrase1.contains("she") || phrase2.contains("she")) {
 			return 1.0;
 		}
 		Set<String> tokens1 = new HashSet<>();
@@ -367,11 +369,17 @@ public class Tools {
 	}
 
 	public static double jaccardEntail(List<String> phrase1, List<String> phrase2) {
-		if(phrase1 == null || phrase2 == null) {
+		if(phrase1 == null || phrase2 == null ||
+				phrase1.size() == 0 || phrase2.size() == 0) {
 			return 0.0;
 		}
-		if(phrase1.size() == phrase2.size()) {
-			return 0.0;
+		if(phrase1.get(phrase1.size()-1).equalsIgnoreCase("her") ||
+				phrase1.contains("him")  || phrase1.contains("them") ||
+				phrase1.contains("he") || phrase1.contains("she")) {
+			return 1.0;
+		}
+		if(phrase2.contains("them") || phrase2.contains("they")) {
+			return 1.0;
 		}
 		Set<String> tokens1 = new HashSet<>();
 		tokens1.addAll(phrase1);

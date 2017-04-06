@@ -117,8 +117,8 @@ public class LogicDriver {
 			Map<Pair<String, Integer>, Double> scores = Logic.logicSolver(num1, num2, ques);
 			LogicY pred = null;
 			double maxScore = Double.NEGATIVE_INFINITY;
-			for(Pair<String, Integer> key : scores.keySet()) {
-				if(scores.get(key) > maxScore) {
+			for (Pair<String, Integer> key : scores.keySet()) {
+				if (scores.get(key) > maxScore) {
 					maxScore = scores.get(key);
 					pred = new LogicY(key.getFirst(), key.getSecond(), null, null, null);
 				}
@@ -128,37 +128,47 @@ public class LogicDriver {
 				acc += 1;
 			} else {
 				incorrect.add(x.problemId);
-				System.out.println(x.problemId+" : "+x.text);
-				System.out.println();
-				for(StanfordSchema schema : x.schema) {
-					System.out.println(schema);
-				}
-				System.out.println(x.questionSchema);
-				System.out.println();
-				System.out.println("Quantities : "+x.quantities);
-				System.out.println("Quant of Interest: "+x.quantIndex1+" "+x.quantIndex2);
-				System.out.println();
-				System.out.println("Verb1 : "+Arrays.asList(Verbs.verbClassify(num1)));
-				System.out.println("Verb2 : "+Arrays.asList(Verbs.verbClassify(num2)));
-				System.out.println("VerbQues : "+Arrays.asList(Verbs.verbClassify(ques)));
-				System.out.println();
-				System.out.println("Part12 : "+Arrays.asList(Logic.partition(num1, num2)));
-				System.out.println("Part1Ques : "+Arrays.asList(Logic.partition(num1, ques)));
-				System.out.println("Part2Ques : "+Arrays.asList(Logic.partition(num2, ques)));
-				System.out.println();
-				System.out.println("UD12 : "+Arrays.asList(Logic.unitDependency(num1, num2)));
-				System.out.println("UD1Ques : "+Arrays.asList(Logic.unitDependency(num1, ques)));
-				System.out.println("UD2Ques : "+Arrays.asList(Logic.unitDependency(num2, ques)));
-				System.out.println();
-				System.out.println("Math1 : "+Arrays.asList(Logic.math(num1)));
-				System.out.println("Math2 : "+Arrays.asList(Logic.math(num2)));
-				System.out.println("Math3 : "+Arrays.asList(Logic.math(ques)));
-				System.out.println();
-				System.out.println("Gold : "+gold);
-				System.out.println("Pred : "+pred);
-				System.out.println("Loss : "+ LogicY.getLoss(gold, pred));
-				System.out.println();
 			}
+			System.out.println(x.problemId+" : "+x.text);
+			System.out.println();
+			for(StanfordSchema schema : x.schema) {
+				System.out.println(schema);
+			}
+			System.out.println(x.questionSchema);
+			System.out.println();
+			System.out.println("Quantities : "+x.quantities);
+			System.out.println("Quant of Interest: "+x.quantIndex1+" "+x.quantIndex2);
+			System.out.println();
+			System.out.println("Verb1 : "+Arrays.asList(Verbs.verbClassify(num1)));
+			System.out.println("Verb2 : "+Arrays.asList(Verbs.verbClassify(num2)));
+			System.out.println("VerbQues : "+Arrays.asList(Verbs.verbClassify(ques)));
+			System.out.println();
+			System.out.println("Part12 : "+Arrays.asList(Logic.partition(num1, num2)));
+			System.out.println("Part1Ques : "+Arrays.asList(Logic.partition(num1, ques)));
+			System.out.println("Part2Ques : "+Arrays.asList(Logic.partition(num2, ques)));
+			System.out.println();
+			System.out.println("UD12 : "+Arrays.asList(Logic.unitDependency(num1, num2)));
+			System.out.println("UD1Ques : "+Arrays.asList(Logic.unitDependency(num1, ques)));
+			System.out.println("UD2Ques : "+Arrays.asList(Logic.unitDependency(num2, ques)));
+			System.out.println();
+			System.out.println("Math1 : "+Arrays.asList(Logic.math(num1)));
+			System.out.println("Math2 : "+Arrays.asList(Logic.math(num2)));
+			System.out.println("Math3 : "+Arrays.asList(Logic.math(ques)));
+			System.out.println();
+			System.out.println("Gold : "+gold);
+			for(int infRule=0; infRule<Logic.maxNumInferenceTypes; ++infRule) {
+				pred = null;
+				maxScore = Double.NEGATIVE_INFINITY;
+				for (Pair<String, Integer> key : scores.keySet()) {
+					if (key.getSecond() != infRule) continue;
+					if (scores.get(key) > maxScore) {
+						maxScore = scores.get(key);
+						pred = new LogicY(key.getFirst(), key.getSecond(), null, null, null);
+					}
+				}
+				System.out.println(pred);
+			}
+			System.out.println();
 		}
 		System.out.println("Accuracy : = " + acc + " / " + sp.instanceList.size()
 				+ " = " + (acc/sp.instanceList.size()));
@@ -204,7 +214,6 @@ public class LogicDriver {
 		}
 		return wv;
 	}
-
 
 	public static void main(String[] args) throws Exception {
 		InteractiveShell<LogicDriver> tester = new InteractiveShell<>(LogicDriver.class);

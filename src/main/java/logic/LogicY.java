@@ -37,6 +37,8 @@ public class LogicY implements IStructure {
 			inference = "Math";
 		} else if (inferenceRule == 3) {
 			inference = "Rate";
+		} else {
+			inference = "No Relation";
 		}
 		return label+" "+inference;
 	}

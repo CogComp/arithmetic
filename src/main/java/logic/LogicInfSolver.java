@@ -12,11 +12,11 @@ import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import structure.PairComparator;
 import structure.StanfordSchema;
+import utils.Params;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class LogicInfSolver extends AbstractInferenceSolver implements Serializable {
 
@@ -43,21 +43,18 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				enumerateLogicInputTriples(logicX, weight)) {
 			Triple<LogicInput, LogicInput, LogicInput> logicInput = pair.getFirst();
 			Double extractionScore = pair.getSecond();
-			Map<Pair<String, Integer>, Double> logicOutput = Logic.logicSolver(
-					logicInput.getFirst(), logicInput.getSecond(), logicInput.getThird());
-			for (String label : Logic.labels) {
-				for (int infRule = 0; infRule < Logic.maxNumInferenceTypes; infRule++) {
-					LogicY logicY = new LogicY(label, infRule, logicInput.getFirst(),
-							logicInput.getSecond(), logicInput.getThird());
-					double score = weight.dotProduct(featGen.getFeatureVector(ins, logicY)) *
-							logicOutput.getOrDefault(new Pair<>(label, infRule), 0.0) + extractionScore;
-					if (bestScore < score) {
-						best = logicY;
-						bestScore = score;
-					}
+			for (int infRule = 0; infRule < Logic.maxNumInferenceTypes; infRule++) {
+				LogicY logicY = new LogicY(null, infRule, logicInput.getFirst(),
+						logicInput.getSecond(), logicInput.getThird());
+				double score = weight.dotProduct(featGen.getLogicFeatureVector(
+						logicX, logicY)) + extractionScore;
+				if (bestScore < score) {
+					best = logicY;
+					bestScore = score;
 				}
 			}
 		}
+		best.label = Logic.logicSolver(best.num1, best.num2, best.ques, best.inferenceRule);
 		return best;
 	}
 
@@ -73,17 +70,37 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				enumerateLogicInputTriples(ins, weight)) {
 			Triple<LogicInput, LogicInput, LogicInput> logicInput = pair.getFirst();
 			Double extractionScore = pair.getSecond();
-			Map<Pair<String, Integer>, Double> logicOutput = Logic.logicSolver(
-					logicInput.getFirst(), logicInput.getSecond(), logicInput.getThird());
 			for (int infRule = 0; infRule < Logic.maxNumInferenceTypes; infRule++) {
+				String label = Logic.logicSolver(logicInput.getFirst(),
+						logicInput.getSecond(), logicInput.getThird(), infRule);
+				if(!label.equals(gold.label)) {
+					continue;
+				}
 				LogicY logicY = new LogicY(gold.label, infRule, logicInput.getFirst(),
-						logicInput.getSecond(), logicInput.getThird());
-				double score = weight.dotProduct(featGen.getFeatureVector(ins, logicY)) *
-						logicOutput.getOrDefault(new Pair<>(gold.label, infRule), 0.0) +
-						extractionScore;
+					logicInput.getSecond(), logicInput.getThird());
+				double score = weight.dotProduct(featGen.getLogicFeatureVector(
+					ins, logicY)) + extractionScore;
 				if (bestScore < score) {
 					best = logicY;
 					bestScore = score;
+				}
+			}
+		}
+		if(best == null) {
+			// In this part, we don't restrict that the KB response has to be gold label
+			for(Pair<Triple<LogicInput, LogicInput, LogicInput>, Double> pair :
+					enumerateLogicInputTriples(ins, weight)) {
+				Triple<LogicInput, LogicInput, LogicInput> logicInput = pair.getFirst();
+				Double extractionScore = pair.getSecond();
+				for (int infRule = 0; infRule < Logic.maxNumInferenceTypes; infRule++) {
+					LogicY logicY = new LogicY(gold.label, infRule, logicInput.getFirst(),
+							logicInput.getSecond(), logicInput.getThird());
+					double score = weight.dotProduct(featGen.getLogicFeatureVector(
+							ins, logicY)) + extractionScore;
+					if (bestScore < score) {
+						best = logicY;
+						bestScore = score;
+					}
 				}
 			}
 		}
@@ -99,8 +116,8 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		for(Pair<LogicInput, Double> pair1 : enumerateLogicInputs(x, 0, wv)) {
 			for(Pair<LogicInput, Double> pair2 : enumerateLogicInputs(x, 1, wv)) {
 				for(Pair<LogicInput, Double> pair3 : enumerateLogicInputs(x, 2, wv)) {
-					inputs.add(new Pair<>(new Triple<>(pair1.getFirst(),
-							pair2.getFirst(), pair3.getFirst()),
+					inputs.add(new Pair<>(new Triple<>(
+							pair1.getFirst(), pair2.getFirst(), pair3.getFirst()),
 							pair1.getSecond() + pair2.getSecond() + pair3.getSecond()));
 				}
 			}
@@ -112,7 +129,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 			LogicX x, int mode, WeightVector wv) {
 		PairComparator<LogicInput> pairComparator = new PairComparator<LogicInput>() {};
 		MinMaxPriorityQueue<Pair<LogicInput, Double>> inputs =
-				MinMaxPriorityQueue.orderedBy(pairComparator).maximumSize(200).create();
+				MinMaxPriorityQueue.orderedBy(pairComparator).maximumSize(10).create();
 		for(Integer verbIndex : enumerateVerbs(x, mode)) {
 			for(IntPair subj : enumerateSubjects(x, mode, verbIndex)) {
 				for(IntPair obj : enumerateObjects(x, mode, verbIndex)) {
@@ -123,11 +140,11 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 										mode, subj, obj, unit, rate, verbIndex, mathIndex,
 										x.sentIds.get(mode) >= 0 ?
 												x.tokens.get(x.sentIds.get(mode)) : null);
-								double score = wv.dotProduct(featGen.getVerbFeatureVector(x, verbIndex)) +
-										wv.dotProduct(featGen.getSubjectFeatureVector(x, subj)) +
-										wv.dotProduct(featGen.getObjectFeatureVector(x, obj)) +
-										wv.dotProduct(featGen.getUnitFeatureVector(x, unit)) +
-										wv.dotProduct(featGen.getRateFeatureVector(x, rate));
+								double score = wv.dotProduct(featGen.getVerbFeatureVector(x, verbIndex, mode)) +
+										wv.dotProduct(featGen.getSubjectFeatureVector(x, subj, mode)) +
+										wv.dotProduct(featGen.getObjectFeatureVector(x, obj, mode)) +
+										wv.dotProduct(featGen.getUnitFeatureVector(x, unit, mode)) +
+										wv.dotProduct(featGen.getRateFeatureVector(x, rate, mode));
 								inputs.add(new Pair<>(logicInput, score));
 							}
 						}
@@ -142,6 +159,11 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		List<IntPair> candidates = new ArrayList<>();
 		if (x.sentIds.get(mode) < 0) {
 			candidates.add(new IntPair(-1, -1));
+			return candidates;
+		}
+		StanfordSchema qSchema = x.relevantSchemas.get(mode);
+		if(!Params.useLearnedExtraction) {
+			candidates.add(qSchema.subject);
 			return candidates;
 		}
 		List<CoreLabel> tokens = x.tokens.get(x.sentIds.get(mode));
@@ -175,6 +197,11 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		List<IntPair> candidates = new ArrayList<>();
 		if (x.sentIds.get(mode) < 0) {
 			candidates.add(new IntPair(-1, -1));
+			return candidates;
+		}
+		StanfordSchema qSchema = x.relevantSchemas.get(mode);
+		if(!Params.useLearnedExtraction) {
+			candidates.add(qSchema.object);
 			return candidates;
 		}
 		List<CoreLabel> tokens = x.tokens.get(x.sentIds.get(mode));
@@ -212,6 +239,11 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 			candidates.add(new IntPair(-1, -1));
 			return candidates;
 		}
+		StanfordSchema qSchema = x.relevantSchemas.get(mode);
+		if(!Params.useLearnedExtraction) {
+			candidates.add(qSchema.unit);
+			return candidates;
+		}
 		List<CoreLabel> tokens = x.tokens.get(x.sentIds.get(mode));
 		IntPair span = (mode == 0) ? x.questionSpan : new IntPair(0, tokens.size());
 		int tokenId = x.tokenIds.get(mode);
@@ -245,6 +277,11 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 			candidates.add(new IntPair(-1, -1));
 			return candidates;
 		}
+		StanfordSchema qSchema = x.relevantSchemas.get(mode);
+		if(!Params.useLearnedExtraction) {
+			candidates.add(qSchema.rate);
+			return candidates;
+		}
 		List<CoreLabel> tokens = x.tokens.get(x.sentIds.get(mode));
 		IntPair span = (mode == 0) ? x.questionSpan : new IntPair(0, tokens.size());
 		for(int i=span.getFirst(); i<span.getSecond(); ++i) {
@@ -267,7 +304,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				break;
 			}
 		}
-		if (candidates.size() == 0) candidates.add(new IntPair(-1, -1));
+		candidates.add(new IntPair(-1, -1));
 		return candidates;
 	}
 
@@ -279,18 +316,14 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		}
 		int tokenId = x.tokenIds.get(mode);
 		List<CoreLabel> tokens = x.tokens.get(x.sentIds.get(mode));
-//		for(CoreLabel token : tokens) {
-//			System.out.print(token+" ");
-//		}
-//		System.out.println();
-//		System.out.println("Tokens size : "+tokens.size());
 		StanfordSchema qSchema = x.relevantSchemas.get(mode);
+		if(!Params.useLearnedExtraction) {
+			candidates.add(qSchema.verb);
+			return candidates;
+		}
 		int verbTokenIndex;
 		if (qSchema.verb != -1) {
 			verbTokenIndex = qSchema.verb;
-//			System.out.println("Verb from schema : "+verbTokenIndex);
-//			System.out.println("Mode: "+mode);
-//			System.out.println("LogicX: "+x);
 			candidates.add(verbTokenIndex);
 			return candidates;
 		}
@@ -310,14 +343,12 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 					if(i+1<tokens.size() && tokens.get(i+1).tag().startsWith("V")) {
 						continue;
 					}
-//					System.out.println("Verb from right: "+i);
 					candidates.add(i);
 					break;
 				}
 			}
 			for(int i=tokenId - 1; i>=0; --i) {
 				if(tokens.get(i).tag().startsWith("V")) {
-//					System.out.println("Verb from Ques: "+i);
 					candidates.add(i);
 					break;
 				}
@@ -340,6 +371,11 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 			candidates.add(-1);
 			return candidates;
 		}
+		StanfordSchema qSchema = x.relevantSchemas.get(mode);
+		if(!Params.useLearnedExtraction) {
+			candidates.add(qSchema.math);
+			return candidates;
+		}
 		int window = 5;
 		List<CoreLabel> tokens = x.tokens.get(x.sentIds.get(mode));
 		int tokenId = x.tokenIds.get(mode);
@@ -347,22 +383,22 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 			for (int i = Math.max(0, tokenId - window);
 				 i < Math.min(tokens.size(), tokenId + window + 1);
 				 ++i) {
-				if (Logic.addTokens.contains(tokens.get(i)) ||
-						Logic.subTokens.contains(tokens.get(i)) ||
-						Logic.mulTokens.contains(tokens.get(i))) {
+				if (Logic.addTokens.contains(tokens.get(i).word()) ||
+						Logic.subTokens.contains(tokens.get(i).word()) ||
+						Logic.mulTokens.contains(tokens.get(i).word())) {
 					candidates.add(i);
 				}
 			}
 		} else {
 			for (int i = x.questionSpan.getFirst(); i < x.questionSpan.getSecond(); ++i) {
-				if (Logic.addTokens.contains(tokens.get(i)) ||
-						Logic.subTokens.contains(tokens.get(i)) ||
-						Logic.mulTokens.contains(tokens.get(i))) {
+				if (Logic.addTokens.contains(tokens.get(i).word()) ||
+						Logic.subTokens.contains(tokens.get(i).word()) ||
+						Logic.mulTokens.contains(tokens.get(i).word())) {
 					candidates.add(i);
 				}
 			}
 		}
-		if (candidates.size() == 0) candidates.add(-1);
+		candidates.add(-1);
 		return candidates;
 	}
 }

@@ -105,5 +105,13 @@ public class FeatGen {
 		}
 		return feats;
 	}
+
+	public static List<String> getFeaturesConjWithLabels(List<String> feats, String label) {
+		List<String> f =new ArrayList<>();
+		for(String feat : feats) {
+			f.add(label+"_"+feat);
+		}
+		return f;
+	}
 	
 }

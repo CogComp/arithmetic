@@ -18,8 +18,8 @@ public class Verbs {
             readVerbClusters(Params.verbnetDir);
             System.out.println("Reading vectors for verbs ...");
             vectors = readVectors(Params.vectorsFile);
-            System.out.println("Assigning verb category using verbnet ...");
-            getVerbCategoryUsingVerbNet();
+//            System.out.println("Assigning verb category using verbnet ...");
+//            getVerbCategoryUsingVerbNet();
         } catch (IOException e) {
             e.printStackTrace();
         }

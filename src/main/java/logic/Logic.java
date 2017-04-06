@@ -111,12 +111,13 @@ public class Logic {
 
     public static List<String> labels = Arrays.asList(
             "ADD", "SUB", "SUB_REV", "MUL", "DIV", "DIV_REV", "NONE");
-
-    public static List<String> addTokens = Arrays.asList("taller", "more", "older", "higher", "faster");
-    public static List<String> subTokens = Arrays.asList("shorter", "less", "younger", "slower");
+    public static List<String> addTokens = Arrays.asList(
+            "taller", "more", "older", "higher", "faster");
+    public static List<String> subTokens = Arrays.asList(
+            "shorter", "less", "younger", "slower");
     public static List<String> mulTokens = Arrays.asList("times");
 
-    public static int maxNumInferenceTypes = 4;
+    public static int maxNumInferenceTypes = 5;
 
     public static Map<String, Double> containerCoref(LogicInput num1, LogicInput num2) {
         Map<String, Double> map = new HashMap<>();
@@ -141,17 +142,21 @@ public class Logic {
         map.put("1_NUM", Tools.jaccardSim(num1.unit, num2.unit)*isRate2);
         map.put("0_DEN", Tools.jaccardSim(num1.rate, num2.unit));
         map.put("1_DEN", Tools.jaccardSim(num2.rate, num1.unit));
-        map.put("NO_REL", 1 - Tools.jaccardSim(num1.unit, num2.unit));
         return map;
     }
 
     public static Map<String, Double> partition(LogicInput num1, LogicInput num2) {
         Map<String, Double> map = new HashMap<>();
-        map.put("0_HYPO", Tools.jaccardEntail(num1.subject, num2.subject));
-        map.put("0_HYPER", Tools.jaccardEntail(num2.subject, num1.subject));
-        map.put("1_HYPO", Tools.jaccardEntail(num1.unit, num2.unit));
-        map.put("1_HYPER", Tools.jaccardEntail(num2.unit, num1.unit));
-        map.put("1_SIBLING", 0.0);
+        map.put("0_HYPO", (Tools.jaccardEntail(num1.subject, num2.subject) +
+                1 - Tools.jaccardEntail(num2.subject, num1.subject))/2.0);
+        map.put("0_HYPER", (Tools.jaccardEntail(num2.subject, num1.subject) +
+                1 - Tools.jaccardEntail(num1.subject, num2.subject))/2.0);
+        map.put("1_HYPO", (Tools.jaccardEntail(num1.unit, num2.unit) +
+                1 - Tools.jaccardEntail(num2.unit, num1.unit))/2.0);
+        map.put("1_HYPER", (Tools.jaccardEntail(num2.unit, num1.unit) +
+                1 - Tools.jaccardEntail(num1.unit, num2.unit))/2.0);
+        map.put("0_SIBLING", Tools.jaccardSim(num1.subject, num2.subject));
+        map.put("1_SIBLING", Tools.jaccardSim(num1.unit, num2.unit));
 
         String wordnetIndicator = Tools.wordnetIndicator(
                 num1.unit, num2.unit, num1.unitPos, num2.unitPos);
@@ -187,6 +192,23 @@ public class Logic {
         return map;
     }
 
+    public static String logicSolver(LogicInput num1, LogicInput num2,
+                                     LogicInput ques, int inferenceRule) {
+        if(inferenceRule == 4) {
+            return "NONE";
+        }
+        Map<Pair<String, Integer>, Double> logicOutput = Logic.logicSolver(num1, num2, ques);
+        String bestLabel = null;
+        Double bestScore = Double.NEGATIVE_INFINITY;
+        for(Pair<String, Integer> pair : logicOutput.keySet()) {
+            if(pair.getSecond() == inferenceRule && bestScore < logicOutput.get(pair)) {
+                bestLabel = pair.getFirst();
+                bestScore = logicOutput.get(pair);
+            }
+        }
+        return bestLabel;
+    }
+
     public static Map<Pair<String, Integer>, Double> logicSolver(
             LogicInput num1, LogicInput num2, LogicInput ques) {
 
@@ -196,8 +218,10 @@ public class Logic {
         Map<String, Double> cc1ques = containerCoref(num1, ques);
         Map<String, Double> cc2ques = containerCoref(num2, ques);
 
-        Map<String, Double> vc1 = Verbs.verbClassify(num1);
-        Map<String, Double> vc2 = Verbs.verbClassify(num2);
+        Map<String, Double> vc1 = transformVerbCategoryBasedonContainers(
+                Verbs.verbClassify(num1), cc1ques);
+        Map<String, Double> vc2 = transformVerbCategoryBasedonContainers(
+                Verbs.verbClassify(num2), cc2ques);
         Map<String, Double> vc_ques = Verbs.verbClassify(ques);
 
         Map<String, Double> ud12 = unitDependency(num1, num2);
@@ -214,51 +238,44 @@ public class Logic {
 
         // Reason : verb interaction
         // Container coref, unit dep, verb interaction
-        Tools.addToHighestMap(scores, new Pair<>("ADD", 0),
-                (ud12.get("SAME_UNIT") + cc12.get("0_0") + Collections.max(Arrays.asList(
-                vc1.get("STATE") + vc2.get("POSITIVE"),
-                vc1.get("POSITIVE") + vc2.get("POSITIVE"),
-                vc1.get("NEGATIVE") + vc2.get("STATE"),
-                vc1.get("NEGATIVE") + vc2.get("NEGATIVE"))))/4.0);
-        Tools.addToHighestMap(scores, new Pair<>("ADD", 0),
-                (ud12.get("SAME_UNIT") + cc12.get("0_1") + Collections.max(Arrays.asList(
-                vc1.get("STATE") + vc2.get("NEGATIVE"),
-                vc1.get("POSITIVE") + vc2.get("NEGATIVE"))))/4.0);
-        Tools.addToHighestMap(scores, new Pair<>("ADD", 0),
-                (ud12.get("SAME_UNIT") + cc12.get("1_0") + Collections.max(Arrays.asList(
-                vc2.get("STATE") + vc1.get("POSITIVE"),
-                vc2.get("POSITIVE") + vc1.get("NEGATIVE"))))/4.0);
-        Tools.addToHighestMap(scores, new Pair<>("SUB", 0),
-                (ud12.get("SAME_UNIT") + cc12.get("0_0") + Collections.max(Arrays.asList(
-                vc1.get("STATE") + vc2.get("STATE"),
-                vc1.get("STATE") + vc2.get("NEGATIVE"),
-                vc1.get("POSITIVE") + vc2.get("NEGATIVE"))))/4.0);
-        Tools.addToHighestMap(scores, new Pair<>("SUB", 0),
-                (ud12.get("SAME_UNIT") + cc12.get("0_1") + Collections.max(Arrays.asList(
-                vc1.get("STATE") + vc2.get("POSITIVE"),
-                vc1.get("POSITIVE") + vc2.get("POSITIVE"))))/4.0);
-        Tools.addToHighestMap(scores, new Pair<>("SUB_REV", 0),
-                (ud12.get("SAME_UNIT") + cc12.get("1_0") +
-                        vc1.get("NEGATIVE") + vc2.get("STATE"))/4.0);
+        Tools.addToHighestMap(scores, new Pair<>("ADD", 0), Collections.max(Arrays.asList(
+                vc1.get("STATE") + vc2.get("POSITIVE") + vc_ques.get("STATE"),
+                vc1.get("POSITIVE") + vc2.get("POSITIVE") + vc_ques.get("STATE"),
+                vc1.get("NEGATIVE") + vc2.get("STATE") + vc_ques.get("STATE"),
+                vc1.get("NEGATIVE") + vc2.get("NEGATIVE") + vc_ques.get("STATE")))/3.0);
+        Tools.addToHighestMap(scores, new Pair<>("SUB", 0), Collections.max(Arrays.asList(
+                vc1.get("STATE") + vc2.get("STATE") + vc_ques.get("NEGATIVE"),
+                vc1.get("STATE") + vc2.get("NEGATIVE") + vc_ques.get("STATE"),
+                vc1.get("POSITIVE") + vc2.get("NEGATIVE") + vc_ques.get("STATE")))/3.0);
+        Tools.addToHighestMap(scores, new Pair<>("SUB_REV", 0), Collections.max(Arrays.asList(
+                vc1.get("STATE") + vc2.get("STATE") + vc_ques.get("POSITIVE"),
+                vc1.get("POSITIVE") + vc2.get("STATE") + vc_ques.get("STATE"),
+                vc1.get("NEGATIVE") + vc2.get("POSITIVE") + vc_ques.get("STATE")))/3.0);
 
         // Reason : partition relation
         // Hyponym in wordnet
-        Tools.addToHighestMap(scores, new Pair<>("ADD", 1), part12.get("1_SIBLING"));
-        Tools.addToHighestMap(scores, new Pair<>("SUB", 1), part12.get("1_HYPER"));
-        Tools.addToHighestMap(scores, new Pair<>("SUB_REV", 1), part12.get("1_HYPO"));
-        Tools.addToHighestMap(scores, new Pair<>("SUB_REV", 1),part1ques.get("1_SIBLING"));
-        Tools.addToHighestMap(scores, new Pair<>("SUB", 1), part2ques.get("1_SIBLING"));
-        Tools.addToHighestMap(scores, new Pair<>("ADD", 1),
-                Math.max(part1ques.get("1_HYPO"), part2ques.get("1_HYPO")));
-        Tools.addToHighestMap(scores, new Pair<>("SUB", 1), part1ques.get("1_HYPER"));
-        Tools.addToHighestMap(scores, new Pair<>("SUB_REV", 1), part2ques.get("1_HYPER"));
+        Tools.addToHighestMap(scores, new Pair<>("ADD", 1), (part12.get("1_SIBLING") +
+                (part1ques.get("1_HYPO")+1-part1ques.get("1_HYPER")) +
+                (part2ques.get("1_HYPO")+1-part2ques.get("1_HYPER")))/5.0);
+        Tools.addToHighestMap(scores, new Pair<>("SUB", 1), (part2ques.get("1_SIBLING") +
+                (part12.get("1_HYPER")+1-part12.get("1_HYPO")) +
+                (part1ques.get("1_HYPER")+1-part1ques.get("1_HYPO")))/5.0);
+        Tools.addToHighestMap(scores, new Pair<>("SUB_REV", 1), (part1ques.get("1_SIBLING") +
+                (part12.get("1_HYPO")+1-part12.get("1_HYPER")) +
+                (part2ques.get("1_HYPER")+1-part2ques.get("1_HYPO")))/5.0);
 
         // Partition of subject
-        if (num1.verbLemma != null && num2.verbLemma != null &&
-                ques.verbLemma != null && num1.verbLemma.equals(num2.verbLemma) &&
-                num1.verbLemma.equals(ques.verbLemma)) {
-            Tools.addToHighestMap(scores, new Pair<>("ADD", 1), part1ques.get("0_HYPO"));
-            Tools.addToHighestMap(scores, new Pair<>("ADD", 1), part1ques.get("1_HYPO"));
+        // Extra 1 is added because of the verb match
+        if (num1.verbLemma != null && num2.verbLemma != null && num1.verbLemma.equals(num2.verbLemma)) {
+            Tools.addToHighestMap(scores, new Pair<>("ADD", 1), (part12.get("0_SIBLING") +
+                    (part1ques.get("0_HYPO")+1-part1ques.get("0_HYPER")) +
+                    (part2ques.get("0_HYPO")+1-part2ques.get("0_HYPER")))/5.0);
+            Tools.addToHighestMap(scores, new Pair<>("SUB", 1), (part2ques.get("0_SIBLING") +
+                    (part12.get("0_HYPER")+1-part12.get("0_HYPO")) +
+                    (part1ques.get("0_HYPER")+1-part1ques.get("0_HYPO")))/5.0);
+            Tools.addToHighestMap(scores, new Pair<>("SUB_REV", 1), (part1ques.get("0_SIBLING") +
+                    (part12.get("0_HYPO")+1-part12.get("0_HYPER")) +
+                    (part2ques.get("0_HYPER")+1-part2ques.get("0_HYPO")))/5.0);
         }
 
         // Reason : math
@@ -306,6 +323,17 @@ public class Logic {
         Tools.addToHighestMap(scores, new Pair<>("DIV_REV", 3),
                 (ud1ques.get("1_DEN") + ud2ques.get("1_NUM"))/2.0);
         return scores;
+    }
+
+    public static Map<String, Double> transformVerbCategoryBasedonContainers(
+            Map<String, Double> vc, Map<String, Double> ccQuestion) {
+        Map<String, Double> map = new HashMap<>();
+        map.put("STATE", vc.get("STATE"));
+        map.put("POSITIVE", Math.max(vc.get("POSITIVE")+ccQuestion.get("0_0"),
+                vc.get("NEGATIVE")+ccQuestion.get("1_0"))/2.0);
+        map.put("NEGATIVE", Math.max(vc.get("NEGATIVE")+ccQuestion.get("0_0"),
+                vc.get("POSITIVE")+ccQuestion.get("1_0"))/2.0);
+        return map;
     }
 
 }

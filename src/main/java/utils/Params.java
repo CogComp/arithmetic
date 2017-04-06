@@ -13,9 +13,10 @@ public class Params {
 	public static String verbnetDir = "/shared/austen/sroy9/new_vn/";
 
 	public static boolean useIllinoisTools = false, useStanfordTools = true;
+	public static boolean useLearnedExtraction = false;
+	public static boolean noUDG;
 
 	public static double validationFrac;
 
-	public static boolean noUDG;
 	
 }
