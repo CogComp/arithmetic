@@ -7,6 +7,7 @@ import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.sl.util.IFeatureVector;
 import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
 import edu.stanford.nlp.ling.CoreLabel;
+import joint.LogicInput;
 import structure.StanfordSchema;
 import utils.FeatGen;
 

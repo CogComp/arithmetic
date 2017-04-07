@@ -105,7 +105,7 @@ public class LogicDriver {
 		para.loadConfigFile(Params.spConfigFile);
 		para.MAX_NUM_ITER = 5;
 		Learner learner = LearnerFactory.getLearner(model.infSolver, fg, para);
-		model.wv = latentSVMLearner(learner, train, (LogicInfSolver) model.infSolver, 5);
+		model.wv = latentSVMLearner(learner, train, (LogicInfSolver) model.infSolver, 10);
 		lm.setAllowNewFeatures(false);
 		model.saveModel(modelPath);
 	}

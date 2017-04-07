@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
-import logic.Logic;
+import joint.Logic;
 import utils.Tools;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;

@@ -10,6 +10,8 @@ import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.semgraph.SemanticGraph;
+import joint.Logic;
+import joint.LogicInput;
 import structure.PairComparator;
 import structure.StanfordSchema;
 import utils.Params;
@@ -22,11 +24,11 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 
 	private static final long serialVersionUID = 5253748728743334706L;
 	private LogicFeatGen featGen;
-	
+
 	public LogicInfSolver(LogicFeatGen featGen) throws Exception {
 		this.featGen = featGen;
 	}
-	
+
 	@Override
 	public IStructure getBestStructure(WeightVector weight, IInstance ins)
 			throws Exception {
@@ -54,7 +56,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				}
 			}
 		}
-		best.label = Logic.logicSolver(best.num1, best.num2, best.ques, best.inferenceRule, false);
+		best.label = null;//Logic.logicSolver(best.num1, best.num2, best.ques, best.inferenceRule, false);
 		return best;
 	}
 
@@ -71,8 +73,9 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 			Triple<LogicInput, LogicInput, LogicInput> logicInput = pair.getFirst();
 			Double extractionScore = pair.getSecond();
 			for (int infRule = 0; infRule < Logic.maxNumInferenceTypes; infRule++) {
-				String label = Logic.logicSolver(logicInput.getFirst(),
-						logicInput.getSecond(), logicInput.getThird(), infRule, false);
+				String label = null;
+//				Logic.logicSolver(logicInput.getFirst(),
+//						logicInput.getSecond(), logicInput.getThird(), infRule, false);
 				if(!label.equals(gold.label)) {
 					continue;
 				}

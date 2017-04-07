@@ -7,7 +7,7 @@ import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
-import logic.Logic;
+import joint.Logic;
 import reader.Reader;
 import utils.Params;
 import utils.Tools;

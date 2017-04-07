@@ -6,8 +6,6 @@ import edu.illinois.cs.cogcomp.sl.core.AbstractInferenceSolver;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
-import logic.Logic;
-import logic.LogicInput;
 import structure.Node;
 import structure.PairComparator;
 import structure.StanfordSchema;
@@ -239,30 +237,35 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		StanfordSchema num1 = extractions.get(expr.children.get(0).quantIndex);
 		StanfordSchema num2 = extractions.get(expr.children.get(1).quantIndex);
 		StanfordSchema ques = extractions.get(extractions.size()-1);
-		for(int i=0; i<Logic.maxNumInferenceTypes; ++i) {
-			String opLogic = Logic.logicSolver(
-					new LogicInput(0, num1, x.tokens.get(num1.sentId)),
-					new LogicInput(0, num2, x.tokens.get(num2.sentId)),
-					new LogicInput(0, ques, x.tokens.get(ques.sentId)),
-					i,
-					isTopmost);
-			if(!opLogic.equals(expr.label)) continue;
-			float score = wv.dotProduct(featGen.getInfTypeFeatureVector(
-					x, num1, num2, ques, i));
+
+		Map<Pair<String, Integer>, Double> scores =
+				Logic.logicSolver(
+						new LogicInput(0, num1, x.tokens.get(num1.sentId)),
+						new LogicInput(0, num2, x.tokens.get(num2.sentId)),
+						new LogicInput(0, ques, x.tokens.get(ques.sentId)),
+						isTopmost);
+		for(Pair<String, Integer> key : scores.keySet()) {
+			double score = scores.get(key);
+			if(score < -100.0) continue;
+			String label = key.getFirst();
+			int infRuleType = key.getSecond();
+			if(!label.equals(expr.label)) continue;
+			score = wv.dotProduct(featGen.getInfTypeFeatureVector(
+					x, num1, num2, ques, infRuleType));
 			if(score > bestScore) {
 				bestScore = score;
-				expr.infRuleType = i;
-				if(i==0 || i==1) {
+				expr.infRuleType = infRuleType;
+				if(infRuleType==0 || infRuleType==1) {
 					expr.quantIndex = expr.children.get(0).quantIndex;
 				}
-				if(i==2) {
+				if(infRuleType==2) {
 					if(num2.math != -1) {
 						expr.quantIndex = expr.children.get(1).quantIndex;
 					} else {
 						expr.quantIndex = expr.children.get(0).quantIndex;
 					}
 				}
-				if(i==3) {
+				if(infRuleType==3) {
 					if(num2.rate != null && num2.rate.getFirst() >= 0) {
 						expr.quantIndex = expr.children.get(1).quantIndex;
 					} else {

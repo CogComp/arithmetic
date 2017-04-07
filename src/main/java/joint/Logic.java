@@ -1,6 +1,7 @@
-package logic;
+package joint;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.sl.core.SLProblem;
 import edu.stanford.nlp.ling.CoreLabel;
 import reader.Reader;
 import structure.StanfordProblem;
@@ -103,20 +104,38 @@ public class Logic {
         return map;
     }
 
-    public static String logicSolver(LogicInput num1, LogicInput num2,
-                                     LogicInput ques, int inferenceRule,
-                                     boolean isTopmost) {
+    public static Pair<String, Integer> bestAnswerFromLogicSolver(
+            LogicInput num1, LogicInput num2, LogicInput ques, boolean isTopmost) {
         Map<Pair<String, Integer>, Double> logicOutput =
                 Logic.logicSolver(num1, num2, ques, isTopmost);
         String bestLabel = null;
         Double bestScore = Double.NEGATIVE_INFINITY;
-        for(Pair<String, Integer> pair : logicOutput.keySet()) {
-            if(pair.getSecond() == inferenceRule && bestScore < logicOutput.get(pair)) {
-                bestLabel = pair.getFirst();
-                bestScore = logicOutput.get(pair);
+        // Priority of reason : 2 > 3 > 1 (if verbs are matching) > 0
+        List<Integer> reasonPriority = Arrays.asList(2, 3, 1, 0);
+        for(int reason : reasonPriority) {
+            if(reason == 1) {
+                if(isTopmost && (!num1.verbLemma.equals(num2.verbLemma) ||
+                        !num1.verbLemma.equals(ques.verbLemma) ||
+                        !num1.verbLemma.equals(ques.verbLemma))) {
+                    continue;
+                }
+                if(!isTopmost && (!num1.verbLemma.equals(num2.verbLemma))) {
+                    continue;
+                }
+            }
+            for(Pair<String, Integer> pair : logicOutput.keySet()) {
+                double score = logicOutput.get(pair);
+                if (pair.getSecond() == reason && bestScore < score &&
+                        score > -100.0) {
+                    bestLabel = pair.getFirst();
+                    bestScore = score;
+                }
+            }
+            if(bestLabel != null) {
+                return new Pair<>(bestLabel, reason);
             }
         }
-        return bestLabel;
+        return new Pair<>(bestLabel, -1);
     }
 
     public static Map<Pair<String, Integer>, Double> logicSolver(
@@ -407,8 +426,72 @@ public class Logic {
                 total.size() + " = " + (1-1.0*incorrect.size()/total.size()));
     }
 
+    public static void testLogicSolver(String dataset) throws Exception {
+        Set<Integer> incorrect = new HashSet<>();
+        Set<Integer> total = new HashSet<>();
+        List<StanfordProblem> probs = Reader.readStanfordProblemsFromJson(dataset);
+        SLProblem sp = joint.LogicDriver.getSP(probs);
+        for (int i = 0; i < sp.instanceList.size(); i++) {
+            LogicX x = (LogicX) sp.instanceList.get(i);
+            LogicY gold = (LogicY) sp.goldStructureList.get(i);
+            if(x.quantities.size() != 2) continue;
+            LogicInput num1 = new LogicInput(1, x.schema.get(0),
+                    x.tokens.get(x.schema.get(0).sentId));
+            LogicInput num2 = new LogicInput(2, x.schema.get(1),
+                    x.tokens.get(x.schema.get(1).sentId));
+            LogicInput ques = new LogicInput(0, x.questionSchema,
+                    x.questionSchema.sentId >= 0 ?
+                            x.tokens.get(x.questionSchema.sentId): null);
+            Pair<String, Integer> bestKey = bestAnswerFromLogicSolver(num1, num2, ques, true);
+            String op = bestKey.getFirst();
+            Double soln = 0.0;
+            if(op.equals("ADD")) soln = x.quantities.get(0).val + x.quantities.get(1).val;
+            if(op.equals("SUB")) soln = x.quantities.get(0).val - x.quantities.get(1).val;
+            if(op.equals("SUB_REV")) soln = x.quantities.get(1).val - x.quantities.get(0).val;
+            if(op.equals("MUL")) soln = x.quantities.get(0).val * x.quantities.get(1).val;
+            if(op.equals("DIV")) soln = x.quantities.get(0).val / x.quantities.get(1).val;
+            if(op.equals("DIV_REV")) soln = x.quantities.get(1).val / x.quantities.get(0).val;
+            total.add(x.problemId);
+            if(!Tools.safeEquals(gold.expr.getValue(), soln)) {
+                incorrect.add(x.problemId);
+                System.out.println(x.problemId + " : " + x.text);
+                System.out.println();
+                for (StanfordSchema schema : x.schema) {
+                    System.out.println(schema);
+                }
+                System.out.println(x.questionSchema);
+                System.out.println();
+                System.out.println("Quantities : " + x.quantities);
+                System.out.println();
+                System.out.println("Verb1 : " + Arrays.asList(Verbs.verbClassify(num1)));
+                System.out.println("Verb2 : " + Arrays.asList(Verbs.verbClassify(num2)));
+                System.out.println("VerbQues : " + Arrays.asList(Verbs.verbClassify(ques)));
+                System.out.println();
+                System.out.println("Part12 : " + Arrays.asList(Logic.partition(num1, num2)));
+                System.out.println("Part1Ques : " + Arrays.asList(Logic.partition(num1, ques)));
+                System.out.println("Part2Ques : " + Arrays.asList(Logic.partition(num2, ques)));
+                System.out.println();
+                System.out.println("UD12 : " + Arrays.asList(Logic.unitDependency(num1, num2)));
+                System.out.println("UD1Ques : " + Arrays.asList(Logic.unitDependency(num1, ques)));
+                System.out.println("UD2Ques : " + Arrays.asList(Logic.unitDependency(num2, ques)));
+                System.out.println();
+                System.out.println("Math1 : " + Arrays.asList(Logic.math(num1)));
+                System.out.println("Math2 : " + Arrays.asList(Logic.math(num2)));
+                System.out.println("Math3 : " + Arrays.asList(Logic.math(ques)));
+                System.out.println();
+                System.out.println("Gold : " + gold);
+                System.out.println("PredOp : " + bestKey.getFirst());
+                System.out.println("PredReason : " + bestKey.getSecond());
+                System.out.println();
+            }
+        }
+        System.out.println("Strict Accuracy : = 1 - " + incorrect.size() + " / " +
+                total.size() + " = " + (1-1.0*incorrect.size()/total.size()));
+    }
+
     public static void main(String args[]) throws Exception {
-        testIrrelevance(Params.allArithDir);
+//        testIrrelevance(Params.allArithDir);
+        testLogicSolver(Params.allArithDir);
     }
 
 }

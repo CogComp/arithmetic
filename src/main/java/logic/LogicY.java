@@ -2,6 +2,7 @@ package logic;
 
 
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
+import joint.LogicInput;
 
 public class LogicY implements IStructure {
 	

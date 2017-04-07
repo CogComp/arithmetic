@@ -1,5 +1,6 @@
-package logic;
+package joint;
 
+import joint.LogicInput;
 import utils.Params;
 
 import java.io.*;
