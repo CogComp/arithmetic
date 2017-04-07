@@ -11,9 +11,10 @@ public class Node implements Serializable {
 	private static final long serialVersionUID = -1127009463482561785L;
 	public String label;
 	public List<Node> children;
-	public int quantIndex;
+	public int quantIndex; // Assign this to max_quant+1 for question
 	public QuantSpan qs;
 	public double val;
+	public int infRuleType;
 	
 	public Node() {
 		children = new ArrayList<>();

@@ -353,6 +353,13 @@ public class Tools {
 				phrase1.contains("she") || phrase2.contains("she")) {
 			return 1.0;
 		}
+		if(phrase1.contains("$") || phrase1.contains("money") || phrase1.contains("dollar") ||
+				phrase1.contains("buck") || phrase1.contains("cent")) {
+			if(phrase2.contains("$") || phrase2.contains("money") || phrase2.contains("dollar") ||
+					phrase2.contains("buck") || phrase2.contains("cent")) {
+				return 1.0;
+			}
+		}
 		Set<String> tokens1 = new HashSet<>();
 		tokens1.addAll(phrase1);
 		Set<String> tokens2 = new HashSet<>();

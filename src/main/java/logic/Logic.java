@@ -1,111 +1,14 @@
 package logic;
 
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.stanford.nlp.ling.CoreLabel;
-import structure.QuantitySchema;
+import reader.Reader;
+import structure.StanfordProblem;
 import structure.StanfordSchema;
+import utils.Params;
 import utils.Tools;
 import java.util.*;
 
-
-class LogicInput {
-
-    public List<String> subject, subjectPos, object, objectPos, unit, unitPos, rate;
-    public String verbLemma, math;
-    public int mode; // 0 for ques, 1 for quantity1, 2 for quantity2
-    public IntPair subjSpan, objSpan, unitSpan, rateSpan;
-    public int verbIndex;
-    public int sentId;
-
-    public LogicInput(int mode) {
-        this.mode = mode;
-        this.sentId = -1;
-        subject = new ArrayList<>();
-        subjectPos = new ArrayList<>();
-        object = new ArrayList<>();
-        objectPos = new ArrayList<>();
-        unit = new ArrayList<>();
-        unitPos = new ArrayList<>();
-        rate = new ArrayList<>();
-    }
-
-    public LogicInput(int mode, List<String> subject, List<String> object,
-                      List<String> unit, List<String> rate, String verbLemma,
-                      String math, TextAnnotation ta, List<Constituent> posTags,
-                      List<String> lemmas) {
-        this.mode = mode;
-        this.sentId = -1;
-        this.subject = subject;
-        this.object = object;
-        this.unit = unit;
-        this.rate = rate;
-        this.verbLemma = verbLemma;
-        this.math = math;
-        subjectPos = Tools.populatePos(subject, ta, posTags, lemmas);
-        objectPos = Tools.populatePos(object, ta, posTags, lemmas);
-        unitPos = Tools.populatePos(unit, ta, posTags, lemmas);
-    }
-
-    public LogicInput(int mode, QuantitySchema quantSchema, TextAnnotation ta,
-                      List<Constituent> posTags, List<String> lemmas) {
-        this.mode = mode;
-        this.sentId = -1;
-        subject = Tools.consToList(quantSchema.subject);
-        object = Tools.consToList(quantSchema.object);
-        unit = Arrays.asList(quantSchema.unit.split(" "));
-        rate = Tools.consToList(quantSchema.rateUnit);
-        verbLemma = quantSchema.verbLemma;
-        math = quantSchema.math;
-        subjectPos = Tools.populatePos(subject, ta, posTags, lemmas);
-        objectPos = Tools.populatePos(object, ta, posTags, lemmas);
-        unitPos = Tools.populatePos(unit, ta, posTags, lemmas);
-    }
-
-    public LogicInput(int mode, IntPair subject, IntPair object,
-                      IntPair unit, IntPair rate, int verb, int math,
-                      List<CoreLabel> tokens) {
-        this.mode = mode;
-        this.sentId = -1;
-        if (tokens == null) return;
-        this.subject = Tools.spanToLemmaList(tokens, subject);
-        this.object = Tools.spanToLemmaList(tokens, object);
-        this.unit = Tools.spanToLemmaList(tokens, unit);
-        this.rate = Tools.spanToLemmaList(tokens, rate);
-        if (verb >= 0) {
-            this.verbLemma = tokens.get(verb).lemma();
-        }
-        if(math >= 0) {
-            this.math = tokens.get(math).lemma();
-        }
-        subjectPos = Tools.populatePos(tokens, subject);
-        objectPos = Tools.populatePos(tokens, object);
-        unitPos = Tools.populatePos(tokens, unit);
-    }
-
-    public LogicInput(int mode, StanfordSchema schema, List<CoreLabel> tokens) {
-        this.mode = mode;
-        if (tokens == null) return;
-        this.sentId = schema.sentId;
-        this.subject = Tools.spanToLemmaList(tokens, schema.subject);
-        this.object = Tools.spanToLemmaList(tokens, schema.object);
-        this.unit = Tools.spanToLemmaList(tokens, schema.unit);
-        this.unit.remove("many");
-        this.unit.remove("much");
-        this.rate = Tools.spanToLemmaList(tokens, schema.rate);
-        if (schema.verb >= 0) {
-            this.verbLemma = tokens.get(schema.verb).lemma();
-        }
-        if (schema.math >= 0) {
-            this.math = tokens.get(schema.math).lemma();
-        }
-        subjectPos = Tools.populatePos(tokens, schema.subject);
-        objectPos = Tools.populatePos(tokens, schema.object);
-        unitPos = Tools.populatePos(tokens, schema.unit);
-    }
-}
 
 public class Logic {
 
@@ -117,7 +20,7 @@ public class Logic {
             "shorter", "less", "younger", "slower");
     public static List<String> mulTokens = Arrays.asList("times");
 
-    public static int maxNumInferenceTypes = 5;
+    public static int maxNumInferenceTypes = 4;
 
     public static Map<String, Double> containerCoref(LogicInput num1, LogicInput num2) {
         Map<String, Double> map = new HashMap<>();
@@ -266,7 +169,8 @@ public class Logic {
 
         // Partition of subject
         // Extra 1 is added because of the verb match
-        if (num1.verbLemma != null && num2.verbLemma != null && num1.verbLemma.equals(num2.verbLemma)) {
+        if (num1.verbLemma != null && num2.verbLemma != null &&
+                num1.verbLemma.equals(num2.verbLemma)) {
             Tools.addToHighestMap(scores, new Pair<>("ADD", 1), (part12.get("0_SIBLING") +
                     (part1ques.get("0_HYPO")+1-part1ques.get("0_HYPER")) +
                     (part2ques.get("0_HYPO")+1-part2ques.get("0_HYPER")))/5.0);
@@ -334,6 +238,142 @@ public class Logic {
         map.put("NEGATIVE", Math.max(vc.get("NEGATIVE")+ccQuestion.get("0_0"),
                 vc.get("POSITIVE")+ccQuestion.get("1_0"))/2.0);
         return map;
+    }
+
+    public static boolean irrelevance(List<StanfordSchema> schemas,
+                                      int quantIndex,
+                                      List<List<CoreLabel>> tokens) {
+        double maxSim = 0.0, minSim=1.0;
+        int n = schemas.size() - 1;
+        if(n == 2) return false;
+        StanfordSchema schema = schemas.get(quantIndex);
+        StanfordSchema quesSchema = schemas.get(n);
+        if(Tools.safeEquals(schema.qs.val, 1.0)) {
+            int tokenId = Tools.getTokenIdFromCharOffset(
+                    tokens.get(schema.sentId), schema.qs.start);
+            if(tokenId >= 1 && (tokens.get(schema.sentId).get(tokenId-1).lemma().equals("each") ||
+                    tokens.get(schema.sentId).get(tokenId-1).lemma().equals("every"))) {
+                return true;
+            }
+            if(schema.sentId == quesSchema.sentId) {
+                return true;
+            }
+            Set<Integer> quantTokenIdsInSameSentence = new HashSet<>();
+            for(StanfordSchema s : schemas) {
+                if(s.qs != null && Tools.getTokenIdFromCharOffset(
+                        tokens.get(schema.sentId), s.qs.start) != -1) {
+                    quantTokenIdsInSameSentence.add(
+                            Tools.getTokenIdFromCharOffset(
+                                    tokens.get(schema.sentId), s.qs.start));
+                }
+            }
+            for(int i=tokenId+1; i<tokens.get(schema.sentId).size(); ++i) {
+                if (tokens.get(schema.sentId).get(i).lemma().equals("if") ||
+                        tokens.get(schema.sentId).get(i).lemma().equals(",") ||
+                        tokens.get(schema.sentId).get(i).lemma().equals(";") ||
+                        tokens.get(schema.sentId).get(i).lemma().equals("and")) {
+                    break;
+                }
+                if (quantTokenIdsInSameSentence.contains(i)) {
+                    return true;
+                }
+            }
+            for(int i=tokenId-1; i>=0; --i) {
+                if (tokens.get(schema.sentId).get(i).lemma().equals("if") ||
+                        tokens.get(schema.sentId).get(i).lemma().equals(",") ||
+                        tokens.get(schema.sentId).get(i).lemma().equals(";") ||
+                        tokens.get(schema.sentId).get(i).lemma().equals("and")) {
+                    break;
+                }
+                if (quantTokenIdsInSameSentence.contains(i)) {
+                    return true;
+                }
+            }
+        }
+        if(schema.unit == null || schema.unit.getFirst() == schema.unit.getSecond()) {
+            return false;
+        }
+        double simIndex = 0.0;
+        for(int i=0; i<n; ++i) {
+            StanfordSchema schema1 = schemas.get(i);
+            double sim = Tools.jaccardSim(
+                    Tools.spanToLemmaList(tokens.get(schema1.sentId), schema1.unit),
+                    Tools.spanToLemmaList(tokens.get(quesSchema.sentId), quesSchema.unit));
+            if (tokens.get(quesSchema.sentId).get(quesSchema.verb).lemma().equals("cost") &&
+                    (Tools.spanToLemmaList(tokens.get(schema1.sentId), schema1.unit).contains("dollar")
+                            ||Tools.spanToLemmaList(tokens.get(schema1.sentId), schema1.unit).contains("cent")
+                            ||Tools.spanToLemmaList(tokens.get(schema1.sentId), schema1.unit).contains("buck")
+                            ||Tools.spanToLemmaList(tokens.get(schema1.sentId), schema1.unit).contains("$"))) {
+                sim = 1.0;
+            }
+            if(i==quantIndex) {
+                simIndex = sim;
+            } else {
+                if (sim > maxSim) {
+                    maxSim = sim;
+                }
+                if (sim < minSim) {
+                    minSim = sim;
+                }
+            }
+        }
+        if(minSim - simIndex > 0.5) {
+            boolean foundInRate = false;
+            for(int i=0; i<n; ++i) {
+                if(i==quantIndex) continue;
+                StanfordSchema schema1 = schemas.get(i);
+                if(Tools.jaccardSim(Tools.spanToLemmaList(tokens.get(schema1.sentId), schema1.rate),
+                        Tools.spanToLemmaList(tokens.get(schema.sentId), schema.unit))>0.5) {
+                    foundInRate = true;
+                }
+            }
+            if(!foundInRate) return true;
+        }
+        return false;
+    }
+
+    public static void testIrrelevance(String dataset) throws Exception {
+        Set<Integer> incorrect = new HashSet<>();
+        Set<Integer> total = new HashSet<>();
+        int t = 0;
+        List<StanfordProblem> probs = Reader.readStanfordProblemsFromJson(dataset);
+        double acc = 0.0;
+        for (StanfordProblem prob : probs) {
+            total.add(prob.id);
+            for(int i=0; i<prob.quantities.size(); ++i) {
+                t++;
+                String gold = prob.expr.findRelevanceLabel(i);
+                List<StanfordSchema> schemas = new ArrayList<>();
+                schemas.addAll(prob.schema);
+                schemas.add(prob.questionSchema);
+                boolean pred = irrelevance(schemas, i, prob.tokens);
+                if((gold.equals("REL") && !pred) || (gold.equals("IRR") && pred)) {
+                    acc += 1.0;
+                } else {
+                    incorrect.add(prob.id);
+                    System.out.println(prob.id+" : "+prob.question);
+                    System.out.println();
+                    for(StanfordSchema schema : prob.schema) {
+                        System.out.println(schema);
+                    }
+                    System.out.println(prob.questionSchema);
+                    System.out.println();
+                    System.out.println("Quantities : "+prob.quantities);
+                    System.out.println("Quant of Interest: "+i);
+                    System.out.println();
+                    System.out.println("Gold : "+gold);
+                    System.out.println("Pred : "+pred);
+                    System.out.println();
+                }
+            }
+        }
+        System.out.println("Accuracy : = " + acc + " / " + t + " = " + (acc/t));
+        System.out.println("Strict Accuracy : = 1 - " + incorrect.size() + " / " +
+                total.size() + " = " + (1-1.0*incorrect.size()/total.size()));
+    }
+
+    public static void main(String args[]) throws Exception {
+        testIrrelevance(Params.allArithDir);
     }
 
 }
