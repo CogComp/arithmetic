@@ -16,6 +16,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class LogicInfSolver extends AbstractInferenceSolver implements Serializable {
 
@@ -59,7 +60,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 			gold.extractions.add(getBestStanfordSchemas(ins, weight, i));
 		}
 		// Now find best tree construction from the extractions
-		populateInfRuleType(ins, gold.expr, gold.extractions, weight);
+		populateInfRuleType(ins, gold.expr, gold.extractions, weight, true);
 		return gold;
 	}
 
@@ -126,6 +127,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 			tmpNodeList.add(state);
 			return tmpNodeList;
 		}
+		boolean isTopmost = nodeList.size() <= 2;
 		double initScore = state.getSecond();
 		for(int i=0; i<nodeList.size(); ++i) {
 			for(int j=i+1; j<nodeList.size(); ++j) {
@@ -135,7 +137,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				tmpNodeList.remove(j-1);
 				for(Pair<Node, Double> pair : enumerateMerge(
 						x, nodeList.get(i), nodeList.get(j),
-						extractionCandidates, wv)) {
+						extractionCandidates, wv, isTopmost)) {
 					List<Node> newNodeList = new ArrayList<>();
 					newNodeList.addAll(tmpNodeList);
 					newNodeList.add(pair.getFirst());
@@ -149,7 +151,8 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 	public List<Pair<Node, Double>> enumerateMerge(
 			LogicX x, Node node1, Node node2,
 			List<StanfordSchema> extractionCandidates,
-			WeightVector wv) {
+			WeightVector wv,
+			boolean isTopmost) {
 		List<Pair<Node, Double>> nextStates = new ArrayList<>();
 		double mergeScore;
 		LogicInput num1 = new LogicInput(
@@ -164,28 +167,61 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				0,
 				extractionCandidates.get(x.quantities.size()),
 				x.tokens.get(extractionCandidates.get(x.quantities.size()).sentId));
-		for(int i=0; i<Logic.maxNumInferenceTypes; ++i) {
-			String label = Logic.logicSolver(num1, num2, ques, i);
+		Map<Pair<String, Integer>, Double> scores =
+				Logic.logicSolver(num1, num2, ques, isTopmost);
+		for(Pair<String, Integer> key : scores.keySet()) {
+			double score = scores.get(key);
+			if(score < -100.0) continue;
+			String label = key.getFirst();
+			int infRuleType = key.getSecond();
+			if((label.equals("ADD") || label.startsWith("SUB")) &&
+					(node1.label.startsWith("SUB") || node2.label.startsWith("SUB"))) {
+				continue;
+			}
+			if((label.equals("MUL") || label.startsWith("DIV")) &&
+					(node1.label.startsWith("DIV") || node2.label.startsWith("DIV"))) {
+				continue;
+			}
+			Node node;
 			if(label.endsWith("REV")) {
 				label = label.substring(0, 3);
-				Node node = new Node(label, Arrays.asList(node2, node1));
+				node = new Node(label, Arrays.asList(node2, node1));
 				mergeScore = wv.dotProduct(featGen.getInfTypeFeatureVector(
 						x,
 						extractionCandidates.get(node1.quantIndex),
 						extractionCandidates.get(node2.quantIndex),
 						extractionCandidates.get(x.quantities.size()),
-						i));
-				nextStates.add(new Pair<>(node, mergeScore));
+						infRuleType));
 			} else {
-				Node node = new Node(label, Arrays.asList(node1, node2));
+				node = new Node(label, Arrays.asList(node1, node2));
 				mergeScore = wv.dotProduct(featGen.getInfTypeFeatureVector(
 						x,
 						extractionCandidates.get(node1.quantIndex),
 						extractionCandidates.get(node2.quantIndex),
 						extractionCandidates.get(x.quantities.size()),
-						i));
-				nextStates.add(new Pair<>(node, mergeScore));
+						infRuleType));
 			}
+			node.infRuleType = infRuleType;
+			if(infRuleType==0 || infRuleType==1) {
+				node.quantIndex = node.children.get(0).quantIndex;
+			}
+			if(infRuleType==2) {
+				if(extractionCandidates.get(node2.quantIndex).math != -1) {
+					node.quantIndex = node.children.get(1).quantIndex;
+				} else {
+					node.quantIndex = node.children.get(0).quantIndex;
+				}
+			}
+			if(infRuleType==3) {
+				if(extractionCandidates.get(node2.quantIndex).rate != null &&
+						extractionCandidates.get(node2.quantIndex).rate.getFirst() >= 0) {
+					node.quantIndex = node.children.get(1).quantIndex;
+				} else {
+					node.quantIndex = node.children.get(0).quantIndex;
+				}
+			}
+			nextStates.add(new Pair<>(node, mergeScore));
+
 		}
 		return nextStates;
 	}
@@ -193,27 +229,31 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 	public void populateInfRuleType(LogicX x,
 									Node expr,
 									List<StanfordSchema> extractions,
-									WeightVector wv) {
+									WeightVector wv,
+									boolean isTopmost) {
 		if (expr.children.size() == 0) return;
-		populateInfRuleType(x, expr.children.get(0), extractions, wv);
-		populateInfRuleType(x, expr.children.get(1), extractions, wv);
+		populateInfRuleType(x, expr.children.get(0), extractions, wv, false);
+		populateInfRuleType(x, expr.children.get(1), extractions, wv, false);
 		expr.infRuleType = -1;
 		double bestScore = -Double.MAX_VALUE;
 		StanfordSchema num1 = extractions.get(expr.children.get(0).quantIndex);
 		StanfordSchema num2 = extractions.get(expr.children.get(1).quantIndex);
 		StanfordSchema ques = extractions.get(extractions.size()-1);
 		for(int i=0; i<Logic.maxNumInferenceTypes; ++i) {
+			String opLogic = Logic.logicSolver(
+					new LogicInput(0, num1, x.tokens.get(num1.sentId)),
+					new LogicInput(0, num2, x.tokens.get(num2.sentId)),
+					new LogicInput(0, ques, x.tokens.get(ques.sentId)),
+					i,
+					isTopmost);
+			if(!opLogic.equals(expr.label)) continue;
 			float score = wv.dotProduct(featGen.getInfTypeFeatureVector(
 					x, num1, num2, ques, i));
 			if(score > bestScore) {
 				bestScore = score;
 				expr.infRuleType = i;
 				if(i==0 || i==1) {
-					if(expr.label.equals("SUB_REV")) {
-						expr.quantIndex = expr.children.get(1).quantIndex;
-					} else {
-						expr.quantIndex = expr.children.get(0).quantIndex;
-					}
+					expr.quantIndex = expr.children.get(0).quantIndex;
 				}
 				if(i==2) {
 					if(num2.math != -1) {

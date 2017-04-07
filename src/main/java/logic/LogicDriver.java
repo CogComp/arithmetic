@@ -114,7 +114,7 @@ public class LogicDriver {
 					x.tokens.get(x.schema.get(x.quantIndex2).sentId));
 			LogicInput ques = new LogicInput(0, x.questionSchema,
 					x.questionSchema.sentId >= 0 ? x.tokens.get(x.questionSchema.sentId): null);
-			Map<Pair<String, Integer>, Double> scores = Logic.logicSolver(num1, num2, ques);
+			Map<Pair<String, Integer>, Double> scores = Logic.logicSolver(num1, num2, ques, false);
 			LogicY pred = null;
 			double maxScore = Double.NEGATIVE_INFINITY;
 			for (Pair<String, Integer> key : scores.keySet()) {

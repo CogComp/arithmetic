@@ -13,7 +13,7 @@ import java.util.*;
 public class Logic {
 
     public static List<String> labels = Arrays.asList(
-            "ADD", "SUB", "SUB_REV", "MUL", "DIV", "DIV_REV", "NONE");
+            "ADD", "SUB", "SUB_REV", "MUL", "DIV", "DIV_REV");
     public static List<String> addTokens = Arrays.asList(
             "taller", "more", "older", "higher", "faster");
     public static List<String> subTokens = Arrays.asList(
@@ -40,11 +40,19 @@ public class Logic {
             isRate2 = 1;
         }
         Map<String, Double> map = new HashMap<>();
+        map.put("0_NUM", -Double.MAX_VALUE);
+        map.put("1_NUM", -Double.MAX_VALUE);
+        map.put("0_DEN", -Double.MAX_VALUE);
+        map.put("1_DEN", -Double.MAX_VALUE);
         map.put("SAME_UNIT", Tools.jaccardSim(num1.unit, num2.unit));
-        map.put("0_NUM", Tools.jaccardSim(num1.unit, num2.unit)*isRate1);
-        map.put("1_NUM", Tools.jaccardSim(num1.unit, num2.unit)*isRate2);
-        map.put("0_DEN", Tools.jaccardSim(num1.rate, num2.unit));
-        map.put("1_DEN", Tools.jaccardSim(num2.rate, num1.unit));
+        if(isRate1 > 0.9) {
+            map.put("0_NUM", Tools.jaccardSim(num1.unit, num2.unit));
+            map.put("0_DEN", Tools.jaccardSim(num1.rate, num2.unit));
+        }
+        if(isRate2 > 0.9) {
+            map.put("1_NUM", Tools.jaccardSim(num1.unit, num2.unit) * isRate2);
+            map.put("1_DEN", Tools.jaccardSim(num2.rate, num1.unit));
+        }
         return map;
     }
 
@@ -80,9 +88,9 @@ public class Logic {
 
     public static Map<String, Double> math(LogicInput num) {
         Map<String, Double> map = new HashMap<>();
-        map.put("ADD", 0.0);
-        map.put("SUB", 0.0);
-        map.put("MUL", 0.0);
+        map.put("ADD", -Double.MAX_VALUE);
+        map.put("SUB", -Double.MAX_VALUE);
+        map.put("MUL", -Double.MAX_VALUE);
         if (addTokens.contains(num.math)) {
             map.put("ADD", 1.0);
         }
@@ -96,11 +104,10 @@ public class Logic {
     }
 
     public static String logicSolver(LogicInput num1, LogicInput num2,
-                                     LogicInput ques, int inferenceRule) {
-        if(inferenceRule == 4) {
-            return "NONE";
-        }
-        Map<Pair<String, Integer>, Double> logicOutput = Logic.logicSolver(num1, num2, ques);
+                                     LogicInput ques, int inferenceRule,
+                                     boolean isTopmost) {
+        Map<Pair<String, Integer>, Double> logicOutput =
+                Logic.logicSolver(num1, num2, ques, isTopmost);
         String bestLabel = null;
         Double bestScore = Double.NEGATIVE_INFINITY;
         for(Pair<String, Integer> pair : logicOutput.keySet()) {
@@ -113,7 +120,7 @@ public class Logic {
     }
 
     public static Map<Pair<String, Integer>, Double> logicSolver(
-            LogicInput num1, LogicInput num2, LogicInput ques) {
+            LogicInput num1, LogicInput num2, LogicInput ques, boolean isTopmost) {
 
         Map<Pair<String, Integer>, Double> scores = new HashMap<>();
 
@@ -121,11 +128,10 @@ public class Logic {
         Map<String, Double> cc1ques = containerCoref(num1, ques);
         Map<String, Double> cc2ques = containerCoref(num2, ques);
 
-        Map<String, Double> vc1 = transformVerbCategoryBasedonContainers(
-                Verbs.verbClassify(num1), cc1ques);
-        Map<String, Double> vc2 = transformVerbCategoryBasedonContainers(
-                Verbs.verbClassify(num2), cc2ques);
-        Map<String, Double> vc_ques = Verbs.verbClassify(ques);
+        Map<String, Double> vc1, vc2, vc_ques;
+        vc1 = transformVerbCategoryBasedonContainers(Verbs.verbClassify(num1), cc1ques);
+        vc2 = transformVerbCategoryBasedonContainers(Verbs.verbClassify(num2), cc2ques);
+        vc_ques = Verbs.verbClassify(ques);
 
         Map<String, Double> ud12 = unitDependency(num1, num2);
         Map<String, Double> ud1ques = unitDependency(num1, ques);
@@ -138,6 +144,35 @@ public class Logic {
         Map<String, Double> math1 = math(num1);
         Map<String, Double> math2 = math(num2);
         Map<String, Double> math_ques = math(ques);
+
+        // Make all question properties 0, since its not useful unless its a
+        // topmost operation
+        if(!isTopmost) {
+            for(String key : cc1ques.keySet()) {
+                cc1ques.put(key, 0.0);
+            }
+            for(String key : cc2ques.keySet()) {
+                cc2ques.put(key, 0.0);
+            }
+            for(String key : vc_ques.keySet()) {
+                vc_ques.put(key, 0.0);
+            }
+            for(String key : ud1ques.keySet()) {
+                ud1ques.put(key, 0.0);
+            }
+            for(String key : ud2ques.keySet()) {
+                ud2ques.put(key, 0.0);
+            }
+            for(String key : part1ques.keySet()) {
+                part1ques.put(key, 0.0);
+            }
+            for(String key : part2ques.keySet()) {
+                part2ques.put(key, 0.0);
+            }
+            for(String key : math_ques.keySet()) {
+                math_ques.put(key, 0.0);
+            }
+        }
 
         // Reason : verb interaction
         // Container coref, unit dep, verb interaction

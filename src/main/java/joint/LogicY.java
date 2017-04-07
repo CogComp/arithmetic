@@ -30,7 +30,7 @@ public class LogicY implements IStructure {
 				str += inp.toString() + "\n";
 			}
 		}
-		return str + expr.toString()+"\n";
+		return str + "Expression: "+expr.toString()+"\n";
 	}
 	
 	public static float getLoss(LogicY gold, LogicY pred) {
@@ -38,6 +38,9 @@ public class LogicY implements IStructure {
 			return 1.0f;
 		}
 		if(Tools.safeEquals(gold.expr.getValue(), pred.expr.getValue())) {
+			return 0.0f;
+		}
+		if(Tools.safeEquals(-gold.expr.getValue(), pred.expr.getValue())) {
 			return 0.0f;
 		}
 		return 1.0f;

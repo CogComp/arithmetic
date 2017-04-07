@@ -5,7 +5,6 @@ import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.sl.util.IFeatureVector;
 import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
-import logic.LogicInput;
 import structure.Node;
 import structure.StanfordSchema;
 import utils.FeatGen;
@@ -52,7 +51,35 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 			LogicX x, StanfordSchema num1, StanfordSchema num2,
 			StanfordSchema ques, int infRuleType) {
 		List<String> features = new ArrayList<>();
-		return features;
+		if(num1.rate != null && num1.rate.getFirst() != -1) {
+			features.add("RateDetected");
+		}
+		if(num2.rate != null && num2.rate.getFirst() != -1) {
+			features.add("RateDetected");
+		}
+		if(ques.rate != null && ques.rate.getFirst() != -1) {
+			features.add("RateDetected");
+		}
+		if(num1.math != -1) {
+			features.add("MathDetected");
+		}
+		if(num2.math != -1) {
+			features.add("MathDetected");
+		}
+		if(ques.math != -1) {
+			features.add("MathDetected");
+		}
+		if(x.tokens.get(num1.sentId).get(num1.verb).lemma().equals(
+				x.tokens.get(num2.sentId).get(num2.verb).lemma())) {
+			features.add("Verb12Same");
+		}
+		if(x.tokens.get(num1.sentId).get(num1.verb).lemma().equals(
+				x.tokens.get(num2.sentId).get(num2.verb).lemma()) &&
+				x.tokens.get(num1.sentId).get(num1.verb).lemma().equals(
+						x.tokens.get(ques.sentId).get(ques.verb).lemma())) {
+			features.add("AllVerbsSame");
+		}
+		return FeatGen.getFeaturesConjWithLabels(features, ""+infRuleType);
 	}
 
 	public static List<String> getExtractionFeatures(LogicX x, StanfordSchema num) {

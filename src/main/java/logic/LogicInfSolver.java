@@ -54,7 +54,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				}
 			}
 		}
-		best.label = Logic.logicSolver(best.num1, best.num2, best.ques, best.inferenceRule);
+		best.label = Logic.logicSolver(best.num1, best.num2, best.ques, best.inferenceRule, false);
 		return best;
 	}
 
@@ -72,7 +72,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 			Double extractionScore = pair.getSecond();
 			for (int infRule = 0; infRule < Logic.maxNumInferenceTypes; infRule++) {
 				String label = Logic.logicSolver(logicInput.getFirst(),
-						logicInput.getSecond(), logicInput.getThird(), infRule);
+						logicInput.getSecond(), logicInput.getThird(), infRule, false);
 				if(!label.equals(gold.label)) {
 					continue;
 				}
