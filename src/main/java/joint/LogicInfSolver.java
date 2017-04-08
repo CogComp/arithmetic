@@ -1,18 +1,14 @@
 package joint;
 
 import com.google.common.collect.MinMaxPriorityQueue;
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.sl.core.AbstractInferenceSolver;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
-import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.semgraph.SemanticGraph;
 import structure.Node;
 import structure.PairComparator;
 import structure.StanfordSchema;
-import utils.Params;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -38,17 +34,18 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 	@Override
 	public IStructure getLossAugmentedBestStructure(WeightVector weight,
 			IInstance ins, IStructure goldStructure) throws Exception {
-		LogicX logicX = (LogicX) ins;
+		LogicX x = (LogicX) ins;
 		List<StanfordSchema> extractionCandidates = new ArrayList<>();
 		// Get top candidate extractions
-		for(int i=0; i<=logicX.quantities.size(); ++i) {
-			extractionCandidates.add(getBestStanfordSchemas(logicX, weight, i));
+		for(int i=0; i<x.quantities.size(); ++i) {
+			extractionCandidates.add(x.schema.get(i));
 		}
+		extractionCandidates.add(x.questionSchema);
 		// Now find best tree construction from the extractions
 		MinMaxPriorityQueue<Pair<List<Node>, Double>> topExpressions =
-				getTopExpressions(logicX, extractionCandidates, weight, 200);
+				getTopExpressions(x, weight, 200);
 		Node node = topExpressions.element().getFirst().get(0);
-		LogicY y = new LogicY(node, extractionCandidates);
+		LogicY y = new LogicY(node);
 		return y;
 	}
 
@@ -57,36 +54,13 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		return LogicY.getLoss((LogicY)gold, (LogicY)pred);
 	}
 
-	public LogicY getLatentBestStructure(LogicX ins, LogicY gold, WeightVector weight) {
-		gold.extractions = new ArrayList<>();
-		// Get top candidate extractions
-		for(int i=0; i<=ins.quantities.size(); ++i) {
-			gold.extractions.add(getBestStanfordSchemas(ins, weight, i));
-		}
-		// Now find best tree construction from the extractions
-		populateInfRuleType(ins, gold.expr, gold.extractions, weight, true);
+	public LogicY getLatentBestStructure(LogicX x, LogicY gold, WeightVector weight) {
+		populateInfRuleType(x, gold.expr, weight, true);
 		return gold;
 	}
 
-	public StanfordSchema getBestStanfordSchemas(LogicX x, WeightVector wv, int index) {
-		PairComparator<StanfordSchema> pairComparator =
-				new PairComparator<StanfordSchema>() {};
-		MinMaxPriorityQueue<Pair<StanfordSchema, Double>> inputs =
-				MinMaxPriorityQueue.orderedBy(pairComparator).maximumSize(5).create();
-		StanfordSchema schema;
-		if(index == x.quantities.size()) {
-			schema = x.questionSchema;
-		} else {
-			schema = x.schema.get(index);
-		}
-		inputs.add(new Pair<>(schema, 1.0*wv.dotProduct(
-				featGen.getExtractionFeatureVector(x, schema))));
-		return inputs.element().getFirst();
-	}
-
 	public MinMaxPriorityQueue<Pair<List<Node>, Double>> getTopExpressions(
-			LogicX x, List<StanfordSchema> extractionCandidates, WeightVector wv, int beamSize)
-			throws Exception {
+			LogicX x, WeightVector wv, int beamSize) throws Exception {
 		PairComparator<List<Node>> nodePairComparator =
 				new PairComparator<List<Node>>() {};
 		MinMaxPriorityQueue<Pair<List<Node>, Double>> beam1 =
@@ -95,12 +69,15 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		MinMaxPriorityQueue<Pair<List<Node>, Double>> beam2 =
 				MinMaxPriorityQueue.orderedBy(nodePairComparator)
 						.maximumSize(beamSize).create();
-		int n = extractionCandidates.size() - 1;
+		int n = x.quantities.size();
 		List<Node> init = new ArrayList<>();
+		List<StanfordSchema> schemas = new ArrayList<>();
+		schemas.addAll(x.schema);
+		schemas.add(x.questionSchema);
 		for(int i=0; i<n; ++i) {
 			Node node = new Node(i, x.quantities.get(i), "NUM");
 			node.infRuleType = -1;
-			if(!Logic.irrelevance(extractionCandidates, i, x.tokens)) {
+			if(!Logic.irrelevance(schemas, i, x.tokens)) {
 				init.add(node);
 			}
 		}
@@ -108,8 +85,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		beam1.add(new Pair<>(init, 0.0));
 		for(int i=0; i<n-1; ++i) {
 			for(Pair<List<Node>, Double> state : beam1) {
-				beam2.addAll(enumerateSingleMerge(
-						x, state, extractionCandidates, wv));
+				beam2.addAll(enumerateSingleMerge(x, state, wv));
 			}
 			beam1.clear();
 			beam1.addAll(beam2);
@@ -121,7 +97,6 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 	public List<Pair<List<Node>, Double>> enumerateSingleMerge(
 			LogicX x,
 			Pair<List<Node>, Double> state,
-			List<StanfordSchema> extractionCandidates,
 			WeightVector wv) {
 		List<Pair<List<Node>, Double>> nextStates = new ArrayList<>();
 		List<Node> nodeList = state.getFirst();
@@ -138,90 +113,96 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				tmpNodeList.addAll(nodeList);
 				tmpNodeList.remove(i);
 				tmpNodeList.remove(j-1);
-				Pair<Node, Double> pair = enumerateMerge(x, nodeList.get(i),
-						nodeList.get(j),extractionCandidates, wv, isTopmost);
-				List<Node> newNodeList = new ArrayList<>();
-				newNodeList.addAll(tmpNodeList);
-				newNodeList.add(pair.getFirst());
-				nextStates.add(new Pair<>(newNodeList,
-						initScore + pair.getSecond()));
+				for(Pair<Node, Double> pair : enumerateMerge(
+						x, nodeList.get(i), nodeList.get(j), wv, isTopmost)) {
+					List<Node> newNodeList = new ArrayList<>();
+					newNodeList.addAll(tmpNodeList);
+					newNodeList.add(pair.getFirst());
+					nextStates.add(new Pair<>(newNodeList,
+							initScore + pair.getSecond()));
+				}
 			}
 		}
 		return nextStates;
 	}
 
-	public Pair<Node, Double> enumerateMerge(LogicX x, Node node1, Node node2,
-			List<StanfordSchema> extractionCandidates, WeightVector wv, boolean isTopmost) {
+	public List<Pair<Node, Double>> enumerateMerge(LogicX x, Node node1, Node node2,
+			WeightVector wv, boolean isTopmost) {
+		List<Pair<Node, Double>> nodeList = new ArrayList<>();
 		LogicInput num1 = new LogicInput(
 				1,
-				extractionCandidates.get(node1.quantIndex),
-				x.tokens.get(extractionCandidates.get(node1.quantIndex).sentId));
+				x.schema.get(node1.quantIndex),
+				x.tokens.get(x.schema.get(node1.quantIndex).sentId));
 		LogicInput num2 = new LogicInput(
 				2,
-				extractionCandidates.get(node2.quantIndex),
-				x.tokens.get(extractionCandidates.get(node2.quantIndex).sentId));
+				x.schema.get(node2.quantIndex),
+				x.tokens.get(x.schema.get(node2.quantIndex).sentId));
 		LogicInput ques = new LogicInput(
 				0,
-				extractionCandidates.get(x.quantities.size()),
-				x.tokens.get(extractionCandidates.get(x.quantities.size()).sentId));
-		Pair<String, Integer> key = Logic.bestAnswerFromLogicSolver(num1, num2, ques, isTopmost);
-		int infRuleType = key.getSecond();
-		String label = key.getFirst();
-		Node node;
-		double mergeScore;
-		if(label.endsWith("REV")) {
-			label = label.substring(0, 3);
-			node = new Node(label, Arrays.asList(node2, node1));
-			mergeScore = wv.dotProduct(featGen.getInfTypeFeatureVector(
-					x,
-					extractionCandidates.get(node1.quantIndex),
-					extractionCandidates.get(node2.quantIndex),
-					extractionCandidates.get(x.quantities.size()),
-					infRuleType));
-		} else {
-			node = new Node(label, Arrays.asList(node1, node2));
-			mergeScore = wv.dotProduct(featGen.getInfTypeFeatureVector(
-					x,
-					extractionCandidates.get(node1.quantIndex),
-					extractionCandidates.get(node2.quantIndex),
-					extractionCandidates.get(x.quantities.size()),
-					infRuleType));
-		}
-		node.infRuleType = infRuleType;
-		if(infRuleType==0 || infRuleType==1) {
-			node.quantIndex = node.children.get(0).quantIndex;
-		}
-		if(infRuleType==2) {
-			if(extractionCandidates.get(node2.quantIndex).math != -1) {
-				node.quantIndex = node.children.get(1).quantIndex;
+				x.questionSchema,
+				x.tokens.get(x.questionSchema.sentId));
+		Map<Pair<String, Integer>, Double> scores =
+				Logic.logicSolver(num1, num2, ques, isTopmost);
+		for(Pair<String, Integer> key : scores.keySet()) {
+			if(scores.get(key) < -100.0) continue;
+			int infRuleType = key.getSecond();
+			String label = key.getFirst();
+			Node node;
+			double mergeScore;
+			if (label.endsWith("REV")) {
+				label = label.substring(0, 3);
+				node = new Node(label, Arrays.asList(node2, node1));
+				mergeScore = wv.dotProduct(featGen.getInfTypeFeatureVector(
+						x,
+						x.schema.get(node1.quantIndex),
+						x.schema.get(node2.quantIndex),
+						x.questionSchema,
+						infRuleType));
 			} else {
+				node = new Node(label, Arrays.asList(node1, node2));
+				mergeScore = wv.dotProduct(featGen.getInfTypeFeatureVector(
+						x,
+						x.schema.get(node1.quantIndex),
+						x.schema.get(node2.quantIndex),
+						x.questionSchema,
+						infRuleType));
+			}
+			node.infRuleType = infRuleType;
+			if (infRuleType == 0 || infRuleType == 1) {
 				node.quantIndex = node.children.get(0).quantIndex;
 			}
-		}
-		if(infRuleType==3) {
-			if(extractionCandidates.get(node2.quantIndex).rate != null &&
-					extractionCandidates.get(node2.quantIndex).rate.getFirst() >= 0) {
-				node.quantIndex = node.children.get(1).quantIndex;
-			} else {
-				node.quantIndex = node.children.get(0).quantIndex;
+			if (infRuleType == 2) {
+				if (x.schema.get(node2.quantIndex).math != -1) {
+					node.quantIndex = node.children.get(1).quantIndex;
+				} else {
+					node.quantIndex = node.children.get(0).quantIndex;
+				}
 			}
+			if (infRuleType == 3) {
+				if (x.schema.get(node2.quantIndex).rate != null &&
+						x.schema.get(node2.quantIndex).rate.getFirst() >= 0) {
+					node.quantIndex = node.children.get(1).quantIndex;
+				} else {
+					node.quantIndex = node.children.get(0).quantIndex;
+				}
+			}
+			nodeList.add(new Pair<>(node, mergeScore));
 		}
-		return new Pair<>(node, mergeScore);
+		return nodeList;
 	}
 
 	public void populateInfRuleType(LogicX x,
 									Node expr,
-									List<StanfordSchema> extractions,
 									WeightVector wv,
 									boolean isTopmost) {
 		if (expr.children.size() == 0) return;
-		populateInfRuleType(x, expr.children.get(0), extractions, wv, false);
-		populateInfRuleType(x, expr.children.get(1), extractions, wv, false);
+		populateInfRuleType(x, expr.children.get(0), wv, false);
+		populateInfRuleType(x, expr.children.get(1), wv, false);
 		expr.infRuleType = -1;
 		double bestScore = -Double.MAX_VALUE;
-		StanfordSchema num1 = extractions.get(expr.children.get(0).quantIndex);
-		StanfordSchema num2 = extractions.get(expr.children.get(1).quantIndex);
-		StanfordSchema ques = extractions.get(extractions.size()-1);
+		StanfordSchema num1 = x.schema.get(expr.children.get(0).quantIndex);
+		StanfordSchema num2 = x.schema.get(expr.children.get(1).quantIndex);
+		StanfordSchema ques = x.questionSchema;
 
 		Map<Pair<String, Integer>, Double> scores =
 				Logic.logicSolver(
@@ -259,126 +240,6 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				}
 			}
 		}
-	}
-
-	public static List<StanfordSchema> enumerateSchemas(LogicX x, int quantIndex) {
-		List<StanfordSchema> schemas = new ArrayList<>();
-		return schemas;
-	}
-
-	public static List<IntPair> enumerateObjects(logic.LogicX x, int mode, int verbIndex) {
-		List<IntPair> candidates = new ArrayList<>();
-		if (x.sentIds.get(mode) < 0) {
-			candidates.add(new IntPair(-1, -1));
-			return candidates;
-		}
-		StanfordSchema qSchema = x.relevantSchemas.get(mode);
-		if(!Params.useLearnedExtraction) {
-			candidates.add(qSchema.object);
-			return candidates;
-		}
-		List<CoreLabel> tokens = x.tokens.get(x.sentIds.get(mode));
-		IntPair span = (mode == 0) ? x.questionSpan : new IntPair(0, tokens.size());
-		int tokenId = x.tokenIds.get(mode);
-		SemanticGraph dependency = x.dependencies.get(x.sentIds.get(mode));
-		if (verbIndex != -1) {
-			IntPair subj = StanfordSchema.getSubject(tokens, dependency, verbIndex);
-			if (subj.getSecond() != -1) {
-				candidates.add(subj);
-			}
-		}
-		if(candidates.size() == 0) {
-			for(int i=verbIndex + 1; i<span.getSecond(); ++i) {
-				if(tokens.get(i).tag().startsWith("N") ||
-						tokens.get(i).tag().equals("PRP")) {
-					if(tokenId == i || tokenId == (i-1)) continue;
-					if(i >= 1 && tokens.get(i-1).tag().startsWith("J")) {
-						candidates.add(new IntPair(i-1, i+1));
-					} else {
-						candidates.add(new IntPair(i, i+1));
-					}
-					break;
-				}
-			}
-		}
-		// No object is possible
-		candidates.add(new IntPair(-1, -1));
-		return candidates;
-	}
-
-	public static List<IntPair> enumerateUnits(logic.LogicX x, int mode) {
-		List<IntPair> candidates = new ArrayList<>();
-		if (x.sentIds.get(mode) < 0) {
-			candidates.add(new IntPair(-1, -1));
-			return candidates;
-		}
-		StanfordSchema qSchema = x.relevantSchemas.get(mode);
-		if(!Params.useLearnedExtraction) {
-			candidates.add(qSchema.unit);
-			return candidates;
-		}
-		List<CoreLabel> tokens = x.tokens.get(x.sentIds.get(mode));
-		IntPair span = (mode == 0) ? x.questionSpan : new IntPair(0, tokens.size());
-		int tokenId = x.tokenIds.get(mode);
-		if (tokenId >= 0 && tokens.get(tokenId).word().contains("$")) {
-			candidates.add(new IntPair(tokenId, tokenId+1));
-			return candidates;
-		}
-		if (tokenId >= 1 && tokens.get(tokenId-1).word().contains("$")) {
-			candidates.add(new IntPair(tokenId-1, tokenId));
-			return candidates;
-		}
-		for(int i=tokenId + 1; i<span.getSecond(); ++i) {
-			if(tokens.get(i).tag().startsWith("N") ||
-					tokens.get(i).tag().equals("PRP")) {
-				if(i >= 1 && tokens.get(i-1).tag().startsWith("J")) {
-					candidates.add(new IntPair(i-1, i+1));
-				} else {
-					candidates.add(new IntPair(i, i+1));
-				}
-				break;
-			}
-		}
-		// No unit is possible, in this case, we need to use last number's unit
-		candidates.add(new IntPair(-1, -1));
-		return candidates;
-	}
-
-	public static List<IntPair> enumerateRates(logic.LogicX x, int mode, IntPair subject) {
-		List<IntPair> candidates = new ArrayList<>();
-		if (x.sentIds.get(mode) < 0) {
-			candidates.add(new IntPair(-1, -1));
-			return candidates;
-		}
-		StanfordSchema qSchema = x.relevantSchemas.get(mode);
-		if(!Params.useLearnedExtraction) {
-			candidates.add(qSchema.rate);
-			return candidates;
-		}
-		List<CoreLabel> tokens = x.tokens.get(x.sentIds.get(mode));
-		IntPair span = (mode == 0) ? x.questionSpan : new IntPair(0, tokens.size());
-		for(int i=span.getFirst(); i<span.getSecond(); ++i) {
-			if(tokens.get(i).word().equalsIgnoreCase("per") ||
-					tokens.get(i).word().equalsIgnoreCase("each") ||
-					tokens.get(i).word().equalsIgnoreCase("every")) {
-				for(int j=i+1; j<span.getSecond(); ++j) {
-					if(tokens.get(j).tag().startsWith("N") ||
-							tokens.get(j).tag().equals("PRP")) {
-						if(tokens.get(j-1).tag().startsWith("J")) {
-							candidates.add(new IntPair(j-1, j+1));
-						} else {
-							candidates.add(new IntPair(j, j+1));
-						}
-					}
-				}
-				if (candidates.size() == 0) {
-					candidates.add(subject);
-				}
-				break;
-			}
-		}
-		candidates.add(new IntPair(-1, -1));
-		return candidates;
 	}
 
 }

@@ -10,27 +10,18 @@ import java.util.List;
 public class LogicY implements IStructure {
 	
 	public Node expr;
-	public List<StanfordSchema> extractions;
 	
-	public LogicY(Node expr, List<StanfordSchema> extractions) {
+	public LogicY(Node expr) {
 		this.expr = expr;
-		this.extractions = extractions;
 	}
 	
 	public LogicY(LogicY other) {
 		this.expr = other.expr;
-		this.extractions = other.extractions;
 	}
 	
 	@Override
 	public String toString() {
-		String str = "\n";
-		if(extractions != null) {
-			for (StanfordSchema inp : extractions) {
-				str += inp.toString() + "\n";
-			}
-		}
-		return str + "Expression: "+expr.toString()+"\n";
+		return expr.toString();
 	}
 	
 	public static float getLoss(LogicY gold, LogicY pred) {

@@ -51,7 +51,7 @@ public class LogicDriver {
 		SLProblem problem = new SLProblem();
 		for(StanfordProblem prob : problemList){
 			LogicX x = new LogicX(prob);
-			LogicY y = new LogicY(prob.expr, null);
+			LogicY y = new LogicY(prob.expr);
 			problem.addExample(x, y);
 		}
 		return problem;

@@ -32,16 +32,13 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 
 	public static List<String> getFeatures(LogicX x, LogicY y) {
 		List<String> features = new ArrayList<>();
-		for(StanfordSchema extraction : y.extractions) {
-			features.addAll(getExtractionFeatures(x, extraction));
-		}
 		for(Node node : y.expr.getAllSubNodes()) {
 			if(node.children.size() == 0) continue;
 			features.addAll(getInfTypeFeatures(
 					x,
-					y.extractions.get(node.children.get(0).quantIndex),
-					y.extractions.get(node.children.get(1).quantIndex),
-					y.extractions.get(y.extractions.size()-1),
+					x.schema.get(node.children.get(0).quantIndex),
+					x.schema.get(node.children.get(1).quantIndex),
+					x.questionSchema,
 					node.infRuleType));
 		}
 		return features;
@@ -82,19 +79,10 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		return FeatGen.getFeaturesConjWithLabels(features, ""+infRuleType);
 	}
 
-	public static List<String> getExtractionFeatures(LogicX x, StanfordSchema num) {
-		List<String> features = new ArrayList<>();
-		return features;
-	}
-
 	public IFeatureVector getInfTypeFeatureVector(
-			LogicX x, StanfordSchema num1, StanfordSchema num2, StanfordSchema ques, int infRuleType) {
+			LogicX x, StanfordSchema num1, StanfordSchema num2,
+			StanfordSchema ques, int infRuleType) {
 		List<String> features = getInfTypeFeatures(x, num1, num2, ques, infRuleType);
-		return FeatGen.getFeatureVectorFromListString(features, lm);
-	}
-
-	public IFeatureVector getExtractionFeatureVector(LogicX x, StanfordSchema num) {
-		List<String> features = getExtractionFeatures(x, num);
 		return FeatGen.getFeatureVectorFromListString(features, lm);
 	}
 
