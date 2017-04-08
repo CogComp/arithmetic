@@ -123,12 +123,14 @@ public class StanfordProblem {
 		List<String> whWords = Arrays.asList("what", "how", "when");
 		int start = 0, end = tokens.size();
 		for(int i=0; i<tokens.size(); ++i) {
+			if(whWords.contains(tokens.get(i).lemma())) {
+				start = i;
+			}
+		}
+		for(int i=start+1; i<tokens.size(); ++i) {
 			if(tokens.get(i).word().equals("?") || tokens.get(i).word().equals("if") ||
 					tokens.get(i).word().equals(",")) {
 				end = i;
-			}
-			if(whWords.contains(tokens.get(i).lemma())) {
-				start = i;
 			}
 		}
 		return new IntPair(start, end);

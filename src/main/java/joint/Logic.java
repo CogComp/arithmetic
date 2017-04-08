@@ -116,7 +116,7 @@ public class Logic {
             if(reason == 1) {
                 if(isTopmost && (!num1.verbLemma.equals(num2.verbLemma) ||
                         !num1.verbLemma.equals(ques.verbLemma) ||
-                        !num1.verbLemma.equals(ques.verbLemma))) {
+                        !num2.verbLemma.equals(ques.verbLemma))) {
                     continue;
                 }
                 if(!isTopmost && (!num1.verbLemma.equals(num2.verbLemma))) {
@@ -386,7 +386,7 @@ public class Logic {
         return false;
     }
 
-    public static void testIrrelevance(String dataset) throws Exception {
+    public static void testIrrelevanceWithDefaultExtraction(String dataset) throws Exception {
         Set<Integer> incorrect = new HashSet<>();
         Set<Integer> total = new HashSet<>();
         int t = 0;
@@ -426,7 +426,7 @@ public class Logic {
                 total.size() + " = " + (1-1.0*incorrect.size()/total.size()));
     }
 
-    public static void testLogicSolver(String dataset) throws Exception {
+    public static void testLogicSolverWithDefaultExtraction(String dataset) throws Exception {
         Set<Integer> incorrect = new HashSet<>();
         Set<Integer> total = new HashSet<>();
         List<StanfordProblem> probs = Reader.readStanfordProblemsFromJson(dataset);
@@ -490,8 +490,8 @@ public class Logic {
     }
 
     public static void main(String args[]) throws Exception {
-//        testIrrelevance(Params.allArithDir);
-        testLogicSolver(Params.allArithDir);
+//        testIrrelevanceWithDefaultExtraction(Params.allArithDir);
+        testLogicSolverWithDefaultExtraction(Params.allArithDir);
     }
 
 }
