@@ -46,7 +46,8 @@ public class StanfordSchema {
 		unit = getUnit(prob.tokens.get(sentId),
 				Tools.getTokenIdFromCharOffset(prob.tokens.get(sentId), qs.start));
 		object = getObject(prob.tokens.get(sentId), prob.dependencies.get(sentId), verb);
-		rate = getRate(prob.tokens.get(sentId));
+		rate = getRate(prob.tokens.get(sentId),
+				Tools.getTokenIdFromCharOffset(prob.tokens.get(sentId), qs.start));
 	}
 
 	@Override
@@ -152,8 +153,12 @@ public class StanfordSchema {
 	}
 
 	// Assumes subject to have been called before this
-	public static IntPair getRate(List<CoreLabel> tokens) {
-		for(int i=0; i<tokens.size(); ++i) {
+	public static IntPair getRate(List<CoreLabel> tokens, int tokenId) {
+		for(int i=tokenId; i<tokens.size(); ++i) {
+			if(tokens.get(i).word().equals("if") || tokens.get(i).word().equals("and")
+					|| tokens.get(i).word().equals(",") || tokens.get(i).word().equals(";")) {
+				break;
+			}
 			if (tokens.get(i).lemma().equals("per") ||
 					tokens.get(i).lemma().equals("every") ||
 					tokens.get(i).lemma().equals("each")) {
@@ -169,6 +174,27 @@ public class StanfordSchema {
 				}
 			}
 		}
+		for(int i=tokenId-1; i>=0; --i) {
+			if(tokens.get(i).word().equals("if") || tokens.get(i).word().equals("and")
+					|| tokens.get(i).word().equals(",") || tokens.get(i).word().equals(";")) {
+				break;
+			}
+			if (tokens.get(i).lemma().equals("per") ||
+					tokens.get(i).lemma().equals("every") ||
+					tokens.get(i).lemma().equals("each")) {
+				for(int j=i+1; j<tokens.size(); ++j) {
+					if (tokens.get(j).tag().startsWith("N") ||
+							tokens.get(j).tag().startsWith("PRP")) {
+						if (tokens.get(j-1).tag().startsWith("J")) {
+							return new IntPair(j-1, j+1);
+						} else{
+							return new IntPair(j, j+1);
+						}
+					}
+				}
+			}
+		}
+
 		return new IntPair(-1, -1);
 	}
 }

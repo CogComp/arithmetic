@@ -105,7 +105,7 @@ public class StanfordProblem {
 		SemanticGraph dependency = prob.dependencies.get(schema.sentId);
 		schema.verb = schema.getDependentVerb(dependency, quesSpan.getFirst());
 		schema.unit = schema.getUnit(tokens, quesSpan.getFirst());
-		schema.rate = schema.getRate(tokens);
+		schema.rate = schema.getRate(tokens, quesSpan.getFirst());
 		schema.subject = schema.getSubject(tokens, dependency, schema.verb);
 		schema.object = schema.getObject(tokens, dependency, schema.verb);
 		for(int i=quesSpan.getFirst(); i<quesSpan.getSecond(); ++i) {

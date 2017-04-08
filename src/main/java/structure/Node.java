@@ -25,6 +25,7 @@ public class Node implements Serializable {
 		this();
 		this.label = label;
 		this.children = children;
+		this.infRuleType = -1;
 	}
 	
 	// For leaves
@@ -33,6 +34,7 @@ public class Node implements Serializable {
 		this.quantIndex = quantindex;
 		this.qs = qs;
 		this.label = label;
+		this.infRuleType = -1;
 	}
 
 	public Node(Node other) {
@@ -41,6 +43,7 @@ public class Node implements Serializable {
 		this.qs = other.qs;
 		this.label = other.label;
 		this.val = other.val;
+		this.infRuleType = other.infRuleType;
 		for(Node child : other.children) {
 			this.children.add(new Node(child));			
 		}

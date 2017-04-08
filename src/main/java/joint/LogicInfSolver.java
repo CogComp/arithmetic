@@ -35,13 +35,6 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 	public IStructure getLossAugmentedBestStructure(WeightVector weight,
 			IInstance ins, IStructure goldStructure) throws Exception {
 		LogicX x = (LogicX) ins;
-		List<StanfordSchema> extractionCandidates = new ArrayList<>();
-		// Get top candidate extractions
-		for(int i=0; i<x.quantities.size(); ++i) {
-			extractionCandidates.add(x.schema.get(i));
-		}
-		extractionCandidates.add(x.questionSchema);
-		// Now find best tree construction from the extractions
 		MinMaxPriorityQueue<Pair<List<Node>, Double>> topExpressions =
 				getTopExpressions(x, weight, 200);
 		Node node = topExpressions.element().getFirst().get(0);
@@ -55,8 +48,10 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 	}
 
 	public LogicY getLatentBestStructure(LogicX x, LogicY gold, WeightVector weight) {
-		populateInfRuleType(x, gold.expr, weight, true);
-		return gold;
+		MinMaxPriorityQueue<Pair<Node, Double>> beam =
+				populateInfRuleType(x, gold.expr, weight, true, 200);
+		LogicY y = new LogicY(beam.element().getFirst());
+		return y;
 	}
 
 	public MinMaxPriorityQueue<Pair<List<Node>, Double>> getTopExpressions(
@@ -147,6 +142,14 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 			if(scores.get(key) < -100.0) continue;
 			int infRuleType = key.getSecond();
 			String label = key.getFirst();
+			if((label.equals("ADD") || label.startsWith("SUB")) &&
+					(node1.label.startsWith("SUB") || node2.label.startsWith("SUB"))) {
+				continue;
+			}
+			if((label.equals("MUL") || label.startsWith("DIV")) &&
+					(node1.label.startsWith("DIV") || node2.label.startsWith("DIV"))) {
+				continue;
+			}
 			Node node;
 			double mergeScore;
 			if (label.endsWith("REV")) {
@@ -191,55 +194,114 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		return nodeList;
 	}
 
-	public void populateInfRuleType(LogicX x,
-									Node expr,
-									WeightVector wv,
-									boolean isTopmost) {
-		if (expr.children.size() == 0) return;
-		populateInfRuleType(x, expr.children.get(0), wv, false);
-		populateInfRuleType(x, expr.children.get(1), wv, false);
-		expr.infRuleType = -1;
-		double bestScore = -Double.MAX_VALUE;
-		StanfordSchema num1 = x.schema.get(expr.children.get(0).quantIndex);
-		StanfordSchema num2 = x.schema.get(expr.children.get(1).quantIndex);
-		StanfordSchema ques = x.questionSchema;
-
-		Map<Pair<String, Integer>, Double> scores =
-				Logic.logicSolver(
-						new LogicInput(0, num1, x.tokens.get(num1.sentId)),
-						new LogicInput(0, num2, x.tokens.get(num2.sentId)),
-						new LogicInput(0, ques, x.tokens.get(ques.sentId)),
-						isTopmost);
-		for(Pair<String, Integer> key : scores.keySet()) {
-			double score = scores.get(key);
-			if(score < -100.0) continue;
-			String label = key.getFirst();
-			int infRuleType = key.getSecond();
-			if(!label.equals(expr.label)) continue;
-			score = wv.dotProduct(featGen.getInfTypeFeatureVector(
-					x, num1, num2, ques, infRuleType));
-			if(score > bestScore) {
-				bestScore = score;
-				expr.infRuleType = infRuleType;
-				if(infRuleType==0 || infRuleType==1) {
-					expr.quantIndex = expr.children.get(0).quantIndex;
-				}
-				if(infRuleType==2) {
-					if(num2.math != -1) {
-						expr.quantIndex = expr.children.get(1).quantIndex;
-					} else {
-						expr.quantIndex = expr.children.get(0).quantIndex;
+	public MinMaxPriorityQueue<Pair<Node, Double>> populateInfRuleType(
+			LogicX x, Node expr, WeightVector wv, boolean isTopmost, int beamSize) {
+		PairComparator<Node> nodePairComparator = new PairComparator<Node>() {};
+		MinMaxPriorityQueue<Pair<Node, Double>> beam =
+				MinMaxPriorityQueue.orderedBy(nodePairComparator)
+						.maximumSize(beamSize).create();
+		if (expr.children.size() == 0) {
+			Node node = new Node(expr);
+			beam.add(new Pair<>(node, 0.0));
+			return beam;
+		}
+		MinMaxPriorityQueue<Pair<Node, Double>> left =
+				populateInfRuleType(x, expr.children.get(0), wv, false, beamSize);
+		MinMaxPriorityQueue<Pair<Node, Double>> right =
+				populateInfRuleType(x, expr.children.get(1), wv, false, beamSize);
+		for(Pair<Node, Double> l : left) {
+			for(Pair<Node, Double> r : right) {
+				StanfordSchema num1 = x.schema.get(l.getFirst().quantIndex);
+				StanfordSchema num2 = x.schema.get(r.getFirst().quantIndex);
+				StanfordSchema ques = x.questionSchema;
+				Map<Pair<String, Integer>, Double> scores =
+						Logic.logicSolver(
+								new LogicInput(0, num1, x.tokens.get(num1.sentId)),
+								new LogicInput(0, num2, x.tokens.get(num2.sentId)),
+								new LogicInput(0, ques, x.tokens.get(ques.sentId)),
+								isTopmost);
+				for(Pair<String, Integer> key : scores.keySet()) {
+					double score = scores.get(key);
+					if(score < -100.0) continue;
+					String label = key.getFirst();
+					int infRuleType = key.getSecond();
+					if(!label.equals(expr.label)) continue;
+					score = wv.dotProduct(featGen.getInfTypeFeatureVector(
+							x, num1, num2, ques, infRuleType)) + l.getSecond() + r.getSecond();
+					Node node = new Node(expr);
+					node.children.clear();
+					node.infRuleType = infRuleType;
+					if(infRuleType==0 || infRuleType==1) {
+						node.quantIndex = l.getFirst().quantIndex;
 					}
-				}
-				if(infRuleType==3) {
-					if(num2.rate != null && num2.rate.getFirst() >= 0) {
-						expr.quantIndex = expr.children.get(1).quantIndex;
-					} else {
-						expr.quantIndex = expr.children.get(0).quantIndex;
+					if(infRuleType==2) {
+						if(num2.math != -1) {
+							node.quantIndex = r.getFirst().quantIndex;
+						} else {
+							node.quantIndex = l.getFirst().quantIndex;
+						}
 					}
+					if(infRuleType==3) {
+						if(num2.rate != null && num2.rate.getFirst() >= 0) {
+							node.quantIndex = r.getFirst().quantIndex;
+						} else {
+							node.quantIndex = l.getFirst().quantIndex;
+						}
+					}
+					node.children.clear();
+					node.children.add(l.getFirst());
+					node.children.add(r.getFirst());
+					beam.add(new Pair<>(node, score));
 				}
 			}
 		}
+		if (beam.size() > 0) return beam;
+		for(Pair<Node, Double> l : left) {
+			for(Pair<Node, Double> r : right) {
+				StanfordSchema num1 = x.schema.get(l.getFirst().quantIndex);
+				StanfordSchema num2 = x.schema.get(r.getFirst().quantIndex);
+				StanfordSchema ques = x.questionSchema;
+				Map<Pair<String, Integer>, Double> scores =
+						Logic.logicSolver(
+								new LogicInput(0, num1, x.tokens.get(num1.sentId)),
+								new LogicInput(0, num2, x.tokens.get(num2.sentId)),
+								new LogicInput(0, ques, x.tokens.get(ques.sentId)),
+								isTopmost);
+				for(Pair<String, Integer> key : scores.keySet()) {
+					String label = key.getFirst();
+					int infRuleType = key.getSecond();
+					if(!label.equals(expr.label)) continue;
+					double score = wv.dotProduct(featGen.getInfTypeFeatureVector(
+							x, num1, num2, ques, infRuleType)) + l.getSecond() + r.getSecond();
+					Node node = new Node(expr);
+					node.children.clear();
+					node.infRuleType = infRuleType;
+					if(infRuleType==0 || infRuleType==1) {
+						node.quantIndex = l.getFirst().quantIndex;
+					}
+					if(infRuleType==2) {
+						if(num2.math != -1) {
+							node.quantIndex = r.getFirst().quantIndex;
+						} else {
+							node.quantIndex = l.getFirst().quantIndex;
+						}
+					}
+					if(infRuleType==3) {
+						if(num2.rate != null && num2.rate.getFirst() >= 0) {
+							node.quantIndex = r.getFirst().quantIndex;
+						} else {
+							node.quantIndex = l.getFirst().quantIndex;
+						}
+					}
+					node.children.clear();
+					node.children.add(l.getFirst());
+					node.children.add(r.getFirst());
+					beam.add(new Pair<>(node, score));
+				}
+			}
+		}
+		return beam;
+
 	}
 
 }
