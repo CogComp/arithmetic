@@ -1,7 +1,5 @@
 package utils;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 import edu.illinois.cs.cogcomp.bigdata.mapdb.MapDB;
@@ -16,9 +14,6 @@ import net.didion.jwnl.JWNLException;
 import net.didion.jwnl.data.*;
 import net.didion.jwnl.data.list.*;
 import net.didion.jwnl.dictionary.Dictionary;
-import org.apache.commons.io.FileUtils;
-import structure.QuantSpan;
-import structure.Schema;
 import structure.SimpleQuantifier;
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
@@ -115,39 +110,6 @@ public class Tools {
 		}
 	}
 
-	public static double sigmoid(double x) {
-		return 1.0/(1+Math.pow(Math.E, -x))*2.0-1.0;
-	}
-	
-	public static boolean doesIntersect(IntPair ip1, IntPair ip2) {
-		if(ip1.getFirst() <= ip2.getFirst() && ip2.getFirst() < ip1.getSecond()) {
-			return true;
-		}
-		if(ip2.getFirst() <= ip1.getFirst() && ip1.getFirst() < ip2.getSecond()) {
-			return true;
-		}
-		return false;
-	}
-	
-	// is ip2 subset of ip1
-	public static boolean doesContain(IntPair big, IntPair small) {
-		if(big.getFirst() <= small.getFirst() && small.getSecond() <= big.getSecond()) {
-			return true;
-		}
-		return false;
-	}
-	
-
-	public static boolean doesContainNotEqual(IntPair big, IntPair small) {
-		if(big.getFirst() == small.getFirst() && big.getSecond() == small.getSecond()) {
-			return false;
-		}
-		if(big.getFirst() <= small.getFirst() && small.getSecond() <= big.getSecond()) {
-			return true;
-		}
-		return false;
-	}
-	
 	public static boolean safeEquals(Double d1, Double d2) {
 		if(d1 == null && d2 == null) return true;
 		if(d1 == null || d2 == null) {
@@ -157,37 +119,6 @@ public class Tools {
 			return true;
 		}
 		return false;
-	}
-
-	public static int getTokenIndex(QuantSpan qs, TextAnnotation ta) {
-		return ta.getTokenIdFromCharacterOffset(qs.start);
-	}
-	
-	public static List<Double> uniqueNumbers(List<QuantSpan> quantSpans) {
-		List<Double> uniqueNos = new ArrayList<>();
-		for(int i=0; i<quantSpans.size(); i++) {
-			QuantSpan qs = quantSpans.get(i);
-			boolean allow = true;
-			for(int j=0; j<i; j++) {
-				if(Tools.safeEquals(qs.val, quantSpans.get(j).val)) {
-					allow = false;
-					break;
-				}
-			}
-			if(allow) uniqueNos.add(qs.val);
-		}
-		return uniqueNos;
-	}
-	
-	public static List<QuantSpan> getRelevantQuantSpans(
-			Double d, List<QuantSpan> quantSpans) {
-		List<QuantSpan> relevantSpans = new ArrayList<QuantSpan>();
-		for(QuantSpan qs : quantSpans) {
-			if(Tools.safeEquals(d, qs.val)) {
-				relevantSpans.add(qs);
-			}
-		}
-		return relevantSpans;
 	}
 	
 	public static boolean contains(List<Double> arr, Double key) {
@@ -212,36 +143,6 @@ public class Tools {
 			if(!found) return false;
 		}
 		return true;
-	}
-	
-	public static boolean areAllTokensInSameSentence(
-			TextAnnotation ta, List<Integer> tokenIds) {
-		Set<Integer> sentenceIds = new HashSet<>();
-		for(Integer tokenId : tokenIds) {
-			sentenceIds.add(ta.getSentenceFromToken(tokenId).getSentenceId());
-		}
-		if(sentenceIds.size() == 1) return true;
-		return false;
-	}
-	
-	public static Integer max(List<Integer> intList) {
-		Integer max = Integer.MIN_VALUE;
-		for(Integer i : intList) {
-			if(max < i) {
-				max = i;
-			}
-		}
-		return max;
-	}
-	
-	public static Integer min(List<Integer> intList) {
-		Integer min = Integer.MAX_VALUE;
-		for(Integer i : intList) {
-			if(min > i) {
-				min = i;
-			}
-		}
-		return min;
 	}
 	
 	// Returns id of first question sentence, -1 if none found
@@ -282,25 +183,6 @@ public class Tools {
 		return sim;
 	}
 	
-	public static List<String> getTokensListWithCorefReplacements(
-			Constituent cons, Schema schema) {
-		List<String> tokens = new ArrayList<String>();
-		TextAnnotation ta = cons.getTextAnnotation();
-		int startIndex = cons.getStartSpan();
-		int endIndex = cons.getEndSpan();
-		for(int i=startIndex; i<endIndex; ++i) {
-			if(schema.coref.containsKey(i)) {
-				IntPair ip = schema.coref.get(i);
-				for(int j=ip.getFirst(); j<ip.getSecond(); ++j) {
-					tokens.add(ta.getToken(j));
-				}
-			} else {
-				tokens.add(ta.getToken(i));
-			}
-		}
-		return tokens;
-	}
-	
 	public static List<String> getTokensList(Constituent cons) {
 		List<String> tokens = new ArrayList<String>();
 		TextAnnotation ta = cons.getTextAnnotation();
@@ -310,27 +192,6 @@ public class Tools {
 			tokens.add(ta.getToken(i));
 		}
 		return tokens;
-	}
-	
-	public static boolean implicitRateDetected(TextAnnotation ta, 
-			List<QuantSpan> quantities, int quantIndex1, int quantIndex2) {
-		int tokenId1 = ta.getTokenIdFromCharacterOffset(
-				quantities.get(quantIndex1).start);
-		int tokenId2 = ta.getTokenIdFromCharacterOffset(
-				quantities.get(quantIndex2).start);
-		if(ta.getSentenceFromToken(tokenId1).getSentenceId() == 
-				ta.getSentenceFromToken(tokenId2).getSentenceId()) {
-			boolean allow = true;
-			for(int i=Math.min(tokenId1, tokenId2); i<=Math.max(tokenId1, tokenId2); ++i) {
-				if(ta.getToken(i).equals(",") || ta.getToken(i).equals("and")) {
-					allow = false;
-				}
-			}
-			if(allow) {
-				return true;
-			}
-		}
-		return false;
 	}
 	
 	public static void printCons(List<Constituent> constituents) {
@@ -408,14 +269,6 @@ public class Tools {
 		}
 		for(int i=cons.getStartSpan(); i<cons.getEndSpan(); ++i) {
 			tokens.add(cons.getTextAnnotation().getToken(i));
-		}
-		return tokens;
-	}
-
-	public static List<String> spanToList(List<String> lemmas, IntPair span) {
-		List<String> tokens = new ArrayList<>();
-		for(int i=span.getFirst(); i<span.getSecond(); ++i) {
-			tokens.add(lemmas.get(i));
 		}
 		return tokens;
 	}
@@ -620,6 +473,18 @@ public class Tools {
 			}
 		}
 		return -1;
+	}
+
+	public static <T> T getKeyForMaxValue(Map<T, Double> map) {
+		Double bestScore = -Double.MAX_VALUE;
+		T best = null;
+		for(T key : map.keySet()) {
+			if(map.get(key) > bestScore) {
+				bestScore = map.get(key);
+				best = key;
+			}
+		}
+		return best;
 	}
 
 	public static void main(String args[]) {

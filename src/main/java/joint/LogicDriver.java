@@ -14,6 +14,7 @@ import structure.StanfordProblem;
 import structure.StanfordSchema;
 import utils.Folds;
 import utils.Params;
+import utils.Tools;
 
 import java.util.*;
 
@@ -68,7 +69,8 @@ public class LogicDriver {
 			LogicY gold = (LogicY) sp.goldStructureList.get(i);
 			LogicY pred = (LogicY) model.infSolver.getBestStructure(model.wv, prob);
 			total.add(prob.problemId);
-			if(LogicY.getLoss(gold, pred) < 0.0001) {
+			if(Tools.safeEquals(gold.expr.getValue(), pred.expr.getValue()) ||
+					Tools.safeEquals(-gold.expr.getValue(), pred.expr.getValue())) {
 				acc += 1;
 			} else {
 				incorrect.add(prob.problemId);

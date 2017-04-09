@@ -25,16 +25,17 @@ public class LogicY implements IStructure {
 	}
 	
 	public static float getLoss(LogicY gold, LogicY pred) {
-		if(gold == null || pred == null) {
-			return 1.0f;
-		}
-		if(Tools.safeEquals(gold.expr.getValue(), pred.expr.getValue())) {
-			return 0.0f;
-		}
-		if(Tools.safeEquals(-gold.expr.getValue(), pred.expr.getValue())) {
-			return 0.0f;
-		}
-		return 1.0f;
+//		if(gold == null || pred == null) {
+//			return 1.0f;
+//		}
+//		if(Tools.safeEquals(gold.expr.getValue(), pred.expr.getValue())) {
+//			return 0.0f;
+//		}
+//		if(Tools.safeEquals(-gold.expr.getValue(), pred.expr.getValue())) {
+//			return 0.0f;
+//		}
+//		return 1.0f;
+		return Node.getLoss(gold.expr, pred.expr);
 	}
 
 }

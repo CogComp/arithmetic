@@ -2,6 +2,7 @@ package joint;
 
 import joint.LogicInput;
 import utils.Params;
+import utils.Tools;
 
 import java.io.*;
 import java.util.*;
@@ -62,7 +63,7 @@ public class Verbs {
                 if(verbCluster.get(verb) != index) continue;
                 String clusterCategory = verbCategory(verb);
                 map.put(clusterCategory, map.get(clusterCategory) + 1.0);
-                String finalCategory = maxWeightCategory(map);
+                String finalCategory = Tools.getKeyForMaxValue(map);
                 verbClusterCategory.put(index, finalCategory);
             }
         }
@@ -88,38 +89,31 @@ public class Verbs {
                 getVectorSim(verb, negative.get(0)),
                 getVectorSim(verb, negative.get(1)),
                 getVectorSim(verb, negative.get(2)))));
-        return maxWeightCategory(map);
-    }
-
-    public static String maxWeightCategory(Map<String, Double> map) {
-        if(map.get("NEGATIVE") > map.get("POSITIVE") &&
-                map.get("NEGATIVE") > map.get("STATE")) {
-            return "NEGATIVE";
-        }
-        if(map.get("POSITIVE") > map.get("STATE")) {
-            return "POSITIVE";
-        }
-        return "STATE";
+        return Tools.getKeyForMaxValue(map);
     }
 
     public static Map<String, Double> verbClassify(LogicInput num) {
+        return verbClassify(num.verbLemma, num.unit);
+    }
+
+    public static Map<String, Double> verbClassify(String verbLemma, List<String> unit) {
         Map<String, Double> map = new HashMap<>();
         map.put("STATE", 0.0);
         map.put("POSITIVE", 0.0);
         map.put("NEGATIVE", 0.0);
 
         // Hard decision for now
-        if(verbCluster.containsKey(num.verbLemma)) {
-            if (num.verbLemma.equals("buy") || num.verbLemma.equals("purchase")) {
-                if (num.unit != null && num.unit.contains("$")) {
+        if(verbCluster.containsKey(verbLemma)) {
+            if (verbLemma.equals("buy") || verbLemma.equals("purchase")) {
+                if (unit != null && unit.contains("$")) {
                     map.put("NEGATIVE", 1.0);
                 } else {
                     map.put("POSITIVE", 1.0);
                 }
                 return map;
             }
-            if (num.verbLemma.equals("sell")) {
-                if (num.unit != null && num.unit.contains("$")) {
+            if (verbLemma.equals("sell")) {
+                if (unit != null && unit.contains("$")) {
                     map.put("POSITIVE", 1.0);
                 } else {
                     map.put("NEGATIVE", 1.0);
@@ -128,7 +122,7 @@ public class Verbs {
             }
 //            int vc = verbCluster.get(num.verbLemma);
 //            String vcc = verbClusterCategory.get(vc);
-            String vcc = verbCategory(num.verbLemma);
+            String vcc = verbCategory(verbLemma);
             map.put(vcc, 1.0);
         }
         return map;

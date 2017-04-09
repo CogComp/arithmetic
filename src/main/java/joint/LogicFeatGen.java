@@ -17,7 +17,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 
 	private static final long serialVersionUID = -5902462551801564955L;
 	public Lexiconer lm = null;
-	
+
 	public LogicFeatGen(Lexiconer lm) {
 		this.lm = lm;
 	}
@@ -39,14 +39,18 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 					x.schema.get(node.children.get(0).quantIndex),
 					x.schema.get(node.children.get(1).quantIndex),
 					x.questionSchema,
-					node.infRuleType));
+					node.infRuleType,
+					node.key));
 		}
 		return features;
 	}
 
-	public static List<String> getInfTypeFeatures(
-			LogicX x, StanfordSchema num1, StanfordSchema num2,
-			StanfordSchema ques, int infRuleType) {
+	public static List<String> getInfTypeFeatures(LogicX x,
+												  StanfordSchema num1,
+												  StanfordSchema num2,
+												  StanfordSchema ques,
+												  int infRuleType,
+												  String key) {
 		List<String> features = new ArrayList<>();
 		if(num1.rate != null && num1.rate.getFirst() != -1) {
 			features.add("RateDetected");
@@ -79,10 +83,13 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		return FeatGen.getFeaturesConjWithLabels(features, ""+infRuleType);
 	}
 
-	public IFeatureVector getInfTypeFeatureVector(
-			LogicX x, StanfordSchema num1, StanfordSchema num2,
-			StanfordSchema ques, int infRuleType) {
-		List<String> features = getInfTypeFeatures(x, num1, num2, ques, infRuleType);
+	public IFeatureVector getInfTypeFeatureVector(LogicX x,
+												  StanfordSchema num1,
+												  StanfordSchema num2,
+												  StanfordSchema ques,
+												  int infRuleType,
+												  String key) {
+		List<String> features = getInfTypeFeatures(x, num1, num2, ques, infRuleType, key);
 		return FeatGen.getFeatureVectorFromListString(features, lm);
 	}
 
