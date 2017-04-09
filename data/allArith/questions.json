@@ -365,7 +365,7 @@
   },
   {
     "iIndex": 15,
-    "sQuestion": "Joan found 6.0 seashells and Jessica found 8.0 seashells on the beach . How many seashells did they find together ?",
+    "sQuestion": "Joan found 6.0 seashells, and Jessica found 8.0 seashells on the beach . How many seashells did they find together ?",
     "quantities": [
       {
         "start": 11,
@@ -417,7 +417,7 @@
   },
   {
     "iIndex": 17,
-    "sQuestion": "Benny picked 2.0 apples and Dan picked 9.0 apples from the apple tree . How many apples were picked in total ?",
+    "sQuestion": "Benny picked 2.0 apples, and Dan picked 9.0 apples from the apple tree . How many apples were picked in total ?",
     "quantities": [
       {
         "start": 13,
@@ -507,7 +507,7 @@
   },
   {
     "iIndex": 21,
-    "sQuestion": "Melanie had 7.0 dimes in her bank . Her dad gave her 8.0 dimes and her mother gave her 4.0 dimes . How many dimes does Melanie have now ?",
+    "sQuestion": "Melanie had 7.0 dimes in her bank . Her dad gave her 8.0 dimes, and her mother gave her 4.0 dimes . How many dimes does Melanie have now ?",
     "quantities": [
       {
         "start": 12,
@@ -691,7 +691,7 @@
   },
   {
     "iIndex": 33,
-    "sQuestion": "Tom found 15.0 seashells and Fred found 43.0 seashells on the beach . When they cleaned them , they discovered that 29.0 were cracked . How many seashells did they find together ?",
+    "sQuestion": "Tom found 15.0 seashells, and Fred found 43.0 seashells on the beach . When they cleaned them , they discovered that 29.0 were cracked . How many seashells did they find together ?",
     "quantities": [
       {
         "start": 10,
@@ -753,7 +753,7 @@
   },
   {
     "iIndex": 35,
-    "sQuestion": "Joan picked 37.0 oranges and Sara picked 10.0 oranges . Alyssa picked 30.0 pears . How many oranges were picked in total ?",
+    "sQuestion": "Joan picked 37.0 oranges, and Sara picked 10.0 oranges . Alyssa picked 30.0 pears . How many oranges were picked in total ?",
     "quantities": [
       {
         "start": 12,
@@ -1307,7 +1307,7 @@
   },
   {
     "iIndex": 81,
-    "sQuestion": "Alyssa picked 42.0 pears and Nancy picked 17.0 pears from the pear tree . How many pears were picked in all ?",
+    "sQuestion": "Alyssa picked 42.0 pears, and Nancy picked 17.0 pears from the pear tree . How many pears were picked in all ?",
     "quantities": [
       {
         "start": 14,
@@ -2151,7 +2151,7 @@
   },
   {
     "iIndex": 136,
-    "sQuestion": "Abe 's family moved from the Bahamas to Japan , so they had convert their money into Japanese yen . Their checking account now has 6359.0 yen and their savings account now has 3485.0 yen . How many yen do they have ?",
+    "sQuestion": "Abe 's family moved from the Bahamas to Japan , so they had convert their money into Japanese yen . Their checking account now has 6359.0 yen, and their savings account now has 3485.0 yen . How many yen do they have ?",
     "quantities": [
       {
         "start": 131,
@@ -2650,7 +2650,7 @@
   },
   {
     "iIndex": 155,
-    "sQuestion": "A petri dish originally contained 600.0 bacteria . A scientist let the bacteria grow and now there are 8917.0 of them . How many more bacteria are there now ?",
+    "sQuestion": "A petri dish originally contained 600.0 bacteria . A scientist let the bacteria grow, and now there are 8917.0 of them . How many more bacteria are there now ?",
     "quantities": [
       {
         "start": 34,
@@ -3040,7 +3040,7 @@
   },
   {
     "iIndex": 170,
-    "sQuestion": "Oscar 's bus ride to school is 0.75 mile and Charlie 's bus ride is 0.25 mile . How much longer is Oscar 's bus ride than Charlie 's ?",
+    "sQuestion": "Oscar 's bus ride to school is 0.75 mile, and Charlie 's bus ride is 0.25 mile . How much longer is Oscar 's bus ride than Charlie 's ?",
     "quantities": [
       {
         "start": 31,
@@ -3170,7 +3170,7 @@
   },
   {
     "iIndex": 175,
-    "sQuestion": "At Lindsey 's Vacation Wear , 0.375 the garments are bikinis and 0.25 are trunks . What fraction of the garments are either bikinis or trunks ?",
+    "sQuestion": "At Lindsey 's Vacation Wear , 0.375 the garments are bikinis, and 0.25 are trunks . What fraction of the garments are either bikinis or trunks ?",
     "quantities": [
       {
         "start": 30,
@@ -3222,7 +3222,7 @@
   },
   {
     "iIndex": 177,
-    "sQuestion": "A marine biologist measured 1.0 fish that was 0.3 foot long and a second fish that was 0.2 foot long . How much longer was the first fish ?",
+    "sQuestion": "A marine biologist measured 1.0 fish that was 0.3 foot long, and a second fish that was 0.2 foot long . How much longer was the first fish ?",
     "quantities": [
       {
         "start": 28,
@@ -3279,7 +3279,7 @@
   },
   {
     "iIndex": 179,
-    "sQuestion": "Ella owns 2.0 dogs . Each day , 1.0 dog eats 0.125 scoop of dog food and the other dog eats 0.125 scoop . Together , how much dog food do the 2.0 dogs eat each day ?",
+    "sQuestion": "Ella owns 2.0 dogs . Each day , 1.0 dog eats 0.125 scoop of dog food, and the other dog eats 0.125 scoop . Together , how much dog food do the 2.0 dogs eat each day ?",
     "quantities": [
       {
         "start": 10,
@@ -3398,7 +3398,7 @@
   },
   {
     "iIndex": 183,
-    "sQuestion": "In Mr. Olsen 's mathematics class , 0.7 the students received A 's and 0.2 received B 's . What fraction of the students received either A 's or B 's ?",
+    "sQuestion": "In Mr. Olsen 's mathematics class , 0.7 the students received A 's, and 0.2 received B 's . What fraction of the students received either A 's or B 's ?",
     "quantities": [
       {
         "start": 36,
@@ -3730,7 +3730,7 @@
   },
   {
     "iIndex": 196,
-    "sQuestion": "In Shannon 's apartment complex , 0.16666666666666666 the apartments are one-bedroom apartments and 0.3333333333333333 are two-bedroom apartments . What fraction of the apartments are either 1.0 - or two-bedroom apartments ?",
+    "sQuestion": "In Shannon 's apartment complex , 0.16666666666666666 the apartments are one-bedroom apartments, and 0.3333333333333333 are two-bedroom apartments . What fraction of the apartments are either 1.0 - or two-bedroom apartments ?",
     "quantities": [
       {
         "start": 34,
@@ -3761,7 +3761,7 @@
   },
   {
     "iIndex": 197,
-    "sQuestion": "At the beach , Miki and her sister both built sandcastles and then measured their heights . Miki 's sandcastle was 0.8333333333333334 foot tall and her sister 's was 0.5 foot tall . How much taller was Miki 's sandcastle than her sister 's ?",
+    "sQuestion": "At the beach , Miki and her sister both built sandcastles and then measured their heights . Miki 's sandcastle was 0.8333333333333334 foot tall, and her sister 's was 0.5 foot tall . How much taller was Miki 's sandcastle than her sister 's ?",
     "quantities": [
       {
         "start": 115,
@@ -3865,7 +3865,7 @@
   },
   {
     "iIndex": 201,
-    "sQuestion": "Greg and Sharon own neighboring cornfields . Greg harvested 0.4 acre of corn on Monday and Sharon harvested 0.1 acre . How many more acres did Greg harvest than Sharon ?",
+    "sQuestion": "Greg and Sharon own neighboring cornfields . Greg harvested 0.4 acre of corn on Monday, and Sharon harvested 0.1 acre . How many more acres did Greg harvest than Sharon ?",
     "quantities": [
       {
         "start": 60,
@@ -3891,7 +3891,7 @@
   },
   {
     "iIndex": 202,
-    "sQuestion": "At the hardware store , 0.25 the nails are size 2.0d and 0.5 the nails are size 4.0d . What fraction of the nails are either size 2.0d or 4.0d ?",
+    "sQuestion": "At the hardware store , 0.25 the nails are size 2.0d , and 0.5 the nails are size 4.0d . What fraction of the nails are either size 2.0d or 4.0d ?",
     "quantities": [
       {
         "start": 24,
@@ -4822,7 +4822,7 @@
   },
   {
     "iIndex": 234,
-    "sQuestion": "Kelly 's chemistry textbook weighs 7.125 pounds and her geometry textbook weighs 0.625 pound . How much more does the chemistry textbook weigh than the geometry textbook ?",
+    "sQuestion": "Kelly 's chemistry textbook weighs 7.125 pounds, and her geometry textbook weighs 0.625 pound . How much more does the chemistry textbook weigh than the geometry textbook ?",
     "quantities": [
       {
         "start": 35,
@@ -4978,7 +4978,7 @@
   },
   {
     "iIndex": 240,
-    "sQuestion": "Professor Ellison weighed 2.0 pieces of metal for an experiment . The piece of iron weighed 11.166666666666666 pounds and the piece of aluminum weighed 0.8333333333333334 pound . How much more did the piece of iron weigh than the piece of aluminum ?",
+    "sQuestion": "Professor Ellison weighed 2.0 pieces of metal for an experiment . The piece of iron weighed 11.166666666666666 pounds, and the piece of aluminum weighed 0.8333333333333334 pound . How much more did the piece of iron weigh than the piece of aluminum ?",
     "quantities": [
       {
         "start": 26,
@@ -5061,7 +5061,7 @@
   },
   {
     "iIndex": 244,
-    "sQuestion": "Nicole found an orange caterpillar and a green caterpillar in her backyard . The green caterpillar was 3.0 inches long and the orange caterpillar was 1.1666666666666667 inches long . How much longer was the green caterpillar than the orange caterpillar ?",
+    "sQuestion": "Nicole found an orange caterpillar and a green caterpillar in her backyard . The green caterpillar was 3.0 inches long, and the orange caterpillar was 1.1666666666666667 inches long . How much longer was the green caterpillar than the orange caterpillar ?",
     "quantities": [
       {
         "start": 103,
@@ -5139,7 +5139,7 @@
   },
   {
     "iIndex": 247,
-    "sQuestion": "Irene just bought a new lamp for her bedside table . The old lamp was 1.0 foot tall and the new lamp is 2.3333333333333335 feet tall . How much taller is the new lamp than the old lamp ?",
+    "sQuestion": "Irene just bought a new lamp for her bedside table . The old lamp was 1.0 foot tall, and the new lamp is 2.3333333333333335 feet tall . How much taller is the new lamp than the old lamp ?",
     "quantities": [
       {
         "start": 70,
@@ -5243,7 +5243,7 @@
   },
   {
     "iIndex": 251,
-    "sQuestion": "Kenji and his classmates placed colored blocks on a scale during a science lab . The yellow block weighed 0.6 pounds and the green block weighed 0.4 pounds . How much more did the yellow block weigh than the green block ?",
+    "sQuestion": "Kenji and his classmates placed colored blocks on a scale during a science lab . The yellow block weighed 0.6 pounds, and the green block weighed 0.4 pounds . How much more did the yellow block weigh than the green block ?",
     "quantities": [
       {
         "start": 106,
@@ -5404,7 +5404,7 @@
   },
   {
     "iIndex": 257,
-    "sQuestion": "Ron weighed 2.0 colored metal balls during a science class . The blue ball weighed 6.0 pounds and the brown ball weighed 3.12 pounds . If Ron places both balls on the scale at the same time , what will the scale read ?",
+    "sQuestion": "Ron weighed 2.0 colored metal balls during a science class . The blue ball weighed 6.0 pounds, and the brown ball weighed 3.12 pounds . If Ron places both balls on the scale at the same time , what will the scale read ?",
     "quantities": [
       {
         "start": 12,
@@ -5824,7 +5824,7 @@
   },
   {
     "iIndex": 275,
-    "sQuestion": "Jason has 18.0 books and he has read 9.0 of them . Mary has 42.0 books . How many books do they have together ?",
+    "sQuestion": "Jason has 18.0 books, and he has read 9.0 of them . Mary has 42.0 books . How many books do they have together ?",
     "quantities": [
       {
         "start": 10,
@@ -5948,7 +5948,7 @@
   },
   {
     "iIndex": 283,
-    "sQuestion": "Alyssa picked 25.0 limes and Mike picked 32.0 limes . Tom picked 12.0 plums . How many limes were picked in all ?",
+    "sQuestion": "Alyssa picked 25.0 limes, and Mike picked 32.0 limes . Tom picked 12.0 plums . How many limes were picked in all ?",
     "quantities": [
       {
         "start": 14,
@@ -6196,7 +6196,7 @@
   },
   {
     "iIndex": 300,
-    "sQuestion": "Sandy 's dog had 8.0 puppies and 3.0 had spots . She gave 4.0 to her friends. How many puppies does she now have ?",
+    "sQuestion": "Sandy 's dog had 8.0 puppies, and 3.0 had spots . She gave 4.0 to her friends. How many puppies does she now have ?",
     "quantities": [
       {
         "start": 17,
@@ -6591,7 +6591,7 @@
   },
   {
     "iIndex": 327,
-    "sQuestion": "Last week Fred had 23.0 dollars and Jason had 46.0 dollars . Fred washed cars over the weekend and now has 86.0 dollars . How much money did Fred make washing cars ?",
+    "sQuestion": "Last week, Fred had 23.0 dollars, and Jason had 46.0 dollars . Fred washed cars over the weekend and now has 86.0 dollars . How much money did Fred make washing cars ?",
     "quantities": [
       {
         "start": 19,
@@ -6777,7 +6777,7 @@
   },
   {
     "iIndex": 341,
-    "sQuestion": "Sam 's dog had puppies and 8.0 had spots . He gave 2.0 to his friends . He now has 6.0 puppies . How many puppies did he have to start with ?",
+    "sQuestion": "Sam 's dog had puppies, and 8.0 had spots . He gave 2.0 to his friends . He now has 6.0 puppies . How many puppies did he have to start with ?",
     "quantities": [
       {
         "start": 27,
@@ -8632,7 +8632,7 @@
   },
   {
     "iIndex": 562,
-    "sQuestion": "Gumballs come in packages of 5.0. Nathan ate 20.0 gumballs. How many whole boxes did he eat and how many gumballs does he have left?",
+    "sQuestion": "Gumballs come in packages of 5.0. Nathan ate 20.0 gumballs. How many whole boxes did he eat ?",
     "quantities": [
       {
         "start": 29,
@@ -8684,7 +8684,7 @@
   },
   {
     "iIndex": 564,
-    "sQuestion": "Lemon heads come in packages of 6.0. Louis ate 54.0 Lemon Heads. How many whole boxes did he eat and how many Lemon Heads does he have left?",
+    "sQuestion": "Lemon heads come in packages of 6.0. Louis ate 54.0 Lemon Heads. How many whole boxes did he eat?",
     "quantities": [
       {
         "start": 32,
@@ -9103,7 +9103,7 @@
   },
   {
     "iIndex": 598,
-    "sQuestion": "George has 2.0 boxes of blocks. Each box holds 6.0 blocks and there are 5.0 boxes in a case. How many blocks does George have?",
+    "sQuestion": "George has 2.0 boxes of blocks. Each box holds 6.0 blocks, and there are 5.0 boxes in a case. How many blocks does George have?",
     "quantities": [
       {
         "start": 11,
@@ -9648,7 +9648,7 @@
   },
   {
     "iIndex": 641,
-    "sQuestion": " You have 7.0 balloons and your friend has 5.0 balloons. How many more  balloons do you have than your friend?",
+    "sQuestion": " You have 7.0 balloons, and your friend has 5.0 balloons. How many more  balloons do you have than your friend?",
     "quantities": [
       {
         "start": 10,
@@ -10641,7 +10641,7 @@
   },
   {
     "iIndex": 680,
-    "sQuestion": " Tessa has 4.0 apples. Anita gave her 5.0 more. She needs 10.0 apples to make a pie. Does she have enough to make a pie?",
+    "sQuestion": " Tessa has 4.0 apples. Anita gave her 5.0 more. She needs 10.0 apples to make a pie. How much more does she need to make a pie?",
     "quantities": [
       {
         "start": 11,
@@ -11010,7 +11010,7 @@
   },
   {
     "iIndex": 694,
-    "sQuestion": " Isabella’s hair is 18.0 inches long. If she gets a haircut and now her hair is 9.0 inches long, how much of Isabella’s hair got cut off?",
+    "sQuestion": " Isabella’s hair is 18.0 inches long. She got a haircut, and now her hair is 9.0 inches long. How much of Isabella’s hair got cut off?",
     "quantities": [
       {
         "start": 20,
@@ -11062,7 +11062,7 @@
   },
   {
     "iIndex": 696,
-    "sQuestion": " Jovana had 5.0 pounds of shells in her bucket. She added some shells and now has 28.0 pounds of shells. How many pounds did she add?",
+    "sQuestion": " Jovana had 5.0 pounds of shells in her bucket. She added some shells, and now has 28.0 pounds of shells. How many pounds did she add?",
     "quantities": [
       {
         "start": 12,
@@ -11192,7 +11192,7 @@
   },
   {
     "iIndex": 702,
-    "sQuestion": " Mrs. Snyder made 86.0 heart cookies. She made 36.0 red cookies and the rest are pink. How many pink cookies did she make?",
+    "sQuestion": " Mrs. Snyder made 86.0 heart cookies. She made 36.0 red cookies, and the rest are pink. How many pink cookies did she make?",
     "quantities": [
       {
         "start": 18,
@@ -11972,7 +11972,7 @@
   },
   {
     "iIndex": 735,
-    "sQuestion": " Iesha has 58.0 books. 19.0 are about school and the rest are about sports. How many books about sports does Iesha have?",
+    "sQuestion": " Iesha has 58.0 books. 19.0 are about school, and the rest are about sports. How many books about sports does Iesha have?",
     "quantities": [
       {
         "start": 11,
@@ -12102,7 +12102,7 @@
   },
   {
     "iIndex": 742,
-    "sQuestion": " Adolfo made a tower with 35.0 blocks. He added some more blocks and now he has 65.0 blocks. How many did he have to  add?",
+    "sQuestion": " Adolfo made a tower with 35.0 blocks. He added some more blocks, and now he has 65.0 blocks. How many did he have to  add?",
     "quantities": [
       {
         "start": 26,
@@ -12180,7 +12180,7 @@
   },
   {
     "iIndex": 745,
-    "sQuestion": " Brad has 17.0 balloons. 8.0 balloons are red and the rest are green. How many green balloons does Brad have?",
+    "sQuestion": " Brad has 17.0 balloons. 8.0 balloons are red, and the rest are green. How many green balloons does Brad have?",
     "quantities": [
       {
         "start": 10,
@@ -15474,7 +15474,7 @@
   },
   {
     "iIndex": 876,
-    "sQuestion": " 219.0 people are going to the zoo, and there are 3.0 buses to take people. How many will go in each bus if the same number go in each 1.0 and  all of the people go to the zoo?",
+    "sQuestion": " 219.0 people are going to the zoo, and there are 3.0 buses to take people. How many will go in each bus if the same number go in each 1.0 and all of the people go to the zoo?",
     "quantities": [
       {
         "start": 1,
@@ -15583,7 +15583,7 @@
   },
   {
     "iIndex": 880,
-    "sQuestion": " Mariela was in the hospital and she got 403.0 get well cards from around the country. When she got home she got 287.0 more cards from friends  and family. How many get well cards did Mariela get?",
+    "sQuestion": " Mariela was in the hospital, and she got 403.0 get well cards from around the country. When she got home she got 287.0 more cards from friends  and family. How many get well cards did Mariela get?",
     "quantities": [
       {
         "start": 41,
@@ -16004,7 +16004,7 @@
   },
   {
     "iIndex": 896,
-    "sQuestion": " John walks 0.7 miles to school and Nina walks 0.4 miles to school. How much farther does John walk than Nina?",
+    "sQuestion": " John walks 0.7 miles to school, and Nina walks 0.4 miles to school. How much farther does John walk than Nina?",
     "quantities": [
       {
         "start": 12,
@@ -16247,7 +16247,7 @@
   },
   {
     "iIndex": 904,
-    "sQuestion": " Carol and her mom were picking carrots from their garden. Carol picked 29.0 and her mother picked 16.0. If only 38.0 of the carrots were good, how many bad carrots did they have? ",
+    "sQuestion": " Carol and her mom were picking carrots from their garden. Carol picked 29.0 , and her mother picked 16.0. If only 38.0 of the carrots were good, how many bad carrots did they have? ",
     "quantities": [
       {
         "start": 72,
@@ -16343,7 +16343,7 @@
   },
   {
     "iIndex": 907,
-    "sQuestion": " Rachel bought 2.0 coloring books. 1.0 had 23.0 pictures and the other had 32.0. After 1.0 week she had already colored 44.0 of the pictures. How many pictures does she still have to color? ",
+    "sQuestion": " Rachel bought 2.0 coloring books. 1.0 had 23.0 pictures, and the other had 32.0. After 1.0 week she had already colored 44.0 of the pictures. How many pictures does she still have to color? ",
     "quantities": [
       {
         "start": 15,
@@ -16518,7 +16518,7 @@
   },
   {
     "iIndex": 916,
-    "sQuestion": " Chloe was playing a trivia game. In the first round she scored 40.0 points and in the second round she scored 50.0 points. In the last round she lost 4.0 points. How many points did she have at the end of the game? ",
+    "sQuestion": " Chloe was playing a trivia game. In the first round she scored 40.0 points, and in the second round she scored 50.0 points. In the last round she lost 4.0 points. How many points did she have at the end of the game? ",
     "quantities": [
       {
         "start": 64,
@@ -16646,7 +16646,7 @@
   },
   {
     "iIndex": 943,
-    "sQuestion": " Edward started his own lawn mowing business. In the spring he made 2.0 dollars mowing lawns and in the summer he made 27.0 dollars. If he had to spend 5.0 dollars buying supplies, how much money did he end up with? ",
+    "sQuestion": " Edward started his own lawn mowing business. In the spring he made 2.0 dollars mowing lawns, and in the summer he made 27.0 dollars. If he had to spend 5.0 dollars buying supplies, how much money did he end up with? ",
     "quantities": [
       {
         "start": 68,
@@ -16774,7 +16774,7 @@
   },
   {
     "iIndex": 963,
-    "sQuestion": " For Halloween Faye scored 47.0 pieces of candy. She ate 25.0 pieces the first night and then her sister gave her 40.0 more pieces. How many pieces of candy does Faye have now? ",
+    "sQuestion": " For Halloween Faye scored 47.0 pieces of candy. She ate 25.0 pieces the first night, and then her sister gave her 40.0 more pieces. How many pieces of candy does Faye have now? ",
     "quantities": [
       {
         "start": 27,
@@ -16838,7 +16838,7 @@
   },
   {
     "iIndex": 965,
-    "sQuestion": " In fourth grade there were 10.0 students at the start of the year. During the year 4.0 students left and 42.0 new students came to school. How many students were in fourth grade at the end? ",
+    "sQuestion": " In fourth grade there were 10.0 students at the start of the year. During the year, 4.0 students left, and 42.0 new students came to school. How many students were in fourth grade at the end? ",
     "quantities": [
       {
         "start": 28,
@@ -16902,7 +16902,7 @@
   },
   {
     "iIndex": 967,
-    "sQuestion": " A florist had 37.0 roses. If she sold 16.0 of them and then later picked 19.0 more, how many roses would she have? ",
+    "sQuestion": " A florist had 37.0 roses. If she sold 16.0 of them, and then later picked 19.0 more, how many roses would she have? ",
     "quantities": [
       {
         "start": 15,
@@ -16998,7 +16998,7 @@
   },
   {
     "iIndex": 970,
-    "sQuestion": " A waiter had 19.0 customers to wait on. If 14.0 customers left and he got another 36.0 customers, how many customers would he have? ",
+    "sQuestion": " A waiter had 19.0 customers to wait on. If 14.0 customers left, and he got another 36.0 customers, how many customers would he have? ",
     "quantities": [
       {
         "start": 14,
@@ -17030,7 +17030,7 @@
   },
   {
     "iIndex": 971,
-    "sQuestion": " At the fair there were 9.0 people in line for the bumper cars. If 6.0 of them got tired of waiting and left and 3.0 more got in line, how many people would be in line? ",
+    "sQuestion": " At the fair there were 9.0 people in line for the bumper cars. If 6.0 of them got tired of waiting and left, and 3.0 more got in line, how many people would be in line? ",
     "quantities": [
       {
         "start": 24,
@@ -17424,7 +17424,7 @@
   },
   {
     "iIndex": 1023,
-    "sQuestion": " Chloe was unboxing some of her old winter clothes. She found 4.0 boxes of clothing and inside each box there were 2.0 scarves and 6.0 mittens. How many pieces of winter clothing did Chloe have total? ",
+    "sQuestion": " Chloe was unboxing some of her old winter clothes. She found 4.0 boxes of clothing, and inside each box there were 2.0 scarves and 6.0 mittens. How many pieces of winter clothing did Chloe have total? ",
     "quantities": [
       {
         "start": 62,
@@ -17744,7 +17744,7 @@
   },
   {
     "iIndex": 1035,
-    "sQuestion": " Paul was collecting cans for recycling. On Saturday he filled 6.0 bags up and on Sunday he filled 3.0 more bags. If each bag had 8.0 cans in it, how many cans did he pick up total? ",
+    "sQuestion": " Paul was collecting cans for recycling. On Saturday he filled 6.0 bags up, and on Sunday he filled 3.0 more bags. If each bag had 8.0 cans in it, how many cans did he pick up total? ",
     "quantities": [
       {
         "start": 63,
@@ -17936,7 +17936,7 @@
   },
   {
     "iIndex": 1047,
-    "sQuestion": " George was working as a sacker at a grocery store where he made 5.0 dollars an hour. On Monday he worked 7.0 hours and on Tuesday he worked 2.0 hours. How much money did George make in those 2.0 days? ",
+    "sQuestion": " George was working as a sacker at a grocery store where he made 5.0 dollars an hour. On Monday he worked 7.0 hours, and on Tuesday he worked 2.0 hours. How much money did George make in those 2.0 days? ",
     "quantities": [
       {
         "start": 65,
@@ -18197,7 +18197,7 @@
   },
   {
     "iIndex": 1103,
-    "sQuestion": " There school's baseball team had 48.0 new players and 6.0 returning players. If the coach put them into groups with 6.0 players in each group, how many groups would there be? ",
+    "sQuestion": " The school's baseball team had 48.0 new players and 6.0 returning players. If the coach put them into groups with 6.0 players in each group, how many groups would there be? ",
     "quantities": [
       {
         "start": 34,
@@ -18229,7 +18229,7 @@
   },
   {
     "iIndex": 1104,
-    "sQuestion": " For a birthday party Jerry bought 41.0 regular sodas and 22.0 diet sodas. If his fridge would only hold 9.0 on each shelf, how many shelves would he fill up? ",
+    "sQuestion": " For a birthday party, Jerry bought 41.0 regular sodas and 22.0 diet sodas. If his fridge would only hold 9.0 on each shelf, how many shelves would he fill up? ",
     "quantities": [
       {
         "start": 35,
@@ -18261,7 +18261,7 @@
   },
   {
     "iIndex": 1105,
-    "sQuestion": " Paige and her friends were recycling paper for their class. For every 4.0 pounds they recycled they earned 1.0 point. If Paige recycled 14.0 pounds and her friends recycled 2.0 pounds, how many points did they earn? ",
+    "sQuestion": " Paige and her friends were recycling paper for their class. For every 4.0 pounds they recycled they earned 1.0 point. If Paige recycled 14.0 pounds, and her friends recycled 2.0 pounds, how many points did they earn? ",
     "quantities": [
       {
         "start": 71,
@@ -18298,7 +18298,7 @@
   },
   {
     "iIndex": 1106,
-    "sQuestion": " For homework Nancy had 17.0 math problems and 15.0 spelling problems. If she can finish 8.0 problems in an hour how long will it take her to finish all the problems? ",
+    "sQuestion": " For homework, Nancy had 17.0 math problems and 15.0 spelling problems. If she can finish 8.0 problems in an hour, how long will it take her to finish all the problems? ",
     "quantities": [
       {
         "start": 24,
@@ -18527,7 +18527,7 @@
   },
   {
     "iIndex": 1114,
-    "sQuestion": " Wendy's old washing machine could only wash 8.0 pieces of clothing at a time. If she had to wash 39.0 shirts and 33.0 sweaters how many loads would she have to do? ",
+    "sQuestion": " Wendy's old washing machine could only wash 8.0 pieces of clothing at a time. If she had to wash 39.0 shirts and 33.0 sweaters, how many loads would she have to do? ",
     "quantities": [
       {
         "start": 45,
@@ -18655,7 +18655,7 @@
   },
   {
     "iIndex": 1141,
-    "sQuestion": " At a company picnic 23.0 managers and 7.0 employees decided to start a game of volleyball. If they split into 6.0 teams how many people would be on each team? ",
+    "sQuestion": " At a company picnic 23.0 managers and 7.0 employees decided to start a game of volleyball. If they split into 6.0 teams, how many people would be on each team? ",
     "quantities": [
       {
         "start": 21,
@@ -18975,7 +18975,7 @@
   },
   {
     "iIndex": 1172,
-    "sQuestion": " Each chocolate bar in a box cost $3.0. If a box had 7.0 bars total and Olivia sold all but 4.0 bars, how much money would she have made? ",
+    "sQuestion": " Each chocolate bar in a box cost $3.0. If a box had 7.0 bars total, and Olivia sold all but 4.0 bars, how much money would she have made? ",
     "quantities": [
       {
         "start": 35,
@@ -19007,7 +19007,7 @@
   },
   {
     "iIndex": 1174,
-    "sQuestion": " At a restaurant each adult meal costs $3.0 and kids eat free. If a group of 12.0 people came in and 7.0 were kids, how much would it cost for the group to eat? ",
+    "sQuestion": " At a restaurant, each adult meal costs $3.0, and kids eat free. If a group of 12.0 people came in and 7.0 were kids, how much would it cost for the group to eat? ",
     "quantities": [
       {
         "start": 40,
@@ -19140,7 +19140,7 @@
   },
   {
     "iIndex": 1183,
-    "sQuestion": " A magician was selling magic card decks for 2.0 dollars each. If he started with 5.0 decks and by the end of the day he had 3.0 left, how much money did he earn? ",
+    "sQuestion": " A magician was selling magic card decks for 2.0 dollars each. If he started with 5.0 decks, and by the end of the day, he had 3.0 left, how much money did he earn? ",
     "quantities": [
       {
         "start": 45,
@@ -19204,7 +19204,7 @@
   },
   {
     "iIndex": 1188,
-    "sQuestion": " At lunch a waiter had 10.0 customers and 5.0 of them didn't leave a tip. If he got $3.0 each from the ones who did tip, how much money did he earn? ",
+    "sQuestion": " At lunch a waiter had 10.0 customers, and 5.0 of them didn't leave a tip. If he got $3.0 each from the ones who did tip, how much money did he earn? ",
     "quantities": [
       {
         "start": 23,
@@ -19677,7 +19677,7 @@
   },
   {
     "iIndex": 1229,
-    "sQuestion": " Paige's team won their dodgeball game and scored 41.0 points total. If Paige scored 11.0 of the points and everyone else scored 6.0 points each, how many players were on her team? ",
+    "sQuestion": " Paige's team won their dodgeball game and scored 41.0 points total. If Paige scored 11.0 of the points, and everyone else scored 6.0 points each, how many players were on her team? ",
     "quantities": [
       {
         "start": 50,
@@ -19741,7 +19741,7 @@
   },
   {
     "iIndex": 1231,
-    "sQuestion": " Emily was planting vegetables in her garden. She started with 41.0 seeds and planted 29.0 of them in the big garden and in each of her small gardens put 4.0 seeds each. How many small gardens did Emily have? ",
+    "sQuestion": " Emily was planting vegetables in her garden. She started with 41.0 seeds and planted 29.0 of them in the big garden, and in each of her small gardens, put 4.0 seeds each. How many small gardens did Emily have? ",
     "quantities": [
       {
         "start": 63,
@@ -19773,7 +19773,7 @@
   },
   {
     "iIndex": 1233,
-    "sQuestion": " There are 65.0 students trying out for the school's trivia teams. If 17.0 of them didn't get picked for the team and the rest were put into 8.0 groups, how many students would be in each group? ",
+    "sQuestion": " There are 65.0 students trying out for the school's trivia teams. If 17.0 of them didn't get picked for the team, and the rest were put into 8.0 groups, how many students would be in each group? ",
     "quantities": [
       {
         "start": 11,
@@ -19938,7 +19938,7 @@
   },
   {
     "iIndex": 1247,
-    "sQuestion": " A waiter had 44.0 customers in his section. If 12.0 of them left and the rest of his tables had 8.0 people at each table, how many tables did he have? ",
+    "sQuestion": " A waiter had 44.0 customers in his section. If 12.0 of them left, and the rest of his tables had 8.0 people at each table, how many tables did he have? ",
     "quantities": [
       {
         "start": 14,
@@ -21576,7 +21576,7 @@
   },
   {
     "iIndex": 1456,
-    "sQuestion": "Seth bought 20.0 cartons of ice cream and 2.0 cartons of yogurt. Each carton of ice cream cost $6.0 and each carton of yogurt cost $1.0. How much more did Seth spend on ice cream than on yogurt?",
+    "sQuestion": "Seth bought 20.0 cartons of ice cream and 2.0 cartons of yogurt. Each carton of ice cream cost $6.0, and each carton of yogurt cost $1.0. How much more did Seth spend on ice cream than on yogurt?",
     "quantities": [
       {
         "start": 12,
@@ -21760,7 +21760,7 @@
   },
   {
     "iIndex": 1461,
-    "sQuestion": "There are 24.0 bicycles and 14.0 tricycles in the storage area at Danny's apartment building. Each bicycle has 2.0 wheels and each tricycle has 3.0 wheels. How many wheels are there in all?",
+    "sQuestion": "There are 24.0 bicycles and 14.0 tricycles in the storage area at Danny's apartment building. Each bicycle has 2.0 wheels, and each tricycle has 3.0 wheels. How many wheels are there in all?",
     "quantities": [
       {
         "start": 10,
@@ -21926,7 +21926,7 @@
   },
   {
     "iIndex": 1466,
-    "sQuestion": "Zach wants to ride the Ferris wheel, the roller coaster, and the log ride. The Ferris wheel costs 2.0 tickets, the roller coaster costs 7.0 tickets and the log ride costs 1.0 ticket. Zach has 1.0 ticket. How many more tickets should Zach buy?",
+    "sQuestion": "Zach wants to ride the Ferris wheel, the roller coaster, and the log ride. The Ferris wheel costs 2.0 tickets, the roller coaster costs 7.0 tickets, and the log ride costs 1.0 ticket. Zach has 1.0 ticket. How many more tickets should Zach buy?",
     "quantities": [
       {
         "start": 98,
@@ -22002,7 +22002,7 @@
   },
   {
     "iIndex": 1495,
-    "sQuestion": "Vince's bus ride to school is 0.625 of a mile and Zachary's bus ride is 0.5 of a mile. How much longer is Vince's bus ride than Zachary's?",
+    "sQuestion": "Vince's bus ride to school is 0.625 of a mile, and Zachary's bus ride is 0.5 of a mile. How much longer is Vince's bus ride than Zachary's?",
     "quantities": [
       {
         "start": 30,
@@ -22194,7 +22194,7 @@
   },
   {
     "iIndex": 1547,
-    "sQuestion": "Upon arriving at the circus, they went to the ticket booth and asked how much each ticket cost. If each ticket costs 44.0 dollars and they bought 7.0 tickets, how much money did they spend on tickets?",
+    "sQuestion": "Upon arriving at the circus, they went to the ticket booth and asked how much each ticket cost. If each ticket costs 44.0 dollars, and they bought 7.0 tickets, how much money did they spend on tickets?",
     "quantities": [
       {
         "start": 117,
@@ -22350,7 +22350,7 @@
   },
   {
     "iIndex": 1553,
-    "sQuestion": "Jack has a section filled with short story booklets. If each booklet has 9.0 pages and there are 49.0 booklets in the short story section, how many pages will Jack need to go through if he plans to read them all?",
+    "sQuestion": "Jack has a section filled with short story booklets. If each booklet has 9.0 pages, and there are 49.0 booklets in the short story section, how many pages will Jack need to go through if he plans to read them all?",
     "quantities": [
       {
         "start": 73,
@@ -22662,7 +22662,7 @@
   },
   {
     "iIndex": 1565,
-    "sQuestion": "Allen, Shiela’s brother, likes to play with blocks. Shiela repainted Allen’s old blocks in different colors. If Allen has 49.0 identical blocks and there are 7.0 blocks for every color of paint used, how many colors did Shiela use?",
+    "sQuestion": "Allen, Shiela’s brother, likes to play with blocks. Shiela repainted Allen’s old blocks in different colors. If Allen has 49.0 identical blocks, and there are 7.0 blocks for every color of paint used, how many colors did Shiela use?",
     "quantities": [
       {
         "start": 122,
@@ -22792,7 +22792,7 @@
   },
   {
     "iIndex": 1570,
-    "sQuestion": "A large bag of balls was kept under Haley’s bed. Her mom placed the balls in bags for children in foster homes. If every bag can contain 4.0 balls and Haley has 36.0 balls, how many bags will be used?",
+    "sQuestion": "A large bag of balls was kept under Haley’s bed. Her mom placed the balls in bags for children in foster homes. If every bag can contain 4.0 balls, and Haley has 36.0 balls, how many bags will be used?",
     "quantities": [
       {
         "start": 137,
@@ -22948,7 +22948,7 @@
   },
   {
     "iIndex": 1576,
-    "sQuestion": "Brenda’s mother made cookies for 5.0. If she prepared 35.0 cookies and each of them had the same number of cookies, how many did each of them have?",
+    "sQuestion": "Brenda’s mother made cookies for 5.0. If she prepared 35.0 cookies, and each of them had the same number of cookies, how many did each of them have?",
     "quantities": [
       {
         "start": 33,
@@ -22974,7 +22974,7 @@
   },
   {
     "iIndex": 1577,
-    "sQuestion": "Jane had been saving large empty cans to serve as pots for sunflowers. If she has 54.0 sunflower seeds and there are 9.0 cans, how many seeds will be placed in each can if she places an equal number of seeds in each can?",
+    "sQuestion": "Jane had been saving large empty cans to serve as pots for sunflowers. If she has 54.0 sunflower seeds, and there are 9.0 cans, how many seeds will be placed in each can if she places an equal number of seeds in each can?",
     "quantities": [
       {
         "start": 82,
@@ -23449,7 +23449,7 @@
   },
   {
     "iIndex": 1613,
-    "sQuestion": "Chris has been saving his allowance to buy a new pair of soccer cleats and a ball. His grandmother gave Chris $25.0 for his birthday. His aunt and uncle gave Chris $20.0 and his parents gave him $75.0. Now Chris had $279.0. How much money did Chris have before his birthday?",
+    "sQuestion": "Chris has been saving his allowance to buy a new pair of soccer cleats and a ball. His grandmother gave Chris $25.0 for his birthday. His aunt and uncle gave Chris $20.0 ,  and his parents gave him $75.0. Now Chris had $279.0. How much money did Chris have before his birthday?",
     "quantities": [
       {
         "start": 111,

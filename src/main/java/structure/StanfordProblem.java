@@ -8,7 +8,6 @@ import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
-import joint.Logic;
 import reader.Reader;
 import utils.Params;
 import utils.Tools;
@@ -104,7 +103,7 @@ public class StanfordProblem {
 		}
 		IntPair quesSpan = getQuestionSpan(tokens);
 		SemanticGraph dependency = prob.dependencies.get(schema.sentId);
-		schema.verb = schema.getDependentVerb(dependency, quesSpan.getFirst());
+		schema.verb = schema.getDependentVerb(tokens, dependency, quesSpan.getFirst());
 		schema.unit = schema.getUnit(tokens, quesSpan.getFirst());
 		schema.rate = schema.getRate(tokens, quesSpan.getFirst());
 		schema.subject = schema.getSubject(tokens, dependency, schema.verb);
@@ -138,16 +137,11 @@ public class StanfordProblem {
 		List<StanfordProblem> probs =
 				Reader.readStanfordProblemsFromJson(Params.allArithDir);
 		for(StanfordProblem prob : probs) {
-			for(List<CoreLabel> cl1 : prob.tokens) {
-				for(CoreLabel cl2 : cl1) {
-					System.out.println(cl2.word()+" "+cl2.beginPosition()+" "+cl2.endPosition());
-				}
+			System.out.println(prob);
+			for(StanfordSchema schema : prob.schema) {
+				System.out.println(schema);
 			}
-//			System.out.println(prob);
-//			for(StanfordSchema schema : prob.schema) {
-//				System.out.println(schema);
-//			}
-//			System.out.println(prob.questionSchema);
+			System.out.println(prob.questionSchema);
 			System.out.println();
 		}
 	}

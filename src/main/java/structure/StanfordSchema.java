@@ -40,7 +40,9 @@ public class StanfordSchema {
 		this.qs = qs;
 		this.tokens = prob.tokens;
 		sentId = Tools.getSentenceIdFromCharOffset(prob.tokens, qs.start);
-		verb = getDependentVerb(prob.dependencies.get(sentId),
+		verb = getDependentVerb(
+				prob.tokens.get(sentId),
+				prob.dependencies.get(sentId),
 				Tools.getTokenIdFromCharOffset(prob.tokens.get(sentId), qs.start));
 		subject = getSubject(prob.tokens.get(sentId), prob.dependencies.get(sentId), verb);
 		Pair<Integer, IntPair> mathPair = getMath(prob.tokens.get(sentId),
@@ -71,19 +73,39 @@ public class StanfordSchema {
 				")";
 	}
 
-	public static int getDependentVerb(SemanticGraph dependency, int tokenId) {
+	public static int getDependentVerb(List<CoreLabel> tokens,
+									   SemanticGraph dependency,
+									   int tokenId) {
 		IndexedWord word = dependency.getNodeByIndexSafe(tokenId+1);
 		IndexedWord prev;
+		int verbIndex;
 		while(true) {
 			if (word.tag().startsWith("V")) {
-				return word.index()-1;
+				verbIndex = word.index()-1;
+				break;
 			}
 			prev = word;
 			word = dependency.getParent(word);
 			if (word == null || word.index() == 0) {
-				return prev.index() - 1;
+				verbIndex = prev.index() - 1;
+				break;
 			}
 		}
+		// HACK for wrong verb mapping
+//		if(verbIndex > tokenId) {
+//			for(int i=tokenId+1; i<verbIndex; ++i) {
+//				if(tokens.get(i).word().equals("and")) {
+//					for(int j=tokenId-1; j>=Math.max(0, tokenId-4); --j) {
+//						if(tokens.get(j).tag().startsWith("V")) {
+//							verbIndex = j;
+//							break;
+//						}
+//					}
+//				}
+//			}
+//		}
+		return verbIndex;
+
 	}
 
 	public static IntPair getUnit(List<CoreLabel> tokens, int tokenId) {
