@@ -91,19 +91,6 @@ public class StanfordSchema {
 				break;
 			}
 		}
-		// HACK for wrong verb mapping
-//		if(verbIndex > tokenId) {
-//			for(int i=tokenId+1; i<verbIndex; ++i) {
-//				if(tokens.get(i).word().equals("and")) {
-//					for(int j=tokenId-1; j>=Math.max(0, tokenId-4); --j) {
-//						if(tokens.get(j).tag().startsWith("V")) {
-//							verbIndex = j;
-//							break;
-//						}
-//					}
-//				}
-//			}
-//		}
 		return verbIndex;
 
 	}
@@ -118,11 +105,7 @@ public class StanfordSchema {
 			if (tokens.get(i).tag().startsWith("N") ||
 					tokens.get(i).tag().startsWith("PRP") ||
 					tokens.get(i).tag().startsWith("J")) {
-				if (tokens.get(i-1).tag().startsWith("J")) {
-					return new IntPair(i-1, i+1);
-				} else{
-					return new IntPair(i, i+1);
-				}
+				return Tools.getMaximalNounPhraseSpan(tokens, i);
 			}
 		}
 		return new IntPair(-1, -1);
@@ -170,11 +153,7 @@ public class StanfordSchema {
 				for(int j=i+1; j<end; ++j) {
 					if (tokens.get(j).tag().startsWith("N") ||
 							tokens.get(j).tag().startsWith("PRP")) {
-						if (tokens.get(j-1).tag().startsWith("J")) {
-							obj = new IntPair(j-1, j+1);
-						} else{
-							obj = new IntPair(j, j+1);
-						}
+						obj = Tools.getMaximalNounPhraseSpan(tokens, j);
 					}
 				}
 			}
@@ -190,11 +169,7 @@ public class StanfordSchema {
 		for(SemanticGraphEdge edge : dependency.getOutEdgesSorted(word)) {
 			if(edge.getRelation().getShortName().equals("nsubj")) {
 				int i = edge.getTarget().index()-1;
-				if (i >= 1 && tokens.get(i-1).tag().startsWith("J")) {
-					return new IntPair(i-1, i+1);
-				} else{
-					return new IntPair(i, i+1);
-				}
+				return Tools.getMaximalNounPhraseSpan(tokens, i);
 			}
 		}
 		return new IntPair(-1, -1);
@@ -210,11 +185,7 @@ public class StanfordSchema {
 			if(edge.getRelation().getShortName().equals("iobj") ||
 					edge.getRelation().getShortName().equals("nmod")) {
 				int i = edge.getTarget().index()-1;
-				if (i >= 1 && tokens.get(i-1).tag().startsWith("J")) {
-					return new IntPair(i-1, i+1);
-				} else{
-					return new IntPair(i, i+1);
-				}
+				return Tools.getMaximalNounPhraseSpan(tokens, i);
 			}
 		}
 		return new IntPair(-1, -1);
@@ -233,11 +204,7 @@ public class StanfordSchema {
 				for(int j=i+1; j<tokens.size(); ++j) {
 					if (tokens.get(j).tag().startsWith("N") ||
 							tokens.get(j).tag().startsWith("PRP")) {
-						if (tokens.get(j-1).tag().startsWith("J")) {
-							return new IntPair(j-1, j+1);
-						} else{
-							return new IntPair(j, j+1);
-						}
+						return Tools.getMaximalNounPhraseSpan(tokens, j);
 					}
 				}
 			}
@@ -253,11 +220,7 @@ public class StanfordSchema {
 				for(int j=i+1; j<tokens.size(); ++j) {
 					if (tokens.get(j).tag().startsWith("N") ||
 							tokens.get(j).tag().startsWith("PRP")) {
-						if (tokens.get(j-1).tag().startsWith("J")) {
-							return new IntPair(j-1, j+1);
-						} else{
-							return new IntPair(j, j+1);
-						}
+						return Tools.getMaximalNounPhraseSpan(tokens, j);
 					}
 				}
 			}

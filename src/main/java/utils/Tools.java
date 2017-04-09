@@ -487,6 +487,29 @@ public class Tools {
 		return best;
 	}
 
+	public static IntPair getMaximalNounPhraseSpan(
+			List<CoreLabel> tokens, int tokenId) {
+		int start = tokenId, end = tokenId+1;
+		for(int i=tokenId+1; i<tokens.size(); ++i) {
+			if(tokens.get(i).tag().startsWith("N")) {
+				end = i+1;
+			} else {
+				break;
+			}
+		}
+		for(int i=tokenId-1; i>=0; --i) {
+			if(tokens.get(i).tag().startsWith("N")) {
+				start = i;
+			} else if (tokens.get(i).tag().startsWith("J")) {
+				start = i;
+				break;
+			} else {
+				break;
+			}
+		}
+		return new IntPair(start, end);
+	}
+
 	public static void main(String args[]) {
 		String wn = wordnetIndicator(Arrays.asList("red", "apples"),
 				Arrays.asList("green", "apples"), Arrays.asList("N", "N"),

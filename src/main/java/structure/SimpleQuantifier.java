@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import utils.Params;
 import utils.Tools;
 
 public class SimpleQuantifier {
@@ -80,33 +81,36 @@ public class SimpleQuantifier {
 		Matcher matcher = Pattern.compile(decimalRegex).matcher(text);
 		List<QuantSpan> qsList = new ArrayList<QuantSpan>();
 		while(matcher.find()) {
-			QuantSpan qs = new QuantSpan(Double.parseDouble(matcher.group().replace(",", "")), matcher.start(), matcher.end());
+			QuantSpan qs = new QuantSpan(Double.parseDouble(matcher.group().replace(",", "")),
+					matcher.start(), matcher.end());
 			qsList.add(qs);
 		}
-		TextAnnotation ta = null;
-		try {
-			ta = Tools.pipeline.createBasicTextAnnotation("", "", text);
-		} catch (AnnotatorException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		for(int i=0; i<ta.size(); ++i) {
-			if(i<ta.size()-1 && tens.containsKey(ta.getToken(i).toLowerCase()) &&
-					units.containsKey(ta.getToken(i+1).toLowerCase())) {
-				QuantSpan qs = new QuantSpan(1.0*tens.get(ta.getToken(i).toLowerCase())+
-								units.get(ta.getToken(i+1).toLowerCase()),
-								ta.getTokenCharacterOffset(i).getFirst(),
-								ta.getTokenCharacterOffset(i+1).getSecond());
-				qsList.add(qs);
-				i++;
-				continue;
+		if(Params.useIllinoisTools) {
+			TextAnnotation ta = null;
+			try {
+				ta = Tools.pipeline.createBasicTextAnnotation("", "", text);
+			} catch (AnnotatorException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			if(numberWords.containsKey(ta.getToken(i).toLowerCase())) {
-				QuantSpan qs = new QuantSpan(
-						1.0*numberWords.get(ta.getToken(i).toLowerCase()),
-						ta.getTokenCharacterOffset(i).getFirst(),
-						ta.getTokenCharacterOffset(i).getSecond());
-				qsList.add(qs);
+			for (int i = 0; i < ta.size(); ++i) {
+				if (i < ta.size() - 1 && tens.containsKey(ta.getToken(i).toLowerCase()) &&
+						units.containsKey(ta.getToken(i + 1).toLowerCase())) {
+					QuantSpan qs = new QuantSpan(1.0 * tens.get(ta.getToken(i).toLowerCase()) +
+							units.get(ta.getToken(i + 1).toLowerCase()),
+							ta.getTokenCharacterOffset(i).getFirst(),
+							ta.getTokenCharacterOffset(i + 1).getSecond());
+					qsList.add(qs);
+					i++;
+					continue;
+				}
+				if (numberWords.containsKey(ta.getToken(i).toLowerCase())) {
+					QuantSpan qs = new QuantSpan(
+							1.0 * numberWords.get(ta.getToken(i).toLowerCase()),
+							ta.getTokenCharacterOffset(i).getFirst(),
+							ta.getTokenCharacterOffset(i).getSecond());
+					qsList.add(qs);
+				}
 			}
 		}
 		Collections.sort(qsList, new Comparator<QuantSpan>() {
