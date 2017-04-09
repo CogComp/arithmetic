@@ -66,7 +66,8 @@ public class LogicDriver {
 		double acc = 0.0;
 		for (int i = 0; i < sp.instanceList.size(); i++) {
 			LogicX prob = (LogicX) sp.instanceList.get(i);
-			LogicY gold = (LogicY) sp.goldStructureList.get(i);
+			LogicY gold = ((LogicInfSolver) model.infSolver).getLatentBestStructure(
+					prob, (LogicY) sp.goldStructureList.get(i), model.wv);
 			LogicY pred = (LogicY) model.infSolver.getBestStructure(model.wv, prob);
 			total.add(prob.problemId);
 			if(Tools.safeEquals(gold.expr.getValue(), pred.expr.getValue()) ||
@@ -107,7 +108,7 @@ public class LogicDriver {
 		para.loadConfigFile(Params.spConfigFile);
 		para.MAX_NUM_ITER = 5;
 		Learner learner = LearnerFactory.getLearner(model.infSolver, fg, para);
-		model.wv = latentSVMLearner(learner, train, (LogicInfSolver) model.infSolver, 10);
+		model.wv = latentSVMLearner(learner, train, (LogicInfSolver) model.infSolver, 5);
 		lm.setAllowNewFeatures(false);
 		model.saveModel(modelPath);
 	}

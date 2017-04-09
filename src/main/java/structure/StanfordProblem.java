@@ -2,6 +2,7 @@ package structure;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.semgraph.SemanticGraph;
@@ -108,13 +109,10 @@ public class StanfordProblem {
 		schema.rate = schema.getRate(tokens, quesSpan.getFirst());
 		schema.subject = schema.getSubject(tokens, dependency, schema.verb);
 		schema.object = schema.getObject(tokens, dependency, schema.verb);
-		for(int i=quesSpan.getFirst(); i<quesSpan.getSecond(); ++i) {
-			if (Logic.addTokens.contains(tokens.get(i).lemma()) ||
-					Logic.subTokens.contains(tokens.get(i).lemma()) ||
-					Logic.mulTokens.contains(tokens.get(i).lemma())) {
-				schema.math = i;
-				break;
-			}
+		Pair<Integer, IntPair> mathPair = schema.getMath(tokens, quesSpan.getFirst());
+		if(mathPair.getFirst() >= 0) {
+			schema.math = mathPair.getFirst();
+			schema.object = mathPair.getSecond();
 		}
 		return schema;
 	}

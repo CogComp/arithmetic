@@ -19,7 +19,8 @@ public class Logic {
             "taller", "more", "older", "higher", "faster");
     public static List<String> subTokens = Arrays.asList(
             "shorter", "less", "younger", "slower");
-    public static List<String> mulTokens = Arrays.asList("times");
+    public static List<String> mulTokens = Arrays.asList(
+            "times", "twice", "thrice", "double", "triple");
 
     public static int maxNumInferenceTypes = 4;
 

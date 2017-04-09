@@ -137,14 +137,11 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		String label, mathOp;
 		for(int infRuleType=0; infRuleType<LogicNew.maxNumInferenceTypes; ++infRuleType) {
 			mathOp = null;
-			if(infRuleType == 2) {
-				if(num1.math != -1 || num2.math != -1 || (isTopmost && ques.math != -1)) {
-					mathOp = LogicNew.getMathOp(x.tokens, num1, num2, ques);
-				} else {
-					continue;
-				}
+			if(num1.math != -1 || num2.math != -1 || (isTopmost && ques.math != -1)) {
+				mathOp = LogicNew.getMathOp(x.tokens, num1, num2, ques);
 			}
-			for(String key : LogicNew.getRelevantKeys(infRuleType, isTopmost, null)) {
+			if(infRuleType == 2 && mathOp == null) continue;
+			for(String key : LogicNew.getRelevantKeys(infRuleType, isTopmost, mathOp)) {
 				label = null;
 				if(infRuleType == 0) {
 					label = LogicNew.verb(
@@ -163,6 +160,9 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				if(infRuleType == 3) {
 					label = LogicNew.unitDependency(key);
 				}
+				if(label == null) continue;
+//				System.out.println("Infrule: "+infRuleType+" Label: "+label+
+//						" Mathop: "+mathOp+" Key: "+key);
 				if((label.equals("ADD") || label.startsWith("SUB")) &&
 						(l.label.startsWith("SUB") || r.label.startsWith("SUB"))) {
 					continue;

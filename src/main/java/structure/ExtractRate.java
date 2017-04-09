@@ -20,8 +20,9 @@ public class ExtractRate {
             double minDist = 10000;
             Problem bestMatch = null;
             for(Problem newProb : newProblems) {
-                double dist = Tools.editDist(oldProb.ta.getTokens(), newProb.ta.getTokens(),
-                        oldProb.ta.size(), newProb.ta.size());
+                double dist = 0.0;
+                // = Tools.editDist(oldProb.ta.getTokens(), newProb.ta.getTokens(),
+                // oldProb.ta.size(), newProb.ta.size());
                 if(dist < minDist) {
                     minDist = dist;
                     bestMatch = newProb;

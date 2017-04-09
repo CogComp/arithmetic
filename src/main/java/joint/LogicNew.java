@@ -2,7 +2,6 @@ package joint;
 
 import edu.stanford.nlp.ling.CoreLabel;
 import structure.StanfordSchema;
-import sun.font.CoreMetrics;
 import utils.Tools;
 import java.util.*;
 
@@ -14,7 +13,8 @@ public class LogicNew {
             "taller", "more", "older", "higher", "faster");
     public static List<String> subTokens = Arrays.asList(
             "shorter", "less", "younger", "slower");
-    public static List<String> mulTokens = Arrays.asList("times");
+    public static List<String> mulTokens = Arrays.asList(
+            "times", "twice", "thrice", "double", "triple");
 
     public static int maxNumInferenceTypes = 4;
 

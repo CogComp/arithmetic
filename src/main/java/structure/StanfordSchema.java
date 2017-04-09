@@ -1,6 +1,7 @@
 package structure;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.ling.IndexedWord;
 import edu.stanford.nlp.semgraph.SemanticGraph;
@@ -35,19 +36,24 @@ public class StanfordSchema {
 	}
 
 	public StanfordSchema(StanfordProblem prob, QuantSpan qs) {
+		this();
 		this.qs = qs;
 		this.tokens = prob.tokens;
 		sentId = Tools.getSentenceIdFromCharOffset(prob.tokens, qs.start);
 		verb = getDependentVerb(prob.dependencies.get(sentId),
 				Tools.getTokenIdFromCharOffset(prob.tokens.get(sentId), qs.start));
 		subject = getSubject(prob.tokens.get(sentId), prob.dependencies.get(sentId), verb);
-		math = getMath(prob.tokens.get(sentId),
+		Pair<Integer, IntPair> mathPair = getMath(prob.tokens.get(sentId),
 				Tools.getTokenIdFromCharOffset(prob.tokens.get(sentId), qs.start));
 		unit = getUnit(prob.tokens.get(sentId),
 				Tools.getTokenIdFromCharOffset(prob.tokens.get(sentId), qs.start));
 		object = getObject(prob.tokens.get(sentId), prob.dependencies.get(sentId), verb);
 		rate = getRate(prob.tokens.get(sentId),
 				Tools.getTokenIdFromCharOffset(prob.tokens.get(sentId), qs.start));
+		if(mathPair.getFirst() >= 0) {
+			math = mathPair.getFirst();
+			object = mathPair.getSecond();
+		}
 	}
 
 	@Override
@@ -100,18 +106,58 @@ public class StanfordSchema {
 		return new IntPair(-1, -1);
 	}
 
-	public static int getMath(List<CoreLabel> tokens, int tokenId) {
-		int window = 5;
-		for(int i=Math.max(0, tokenId-window);
-			i<Math.min(tokens.size(), tokenId+window+1);
-			++i) {
+	// Math concepts require different subject and object extraction, should be called
+	// before subject, object extraction
+	public static Pair<Integer, IntPair> getMath(List<CoreLabel> tokens, int tokenId) {
+		int math = -1;
+		int start = tokenId + 1, end = tokens.size();
+		for(int i=tokenId+1; i<tokens.size(); ++i) {
+			if(tokens.get(i).word().equals("if") || tokens.get(i).word().equals("and")
+					|| tokens.get(i).word().equals(",") || tokens.get(i).word().equals(";")) {
+				break;
+			}
 			if (Logic.addTokens.contains(tokens.get(i).word()) ||
 					Logic.subTokens.contains(tokens.get(i).word()) ||
 					Logic.mulTokens.contains(tokens.get(i).word())) {
-				return i;
+				math = i;
+				break;
 			}
 		}
-		return -1;
+		if(math == -1) return new Pair<>(math, null);
+		for(int i=start; i<tokens.size(); ++i) {
+			if (tokens.get(i).word().equals("if") || tokens.get(i).word().equals(",") ||
+					tokens.get(i).word().equals(";")) {
+				end = i;
+				break;
+			}
+		}
+		boolean realMath = false;
+		for(int i=start; i<end; ++i) {
+			if(tokens.get(i).word().equals("as") || tokens.get(i).word().equals("than")) {
+				realMath = true;
+				break;
+			}
+		}
+		if(!realMath) return new Pair<>(-1, null);
+		IntPair obj = new IntPair(-1, -1);
+		for(int i=start; i<end; ++i) {
+			if((tokens.get(i).word().equals("as") &&
+					!(tokens.get(i+1).word().equals("many") ||
+							tokens.get(i+1).word().equals("much"))) ||
+					(tokens.get(i).word().equals("than"))) {
+				for(int j=i+1; j<end; ++j) {
+					if (tokens.get(j).tag().startsWith("N") ||
+							tokens.get(j).tag().startsWith("PRP")) {
+						if (tokens.get(j-1).tag().startsWith("J")) {
+							obj = new IntPair(j-1, j+1);
+						} else{
+							obj = new IntPair(j, j+1);
+						}
+					}
+				}
+			}
+		}
+		return new Pair<>(math, obj);
 	}
 
 	public static IntPair getSubject(List<CoreLabel> tokens,
