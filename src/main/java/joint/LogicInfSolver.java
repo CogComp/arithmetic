@@ -171,8 +171,8 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 						(l.label.startsWith("DIV") || r.label.startsWith("DIV"))) {
 					continue;
 				}
-				double score = wv.dotProduct(featGen.getInfTypeFeatureVector(
-						x, num1, num2, ques, infRuleType, key));
+				double score = wv.dotProduct(featGen.getCombinationFeatureVector(
+						x, num1, num2, ques, infRuleType, key, isTopmost));
 
 				Node node = new Node();
 				node.infRuleType = infRuleType;
