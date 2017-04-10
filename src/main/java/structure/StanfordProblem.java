@@ -77,8 +77,8 @@ public class StanfordProblem {
 					CollapsedCCProcessedDependenciesAnnotation.class));
 		}
 		schema = new ArrayList<>();
-		for(QuantSpan qs : quantities) {
-			schema.add(new StanfordSchema(this, qs));
+		for(int i=0; i<quantities.size(); ++i) {
+			schema.add(new StanfordSchema(this, i));
 		}
 		questionSchema = getQuestionSchema(this);
 		wordnetRelations = getWordnetRelations();

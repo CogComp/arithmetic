@@ -16,9 +16,11 @@ public class Logic {
     public static List<String> labels = Arrays.asList(
             "ADD", "SUB", "SUB_REV", "MUL", "DIV", "DIV_REV");
     public static List<String> addTokens = Arrays.asList(
-            "taller", "more", "older", "higher", "faster");
+            "taller", "more", "older", "higher", "faster",
+            "increased", "increase", "increases");
     public static List<String> subTokens = Arrays.asList(
-            "shorter", "less", "younger", "slower");
+            "shorter", "less", "younger", "slower",
+            "decreased", "decrease", "decreases", "reduction");
     public static List<String> mulTokens = Arrays.asList(
             "times", "twice", "thrice", "double", "triple");
 

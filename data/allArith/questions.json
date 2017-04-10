@@ -5591,7 +5591,7 @@
   },
   {
     "iIndex": 265,
-    "sQuestion": "Gordon bought 3.42 pounds of fruit for a class party . The class ate 2.2 pounds of the fruit . How much fruit is ?",
+    "sQuestion": "Gordon bought 3.42 pounds of fruit for a class party . The class ate 2.2 pounds of the fruit . How much fruit is left ?",
     "quantities": [
       {
         "start": 14,
@@ -9640,10 +9640,10 @@
       1
     ],
     "lEquations": [
-      "X=(4.0-3.0)"
+      "X=(4.0/3.0)"
     ],
     "lSolutions": [
-      1.0
+      1.333333
     ]
   },
   {

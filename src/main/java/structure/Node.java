@@ -62,8 +62,9 @@ public class Node implements Serializable {
 		case "DIV" : labelSym = "/"; break;
 		}
 		return "("+children.get(0).toString() + " " +
-				labelSym + "_" +
-				infRuleType + " " +
+				label + "_" +
+				infRuleType + "_" +
+				key + " " +
 				children.get(1).toString()+")";
 	}
 

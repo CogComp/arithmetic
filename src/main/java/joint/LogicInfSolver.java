@@ -13,6 +13,7 @@ import utils.Tools;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class LogicInfSolver extends AbstractInferenceSolver implements Serializable {
@@ -48,7 +49,15 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 
 	public LogicY getLatentBestStructure(LogicX x, LogicY gold, WeightVector weight) {
 		MinMaxPriorityQueue<Pair<Node, Double>> beam =
-				populateInfRuleType(x, gold.expr, weight, true, 1000);
+				populateInfRuleType(x, gold.expr, weight, true, 200);
+		if(beam.size() == 0) {
+			System.out.println("Prob: "+ Arrays.asList(x.tokens));
+			System.out.println();
+			for(StanfordSchema schema : x.schema) {
+				System.out.println(schema);
+			}
+			System.out.println(x.questionSchema);
+		}
 		LogicY y = new LogicY(beam.element().getFirst());
 		return y;
 	}
@@ -141,7 +150,16 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				mathOp = LogicNew.getMathOp(x.tokens, num1, num2, ques);
 			}
 			if(infRuleType == 2 && mathOp == null) continue;
+			if(infRuleType != 2 && mathOp != null) continue;
+			if(num1.rate.getFirst()>=0 || num2.rate.getFirst()>=0 || (isTopmost && ques.rate.getFirst()>=0)) {
+				if(infRuleType != 3) continue;
+			}
 			for(String key : LogicNew.getRelevantKeys(infRuleType, isTopmost, mathOp)) {
+				if(num1.rate.getFirst()>=0 || num2.rate.getFirst()>=0 || ques.rate.getFirst()>=0) {
+					if(key.startsWith("0") && num1.rate.getFirst() == -1) continue;
+					if(key.startsWith("1") && num2.rate.getFirst() == -1) continue;
+					if(key.startsWith("QUES") && ques.rate.getFirst() == -1) continue;
+				}
 				label = null;
 				if(infRuleType == 0) {
 					label = LogicNew.verb(
@@ -234,6 +252,16 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 						x, l.getFirst(), r.getFirst(), wv, isTopmost);
 				for(Pair<Node, Double> pair : pairList) {
 					if(!pair.getFirst().label.equals(expr.label)) continue;
+					if(expr.label.equals("SUB") || expr.label.equals("DIV")) {
+						if(!(Tools.safeEquals(
+								pair.getFirst().children.get(0).getValue(),
+								expr.children.get(0).getValue()) &&
+								Tools.safeEquals(
+										pair.getFirst().children.get(1).getValue(),
+										expr.children.get(1).getValue()))) {
+							continue;
+						}
+					}
 					beam.add(new Pair<>(pair.getFirst(),
 							pair.getSecond() + l.getSecond() + r.getSecond()));
 				}

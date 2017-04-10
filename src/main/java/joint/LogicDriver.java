@@ -51,6 +51,7 @@ public class LogicDriver {
 	public static SLProblem getSP(List<StanfordProblem> problemList) throws Exception{
 		SLProblem problem = new SLProblem();
 		for(StanfordProblem prob : problemList){
+			if(prob.quantities.size() != 2) continue;
 			LogicX x = new LogicX(prob);
 			LogicY y = new LogicY(prob.expr);
 			problem.addExample(x, y);

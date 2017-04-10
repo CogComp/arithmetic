@@ -10,9 +10,9 @@ public class LogicNew {
     public static List<String> labels = Arrays.asList(
             "ADD", "SUB", "SUB_REV", "MUL", "DIV", "DIV_REV");
     public static List<String> addTokens = Arrays.asList(
-            "taller", "more", "older", "higher", "faster");
+            "taller", "more", "older", "higher", "faster", "heavier", "farther");
     public static List<String> subTokens = Arrays.asList(
-            "shorter", "less", "younger", "slower");
+            "shorter", "less", "younger", "slower", "lighter");
     public static List<String> mulTokens = Arrays.asList(
             "times", "twice", "thrice", "double", "triple");
 

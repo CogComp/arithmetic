@@ -16,6 +16,7 @@ public class StanfordSchema {
 
 	List<List<CoreLabel>> tokens;
 	public int sentId;
+	public int quantId;
 	public QuantSpan qs;
 	public IntPair unit;
 	public int verb;
@@ -27,6 +28,7 @@ public class StanfordSchema {
 	public StanfordSchema() {
 		this.qs = null;
 		sentId = -1;
+		quantId = -1;
 		verb = -1;
 		math = -1;
 		subject = new IntPair(-1, -1);
@@ -35,9 +37,10 @@ public class StanfordSchema {
 		rate = new IntPair(-1, -1);
 	}
 
-	public StanfordSchema(StanfordProblem prob, QuantSpan qs) {
+	public StanfordSchema(StanfordProblem prob, int quantId) {
 		this();
-		this.qs = qs;
+		this.quantId = quantId;
+		this.qs = prob.quantities.get(quantId);
 		this.tokens = prob.tokens;
 		sentId = Tools.getSentenceIdFromCharOffset(prob.tokens, qs.start);
 		verb = getDependentVerb(
@@ -199,31 +202,54 @@ public class StanfordSchema {
 
 	// Assumes subject to have been called before this
 	public static IntPair getRate(List<CoreLabel> tokens, int tokenId) {
-		for(int i=tokenId; i<tokens.size(); ++i) {
-			if(tokens.get(i).word().equals("if") || tokens.get(i).word().equals("and")
-					|| tokens.get(i).word().equals(",") || tokens.get(i).word().equals(";")) {
+		for(int i=tokenId+1; i<tokens.size(); ++i) {
+			if(tokens.get(i).word().equals("if") || tokens.get(i).word().equals("and") ||
+					tokens.get(i).word().equals(",") || tokens.get(i).word().equals(";") ||
+					tokens.get(i).tag().startsWith("V") || tokens.get(i).tag().equals("CD")) {
 				break;
 			}
 			if (tokens.get(i).lemma().equals("per") ||
 					tokens.get(i).lemma().equals("every") ||
 					tokens.get(i).lemma().equals("each")) {
 				for(int j=i+1; j<tokens.size(); ++j) {
+					if(tokens.get(j).word().equals("if") || tokens.get(j).word().equals("and")
+							|| tokens.get(j).word().equals(",") || tokens.get(j).word().equals(";")
+							|| tokens.get(j).tag().equals("CD")) {
+						break;
+					}
 					if (tokens.get(j).tag().startsWith("N") ||
 							tokens.get(j).tag().startsWith("PRP")) {
 						return Tools.getMaximalNounPhraseSpan(tokens, j);
 					}
 				}
+				for(int j=tokenId-1; j>=0; --j) {
+					if (tokens.get(j).word().equals("if") || tokens.get(j).word().equals("and")
+							|| tokens.get(j).word().equals(",") || tokens.get(j).word().equals(";")) {
+						break;
+					}
+					if (tokens.get(j).tag().startsWith("N")) {
+						return Tools.getMaximalNounPhraseSpan(tokens, j);
+					}
+				}
 			}
 		}
+		boolean foundVerb = false;
 		for(int i=tokenId-1; i>=0; --i) {
 			if(tokens.get(i).word().equals("if") || tokens.get(i).word().equals("and")
 					|| tokens.get(i).word().equals(",") || tokens.get(i).word().equals(";")) {
 				break;
 			}
+			if(tokens.get(i).tag().startsWith("V")) foundVerb = true;
 			if (tokens.get(i).lemma().equals("per") ||
 					tokens.get(i).lemma().equals("every") ||
-					tokens.get(i).lemma().equals("each")) {
+					tokens.get(i).lemma().equals("each") ||
+					tokens.get(i).lemma().equals("1.0")) {
+				if(!foundVerb) break;
 				for(int j=i+1; j<tokens.size(); ++j) {
+					if(tokens.get(j).word().equals("if") || tokens.get(j).word().equals("and")
+							|| tokens.get(j).word().equals(",") || tokens.get(j).word().equals(";")) {
+						break;
+					}
 					if (tokens.get(j).tag().startsWith("N") ||
 							tokens.get(j).tag().startsWith("PRP")) {
 						return Tools.getMaximalNounPhraseSpan(tokens, j);
@@ -231,7 +257,6 @@ public class StanfordSchema {
 				}
 			}
 		}
-
 		return new IntPair(-1, -1);
 	}
 }
