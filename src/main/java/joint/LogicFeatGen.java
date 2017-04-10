@@ -5,9 +5,12 @@ import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.sl.util.IFeatureVector;
 import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
+import edu.stanford.nlp.ling.CoreLabel;
 import structure.Node;
+import structure.Schema;
 import structure.StanfordSchema;
 import utils.FeatGen;
+import utils.Tools;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -72,8 +75,19 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 													  String key,
 													  boolean isTopmost) {
 		List<String> features = new ArrayList<>();
-		features.addAll(getInfTypeFeatures(x, num1, num2, ques, infRuleType));
-		features.addAll(getKeyFeatures(x, num1, num2, ques, infRuleType, key));
+		features.addAll(getInfTypeFeatures(x, num1, num2, ques, infRuleType, isTopmost));
+		if(infRuleType == 0) {
+			features.addAll(getVerbFeatures(x, num1, num2, ques, key, isTopmost));
+		}
+		if(infRuleType == 1) {
+			features.addAll(getPartitionFeatures(x, num1, num2, ques, key, isTopmost));
+		}
+		if(infRuleType == 2) {
+			features.addAll(getMathFeatures(x, num1, num2, ques, key, isTopmost));
+		}
+		if(infRuleType == 3) {
+			features.addAll(getUnitDepFeatures(x, num1, num2, ques, key, isTopmost));
+		}
 		return features;
 	}
 
@@ -81,25 +95,13 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 												  StanfordSchema num1,
 												  StanfordSchema num2,
 												  StanfordSchema ques,
-												  int infRuleType) {
+												  int infRuleType,
+												  boolean isTopmost) {
 		List<String> features = new ArrayList<>();
-		if(num1.rate != null && num1.rate.getFirst() != -1) {
-			features.add("RateDetected");
-		}
-		if(num2.rate != null && num2.rate.getFirst() != -1) {
-			features.add("RateDetected");
-		}
-		if(ques.rate != null && ques.rate.getFirst() != -1) {
-			features.add("RateDetected");
-		}
-		if(num1.math != -1) {
-			features.add("MathDetected");
-		}
-		if(num2.math != -1) {
-			features.add("MathDetected");
-		}
-		if(ques.math != -1) {
-			features.add("MathDetected");
+		features.addAll(getSingleSchemaFeatures(x, num1, infRuleType));
+		features.addAll(getSingleSchemaFeatures(x, num2, infRuleType));
+		if(isTopmost) {
+			features.addAll(getSingleSchemaFeatures(x, ques, infRuleType));
 		}
 		if(x.tokens.get(num1.sentId).get(num1.verb).lemma().equals(
 				x.tokens.get(num2.sentId).get(num2.verb).lemma())) {
@@ -107,62 +109,151 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		} else {
 			features.add("Verb12Diff");
 		}
-		if(x.tokens.get(num1.sentId).get(num1.verb).lemma().equals(
-				x.tokens.get(num2.sentId).get(num2.verb).lemma()) &&
-				x.tokens.get(num1.sentId).get(num1.verb).lemma().equals(
-						x.tokens.get(ques.sentId).get(ques.verb).lemma())) {
-			features.add("AllVerbsSame");
-		} else {
-			features.add("AllVerbsNotSame");
+		if(isTopmost) {
+			if (x.tokens.get(num1.sentId).get(num1.verb).lemma().equals(
+					x.tokens.get(num2.sentId).get(num2.verb).lemma()) &&
+					x.tokens.get(num1.sentId).get(num1.verb).lemma().equals(
+							x.tokens.get(ques.sentId).get(ques.verb).lemma())) {
+				features.add("AllVerbsSame");
+			} else {
+				features.add("AllVerbsNotSame");
+			}
 		}
 		return FeatGen.getFeaturesConjWithLabels(features, "InfRule:"+infRuleType);
 	}
 
-	public static List<String> getKeyFeatures(LogicX x,
-											  StanfordSchema num1,
-											  StanfordSchema num2,
-											  StanfordSchema ques,
-											  int infRuleType,
-											  String key) {
-		List<String> features = new ArrayList<>();
-		features.add(key);
-		return features;
-	}
-
-	public static List<String> getUnitSimFeatures(LogicX x,
+	public static List<String> getUnitDepFeatures(LogicX x,
 												  StanfordSchema num1,
 												  StanfordSchema num2,
-												  String key) {
+												  StanfordSchema ques,
+												  String key,
+												  boolean isTopmost) {
 		List<String> features = new ArrayList<>();
-		return features;
+		if(key.startsWith("0")) {
+			features.addAll(getSingleSchemaFeatures(x, num1, 3));
+		} else if(key.startsWith("1")) {
+			features.addAll(getSingleSchemaFeatures(x, num2, 3));
+		} else {
+			features.addAll(getSingleSchemaFeatures(x, ques, 3));
+		}
+		if(key.equals("0_NUM") || key.equals("1_NUM")) {
+			features.addAll(getPairSchemaFeatures(x, num1, num2, "UNIT", "UNIT"));
+		}
+		if(key.equals("0_DEN")) {
+			features.addAll(getPairSchemaFeatures(x, num1, num2, "RATE", "UNIT"));
+		}
+		if(key.equals("1_DEN")) {
+			features.addAll(getPairSchemaFeatures(x, num1, num2, "UNIT", "RATE"));
+		}
+		if(key.equals("QUES")) {
+			features.addAll(getPairSchemaFeatures(x, num1, ques, "UNIT", "UNIT"));
+		}
+		if(key.equals("QUES_REV")) {
+			features.addAll(getPairSchemaFeatures(x, num2, ques, "UNIT", "UNIT"));
+		}
+		return FeatGen.getFeaturesConjWithLabels(features, "UnitDep");
 	}
 
-	public static List<String> getSubjObjSimFeatures(LogicX x,
-													 StanfordSchema num1,
-													 StanfordSchema num2,
-													 String key) {
+	public static List<String> getMathFeatures(LogicX x,
+											   StanfordSchema num1,
+											   StanfordSchema num2,
+											   StanfordSchema ques,
+											   String key,
+											   boolean isTopmost) {
 		List<String> features = new ArrayList<>();
-		return features;
+		if(num1.math != -1) {
+			features.addAll(getSingleSchemaFeatures(x, num1, 2));
+		} else if(num2.math != -1) {
+			features.addAll(getSingleSchemaFeatures(x, num2, 2));
+		} else if(ques.math != -1 && isTopmost){
+			features.addAll(getSingleSchemaFeatures(x, ques, 2));
+		}
+		if(key.equals("0_0")) {
+			features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "SUBJ"));
+		}
+		if(key.equals("0_1")) {
+			features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "OBJ"));
+		}
+		if(key.equals("1_0")) {
+			features.addAll(getPairSchemaFeatures(x, num1, num2, "OBJ", "SUBJ"));
+		}
+		if(key.equals("0")) {
+			features.addAll(getPairSchemaFeatures(x, num1, ques, "SUBJ", "SUBJ"));
+		}
+		if(key.equals("1")) {
+			features.addAll(getPairSchemaFeatures(x, num2, ques, "OBJ", "SUBJ"));
+		}
+		return FeatGen.getFeaturesConjWithLabels(features, "Math");
 	}
 
 	public static List<String> getPartitionFeatures(LogicX x,
 													StanfordSchema num1,
 													StanfordSchema num2,
-													String key) {
+													StanfordSchema ques,
+													String key,
+													boolean isTopmost) {
 		List<String> features = new ArrayList<>();
-		return features;
+		return FeatGen.getFeaturesConjWithLabels(features, "Partition");
 	}
 
 	public static List<String> getVerbFeatures(LogicX x,
 											   StanfordSchema num1,
 											   StanfordSchema num2,
-											   String key) {
+											   StanfordSchema ques,
+											   String key,
+											   boolean isTopmost) {
+		List<String> features = new ArrayList<>();
+		if(key.equals("0_0")) {
+			features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "SUBJ"));
+		}
+		if(key.equals("0_1")) {
+			features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "OBJ"));
+		}
+		if(key.equals("1_0")) {
+			features.addAll(getPairSchemaFeatures(x, num1, num2, "OBJ", "SUBJ"));
+		}
+		return FeatGen.getFeaturesConjWithLabels(features, "Verb");
+	}
+
+	// Mode has to be one of "SUBJ", "OBJ", "UNIT", "RATE"
+	// Note that this is a symmetric similarity function, lets keep it that way
+	public static List<String> getPairSchemaFeatures(
+			LogicX x, StanfordSchema schema1, StanfordSchema schema2, String mode1, String mode2) {
+		List<String> features = new ArrayList<>();
+		List<String> phrase1 = getPhraseByMode(x.tokens, schema1, mode1);
+		List<String> phrase2 = getPhraseByMode(x.tokens, schema2, mode2);
+		double sim = Tools.jaccardSim(phrase1, phrase2);
+		if(sim > 0.5) features.add("MoreThanHalfPhraseMatch");
+		if(sim > 0.9) features.add("ExactPhraseMatch");
+		if(sim < 0.2) features.add("AbsolutelyNoMatch");
+		StanfordSchema emptyUnitSchema = null;
+		if(phrase1.size() == 0 && mode1.equals("UNIT")) {
+			emptyUnitSchema = schema1;
+		}
+		if(phrase2.size() == 0 && mode2.equals("UNIT")) {
+			emptyUnitSchema = schema2;
+		}
+		// If unit was not extracted, copy last unit over
+		if(emptyUnitSchema != null) {
+
+		}
+		return features;
+	}
+
+	public static List<String> getSingleSchemaFeatures(LogicX x, StanfordSchema schema, int infType) {
 		List<String> features = new ArrayList<>();
 		return features;
 	}
 
-
-
+	public static List<String> getPhraseByMode(List<List<CoreLabel>> tokens,
+											   StanfordSchema schema,
+											   String mode) {
+		if(mode.equals("SUBJ")) return Tools.spanToLemmaList(tokens.get(schema.sentId), schema.subject);
+		if(mode.equals("OBJ")) return Tools.spanToLemmaList(tokens.get(schema.sentId), schema.object);
+		if(mode.equals("UNIT")) return Tools.spanToLemmaList(tokens.get(schema.sentId), schema.unit);
+		if(mode.equals("RATE")) return Tools.spanToLemmaList(tokens.get(schema.sentId), schema.rate);
+		return new ArrayList<>();
+	}
 
 
 

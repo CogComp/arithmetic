@@ -45,17 +45,21 @@ public class StanfordSchema {
 				prob.dependencies.get(sentId),
 				Tools.getTokenIdFromCharOffset(prob.tokens.get(sentId), qs.start));
 		subject = getSubject(prob.tokens.get(sentId), prob.dependencies.get(sentId), verb);
-		Pair<Integer, IntPair> mathPair = getMath(prob.tokens.get(sentId),
-				Tools.getTokenIdFromCharOffset(prob.tokens.get(sentId), qs.start));
-		unit = getUnit(prob.tokens.get(sentId),
-				Tools.getTokenIdFromCharOffset(prob.tokens.get(sentId), qs.start));
 		object = getObject(prob.tokens.get(sentId), prob.dependencies.get(sentId), verb);
-		rate = getRate(prob.tokens.get(sentId),
+		Pair<Integer, IntPair> mathPair = getMath(prob.tokens.get(sentId),
 				Tools.getTokenIdFromCharOffset(prob.tokens.get(sentId), qs.start));
 		if(mathPair.getFirst() >= 0) {
 			math = mathPair.getFirst();
 			object = mathPair.getSecond();
 		}
+		Pair<IntPair, IntPair> unitPair = getUnit(prob.tokens.get(sentId),
+				Tools.getTokenIdFromCharOffset(prob.tokens.get(sentId), qs.start));
+		unit = unitPair.getFirst();
+		if(unitPair.getSecond().getFirst() >= 0) {
+			object = unitPair.getSecond();
+		}
+		rate = getRate(prob.tokens.get(sentId),
+				Tools.getTokenIdFromCharOffset(prob.tokens.get(sentId), qs.start));
 	}
 
 	@Override
@@ -92,23 +96,25 @@ public class StanfordSchema {
 			}
 		}
 		return verbIndex;
-
 	}
 
-	public static IntPair getUnit(List<CoreLabel> tokens, int tokenId) {
+	public static Pair<IntPair, IntPair> getUnit(List<CoreLabel> tokens, int tokenId) {
 		if (tokenId >= 1 && tokens.get(tokenId-1).word().equals("$")) {
-			return new IntPair(tokenId-1, tokenId);
+			return new Pair<>(new IntPair(tokenId-1, tokenId), new IntPair(-1, -1));
 		}
 		for(int i=tokenId + 1; i<tokens.size(); ++i) {
 			if(tokens.get(i).word().equals("many") ||
 					tokens.get(i).word().equals("much")) continue;
+			if(tokens.get(i).word().equals("to") || tokens.get(i).word().equals("from")) {
+				return new Pair<>(new IntPair(-1, -1), Tools.getMaximalNounPhraseSpan(tokens, i+1));
+			}
 			if (tokens.get(i).tag().startsWith("N") ||
 					tokens.get(i).tag().startsWith("PRP") ||
 					tokens.get(i).tag().startsWith("J")) {
-				return Tools.getMaximalNounPhraseSpan(tokens, i);
+				return new Pair<>(Tools.getMaximalNounPhraseSpan(tokens, i), new IntPair(-1, -1));
 			}
 		}
-		return new IntPair(-1, -1);
+		return new Pair<>(new IntPair(-1, -1), new IntPair(-1, -1));
 	}
 
 	// Math concepts require different subject and object extraction, should be called

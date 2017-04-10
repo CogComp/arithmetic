@@ -12,9 +12,7 @@ import reader.Reader;
 import utils.Params;
 import utils.Tools;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class StanfordProblem {
 
@@ -27,6 +25,8 @@ public class StanfordProblem {
 	public List<SemanticGraph> dependencies;
 	public List<StanfordSchema> schema;
 	public StanfordSchema questionSchema;
+	public Map<Pair<String, String>, String> wordnetRelations;
+
 
 	@Override
 	public String toString() {
@@ -81,6 +81,7 @@ public class StanfordProblem {
 			schema.add(new StanfordSchema(this, qs));
 		}
 		questionSchema = getQuestionSchema(this);
+		wordnetRelations = getWordnetRelations();
 	}
 
 	public StanfordSchema getQuestionSchema(StanfordProblem prob) {
@@ -104,10 +105,14 @@ public class StanfordProblem {
 		IntPair quesSpan = getQuestionSpan(tokens);
 		SemanticGraph dependency = prob.dependencies.get(schema.sentId);
 		schema.verb = schema.getDependentVerb(tokens, dependency, quesSpan.getFirst());
-		schema.unit = schema.getUnit(tokens, quesSpan.getFirst());
 		schema.rate = schema.getRate(tokens, quesSpan.getFirst());
 		schema.subject = schema.getSubject(tokens, dependency, schema.verb);
 		schema.object = schema.getObject(tokens, dependency, schema.verb);
+		Pair<IntPair, IntPair> unitPair = schema.getUnit(tokens, quesSpan.getFirst());
+		schema.unit = unitPair.getFirst();
+		if(unitPair.getSecond().getFirst() >= 0) {
+			schema.object = unitPair.getSecond();
+		}
 		Pair<Integer, IntPair> mathPair = schema.getMath(tokens, quesSpan.getFirst());
 		if(mathPair.getFirst() >= 0) {
 			schema.math = mathPair.getFirst();
@@ -131,6 +136,27 @@ public class StanfordProblem {
 			}
 		}
 		return new IntPair(start, end);
+	}
+
+	public Map<Pair<String, String>, String> getWordnetRelations() {
+		Map<Pair<String, String>, String> map = new HashMap<>();
+		for(List<CoreLabel> sent1 : tokens) {
+			for(CoreLabel word1 : sent1) {
+				for (List<CoreLabel> sent2 : tokens) {
+					for (CoreLabel word2 : sent2) {
+						if(word1.lemma().equals(word2.lemma())) {
+							continue;
+						}
+						String wn = Tools.wordNetIndicator(
+								word1.lemma(), word2.lemma(), word1.tag(), word2.tag());
+						if(wn != null) {
+							map.put(new Pair<>(word1.lemma(), word2.lemma()), wn);
+						}
+					}
+				}
+			}
+		}
+		return map;
 	}
 
 	public static void main(String args[]) throws Exception {

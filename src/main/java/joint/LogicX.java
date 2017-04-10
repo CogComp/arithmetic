@@ -18,15 +18,7 @@ public class LogicX implements IInstance {
 	public List<SemanticGraph> dependencies;
 	public List<StanfordSchema> schema;
 	public StanfordSchema questionSchema;
-
-	// Span of question within the sentence. You also need to know sentenceId
-	// to get the text of questionSpan
 	public IntPair questionSpan;
-
-	// The following has one item for each of the 3 modes
-	public List<Integer> sentIds;
-	public List<Integer> tokenIds;
-	public List<StanfordSchema> relevantSchemas;
 
 	public LogicX(StanfordProblem prob) {
 		this.problemId = prob.id;
@@ -36,6 +28,8 @@ public class LogicX implements IInstance {
 		this.dependencies = prob.dependencies;
 		this.schema = prob.schema;
 		this.questionSchema = prob.questionSchema;
+		this.questionSpan = StanfordProblem.getQuestionSpan(
+				prob.tokens.get(questionSchema.sentId));
 	}
 
 }

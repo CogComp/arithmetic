@@ -369,7 +369,8 @@ public class Tools {
 				}
 				IndexWord word2 = getIndexWord(tokens2.get(j), posTags2.get(j));
 				if (word2 == null) continue;
-				String wn = wordNetIndicator(word1, word2);
+				String wn = wordNetIndicator(tokens1.get(i), tokens2.get(j),
+						posTags1.get(i), posTags2.get(j));
 				if (wn != null) {
 					return wn;
 				}
@@ -378,10 +379,13 @@ public class Tools {
 		return null;
 	}
 
-	public static String wordNetIndicator(IndexWord word1, IndexWord word2) {
-		if (word1.getLemma().equalsIgnoreCase(word2.getLemma())) {
+	public static String wordNetIndicator(String lemma1, String lemma2, String pos1, String pos2) {
+		if (lemma1.equalsIgnoreCase(lemma2)) {
 			return null;
 		}
+		IndexWord word1 = getIndexWord(lemma1, pos1);
+		IndexWord word2 = getIndexWord(lemma2, pos2);
+		if(word1 == null || word2 == null) return null;
 		try {
 			for(Synset synset1 : word1.getSenses()) {
                 PointerTargetNodeList list = PointerUtils.getInstance().getAntonyms(synset1);

@@ -9,6 +9,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.sl.util.FeatureVectorBuffer;
 import edu.illinois.cs.cogcomp.sl.util.IFeatureVector;
 import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
+import edu.stanford.nlp.ling.CoreLabel;
 
 public class FeatGen {
 	
@@ -102,6 +103,15 @@ public class FeatGen {
 		for(int i=Math.max(0, index-window); i<Math.min(ta.size()-1, index+window); ++i) {
 			feats.add("Context_"+ta.getToken(i).toLowerCase()+"_"+posTags.get(i+1).getLabel());
 			feats.add("Context_"+posTags.get(i).getLabel()+"_"+ta.getToken(i+1).toLowerCase());
+		}
+		return feats;
+	}
+
+	public static List<String> getNeighborhoodFeatures(List<CoreLabel> tokens, int index, int window) {
+		List<String> feats = new ArrayList<>();
+		for(int i=Math.max(0, index-window); i<Math.min(tokens.size()-1, index+window); ++i) {
+			feats.add("Context_"+tokens.get(i).lemma()+"_"+tokens.get(i+1).tag());
+			feats.add("Context_"+tokens.get(i).tag()+"_"+tokens.get(i).lemma());
 		}
 		return feats;
 	}
