@@ -333,6 +333,12 @@ public class Node implements Serializable {
 		if(!node1.label.equals(node2.label)) {
 			return 1.0f;
 		}
+		if(node1.infRuleType != node2.infRuleType) {
+			return 1.0f;
+		}
+		if(!node1.key.equals(node2.key)) {
+			return 1.0f;
+		}
 		float loss;
 		if(node1.label.equals("ADD") || node1.label.equals("MUL")) {
 			loss = Math.min(

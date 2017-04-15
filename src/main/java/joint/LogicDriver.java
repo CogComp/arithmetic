@@ -10,6 +10,7 @@ import edu.illinois.cs.cogcomp.sl.learner.Learner;
 import edu.illinois.cs.cogcomp.sl.learner.LearnerFactory;
 import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
+import reader.Reader;
 import structure.StanfordProblem;
 import structure.StanfordSchema;
 import utils.Folds;
@@ -37,13 +38,15 @@ public class LogicDriver {
 	public static Pair<Double, Double> doTrainTest(int testFold, String isTrain, String dataset) 
 			throws Exception {
 		List<List<StanfordProblem>> split = Folds.getDataSplitForStanford(dataset, testFold);
+		List<StanfordProblem> seedProbs = Reader.readStanfordProblemsFromJson("data/seed/");
 		List<StanfordProblem> trainProbs = split.get(0);
 		List<StanfordProblem> testProbs = split.get(2);
+		SLProblem seed = getSP(seedProbs);
 		SLProblem train = getSP(trainProbs);
 		SLProblem test = getSP(testProbs);
 		System.out.println("Train : "+train.instanceList.size()+" Test : "+test.instanceList.size());
 		if(isTrain.equalsIgnoreCase("true")) {
-			trainModel("models/Logic"+testFold+".save", train);
+			trainModel("models/Logic"+testFold+".save", train, seed);
 		}
 		return testModel("models/Logic"+testFold+".save", test);
 	}
@@ -67,8 +70,9 @@ public class LogicDriver {
 		double acc = 0.0;
 		for (int i = 0; i < sp.instanceList.size(); i++) {
 			LogicX prob = (LogicX) sp.instanceList.get(i);
-			LogicY gold = ((LogicInfSolver) model.infSolver).getLatentBestStructure(
-					prob, (LogicY) sp.goldStructureList.get(i), model.wv);
+			LogicY gold = (LogicY) sp.goldStructureList.get(i);
+//			LogicY gold = ((LogicInfSolver) model.infSolver).getLatentBestStructure(
+//					prob, (LogicY) sp.goldStructureList.get(i), model.wv);
 			LogicY pred = (LogicY) model.infSolver.getBestStructure(model.wv, prob);
 			total.add(prob.problemId);
 			if(Tools.safeEquals(gold.expr.getValue(), pred.expr.getValue()) ||
@@ -96,7 +100,7 @@ public class LogicDriver {
 		return new Pair<>(acc/sp.instanceList.size(), 1-1.0*incorrect.size()/total.size());
 	}
 
-	public static void trainModel(String modelPath, SLProblem train)
+	public static void trainModel(String modelPath, SLProblem train, SLProblem seed)
 			throws Exception {
 		SLModel model = new SLModel();
 		Lexiconer lm = new Lexiconer();
@@ -109,15 +113,26 @@ public class LogicDriver {
 		para.loadConfigFile(Params.spConfigFile);
 		para.MAX_NUM_ITER = 5;
 		Learner learner = LearnerFactory.getLearner(model.infSolver, fg, para);
-		model.wv = latentSVMLearner(learner, train, (LogicInfSolver) model.infSolver, 10);
+		System.err.println("Training on seed examples");
+		model.wv = learner.train(seed);
+		model.wv = latentSVMLearner(learner, train,
+				(LogicInfSolver) model.infSolver, model.wv, 10);
 		lm.setAllowNewFeatures(false);
 		model.saveModel(modelPath);
 	}
 
 	public static WeightVector latentSVMLearner(
-			Learner learner, SLProblem sp, LogicInfSolver infSolver,
+			Learner learner,
+			SLProblem sp,
+			LogicInfSolver infSolver,
+			WeightVector initWeight,
 			int maxIter) throws Exception {
-		WeightVector wv = new WeightVector(7000);
+		WeightVector wv;
+		if(initWeight == null) {
+			wv = new WeightVector(7000);
+		} else {
+			wv = initWeight;
+		}
 		wv.setExtendable(true);
 		for(int i=0; i<maxIter; ++i) {
 			System.err.println("Latent SSVM : Iteration "+i);

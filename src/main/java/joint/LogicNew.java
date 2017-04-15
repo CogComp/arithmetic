@@ -33,8 +33,6 @@ public class LogicNew {
         if(key.equals("SIBLING")) return "ADD";
         if(key.equals("HYPO")) return "SUB_REV";
         if(key.equals("HYPER")) return "SUB";
-        if(key.equals("QUES_1_SIBLING")) return "SUB_REV";
-        if(key.equals("QUES_2_SIBLING")) return "SUB";
         return null;
     }
 
@@ -101,12 +99,7 @@ public class LogicNew {
             keys.addAll(Arrays.asList("0_0", "0_1", "1_0"));
         }
         if(infType == 1) {
-            if(isTopmost) {
-                keys.addAll(Arrays.asList("SIBLING", "HYPO", "HYPER",
-                        "QUES_1_SIBLING", "QUES_2_SIBLING"));
-            } else {
-                keys.addAll(Arrays.asList("SIBLING", "HYPO", "HYPER"));
-            }
+            keys.addAll(Arrays.asList("SIBLING", "HYPO", "HYPER"));
         }
         if(mathOp != null && infType == 2) {
             if(mathOp.startsWith("QUES")) {

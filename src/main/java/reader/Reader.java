@@ -96,6 +96,10 @@ public class Reader {
 				node.quantIndex = kushmanProb.lAlignments.get(j);
 				node.qs = prob.quantities.get(node.quantIndex);
 			}
+			if(kushmanProb.key != null) {
+				prob.expr.key = kushmanProb.key;
+				prob.expr.infRuleType = kushmanProb.infType;
+			}
 			prob.extractAnnotations();
 			problemList.add(prob);
 		}
@@ -124,6 +128,10 @@ public class Reader {
 				Node node = prob.expr.getLeaves().get(j);
 				node.quantIndex = kushmanProb.lAlignments.get(j);
 				node.qs = prob.quantities.get(node.quantIndex);
+			}
+			if(kushmanProb.key != null) {
+				prob.expr.key = kushmanProb.key;
+				prob.expr.infRuleType = kushmanProb.infType;
 			}
 			prob.extractAnnotations();
 			problemList.add(prob);
