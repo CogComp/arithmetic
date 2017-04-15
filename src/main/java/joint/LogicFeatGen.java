@@ -192,6 +192,43 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 													String key,
 													boolean isTopmost) {
 		List<String> features = new ArrayList<>();
+		String wn;
+		if(key.equals("HYPO") || key.equals("HYPER") || key.equals("SIBLING")) {
+			wn = Tools.wordnetIndicator(
+					Tools.spanToLemmaList(x.tokens.get(num1.sentId), num1.unit),
+					Tools.spanToLemmaList(x.tokens.get(num2.sentId), num2.unit),
+					Tools.populatePos(x.tokens.get(num1.sentId), num1.unit),
+					Tools.populatePos(x.tokens.get(num2.sentId), num2.unit),
+					x.wordnetRelations);
+			if(wn != null) features.add(key+"_"+wn);
+//			features.addAll(FeatGen.getFeaturesConjWithLabels(
+//					getPairSchemaFeatures(x, num1, num2, "UNIT", "UNIT"),
+//					key));
+		}
+		if(key.equals("QUES_1_SIBLING")) {
+			wn = Tools.wordnetIndicator(
+					Tools.spanToLemmaList(x.tokens.get(num1.sentId), num1.unit),
+					Tools.spanToLemmaList(x.tokens.get(ques.sentId), ques.unit),
+					Tools.populatePos(x.tokens.get(num1.sentId), num1.unit),
+					Tools.populatePos(x.tokens.get(ques.sentId), ques.unit),
+					x.wordnetRelations);
+			if(wn != null) features.add(key+"_"+wn);
+//			features.addAll(FeatGen.getFeaturesConjWithLabels(
+//					getPairSchemaFeatures(x, num1, ques, "UNIT", "UNIT"),
+//					key));
+		}
+		if(key.equals("QUES_1_SIBLING")) {
+			wn = Tools.wordnetIndicator(
+					Tools.spanToLemmaList(x.tokens.get(num2.sentId), num2.unit),
+					Tools.spanToLemmaList(x.tokens.get(ques.sentId), ques.unit),
+					Tools.populatePos(x.tokens.get(num2.sentId), num2.unit),
+					Tools.populatePos(x.tokens.get(ques.sentId), ques.unit),
+					x.wordnetRelations);
+			if(wn != null) features.add(key+"_"+wn);
+//			features.addAll(FeatGen.getFeaturesConjWithLabels(
+//					getPairSchemaFeatures(x, num2, ques, "UNIT", "UNIT"),
+//					key));
+		}
 		return FeatGen.getFeaturesConjWithLabels(features, "");
 	}
 
@@ -225,6 +262,12 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(sim > 0.5) features.add("MoreThanHalfPhraseMatch");
 		if(sim > 0.9) features.add("ExactPhraseMatch");
 		if(sim < 0.2) features.add("AbsolutelyNoMatch");
+
+		double entail = Tools.jaccardEntail(phrase1, phrase2);
+		if(entail > 0.5) features.add("MoreThanHalfPhraseMatch");
+		if(entail > 0.9) features.add("ExactPhraseMatch");
+		if(entail < 0.2) features.add("AbsolutelyNoMatch");
+
 		StanfordSchema emptyUnitSchema = null;
 		List<String> phraseOther = null;
 		if(phrase1.size() == 0 && mode1.equals("UNIT")) {

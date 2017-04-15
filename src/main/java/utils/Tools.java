@@ -3,6 +3,7 @@ package utils;
 import java.util.*;
 
 import edu.illinois.cs.cogcomp.bigdata.mapdb.MapDB;
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.nlp.util.SimpleCachingPipeline;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
@@ -34,6 +35,7 @@ import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.CcgTextAnnotationBuilder;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
+import structure.StanfordProblem;
 
 public class Tools {
 	
@@ -354,23 +356,26 @@ public class Tools {
 	}
 
 	public static String wordnetIndicator(List<String> tokens1, List<String> tokens2,
-										  List<String> posTags1, List<String> posTags2) {
+										  List<String> posTags1, List<String> posTags2,
+										  Map<Pair<String, String>, String> cache) {
 		if (tokens1 == null || tokens2 == null || posTags1 == null || posTags2 == null) {
 			return null;
 		}
 		List<String> colors = Arrays.asList("white", "black", "red", "green", "yellow", "brown", "blue", "gray");
 		for (int i=0; i<tokens1.size(); ++i) {
-			IndexWord word1 = getIndexWord(tokens1.get(i), posTags1.get(i));
-			if (word1 == null) continue;
 			for (int j=0; j<tokens2.size(); ++j) {
 				if (colors.contains(tokens1.get(i)) && colors.contains(tokens1.get(j)) &&
 						!tokens1.get(i).equalsIgnoreCase(tokens2.get(j))) {
 					return "Siblings";
 				}
-				IndexWord word2 = getIndexWord(tokens2.get(j), posTags2.get(j));
-				if (word2 == null) continue;
-				String wn = wordNetIndicator(tokens1.get(i), tokens2.get(j),
-						posTags1.get(i), posTags2.get(j));
+				String wn;
+				// Optimization on time, call wordnet only when not found in cache
+				if(cache == null) {
+					wn = wordNetIndicator(tokens1.get(i), tokens2.get(j),
+							posTags1.get(i), posTags2.get(j));
+				} else {
+					wn = cache.getOrDefault(new Pair<>(tokens1.get(i), tokens2.get(j)), null);
+				}
 				if (wn != null) {
 					return wn;
 				}
@@ -517,10 +522,10 @@ public class Tools {
 	public static void main(String args[]) {
 		String wn = wordnetIndicator(Arrays.asList("red", "apples"),
 				Arrays.asList("green", "apples"), Arrays.asList("N", "N"),
-				Arrays.asList("N", "N"));
+				Arrays.asList("N", "N"), null);
 		System.out.println("Wordnet says "+wn);
 		wn = wordnetIndicator(Arrays.asList("win"), Arrays.asList("lose"),
-				Arrays.asList("V"), Arrays.asList("V"));
+				Arrays.asList("V"), Arrays.asList("V"), null);
 		System.out.println("Wordnet says "+wn);
 	}
 }

@@ -38,7 +38,7 @@ public class LogicNew {
         return null;
     }
 
-    // Classification for math: 0_0, 0_1, 1_0, 0, 1, 0, 1
+    // Classification for math: 0_0, 0_1, 1_0, 0, 1,
     public static String math(String mathOp, String key) {
         if(mathOp.equals("FIRST_ADD") && key.equals("0_0")) return "SUB_REV";
         if(mathOp.equals("SECOND_ADD") && key.equals("0_0")) return "SUB";
@@ -67,7 +67,7 @@ public class LogicNew {
         return null;
     }
 
-    // Classification for partition: 0_0, 0_1, 1_0,
+    // Classification for each verb: POSITIVE, NEGATIVE, STATE
     public static String verb(String verb1, String verb2, List<String> unit1,
                               List<String> unit2, String key) {
         String vc1 = Tools.getKeyForMaxValue(Verbs.verbClassify(verb1, unit1));

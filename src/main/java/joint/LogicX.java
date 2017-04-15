@@ -1,6 +1,7 @@
 package joint;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.semgraph.SemanticGraph;
@@ -8,6 +9,7 @@ import structure.QuantSpan;
 import structure.StanfordProblem;
 import structure.StanfordSchema;
 import java.util.List;
+import java.util.Map;
 
 public class LogicX implements IInstance {
 	
@@ -19,6 +21,7 @@ public class LogicX implements IInstance {
 	public List<StanfordSchema> schema;
 	public StanfordSchema questionSchema;
 	public IntPair questionSpan;
+	public Map<Pair<String, String>, String> wordnetRelations;
 
 	public LogicX(StanfordProblem prob) {
 		this.problemId = prob.id;
@@ -30,6 +33,7 @@ public class LogicX implements IInstance {
 		this.questionSchema = prob.questionSchema;
 		this.questionSpan = StanfordProblem.getQuestionSpan(
 				prob.tokens.get(questionSchema.sentId));
+		this.wordnetRelations = prob.wordnetRelations;
 	}
 
 }
