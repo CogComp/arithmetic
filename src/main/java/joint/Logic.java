@@ -74,7 +74,7 @@ public class Logic {
         map.put("1_SIBLING", Tools.jaccardSim(num1.unit, num2.unit));
 
         String wordnetIndicator = Tools.wordnetIndicator(
-                num1.unit, num2.unit, num1.unitPos, num2.unitPos);
+                num1.unit, num2.unit, num1.unitPos, num2.unitPos, null);
         if (wordnetIndicator == null) {
             return map;
         }

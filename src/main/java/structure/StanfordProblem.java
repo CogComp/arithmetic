@@ -161,7 +161,7 @@ public class StanfordProblem {
 
 	public static void main(String args[]) throws Exception {
 		List<StanfordProblem> probs =
-				Reader.readStanfordProblemsFromJson(Params.allArithDir);
+				Reader.readStanfordProblemsFromJson("data/seed/");
 		for(StanfordProblem prob : probs) {
 			System.out.println(prob);
 			for(StanfordSchema schema : prob.schema) {

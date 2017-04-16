@@ -87,8 +87,11 @@ public class LogicNew {
             if(vc2.equals("NEGATIVE")) op = "ADD";
         }
         if(key.equals("0_1") || key.equals("1_0")) {
-            if(op.equals("SUB_REV")) return "SUB";
-            if(op.equals("SUB")) return "SUB_REV";
+            if(op.startsWith("SUB")) return "ADD";
+            if(op.equals("ADD")) {
+                if(vc1.equals("STATE")) return "SUB_REV";
+                else return "SUB";
+            }
         }
         return op;
     }

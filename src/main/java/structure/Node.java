@@ -336,7 +336,7 @@ public class Node implements Serializable {
 		if(node1.infRuleType != node2.infRuleType) {
 			return 1.0f;
 		}
-		if(!node1.key.equals(node2.key)) {
+		if(node1.key != null && node2.key != null && !node1.key.equals(node2.key)) {
 			return 1.0f;
 		}
 		float loss;

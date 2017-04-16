@@ -201,9 +201,6 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 					Tools.populatePos(x.tokens.get(num2.sentId), num2.unit),
 					x.wordnetRelations);
 			if(wn != null) features.add(key+"_"+wn);
-//			features.addAll(FeatGen.getFeaturesConjWithLabels(
-//					getPairSchemaFeatures(x, num1, num2, "UNIT", "UNIT"),
-//					key));
 		}
 		if(key.equals("QUES_1_SIBLING")) {
 			wn = Tools.wordnetIndicator(
@@ -213,9 +210,6 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 					Tools.populatePos(x.tokens.get(ques.sentId), ques.unit),
 					x.wordnetRelations);
 			if(wn != null) features.add(key+"_"+wn);
-//			features.addAll(FeatGen.getFeaturesConjWithLabels(
-//					getPairSchemaFeatures(x, num1, ques, "UNIT", "UNIT"),
-//					key));
 		}
 		if(key.equals("QUES_1_SIBLING")) {
 			wn = Tools.wordnetIndicator(
@@ -225,9 +219,6 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 					Tools.populatePos(x.tokens.get(ques.sentId), ques.unit),
 					x.wordnetRelations);
 			if(wn != null) features.add(key+"_"+wn);
-//			features.addAll(FeatGen.getFeaturesConjWithLabels(
-//					getPairSchemaFeatures(x, num2, ques, "UNIT", "UNIT"),
-//					key));
 		}
 		return FeatGen.getFeaturesConjWithLabels(features, "");
 	}

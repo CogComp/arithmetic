@@ -71,8 +71,6 @@ public class LogicDriver {
 		for (int i = 0; i < sp.instanceList.size(); i++) {
 			LogicX prob = (LogicX) sp.instanceList.get(i);
 			LogicY gold = (LogicY) sp.goldStructureList.get(i);
-//			LogicY gold = ((LogicInfSolver) model.infSolver).getLatentBestStructure(
-//					prob, (LogicY) sp.goldStructureList.get(i), model.wv);
 			LogicY pred = (LogicY) model.infSolver.getBestStructure(model.wv, prob);
 			total.add(prob.problemId);
 			if(Tools.safeEquals(gold.expr.getValue(), pred.expr.getValue()) ||
@@ -80,19 +78,20 @@ public class LogicDriver {
 				acc += 1;
 			} else {
 				incorrect.add(prob.problemId);
-				System.out.println(prob.problemId+" : "+prob.text);
-				System.out.println();
-				for(StanfordSchema schema : prob.schema) {
-					System.out.println(schema);
-				}
-				System.out.println(prob.questionSchema);
-				System.out.println();
-				System.out.println("Quantities : "+prob.quantities);
-				System.out.println("Gold : "+gold);
-				System.out.println("Pred : "+pred);
-				System.out.println("Loss : "+ LogicY.getLoss(gold, pred));
-				System.out.println();
 			}
+			System.out.println(prob.problemId+" : "+prob.text);
+			System.out.println();
+			for(StanfordSchema schema : prob.schema) {
+				System.out.println(schema);
+			}
+			System.out.println(prob.questionSchema);
+			System.out.println();
+			System.out.println("Quantities : "+prob.quantities);
+			System.out.println("Gold : "+gold);
+			System.out.println("Pred : "+pred);
+			System.out.println("Loss : "+ LogicY.getLoss(gold, pred));
+			System.out.println();
+
 		}
 		System.out.println("Accuracy : = " + acc + " / " + sp.instanceList.size()
 				+ " = " + (acc/sp.instanceList.size()));
@@ -116,7 +115,7 @@ public class LogicDriver {
 		System.err.println("Training on seed examples");
 		model.wv = learner.train(seed);
 		model.wv = latentSVMLearner(learner, train,
-				(LogicInfSolver) model.infSolver, model.wv, 10);
+				(LogicInfSolver) model.infSolver, model.wv, 1);
 		lm.setAllowNewFeatures(false);
 		model.saveModel(modelPath);
 	}

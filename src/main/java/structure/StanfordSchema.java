@@ -51,14 +51,14 @@ public class StanfordSchema {
 		object = getObject(prob.tokens.get(sentId), prob.dependencies.get(sentId), verb);
 		Pair<Integer, IntPair> mathPair = getMath(prob.tokens.get(sentId),
 				Tools.getTokenIdFromCharOffset(prob.tokens.get(sentId), qs.start));
-		if(mathPair.getFirst() >= 0) {
-			math = mathPair.getFirst();
+		math = mathPair.getFirst();
+		if(mathPair.getSecond() != null && mathPair.getSecond().getFirst() >= 0) {
 			object = mathPair.getSecond();
 		}
 		Pair<IntPair, IntPair> unitPair = getUnit(prob.tokens.get(sentId),
 				Tools.getTokenIdFromCharOffset(prob.tokens.get(sentId), qs.start));
 		unit = unitPair.getFirst();
-		if(unitPair.getSecond().getFirst() >= 0) {
+		if(unitPair.getSecond() != null && unitPair.getSecond().getFirst() >= 0) {
 			object = unitPair.getSecond();
 		}
 		rate = getRate(prob.tokens.get(sentId),
@@ -191,9 +191,14 @@ public class StanfordSchema {
 		IndexedWord word = dependency.getNodeByIndexSafe(verbIndex+1);
 		if (word == null) return new IntPair(-1, -1);
 		for(SemanticGraphEdge edge : dependency.getOutEdgesSorted(word)) {
+//			System.out.println(edge.getRelation().getShortName()+":"+
+//					edge.getSource()+"-->"+edge.getTarget());
 			if(edge.getRelation().getShortName().equals("iobj") ||
-					edge.getRelation().getShortName().equals("nmod")) {
+					edge.getRelation().getShortName().equals("nmod") ||
+					edge.getRelation().getShortName().equals("prep")) {
 				int i = edge.getTarget().index()-1;
+//				System.out.println("Returned:"+
+//						Arrays.asList(Tools.getMaximalNounPhraseSpan(tokens, i)));
 				return Tools.getMaximalNounPhraseSpan(tokens, i);
 			}
 		}
