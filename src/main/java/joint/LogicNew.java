@@ -10,7 +10,7 @@ public class LogicNew {
     public static List<String> labels = Arrays.asList(
             "ADD", "SUB", "SUB_REV", "MUL", "DIV", "DIV_REV");
     public static List<String> addTokens = Arrays.asList(
-            "taller", "more", "older", "higher", "faster", "heavier", "farther");
+            "taller", "more", "older", "higher", "faster", "heavier", "farther", "longer");
     public static List<String> subTokens = Arrays.asList(
             "shorter", "less", "younger", "slower", "lighter");
     public static List<String> mulTokens = Arrays.asList(
@@ -130,12 +130,10 @@ public class LogicNew {
         if(num1.math != -1) {
             math = tokens.get(num1.sentId).get(num1.math).word();
             order = "FIRST_";
-        }
-        if(num2.math != -1) {
+        } else if(num2.math != -1) {
             math = tokens.get(num2.sentId).get(num2.math).word();
             order = "SECOND_";
-        }
-        if(ques.math != -1) {
+        } else if(ques.math != -1) {
             math = tokens.get(ques.sentId).get(ques.math).word();
             order = "QUES_";
         }

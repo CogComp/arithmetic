@@ -3787,7 +3787,7 @@
   },
   {
     "iIndex": 198,
-    "sQuestion": "Michelle began her pizza delivery route with 0.5 tank of gas in her car . When she made it back to the pizzeria , 0.16666666666666666 tank of gas was . How much gas did Michelle use ?",
+    "sQuestion": "Michelle began her pizza delivery route with 0.5 tank of gas in her car . When she made it back to the pizzeria , 0.16666666666666666 tank of gas was left. How much gas did Michelle use ?",
     "quantities": [
       {
         "start": 45,
@@ -12315,7 +12315,7 @@
   },
   {
     "iIndex": 750,
-    "sQuestion": " Mrs. Hilt bought 6.0 hot dogs. Each hot dog cost 50.0 cents. How much money did she pay for all of the hot dogs?",
+    "sQuestion": " Mrs. Hilt bought 6.0 hot dogs. Each hot dog costs 50.0 cents. How much money did she pay for all of the hot dogs?",
     "quantities": [
       {
         "start": 18,

@@ -98,6 +98,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(infRuleType == 3) {
 			features.addAll(getUnitDepFeatures(x, num1, num2, ques, key, isTopmost));
 		}
+		features.addAll(FeatGen.getConjunctions(features));
 		return features;
 	}
 
@@ -113,25 +114,23 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(isTopmost) {
 			features.addAll(getSingleSchemaFeatures(x, ques));
 		}
+		if(!features.contains("RateDetected")) {
+			features.add("RateNotDetected");
+		}
+		if(!features.contains("MathDetected")) {
+			features.add("MathNotDetected");
+		}
 		if(x.tokens.get(num1.sentId).get(num1.verb).lemma().equals(
 				x.tokens.get(num2.sentId).get(num2.verb).lemma())) {
 			features.add("Verb12Same");
 		} else {
 			features.add("Verb12Diff");
 		}
-		if(isTopmost) {
-			if (x.tokens.get(num1.sentId).get(num1.verb).lemma().equals(
-					x.tokens.get(num2.sentId).get(num2.verb).lemma()) &&
-					x.tokens.get(num1.sentId).get(num1.verb).lemma().equals(
-							x.tokens.get(ques.sentId).get(ques.verb).lemma())) {
-				features.add("AllVerbsSame");
-			} else {
-				features.add("AllVerbsNotSame");
-			}
-		}
+		boolean midVerb = LogicY.midVerb(x.tokens, num1, num2);
+		features.add("MidVerb:"+midVerb);
 		return FeatGen.getFeaturesConjWithLabels(
-//				features,
-				FeatGen.getConjunctions(features),
+				features,
+//				FeatGen.getConjunctions(features),
 				"InfRule:"+infRuleType);
 	}
 
@@ -142,6 +141,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 												  String key,
 												  boolean isTopmost) {
 		List<String> features = new ArrayList<>();
+		features.add(key);
 		if(key.equals("0_NUM") || key.equals("1_NUM")) {
 			features.addAll(getPairSchemaFeatures(x, num1, num2, "UNIT", "UNIT"));
 		}
@@ -157,7 +157,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(key.equals("QUES_REV")) {
 			features.addAll(getPairSchemaFeatures(x, num2, ques, "UNIT", "UNIT"));
 		}
-		return FeatGen.getFeaturesConjWithLabels(features, "");
+		return features;
 	}
 
 	public static List<String> getMathFeatures(LogicX x,
@@ -167,6 +167,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 											   String key,
 											   boolean isTopmost) {
 		List<String> features = new ArrayList<>();
+		features.add(key);
 		if(key.equals("0_0")) {
 			features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "SUBJ"));
 		}
@@ -182,7 +183,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(key.equals("1")) {
 			features.addAll(getPairSchemaFeatures(x, num2, ques, "OBJ", "SUBJ"));
 		}
-		return FeatGen.getFeaturesConjWithLabels(features, "");
+		return features;
 	}
 
 	public static List<String> getPartitionFeatures(LogicX x,
@@ -192,6 +193,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 													String key,
 													boolean isTopmost) {
 		List<String> features = new ArrayList<>();
+		features.add(key);
 		String wn;
 		if(key.equals("HYPO") || key.equals("HYPER") || key.equals("SIBLING")) {
 			wn = Tools.wordnetIndicator(
@@ -200,7 +202,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 					Tools.populatePos(x.tokens.get(num1.sentId), num1.unit),
 					Tools.populatePos(x.tokens.get(num2.sentId), num2.unit),
 					x.wordnetRelations);
-			if(wn != null) features.add(key+"_"+wn);
+			if(wn != null) features.add(wn);
 		}
 		if(key.equals("QUES_1_SIBLING")) {
 			wn = Tools.wordnetIndicator(
@@ -209,7 +211,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 					Tools.populatePos(x.tokens.get(num1.sentId), num1.unit),
 					Tools.populatePos(x.tokens.get(ques.sentId), ques.unit),
 					x.wordnetRelations);
-			if(wn != null) features.add(key+"_"+wn);
+			if(wn != null) features.add(wn);
 		}
 		if(key.equals("QUES_1_SIBLING")) {
 			wn = Tools.wordnetIndicator(
@@ -218,9 +220,9 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 					Tools.populatePos(x.tokens.get(num2.sentId), num2.unit),
 					Tools.populatePos(x.tokens.get(ques.sentId), ques.unit),
 					x.wordnetRelations);
-			if(wn != null) features.add(key+"_"+wn);
+			if(wn != null) features.add(wn);
 		}
-		return FeatGen.getFeaturesConjWithLabels(features, "");
+		return features;
 	}
 
 	public static List<String> getVerbFeatures(LogicX x,
@@ -230,6 +232,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 											   String key,
 											   boolean isTopmost) {
 		List<String> features = new ArrayList<>();
+		features.add(key);
 		if(key.equals("0_0")) {
 			features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "SUBJ"));
 		}
@@ -239,7 +242,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(key.equals("1_0")) {
 			features.addAll(getPairSchemaFeatures(x, num1, num2, "OBJ", "SUBJ"));
 		}
-		return FeatGen.getFeaturesConjWithLabels(features, "");
+		return features;
 	}
 
 	// Mode has to be one of "SUBJ", "OBJ", "UNIT", "RATE"
@@ -250,14 +253,14 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		List<String> phrase1 = getPhraseByMode(x.tokens, schema1, mode1);
 		List<String> phrase2 = getPhraseByMode(x.tokens, schema2, mode2);
 		double sim = Tools.jaccardSim(phrase1, phrase2);
-		if(sim > 0.5) features.add("MoreThanHalfPhraseMatch");
-		if(sim > 0.9) features.add("ExactPhraseMatch");
-		if(sim < 0.2) features.add("AbsolutelyNoMatch");
+		if(sim > 0.5) features.add("SimMoreThanHalfPhraseMatch");
+		if(sim > 0.9) features.add("SimExactPhraseMatch");
+		if(sim < 0.2) features.add("SimAbsolutelyNoMatch");
 
 		double entail = Tools.jaccardEntail(phrase1, phrase2);
-		if(entail > 0.5) features.add("MoreThanHalfPhraseMatch");
-		if(entail > 0.9) features.add("ExactPhraseMatch");
-		if(entail < 0.2) features.add("AbsolutelyNoMatch");
+		if(entail > 0.5) features.add("EntailMoreThanHalfPhraseMatch");
+		if(entail > 0.9) features.add("EntailExactPhraseMatch");
+		if(entail < 0.2) features.add("EntailAbsolutelyNoMatch");
 
 		StanfordSchema emptyUnitSchema = null;
 		List<String> phraseOther = null;
@@ -277,9 +280,9 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				sim = Tools.jaccardSim(Tools.spanToLemmaList(
 						x.tokens.get(prevSchema.sentId),
 						prevSchema.unit), phraseOther);
-				if(sim > 0.5) features.add("MoreThanHalfPhraseMatch");
-				if(sim > 0.9) features.add("ExactPhraseMatch");
-				if(sim < 0.2) features.add("AbsolutelyNoMatch");
+				if(sim > 0.5) features.add("SimMoreThanHalfPhraseMatch");
+				if(sim > 0.9) features.add("SimExactPhraseMatch");
+				if(sim < 0.2) features.add("SimAbsolutelyNoMatch");
 			}
 		}
 		return features;
@@ -291,18 +294,20 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(schema.qs != null) {
 			int tokenId = Tools.getTokenIdFromCharOffset(tokens, schema.qs.start);
 			for (int i=Math.max(0, tokenId-3); i<Math.min(tokens.size(), tokenId+4); ++i) {
-				if(tokens.get(i).tag().startsWith("R") ||
-						tokens.get(i).tag().startsWith("JJR") ||
-						tokens.get(i).word().equals("all")) {
-					features.add("NgbdUnigram_"+tokens.get(i).lemma());
+//				if(tokens.get(i).tag().startsWith("R") ||
+//						tokens.get(i).tag().startsWith("JJR") ||
+//						tokens.get(i).word().equals("all")) {
+				if(!tokens.get(i).tag().startsWith("N")) {
+					features.add("NgbdBigram_"+tokens.get(i).lemma());
 				}
 			}
 		} else {
 			for (int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
-				if(tokens.get(i).tag().startsWith("R") ||
-						tokens.get(i).tag().startsWith("JJR") ||
-						tokens.get(i).word().equals("all")) {
-					features.add("QuesUnigram_"+tokens.get(i).lemma());
+//				if(tokens.get(i).tag().startsWith("R") ||
+//						tokens.get(i).tag().startsWith("JJR") ||
+//						tokens.get(i).word().equals("all")) {
+				if(!tokens.get(i).tag().startsWith("N")) {
+					features.add("QuesBigram_"+tokens.get(i).lemma());
 				}
 			}
 		}

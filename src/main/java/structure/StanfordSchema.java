@@ -6,7 +6,6 @@ import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.ling.IndexedWord;
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphEdge;
-import joint.Logic;
 import joint.LogicNew;
 import utils.Tools;
 
@@ -51,7 +50,7 @@ public class StanfordSchema {
 		subject = getSubject(prob.tokens.get(sentId), prob.dependencies.get(sentId), verb);
 		object = getObject(prob.tokens.get(sentId), prob.dependencies.get(sentId), verb);
 		Pair<Integer, IntPair> mathPair = getMath(prob.tokens.get(sentId),
-				Tools.getTokenIdFromCharOffset(prob.tokens.get(sentId), qs.start));
+				Tools.getTokenIdFromCharOffset(prob.tokens.get(sentId), qs.start), false);
 		math = mathPair.getFirst();
 		if(mathPair.getSecond() != null && mathPair.getSecond().getFirst() >= 0) {
 			object = mathPair.getSecond();
@@ -123,7 +122,9 @@ public class StanfordSchema {
 
 	// Math concepts require different subject and object extraction, should be called
 	// before subject, object extraction
-	public static Pair<Integer, IntPair> getMath(List<CoreLabel> tokens, int tokenId) {
+	public static Pair<Integer, IntPair> getMath(List<CoreLabel> tokens,
+												 int tokenId,
+												 boolean isQuestion) {
 		int math = -1;
 		int start = tokenId + 1, end = tokens.size();
 		for(int i=tokenId+1; i<tokens.size(); ++i) {
@@ -153,7 +154,7 @@ public class StanfordSchema {
 				break;
 			}
 		}
-		if(!realMath) return new Pair<>(-1, null);
+		if(!isQuestion && !realMath) return new Pair<>(-1, null);
 		IntPair obj = new IntPair(-1, -1);
 		for(int i=start; i<end; ++i) {
 			if((tokens.get(i).word().equals("as") &&

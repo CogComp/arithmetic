@@ -251,6 +251,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				List<Pair<Node, Double>> pairList = enumerateMerge(
 						x, l.getFirst(), r.getFirst(), wv, isTopmost);
 				for(Pair<Node, Double> pair : pairList) {
+//					System.out.println("Candidate: "+pair.getFirst());
 					if(!pair.getFirst().label.equals(expr.label)) continue;
 					if(pair.getFirst().infRuleType != expr.infRuleType) continue;
 					if(expr.label.equals("DIV")) {

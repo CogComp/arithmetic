@@ -113,7 +113,7 @@ public class StanfordProblem {
 		if(unitPair.getSecond().getFirst() >= 0) {
 			schema.object = unitPair.getSecond();
 		}
-		Pair<Integer, IntPair> mathPair = schema.getMath(tokens, quesSpan.getFirst());
+		Pair<Integer, IntPair> mathPair = schema.getMath(tokens, quesSpan.getFirst(), true);
 		if(mathPair.getFirst() >= 0) {
 			schema.math = mathPair.getFirst();
 			schema.object = mathPair.getSecond();

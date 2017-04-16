@@ -72,7 +72,7 @@ public class LogicDriver {
 		SLModel model = SLModel.loadModel(modelPath);
 		Set<Integer> incorrect = new HashSet<>();
 		Set<Integer> total = new HashSet<>();
-		double acc = 0.0;
+		double acc = 0.0, infTypeAcc = 0.0;
 		for (int i = 0; i < sp.instanceList.size(); i++) {
 			LogicX prob = (LogicX) sp.instanceList.get(i);
 			LogicY gold = (LogicY) sp.goldStructureList.get(i);
@@ -83,6 +83,10 @@ public class LogicDriver {
 				acc += 1;
 			} else {
 				incorrect.add(prob.problemId);
+			}
+			if(gold.expr.infRuleType == pred.expr.infRuleType) {
+				infTypeAcc += 1;
+			} else {
 				System.out.println(prob.problemId+" : "+prob.text);
 				System.out.println();
 				for(StanfordSchema schema : prob.schema) {
@@ -96,12 +100,13 @@ public class LogicDriver {
 				System.out.println("Loss : "+ LogicY.getLoss(gold, pred));
 				System.out.println();
 			}
-
 		}
+		System.out.println("Inference Type Accuracy : = " + infTypeAcc + " / " +
+				sp.instanceList.size() + " = " + (infTypeAcc/sp.instanceList.size()));
 		System.out.println("Accuracy : = " + acc + " / " + sp.instanceList.size()
 				+ " = " + (acc/sp.instanceList.size()));
 		System.out.println("Strict Accuracy : ="+ (1-1.0*incorrect.size()/total.size()));
-		return new Pair<>(acc/sp.instanceList.size(), 1-1.0*incorrect.size()/total.size());
+		return new Pair<>(infTypeAcc/sp.instanceList.size(), 1-1.0*incorrect.size()/total.size());
 	}
 
 	public static void trainModel(String modelPath, SLProblem train, SLProblem seed)
@@ -115,11 +120,11 @@ public class LogicDriver {
 		model.infSolver = new LogicInfSolver(fg);
 		SLParameters para = new SLParameters();
 		para.loadConfigFile(Params.spConfigFile);
-		para.MAX_NUM_ITER = 50;
+		para.MAX_NUM_ITER = 5;
 		Learner learner = LearnerFactory.getLearner(model.infSolver, fg, para);
-		model.wv = learner.train(seed);
+//		model.wv = learner.train(seed);
 		model.wv = latentSVMLearner(learner, train,
-				(LogicInfSolver) model.infSolver, model.wv, 1);
+				(LogicInfSolver) model.infSolver, model.wv, 5);
 		lm.setAllowNewFeatures(false);
 		model.saveModel(modelPath);
 	}
