@@ -113,9 +113,6 @@ public class Reader {
 				new TypeToken<List<KushmanFormat>>(){}.getType());
 		List<StanfordProblem> problemList = new ArrayList<>();
 		for(KushmanFormat kushmanProb : kushmanProbs) {
-//			System.out.println(kushmanProb.iIndex);
-//			System.out.println(kushmanProb.sQuestion);
-//			System.out.println(Arrays.asList(kushmanProb.lSolutions));
 			StanfordProblem prob = new StanfordProblem(
 					kushmanProb.iIndex,
 					kushmanProb.sQuestion,

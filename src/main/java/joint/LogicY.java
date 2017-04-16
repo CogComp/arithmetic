@@ -2,7 +2,6 @@ package joint;
 
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import structure.Node;
-import utils.Tools;
 
 
 public class LogicY implements IStructure {
@@ -26,13 +25,6 @@ public class LogicY implements IStructure {
 		if(gold == null || pred == null) {
 			return 1.0f;
 		}
-//		if(Tools.safeEquals(gold.expr.getValue(), pred.expr.getValue())) {
-//			return 0.0f;
-//		}
-//		if(Tools.safeEquals(-gold.expr.getValue(), pred.expr.getValue())) {
-//			return 0.0f;
-//		}
-//		return 1.0f;
 		return Node.getLoss(gold.expr, pred.expr);
 	}
 
