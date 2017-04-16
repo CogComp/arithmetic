@@ -49,7 +49,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 
 	public LogicY getLatentBestStructure(LogicX x, LogicY gold, WeightVector weight) {
 		MinMaxPriorityQueue<Pair<Node, Double>> beam =
-				populateInfRuleType(x, gold.expr, weight, true, 200);
+				populateInfRuleType(x, gold.expr, weight, true, 2000);
 		if(beam.size() == 0) {
 			System.out.println("Prob: "+ Arrays.asList(x.tokens));
 			System.out.println();
@@ -252,6 +252,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 						x, l.getFirst(), r.getFirst(), wv, isTopmost);
 				for(Pair<Node, Double> pair : pairList) {
 					if(!pair.getFirst().label.equals(expr.label)) continue;
+					if(pair.getFirst().infRuleType != expr.infRuleType) continue;
 					if(expr.label.equals("SUB") || expr.label.equals("DIV")) {
 						if(!(Tools.safeEquals(
 								pair.getFirst().children.get(0).getValue(),

@@ -159,35 +159,6 @@ public class StanfordProblem {
 		return map;
 	}
 
-	public void populateInfType(Node expr, boolean isTopmost) {
-		if(expr.children.size() == 0) {
-			expr.infRuleType = -1;
-			expr.key = null;
-			return;
-		}
-		populateInfType(expr.children.get(0), false);
-		populateInfType(expr.children.get(1), false);
-		int quantIndex1 = expr.children.get(0).quantIndex;
-		int quantIndex2 = expr.children.get(1).quantIndex;
-		expr.infRuleType = getHeuristicInfType(quantIndex1, quantIndex2, expr.label, isTopmost);
-
-	}
-
-	public int getHeuristicInfType(int quantIndex1,
-								   int quantIndex2,
-								   String label,
-								   boolean isTopmost)  {
-
-		if(label.equals("MUL") || label.equals("DIV")) {
-
-			return 3;
-		}
-		if(label.equals("ADD") || label.equals("SUB")) {
-			return 0;
-		}
-		return -1;
-	}
-
 	public static void main(String args[]) throws Exception {
 		List<StanfordProblem> probs =
 				Reader.readStanfordProblemsFromJson("data/seed/");

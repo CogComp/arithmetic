@@ -18,6 +18,7 @@ public class Node implements Serializable {
 	public String key;
 	
 	public Node() {
+		infRuleType = -1;
 		children = new ArrayList<>();
 	}
 
@@ -319,40 +320,4 @@ public class Node implements Serializable {
 		return path;
 	}
 
-	public static float getLoss(Node node1, Node node2) {
-		if(node1.children.size() != node2.children.size()) {
-			return 1.0f;
-		}
-		if(node1.children.size() == 0) {
-			if(node1.quantIndex == node2.quantIndex) {
-				return 0.0f;
-			} else {
-				return 1.0f;
-			}
-		}
-		if(!node1.label.equals(node2.label)) {
-			return 1.0f;
-		}
-		if(node1.infRuleType != node2.infRuleType) {
-			return 1.0f;
-		}
-		if(node1.key != null && node2.key != null && !node1.key.equals(node2.key)) {
-			return 1.0f;
-		}
-		float loss;
-		if(node1.label.equals("ADD") || node1.label.equals("MUL")) {
-			loss = Math.min(
-					getLoss(node1.children.get(0), node2.children.get(0)) +
-							getLoss(node1.children.get(1), node2.children.get(1)),
-					getLoss(node1.children.get(0), node2.children.get(1)) +
-							getLoss(node1.children.get(1), node2.children.get(0)));
-		} else {
-			loss = getLoss(node1.children.get(0), node2.children.get(0)) +
-					getLoss(node1.children.get(1), node2.children.get(1));
-		}
-		if(loss > 0.5) {
-			return 1.0f;
-		}
-		return 0.0f;
-	}
 }
