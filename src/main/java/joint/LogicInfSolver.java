@@ -253,7 +253,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				for(Pair<Node, Double> pair : pairList) {
 					if(!pair.getFirst().label.equals(expr.label)) continue;
 					if(pair.getFirst().infRuleType != expr.infRuleType) continue;
-					if(expr.label.equals("SUB") || expr.label.equals("DIV")) {
+					if(expr.label.equals("DIV")) {
 						if(!(Tools.safeEquals(
 								pair.getFirst().children.get(0).getValue(),
 								expr.children.get(0).getValue()) &&

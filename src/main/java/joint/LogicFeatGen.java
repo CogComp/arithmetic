@@ -130,8 +130,8 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 			}
 		}
 		return FeatGen.getFeaturesConjWithLabels(
-				features,
-//				FeatGen.getConjunctions(features),
+//				features,
+				FeatGen.getConjunctions(features),
 				"InfRule:"+infRuleType);
 	}
 

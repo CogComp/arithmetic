@@ -7,6 +7,7 @@ import edu.stanford.nlp.ling.IndexedWord;
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphEdge;
 import joint.Logic;
+import joint.LogicNew;
 import utils.Tools;
 
 import java.util.Arrays;
@@ -130,9 +131,9 @@ public class StanfordSchema {
 					|| tokens.get(i).word().equals(",") || tokens.get(i).word().equals(";")) {
 				break;
 			}
-			if (Logic.addTokens.contains(tokens.get(i).word()) ||
-					Logic.subTokens.contains(tokens.get(i).word()) ||
-					Logic.mulTokens.contains(tokens.get(i).word())) {
+			if (LogicNew.addTokens.contains(tokens.get(i).word()) ||
+					LogicNew.subTokens.contains(tokens.get(i).word()) ||
+					LogicNew.mulTokens.contains(tokens.get(i).word())) {
 				math = i;
 				break;
 			}
