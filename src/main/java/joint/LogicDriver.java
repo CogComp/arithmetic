@@ -10,6 +10,7 @@ import edu.illinois.cs.cogcomp.sl.learner.Learner;
 import edu.illinois.cs.cogcomp.sl.learner.LearnerFactory;
 import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
+import edu.stanford.nlp.ling.CoreLabel;
 import reader.Reader;
 import run.Annotations;
 import structure.StanfordProblem;
@@ -88,6 +89,11 @@ public class LogicDriver {
 				infTypeAcc += 1;
 			} else {
 				System.out.println(prob.problemId+" : "+prob.text);
+				for(List<CoreLabel> tokens : prob.tokens) {
+					for(CoreLabel token : tokens) {
+						System.out.print(token.lemma()+" ");
+					}
+				}
 				System.out.println();
 				for(StanfordSchema schema : prob.schema) {
 					System.out.println(schema);
@@ -122,7 +128,6 @@ public class LogicDriver {
 		para.loadConfigFile(Params.spConfigFile);
 		para.MAX_NUM_ITER = 5;
 		Learner learner = LearnerFactory.getLearner(model.infSolver, fg, para);
-//		model.wv = learner.train(seed);
 		model.wv = latentSVMLearner(learner, train,
 				(LogicInfSolver) model.infSolver, model.wv, 5);
 		lm.setAllowNewFeatures(false);

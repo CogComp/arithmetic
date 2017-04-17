@@ -84,20 +84,24 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 													  int infRuleType,
 													  String key,
 													  boolean isTopmost) {
-		List<String> features = new ArrayList<>();
-		features.addAll(getInfTypeFeatures(x, num1, num2, ques, infRuleType, isTopmost));
+		List<String> infFeatures = new ArrayList<>();
+		infFeatures.addAll(getInfTypeFeatures(x, num1, num2, ques, infRuleType, isTopmost));
+		List<String> keyFeaures = new ArrayList<>();
 		if(infRuleType == 0) {
-			features.addAll(getVerbFeatures(x, num1, num2, ques, key, isTopmost));
+			keyFeaures.addAll(getVerbFeatures(x, num1, num2, ques, key, isTopmost));
 		}
 		if(infRuleType == 1) {
-			features.addAll(getPartitionFeatures(x, num1, num2, ques, key, isTopmost));
+			keyFeaures.addAll(getPartitionFeatures(x, num1, num2, ques, key, isTopmost));
 		}
 		if(infRuleType == 2) {
-			features.addAll(getMathFeatures(x, num1, num2, ques, key, isTopmost));
+			keyFeaures.addAll(getMathFeatures(x, num1, num2, ques, key, isTopmost));
 		}
 		if(infRuleType == 3) {
-			features.addAll(getUnitDepFeatures(x, num1, num2, ques, key, isTopmost));
+			keyFeaures.addAll(getUnitDepFeatures(x, num1, num2, ques, key, isTopmost));
 		}
+		List<String> features = new ArrayList<>();
+		features.addAll(keyFeaures);
+		features.addAll(infFeatures);
 		features.addAll(FeatGen.getConjunctions(features));
 		return features;
 	}
@@ -109,11 +113,9 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 												  int infRuleType,
 												  boolean isTopmost) {
 		List<String> features = new ArrayList<>();
-		features.addAll(getSingleSchemaFeatures(x, num1));
-		features.addAll(getSingleSchemaFeatures(x, num2));
-		if(isTopmost) {
-			features.addAll(getSingleSchemaFeatures(x, ques));
-		}
+		features.addAll(getSingleSchemaFeatures(x, num1, isTopmost));
+		features.addAll(getSingleSchemaFeatures(x, num2, isTopmost));
+		features.addAll(getSingleSchemaFeatures(x, ques, isTopmost));
 		if(!features.contains("RateDetected")) {
 			features.add("RateNotDetected");
 		}
@@ -288,26 +290,13 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		return features;
 	}
 
-	public static List<String> getSingleSchemaFeatures(LogicX x, StanfordSchema schema) {
+	public static List<String> getSingleSchemaFeatures(LogicX x, StanfordSchema schema, boolean isTopmost) {
 		List<String> features = new ArrayList<>();
 		List<CoreLabel> tokens = x.tokens.get(schema.sentId);
-		if(schema.qs != null) {
-			int tokenId = Tools.getTokenIdFromCharOffset(tokens, schema.qs.start);
-			for (int i=Math.max(0, tokenId-3); i<Math.min(tokens.size(), tokenId+4); ++i) {
-//				if(tokens.get(i).tag().startsWith("R") ||
-//						tokens.get(i).tag().startsWith("JJR") ||
-//						tokens.get(i).word().equals("all")) {
-				if(!tokens.get(i).tag().startsWith("N")) {
-					features.add("NgbdBigram_"+tokens.get(i).lemma());
-				}
-			}
-		} else {
-			for (int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
-//				if(tokens.get(i).tag().startsWith("R") ||
-//						tokens.get(i).tag().startsWith("JJR") ||
-//						tokens.get(i).word().equals("all")) {
-				if(!tokens.get(i).tag().startsWith("N")) {
-					features.add("QuesBigram_"+tokens.get(i).lemma());
+		if(isTopmost && schema.qs == null) {
+			for (int i = x.questionSpan.getFirst(); i < x.questionSpan.getSecond(); ++i) {
+				if (!tokens.get(i).tag().startsWith("N")) {
+					features.add("QuesUnigram_" + tokens.get(i).lemma());
 				}
 			}
 		}
