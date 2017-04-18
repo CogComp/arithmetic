@@ -281,6 +281,11 @@ public class Tools {
 			return lemmas;
 		}
 		for(int i=span.getFirst(); i<span.getSecond(); ++i) {
+			if(tokens.get(i).lemma().equals("more") ||
+					tokens.get(i).lemma().equals("much") ||
+					tokens.get(i).lemma().equals("many")) {
+				continue;
+			}
 			lemmas.add(tokens.get(i).lemma());
 		}
 		return lemmas;

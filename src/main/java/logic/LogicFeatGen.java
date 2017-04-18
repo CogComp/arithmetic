@@ -92,6 +92,13 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 					x.wordnetRelations);
 			if(wn != null) features.add(wn);
 		}
+		features.addAll(FeatGen.getConjunctions(features));
+		features.addAll(FeatGen.getFeaturesConjWithLabels(
+				getSingleSchemaFeatures(x, x.num1, x.isTopmost), "1"+y.key));
+		features.addAll(FeatGen.getFeaturesConjWithLabels(
+				getSingleSchemaFeatures(x, x.num2, x.isTopmost), "2"+y.key));
+		features.addAll(FeatGen.getFeaturesConjWithLabels(
+				getSingleSchemaFeatures(x, x.questionSchema, x.isTopmost), "Q"+y.key));
 		return features;
 	}
 
@@ -153,6 +160,36 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 			return Tools.spanToLemmaList(tokens.get(schema.sentId), schema.rate);
 		}
 		return new ArrayList<>();
+	}
+
+	public static List<String> getSingleSchemaFeatures(
+			LogicX x, StanfordSchema schema, boolean isTopmost) {
+		List<String> features = new ArrayList<>();
+		List<CoreLabel> tokens = x.tokens.get(schema.sentId);
+		if(schema.rate != null && schema.rate.getFirst() >= 0) {
+			features.add("RateDetected");
+		}
+		if(schema.math != -1) {
+			features.add("MathDetected");
+		}
+		if(isTopmost && schema.qs == null) {
+			for (int i = x.questionSpan.getFirst();
+				 i < x.questionSpan.getSecond();
+				 ++i) {
+				if (!tokens.get(i).tag().startsWith("N")) {
+					features.add("Unigram_" + tokens.get(i).lemma());
+				}
+			}
+		}
+		if(schema.qs != null) {
+			int tokenId = Tools.getTokenIdFromCharOffset(tokens, schema.qs.start);
+			for(int i=Math.max(0, tokenId-3); i<Math.min(tokenId+4, tokens.size()); ++i) {
+				if (!tokens.get(i).tag().startsWith("N")) {
+					features.add("Unigram_" + tokens.get(i).lemma());
+				}
+			}
+		}
+		return features;
 	}
 
 }
