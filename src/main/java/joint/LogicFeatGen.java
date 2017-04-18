@@ -99,10 +99,10 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(infRuleType == 3) {
 			keyFeaures.addAll(getUnitDepFeatures(x, num1, num2, ques, key, isTopmost));
 		}
+
 		List<String> features = new ArrayList<>();
 		features.addAll(keyFeaures);
 		features.addAll(infFeatures);
-		features.addAll(FeatGen.getConjunctions(features));
 		return features;
 	}
 
@@ -116,6 +116,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		features.addAll(getSingleSchemaFeatures(x, num1, isTopmost));
 		features.addAll(getSingleSchemaFeatures(x, num2, isTopmost));
 		features.addAll(getSingleSchemaFeatures(x, ques, isTopmost));
+
 		if(!features.contains("RateDetected")) {
 			features.add("RateNotDetected");
 		}
@@ -255,14 +256,13 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		List<String> phrase1 = getPhraseByMode(x.tokens, schema1, mode1);
 		List<String> phrase2 = getPhraseByMode(x.tokens, schema2, mode2);
 		double sim = Tools.jaccardSim(phrase1, phrase2);
-		if(sim > 0.5) features.add("SimMoreThanHalfPhraseMatch");
+//		if(sim > 0.5) features.add("SimMoreThanHalfPhraseMatch");
 		if(sim > 0.9) features.add("SimExactPhraseMatch");
-		if(sim < 0.2) features.add("SimAbsolutelyNoMatch");
 
 		double entail = Tools.jaccardEntail(phrase1, phrase2);
-		if(entail > 0.5) features.add("EntailMoreThanHalfPhraseMatch");
-		if(entail > 0.9) features.add("EntailExactPhraseMatch");
-		if(entail < 0.2) features.add("EntailAbsolutelyNoMatch");
+//		if(entail > 0.5) features.add("EntailMoreThanHalfPhraseMatch");
+//		if(entail > 0.9) features.add("EntailExactPhraseMatch");
+//		if(entail < 0.2) features.add("EntailAbsolutelyNoMatch");
 
 		StanfordSchema emptyUnitSchema = null;
 		List<String> phraseOther = null;
@@ -276,25 +276,31 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		}
 		// If unit was not extracted, copy last unit over
 		if(emptyUnitSchema != null) {
-			features.add("OneOfThemEmpty");
+//			features.add("OneOfThemEmpty");
 			if(emptyUnitSchema.qs != null && emptyUnitSchema.quantId >= 1) {
 				StanfordSchema prevSchema = x.schema.get(emptyUnitSchema.quantId-1);
 				sim = Tools.jaccardSim(Tools.spanToLemmaList(
 						x.tokens.get(prevSchema.sentId),
 						prevSchema.unit), phraseOther);
-				if(sim > 0.5) features.add("SimMoreThanHalfPhraseMatch");
+//				if(sim > 0.5) features.add("SimMoreThanHalfPhraseMatch");
 				if(sim > 0.9) features.add("SimExactPhraseMatch");
-				if(sim < 0.2) features.add("SimAbsolutelyNoMatch");
 			}
 		}
+		if(sim < 0.2) features.add("SimAbsolutelyNoMatch");
+//		features.addAll(FeatGen.getFeaturesConjWithLabels(features,
+//				(mode1.compareTo(mode2)>=0?mode1:mode2)+"_"+
+//						(mode1.compareTo(mode2)>=0?mode2:mode1)));
 		return features;
 	}
 
-	public static List<String> getSingleSchemaFeatures(LogicX x, StanfordSchema schema, boolean isTopmost) {
+	public static List<String> getSingleSchemaFeatures(
+			LogicX x, StanfordSchema schema, boolean isTopmost) {
 		List<String> features = new ArrayList<>();
 		List<CoreLabel> tokens = x.tokens.get(schema.sentId);
 		if(isTopmost && schema.qs == null) {
-			for (int i = x.questionSpan.getFirst(); i < x.questionSpan.getSecond(); ++i) {
+			for (int i = x.questionSpan.getFirst();
+				 i < x.questionSpan.getSecond();
+				 ++i) {
 				if (!tokens.get(i).tag().startsWith("N")) {
 					features.add("QuesUnigram_" + tokens.get(i).lemma());
 				}
@@ -312,10 +318,18 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 	public static List<String> getPhraseByMode(List<List<CoreLabel>> tokens,
 											   StanfordSchema schema,
 											   String mode) {
-		if(mode.equals("SUBJ")) return Tools.spanToLemmaList(tokens.get(schema.sentId), schema.subject);
-		if(mode.equals("OBJ")) return Tools.spanToLemmaList(tokens.get(schema.sentId), schema.object);
-		if(mode.equals("UNIT")) return Tools.spanToLemmaList(tokens.get(schema.sentId), schema.unit);
-		if(mode.equals("RATE")) return Tools.spanToLemmaList(tokens.get(schema.sentId), schema.rate);
+		if(mode.equals("SUBJ")) {
+			return Tools.spanToLemmaList(tokens.get(schema.sentId), schema.subject);
+		}
+		if(mode.equals("OBJ")) {
+			return Tools.spanToLemmaList(tokens.get(schema.sentId), schema.object);
+		}
+		if(mode.equals("UNIT")) {
+			return Tools.spanToLemmaList(tokens.get(schema.sentId), schema.unit);
+		}
+		if(mode.equals("RATE")) {
+			return Tools.spanToLemmaList(tokens.get(schema.sentId), schema.rate);
+		}
 		return new ArrayList<>();
 	}
 

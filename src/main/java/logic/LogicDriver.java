@@ -11,9 +11,8 @@ import edu.illinois.cs.cogcomp.sl.learner.LearnerFactory;
 import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 import joint.Logic;
-import joint.LogicInput;
-import joint.Verbs;
-import reader.Reader;
+import run.Annotations;
+import structure.Node;
 import structure.StanfordProblem;
 import structure.StanfordSchema;
 import utils.Folds;
@@ -42,25 +41,57 @@ public class LogicDriver {
 		List<List<StanfordProblem>> split = Folds.getDataSplitForStanford(dataset, testFold);
 		List<StanfordProblem> trainProbs = split.get(0);
 		List<StanfordProblem> testProbs = split.get(2);
-		SLProblem train = getSP(trainProbs);
-		SLProblem test = getSP(testProbs);
+		Map<Integer, List<Integer>> rateAnnotations =
+				Annotations.readRateAnnotations(dataset+"rateAnnotations.txt");
+		SLProblem train = getSP(trainProbs, rateAnnotations);
+		SLProblem test = getSP(testProbs, rateAnnotations);
 		System.out.println("Train : "+train.instanceList.size()+" Test : "+test.instanceList.size());
 		if(isTrain.equalsIgnoreCase("true")) {
 			trainModel("models/Logic"+testFold+".save", train);
 		}
 		return testModel("models/Logic"+testFold+".save", test);
 	}
-	
-	public static SLProblem getSP(List<StanfordProblem> problemList) throws Exception{
+
+	public static SLProblem getSP(List<StanfordProblem> problemList,
+								  Map<Integer, List<Integer>> rateAnnotations)
+			throws Exception{
 		SLProblem problem = new SLProblem();
 		for(StanfordProblem prob : problemList){
-			for(int i=0; i<prob.quantities.size(); ++i) {
-				for(int j=i+1; j<prob.quantities.size(); ++j) {
-					String label = prob.expr.findLabelofLCA(i, j);
-					LogicX x = new LogicX(prob, i, j);
-					LogicY y = new LogicY(label, -1, null, null, null);
-					problem.addExample(x, y);
-				}
+			joint.LogicX x = new joint.LogicX(prob);
+			joint.LogicY y = new joint.LogicY(x, prob.expr,
+					rateAnnotations.containsKey(prob.id)?
+							rateAnnotations.get(prob.id):new ArrayList<Integer>());
+			List<Node> nodes = prob.expr.getAllSubNodes();
+			Node root = nodes.get(0); // Using the fact that getAllSubnodes uses preorder traversal
+			LogicX logicX = new LogicX(
+					prob,
+					root.children.get(0).quantIndex,
+					root.children.get(1).quantIndex,
+					Logic.getMathOp(
+							x.tokens,
+							x.schema.get(root.children.get(0).quantIndex),
+							x.schema.get(root.children.get(1).quantIndex),
+							x.questionSchema),
+					root.infRuleType,
+					true);
+			LogicY logicY = new LogicY(root.label, null);
+			problem.addExample(logicX, logicY);
+			for(int i=1; i<nodes.size(); ++i) {
+				Node node = nodes.get(i);
+				if(node.children.size() == 0) continue;
+				logicX = new LogicX(
+						prob,
+						node.children.get(0).quantIndex,
+						node.children.get(1).quantIndex,
+						Logic.getMathOp(
+								x.tokens,
+								x.schema.get(node.children.get(0).quantIndex),
+								x.schema.get(node.children.get(1).quantIndex),
+								x.questionSchema),
+						node.infRuleType,
+						false);
+				logicY = new LogicY(node.label, null);
+				problem.addExample(logicX, logicY);
 			}
 		}
 		return problem;
@@ -102,83 +133,6 @@ public class LogicDriver {
 		return new Pair<>(acc/sp.instanceList.size(), 1-1.0*incorrect.size()/total.size());
 	}
 
-	public static void testLogicSolver(String dataset) throws Exception {
-		Set<Integer> incorrect = new HashSet<>();
-		Set<Integer> total = new HashSet<>();
-		List<StanfordProblem> probs = Reader.readStanfordProblemsFromJson(dataset);
-		SLProblem sp = getSP(probs);
-		double acc = 0.0;
-		for (int i = 0; i < sp.instanceList.size(); i++) {
-			LogicX x = (LogicX) sp.instanceList.get(i);
-			LogicY gold = (LogicY) sp.goldStructureList.get(i);
-			LogicInput num1 = new LogicInput(1, x.schema.get(x.quantIndex1),
-					x.tokens.get(x.schema.get(x.quantIndex1).sentId));
-			LogicInput num2 = new LogicInput(2, x.schema.get(x.quantIndex2),
-					x.tokens.get(x.schema.get(x.quantIndex2).sentId));
-			LogicInput ques = new LogicInput(0, x.questionSchema,
-					x.questionSchema.sentId >= 0 ? x.tokens.get(x.questionSchema.sentId): null);
-			Map<Pair<String, Integer>, Double> scores = Logic.logicSolver(num1, num2, ques, false);
-			LogicY pred = null;
-			double maxScore = Double.NEGATIVE_INFINITY;
-			for (Pair<String, Integer> key : scores.keySet()) {
-				if (scores.get(key) > maxScore) {
-					maxScore = scores.get(key);
-					pred = new LogicY(key.getFirst(), key.getSecond(), null, null, null);
-				}
-			}
-			total.add(x.problemId);
-			if(LogicY.getLoss(gold, pred) < 0.0001) {
-				acc += 1;
-			} else {
-				incorrect.add(x.problemId);
-			}
-			System.out.println(x.problemId+" : "+x.text);
-			System.out.println();
-			for(StanfordSchema schema : x.schema) {
-				System.out.println(schema);
-			}
-			System.out.println(x.questionSchema);
-			System.out.println();
-			System.out.println("Quantities : "+x.quantities);
-			System.out.println("Quant of Interest: "+x.quantIndex1+" "+x.quantIndex2);
-			System.out.println();
-			System.out.println("Verb1 : "+Arrays.asList(Verbs.verbClassify(num1)));
-			System.out.println("Verb2 : "+Arrays.asList(Verbs.verbClassify(num2)));
-			System.out.println("VerbQues : "+Arrays.asList(Verbs.verbClassify(ques)));
-			System.out.println();
-			System.out.println("Part12 : "+Arrays.asList(Logic.partition(num1, num2)));
-			System.out.println("Part1Ques : "+Arrays.asList(Logic.partition(num1, ques)));
-			System.out.println("Part2Ques : "+Arrays.asList(Logic.partition(num2, ques)));
-			System.out.println();
-			System.out.println("UD12 : "+Arrays.asList(Logic.unitDependency(num1, num2)));
-			System.out.println("UD1Ques : "+Arrays.asList(Logic.unitDependency(num1, ques)));
-			System.out.println("UD2Ques : "+Arrays.asList(Logic.unitDependency(num2, ques)));
-			System.out.println();
-			System.out.println("Math1 : "+Arrays.asList(Logic.math(num1)));
-			System.out.println("Math2 : "+Arrays.asList(Logic.math(num2)));
-			System.out.println("Math3 : "+Arrays.asList(Logic.math(ques)));
-			System.out.println();
-			System.out.println("Gold : "+gold);
-			for(int infRule=0; infRule<Logic.maxNumInferenceTypes; ++infRule) {
-				pred = null;
-				maxScore = Double.NEGATIVE_INFINITY;
-				for (Pair<String, Integer> key : scores.keySet()) {
-					if (key.getSecond() != infRule) continue;
-					if (scores.get(key) > maxScore) {
-						maxScore = scores.get(key);
-						pred = new LogicY(key.getFirst(), key.getSecond(), null, null, null);
-					}
-				}
-				System.out.println(pred);
-			}
-			System.out.println();
-		}
-		System.out.println("Accuracy : = " + acc + " / " + sp.instanceList.size()
-				+ " = " + (acc/sp.instanceList.size()));
-		System.out.println("Strict Accuracy : = 1 - " + incorrect.size() + " / " +
-				total.size() + " = " + (1-1.0*incorrect.size()/total.size()));
-	}
-
 	public static void trainModel(String modelPath, SLProblem train)
 			throws Exception {
 		SLModel model = new SLModel();
@@ -208,7 +162,7 @@ public class LogicDriver {
 			for(int j=0; j<sp.goldStructureList.size(); ++j) {
 				LogicX prob = (LogicX) sp.instanceList.get(j);
 				LogicY gold = (LogicY) sp.goldStructureList.get(j);
-				LogicY bestLatent = infSolver.getLatentBestStructure(prob, gold, wv);
+				LogicY bestLatent = infSolver.getBestStructure(prob, gold, wv, true);
 				newProb.addExample(prob, bestLatent);
 			}
 			System.err.println("Learning SSVM");

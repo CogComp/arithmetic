@@ -87,7 +87,9 @@ public class LogicDriver {
 			}
 			if(gold.expr.infRuleType == pred.expr.infRuleType) {
 				infTypeAcc += 1;
-			} else {
+			}
+			if(gold.expr.infRuleType == pred.expr.infRuleType &&
+					incorrect.contains(prob.problemId)) {
 				System.out.println(prob.problemId+" : "+prob.text);
 				for(List<CoreLabel> tokens : prob.tokens) {
 					for(CoreLabel token : tokens) {
@@ -128,6 +130,7 @@ public class LogicDriver {
 		para.loadConfigFile(Params.spConfigFile);
 		para.MAX_NUM_ITER = 5;
 		Learner learner = LearnerFactory.getLearner(model.infSolver, fg, para);
+//		model.wv = learner.train(seed);
 		model.wv = latentSVMLearner(learner, train,
 				(LogicInfSolver) model.infSolver, model.wv, 5);
 		lm.setAllowNewFeatures(false);

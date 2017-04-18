@@ -144,17 +144,17 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		StanfordSchema num2 = x.schema.get(r.quantIndex);
 		StanfordSchema ques = x.questionSchema;
 		String label, mathOp;
-		for(int infRuleType=0; infRuleType<LogicNew.maxNumInferenceTypes; ++infRuleType) {
+		for(int infRuleType = 0; infRuleType< Logic.maxNumInferenceTypes; ++infRuleType) {
 			mathOp = null;
 			if(num1.math != -1 || num2.math != -1 || (isTopmost && ques.math != -1)) {
-				mathOp = LogicNew.getMathOp(x.tokens, num1, num2, ques);
+				mathOp = Logic.getMathOp(x.tokens, num1, num2, ques);
 			}
 			if(infRuleType == 2 && mathOp == null) continue;
 			if(infRuleType != 2 && mathOp != null) continue;
 			if(num1.rate.getFirst()>=0 || num2.rate.getFirst()>=0 || (isTopmost && ques.rate.getFirst()>=0)) {
 				if(infRuleType != 3) continue;
 			}
-			for(String key : LogicNew.getRelevantKeys(infRuleType, isTopmost, mathOp)) {
+			for(String key : Logic.getRelevantKeys(infRuleType, isTopmost, mathOp)) {
 				if(num1.rate.getFirst()>=0 || num2.rate.getFirst()>=0 || ques.rate.getFirst()>=0) {
 					if(key.startsWith("0") && num1.rate.getFirst() == -1) continue;
 					if(key.startsWith("1") && num2.rate.getFirst() == -1) continue;
@@ -162,7 +162,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				}
 				label = null;
 				if(infRuleType == 0) {
-					label = LogicNew.verb(
+					label = Logic.verb(
 							x.tokens.get(num1.sentId).get(num1.verb).lemma(),
 							x.tokens.get(num2.sentId).get(num2.verb).lemma(),
 							Tools.spanToLemmaList(x.tokens.get(num1.sentId), num1.unit),
@@ -170,13 +170,13 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 							key);
 				}
 				if(infRuleType == 1) {
-					label = LogicNew.partition(key);
+					label = Logic.partition(key);
 				}
 				if(infRuleType == 2) {
-					label = LogicNew.math(mathOp, key);
+					label = Logic.math(mathOp, key);
 				}
 				if(infRuleType == 3) {
-					label = LogicNew.unitDependency(key);
+					label = Logic.unitDependency(key);
 				}
 				if(label == null) continue;
 //				System.out.println("Infrule: "+infRuleType+" Label: "+label+
@@ -251,9 +251,9 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				List<Pair<Node, Double>> pairList = enumerateMerge(
 						x, l.getFirst(), r.getFirst(), wv, isTopmost);
 				for(Pair<Node, Double> pair : pairList) {
-//					System.out.println("Candidate: "+pair.getFirst());
 					if(!pair.getFirst().label.equals(expr.label)) continue;
 					if(pair.getFirst().infRuleType != expr.infRuleType) continue;
+					if(expr.key != null && !expr.key.equals(pair.getFirst().key)) continue;
 					if(expr.label.equals("DIV")) {
 						if(!(Tools.safeEquals(
 								pair.getFirst().children.get(0).getValue(),

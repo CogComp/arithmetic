@@ -114,14 +114,14 @@ public class LogicY implements IStructure {
 		}
 		if(mathToken != null) {
 			if((expr.label.equals("ADD") || expr.label.equals("SUB")) &&
-					(LogicNew.addTokens.contains(mathToken) ||
-							LogicNew.subTokens.contains(mathToken))) {
+					(Logic.addTokens.contains(mathToken) ||
+							Logic.subTokens.contains(mathToken))) {
 				expr.quantIndex = mathIndex == 2 ? quantIndex2 : quantIndex1;
 				expr.infRuleType = 2;
 				return;
 			}
 			if((expr.label.equals("MUL") || expr.label.equals("DIV")) &&
-					LogicNew.mulTokens.contains(mathToken)) {
+					Logic.mulTokens.contains(mathToken)) {
 				expr.quantIndex = mathIndex == 2 ? quantIndex2 : quantIndex1;
 				expr.infRuleType = 2;
 				return;
