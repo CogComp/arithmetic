@@ -93,6 +93,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		List<String> features = new ArrayList<>();
 		features.addAll(infFeatures);
 		features.addAll(keyFeatures);
+		features.addAll(FeatGen.getConjunctions(keyFeatures));
 		return features;
 	}
 
@@ -234,33 +235,15 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(key.equals("1")) {
 			features.addAll(getPairSchemaFeatures(x, num2, ques, "OBJ", "SUBJ"));
 		}
-		String wn;
+//		String wn;
 		if(key.equals("HYPO") || key.equals("HYPER") || key.equals("SIBLING")) {
-			wn = Tools.wordnetIndicator(
-					Tools.spanToLemmaList(x.tokens.get(num1.sentId), num1.unit),
-					Tools.spanToLemmaList(x.tokens.get(num2.sentId), num2.unit),
-					Tools.populatePos(x.tokens.get(num1.sentId), num1.unit),
-					Tools.populatePos(x.tokens.get(num2.sentId), num2.unit),
-					x.wordnetRelations);
-			if(wn != null) features.add(wn);
-		}
-		if(key.equals("QUES_1_SIBLING")) {
-			wn = Tools.wordnetIndicator(
-					Tools.spanToLemmaList(x.tokens.get(num1.sentId), num1.unit),
-					Tools.spanToLemmaList(x.tokens.get(x.questionSchema.sentId), x.questionSchema.unit),
-					Tools.populatePos(x.tokens.get(num1.sentId), num1.unit),
-					Tools.populatePos(x.tokens.get(x.questionSchema.sentId), x.questionSchema.unit),
-					x.wordnetRelations);
-			if(wn != null) features.add(wn);
-		}
-		if(key.equals("QUES_1_SIBLING")) {
-			wn = Tools.wordnetIndicator(
-					Tools.spanToLemmaList(x.tokens.get(num2.sentId), num2.unit),
-					Tools.spanToLemmaList(x.tokens.get(x.questionSchema.sentId), x.questionSchema.unit),
-					Tools.populatePos(x.tokens.get(num2.sentId), num2.unit),
-					Tools.populatePos(x.tokens.get(x.questionSchema.sentId), x.questionSchema.unit),
-					x.wordnetRelations);
-			if(wn != null) features.add(wn);
+//			wn = Tools.wordnetIndicator(
+//					Tools.spanToLemmaList(x.tokens.get(num1.sentId), num1.unit),
+//					Tools.spanToLemmaList(x.tokens.get(num2.sentId), num2.unit),
+//					Tools.populatePos(x.tokens.get(num1.sentId), num1.unit),
+//					Tools.populatePos(x.tokens.get(num2.sentId), num2.unit),
+//					x.wordnetRelations);
+//			if(wn != null) features.add(wn);
 		}
 		features.addAll(FeatGen.getConjunctions(features));
 		if(infRuleType == 3) {

@@ -9,7 +9,6 @@ import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
 import reader.Reader;
-import utils.Params;
 import utils.Tools;
 
 import java.util.*;
@@ -78,9 +77,16 @@ public class StanfordProblem {
 		}
 		schema = new ArrayList<>();
 		for(int i=0; i<quantities.size(); ++i) {
-			schema.add(new StanfordSchema(this, i));
+			StanfordSchema ss = new StanfordSchema(this, i);
+			if(ss.unit.equals(ss.rate)) {
+				ss.rate = new IntPair(-1, -1);
+			}
+			schema.add(ss);
 		}
 		questionSchema = getQuestionSchema(this);
+		if(questionSchema.unit.equals(questionSchema.rate)) {
+			questionSchema.rate = new IntPair(-1, -1);
+		}
 		wordnetRelations = getWordnetRelations();
 	}
 

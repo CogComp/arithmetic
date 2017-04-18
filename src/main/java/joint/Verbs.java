@@ -71,7 +71,8 @@ public class Verbs {
     public static String verbCategory(String verb) {
         List<String> state = Arrays.asList("be", "have", "own", "start");
         List<String> positive = Arrays.asList("get", "gain", "borrow", "receive", "increase");
-        List<String> negative = Arrays.asList("give", "lose", "lend", "eat", "decrease", "reduce", "spend", "share");
+        List<String> negative = Arrays.asList("give", "lose", "lend", "eat", "decrease", "reduce",
+                "spend", "share");
         Map<String, Double> map = new HashMap<>();
         map.put("STATE", 0.0);
         map.put("POSITIVE", 0.0);
@@ -103,7 +104,11 @@ public class Verbs {
         // Hard decision for now
         if(verbCluster.containsKey(verbLemma)) {
             if (verbLemma.equals("buy") || verbLemma.equals("purchase")) {
-                if (unit != null && unit.contains("$")) {
+                if (unit != null && (unit.contains("$") ||
+                        unit.contains("dollar") ||
+                        unit.contains("cent") ||
+                        unit.contains("dime") ||
+                        unit.contains("nickel"))) {
                     map.put("NEGATIVE", 1.0);
                 } else {
                     map.put("POSITIVE", 1.0);
@@ -111,7 +116,11 @@ public class Verbs {
                 return map;
             }
             if (verbLemma.equals("sell")) {
-                if (unit != null && unit.contains("$")) {
+                if (unit != null && (unit.contains("$") ||
+                        unit.contains("dollar") ||
+                        unit.contains("cent") ||
+                        unit.contains("dime") ||
+                        unit.contains("nickel"))) {
                     map.put("POSITIVE", 1.0);
                 } else {
                     map.put("NEGATIVE", 1.0);

@@ -283,50 +283,15 @@ public class Tools {
 		for(int i=span.getFirst(); i<span.getSecond(); ++i) {
 			if(tokens.get(i).lemma().equals("more") ||
 					tokens.get(i).lemma().equals("much") ||
-					tokens.get(i).lemma().equals("many")) {
+					tokens.get(i).lemma().equals("many") ||
+					tokens.get(i).word().equals("his") ||
+					(tokens.get(i).word().equals("her") &&
+							span.getSecond()-span.getFirst()>1)) {
 				continue;
 			}
 			lemmas.add(tokens.get(i).lemma());
 		}
 		return lemmas;
-	}
-
-	public static <K> void addToHighestMap(Map<K, Double> map, K key, Double val) {
-		if(!map.containsKey(key) || (map.get(key) < val)) {
-			map.put(key, val);
-		}
-	}
-
-	public static List<String> populatePos(List<String> seq,
-										   TextAnnotation ta,
-										   List<Constituent> posTags,
-										   List<String> lemmas) {
-		List<String> seqPos = new ArrayList<>();
-		boolean flag;
-		for(String item : seq) {
-			flag = false;
-			for (int i=0; i<ta.size(); ++i) {
-				if (ta.getToken(i).equalsIgnoreCase(item)) {
-					seqPos.add(posTags.get(i).getLabel());
-					flag = true;
-					break;
-				}
-			}
-			if (flag) continue;
-			for (int i=0; i<lemmas.size(); ++i) {
-				if (lemmas.get(i).equalsIgnoreCase(item)) {
-					seqPos.add(posTags.get(i).getLabel());
-					flag = true;
-					break;
-				}
-			}
-			if (flag) continue;
-			seqPos.add("UNK");
-		}
-		if(seqPos.size() != seq.size()) {
-			System.out.println("Problem in populatePos");
-		}
-		return seqPos;
 	}
 
 	public static List<String> populatePos(List<CoreLabel> tokens, IntPair span) {

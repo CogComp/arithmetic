@@ -14,7 +14,7 @@ public class Logic {
     public static List<String> addTokens = Arrays.asList(
             "taller", "more", "older", "higher", "faster", "heavier", "farther", "longer");
     public static List<String> subTokens = Arrays.asList(
-            "shorter", "less", "younger", "slower", "lighter");
+            "shorter", "less", "younger", "slower", "lighter", "fewer");
     public static List<String> mulTokens = Arrays.asList(
             "times", "twice", "thrice", "double", "triple");
 
