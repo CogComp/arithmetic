@@ -1099,7 +1099,7 @@
   },
   {
     "iIndex": 65,
-    "sQuestion": "Tom found 7.0 seashells but 4.0 were broken . How many unbroken seashells did Tom find ?",
+    "sQuestion": "Tom found 7.0 seashells, but 4.0 were broken . How many unbroken seashells did Tom find ?",
     "quantities": [
       {
         "start": 10,
@@ -10660,14 +10660,15 @@
       }
     ],
     "lAlignments": [
+      2,
       0,
       1
     ],
     "lEquations": [
-      "X=(4.0+5.0)"
+      "X=(10.0-(4.0+5.0))"
     ],
     "lSolutions": [
-      9.0
+      1.0
     ]
   },
   {
@@ -19066,7 +19067,7 @@
   },
   {
     "iIndex": 1177,
-    "sQuestion": " Mike had 16.0 video games but 8.0 of them weren't working. If he wanted to sell the working games for $7.0 each, how much money could he earn? ",
+    "sQuestion": " Mike had 16.0 video games, but 8.0 of them weren't working. If he wanted to sell the working games for $7.0 each, how much money could he earn? ",
     "quantities": [
       {
         "start": 10,

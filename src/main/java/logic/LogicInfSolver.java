@@ -5,6 +5,8 @@ import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 import joint.Logic;
+import joint.Verbs;
+import structure.StanfordSchema;
 import utils.Tools;
 
 import java.io.Serializable;
@@ -44,7 +46,6 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		LogicY best = null;
 		String label;
 		for(String key : Logic.getRelevantKeys(x.infType, x.isTopmost, x.mathOp)) {
-//			System.out.println(x.tokens+"\n"+x.infType+" "+x.isTopmost+" "+x.mathOp);
 			label = null;
 			if(x.infType == 0) {
 				label = Logic.verb(
@@ -64,14 +65,38 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				label = Logic.unitDependency(key);
 			}
 			if(label == null) continue;
-//			System.out.println(label + " :: " + gold);
-			if(labelCompletion && !label.equals(gold.label)) continue;
+			if(labelCompletion) {
+				if(!label.startsWith("SUB") && !label.equals(gold.label)) {
+					continue;
+				}
+				if(label.startsWith("SUB") && !(label.substring(0, 3).equals(
+						gold.label.substring(0, 3)))) {
+					continue;
+				}
+			}
 			LogicY y = new LogicY(label, key);
 			double score = weight.dotProduct(featGen.getFeatureVector(x, y));
 			if (bestScore < score) {
 				best = y;
 				bestScore = score;
 			}
+		}
+		if(best == null) {
+			System.out.println(x.tokens);
+			System.out.println(x.quantIndex1+" "+x.quantIndex2);
+			System.out.println(x.infType+" "+x.isTopmost+" "+x.mathOp);
+			if(gold != null) System.out.println("Gold:"+gold.label);
+			System.out.println();
+			for(StanfordSchema schema : x.schema) {
+				System.out.println(schema);
+				System.out.println("VerbCat:"+ Verbs.verbClassify(
+						x.tokens.get(schema.sentId).get(schema.verb).lemma(),
+						Tools.spanToLemmaList(x.tokens.get(schema.sentId), schema.unit)));
+			}
+			System.out.println(x.questionSchema);
+			System.out.println();
+			System.out.println("Quantities : "+x.quantities);
+
 		}
 		return best;
 	}

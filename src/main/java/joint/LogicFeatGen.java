@@ -86,22 +86,8 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 													  boolean isTopmost) {
 		List<String> infFeatures = new ArrayList<>();
 		infFeatures.addAll(getInfTypeFeatures(x, num1, num2, ques, infRuleType, isTopmost));
-		List<String> keyFeaures = new ArrayList<>();
-		if(infRuleType == 0) {
-			keyFeaures.addAll(getVerbFeatures(x, num1, num2, ques, key, isTopmost));
-		}
-		if(infRuleType == 1) {
-			keyFeaures.addAll(getPartitionFeatures(x, num1, num2, ques, key, isTopmost));
-		}
-		if(infRuleType == 2) {
-			keyFeaures.addAll(getMathFeatures(x, num1, num2, ques, key, isTopmost));
-		}
-		if(infRuleType == 3) {
-			keyFeaures.addAll(getUnitDepFeatures(x, num1, num2, ques, key, isTopmost));
-		}
 
 		List<String> features = new ArrayList<>();
-		features.addAll(keyFeaures);
 		features.addAll(infFeatures);
 		return features;
 	}
@@ -137,161 +123,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				"InfRule:"+infRuleType);
 	}
 
-	public static List<String> getUnitDepFeatures(LogicX x,
-												  StanfordSchema num1,
-												  StanfordSchema num2,
-												  StanfordSchema ques,
-												  String key,
-												  boolean isTopmost) {
-		List<String> features = new ArrayList<>();
-		features.add(key);
-		if(key.equals("0_NUM") || key.equals("1_NUM")) {
-			features.addAll(getPairSchemaFeatures(x, num1, num2, "UNIT", "UNIT"));
-		}
-		if(key.equals("0_DEN")) {
-			features.addAll(getPairSchemaFeatures(x, num1, num2, "RATE", "UNIT"));
-		}
-		if(key.equals("1_DEN")) {
-			features.addAll(getPairSchemaFeatures(x, num1, num2, "UNIT", "RATE"));
-		}
-		if(key.equals("QUES")) {
-			features.addAll(getPairSchemaFeatures(x, num1, ques, "UNIT", "UNIT"));
-		}
-		if(key.equals("QUES_REV")) {
-			features.addAll(getPairSchemaFeatures(x, num2, ques, "UNIT", "UNIT"));
-		}
-		return features;
-	}
 
-	public static List<String> getMathFeatures(LogicX x,
-											   StanfordSchema num1,
-											   StanfordSchema num2,
-											   StanfordSchema ques,
-											   String key,
-											   boolean isTopmost) {
-		List<String> features = new ArrayList<>();
-		features.add(key);
-		if(key.equals("0_0")) {
-			features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "SUBJ"));
-		}
-		if(key.equals("0_1")) {
-			features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "OBJ"));
-		}
-		if(key.equals("1_0")) {
-			features.addAll(getPairSchemaFeatures(x, num1, num2, "OBJ", "SUBJ"));
-		}
-		if(key.equals("0")) {
-			features.addAll(getPairSchemaFeatures(x, num1, ques, "SUBJ", "SUBJ"));
-		}
-		if(key.equals("1")) {
-			features.addAll(getPairSchemaFeatures(x, num2, ques, "OBJ", "SUBJ"));
-		}
-		return features;
-	}
-
-	public static List<String> getPartitionFeatures(LogicX x,
-													StanfordSchema num1,
-													StanfordSchema num2,
-													StanfordSchema ques,
-													String key,
-													boolean isTopmost) {
-		List<String> features = new ArrayList<>();
-		features.add(key);
-		String wn;
-		if(key.equals("HYPO") || key.equals("HYPER") || key.equals("SIBLING")) {
-			wn = Tools.wordnetIndicator(
-					Tools.spanToLemmaList(x.tokens.get(num1.sentId), num1.unit),
-					Tools.spanToLemmaList(x.tokens.get(num2.sentId), num2.unit),
-					Tools.populatePos(x.tokens.get(num1.sentId), num1.unit),
-					Tools.populatePos(x.tokens.get(num2.sentId), num2.unit),
-					x.wordnetRelations);
-			if(wn != null) features.add(wn);
-		}
-		if(key.equals("QUES_1_SIBLING")) {
-			wn = Tools.wordnetIndicator(
-					Tools.spanToLemmaList(x.tokens.get(num1.sentId), num1.unit),
-					Tools.spanToLemmaList(x.tokens.get(ques.sentId), ques.unit),
-					Tools.populatePos(x.tokens.get(num1.sentId), num1.unit),
-					Tools.populatePos(x.tokens.get(ques.sentId), ques.unit),
-					x.wordnetRelations);
-			if(wn != null) features.add(wn);
-		}
-		if(key.equals("QUES_1_SIBLING")) {
-			wn = Tools.wordnetIndicator(
-					Tools.spanToLemmaList(x.tokens.get(num2.sentId), num2.unit),
-					Tools.spanToLemmaList(x.tokens.get(ques.sentId), ques.unit),
-					Tools.populatePos(x.tokens.get(num2.sentId), num2.unit),
-					Tools.populatePos(x.tokens.get(ques.sentId), ques.unit),
-					x.wordnetRelations);
-			if(wn != null) features.add(wn);
-		}
-		return features;
-	}
-
-	public static List<String> getVerbFeatures(LogicX x,
-											   StanfordSchema num1,
-											   StanfordSchema num2,
-											   StanfordSchema ques,
-											   String key,
-											   boolean isTopmost) {
-		List<String> features = new ArrayList<>();
-		features.add(key);
-		if(key.equals("0_0")) {
-			features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "SUBJ"));
-		}
-		if(key.equals("0_1")) {
-			features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "OBJ"));
-		}
-		if(key.equals("1_0")) {
-			features.addAll(getPairSchemaFeatures(x, num1, num2, "OBJ", "SUBJ"));
-		}
-		return features;
-	}
-
-	// Mode has to be one of "SUBJ", "OBJ", "UNIT", "RATE"
-	// Note that this is a symmetric similarity function, lets keep it that way
-	public static List<String> getPairSchemaFeatures(
-			LogicX x, StanfordSchema schema1, StanfordSchema schema2, String mode1, String mode2) {
-		List<String> features = new ArrayList<>();
-		List<String> phrase1 = getPhraseByMode(x.tokens, schema1, mode1);
-		List<String> phrase2 = getPhraseByMode(x.tokens, schema2, mode2);
-		double sim = Tools.jaccardSim(phrase1, phrase2);
-//		if(sim > 0.5) features.add("SimMoreThanHalfPhraseMatch");
-		if(sim > 0.9) features.add("SimExactPhraseMatch");
-
-		double entail = Tools.jaccardEntail(phrase1, phrase2);
-//		if(entail > 0.5) features.add("EntailMoreThanHalfPhraseMatch");
-//		if(entail > 0.9) features.add("EntailExactPhraseMatch");
-//		if(entail < 0.2) features.add("EntailAbsolutelyNoMatch");
-
-		StanfordSchema emptyUnitSchema = null;
-		List<String> phraseOther = null;
-		if(phrase1.size() == 0 && mode1.equals("UNIT")) {
-			emptyUnitSchema = schema1;
-			phraseOther = phrase2;
-		}
-		if(phrase2.size() == 0 && mode2.equals("UNIT")) {
-			emptyUnitSchema = schema2;
-			phraseOther = phrase1;
-		}
-		// If unit was not extracted, copy last unit over
-		if(emptyUnitSchema != null) {
-//			features.add("OneOfThemEmpty");
-			if(emptyUnitSchema.qs != null && emptyUnitSchema.quantId >= 1) {
-				StanfordSchema prevSchema = x.schema.get(emptyUnitSchema.quantId-1);
-				sim = Tools.jaccardSim(Tools.spanToLemmaList(
-						x.tokens.get(prevSchema.sentId),
-						prevSchema.unit), phraseOther);
-//				if(sim > 0.5) features.add("SimMoreThanHalfPhraseMatch");
-				if(sim > 0.9) features.add("SimExactPhraseMatch");
-			}
-		}
-		if(sim < 0.2) features.add("SimAbsolutelyNoMatch");
-//		features.addAll(FeatGen.getFeaturesConjWithLabels(features,
-//				(mode1.compareTo(mode2)>=0?mode1:mode2)+"_"+
-//						(mode1.compareTo(mode2)>=0?mode2:mode1)));
-		return features;
-	}
 
 	public static List<String> getSingleSchemaFeatures(
 			LogicX x, StanfordSchema schema, boolean isTopmost) {
@@ -315,23 +147,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		return features;
 	}
 
-	public static List<String> getPhraseByMode(List<List<CoreLabel>> tokens,
-											   StanfordSchema schema,
-											   String mode) {
-		if(mode.equals("SUBJ")) {
-			return Tools.spanToLemmaList(tokens.get(schema.sentId), schema.subject);
-		}
-		if(mode.equals("OBJ")) {
-			return Tools.spanToLemmaList(tokens.get(schema.sentId), schema.object);
-		}
-		if(mode.equals("UNIT")) {
-			return Tools.spanToLemmaList(tokens.get(schema.sentId), schema.unit);
-		}
-		if(mode.equals("RATE")) {
-			return Tools.spanToLemmaList(tokens.get(schema.sentId), schema.rate);
-		}
-		return new ArrayList<>();
-	}
+
 
 
 

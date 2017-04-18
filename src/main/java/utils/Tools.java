@@ -364,7 +364,7 @@ public class Tools {
 		List<String> colors = Arrays.asList("white", "black", "red", "green", "yellow", "brown", "blue", "gray");
 		for (int i=0; i<tokens1.size(); ++i) {
 			for (int j=0; j<tokens2.size(); ++j) {
-				if (colors.contains(tokens1.get(i)) && colors.contains(tokens1.get(j)) &&
+				if (colors.contains(tokens1.get(i)) && colors.contains(tokens2.get(j)) &&
 						!tokens1.get(i).equalsIgnoreCase(tokens2.get(j))) {
 					return "Siblings";
 				}

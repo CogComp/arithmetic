@@ -11,12 +11,14 @@ import edu.illinois.cs.cogcomp.sl.learner.LearnerFactory;
 import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 import joint.Logic;
+import joint.Verbs;
 import run.Annotations;
 import structure.Node;
 import structure.StanfordProblem;
 import structure.StanfordSchema;
 import utils.Folds;
 import utils.Params;
+import utils.Tools;
 
 import java.util.*;
 
@@ -57,40 +59,63 @@ public class LogicDriver {
 			throws Exception{
 		SLProblem problem = new SLProblem();
 		for(StanfordProblem prob : problemList){
+			if(prob.quantities.size() != 2) continue;
 			joint.LogicX x = new joint.LogicX(prob);
 			joint.LogicY y = new joint.LogicY(x, prob.expr,
 					rateAnnotations.containsKey(prob.id)?
 							rateAnnotations.get(prob.id):new ArrayList<Integer>());
 			List<Node> nodes = prob.expr.getAllSubNodes();
 			Node root = nodes.get(0); // Using the fact that getAllSubnodes uses preorder traversal
+			int quantLeft = root.children.get(0).quantIndex < root.children.get(1).quantIndex ?
+							root.children.get(0).quantIndex :
+							root.children.get(1).quantIndex;
+			int quantRight = root.children.get(0).quantIndex < root.children.get(1).quantIndex ?
+							root.children.get(1).quantIndex :
+							root.children.get(0).quantIndex;
+			String label = root.label;
+			if(root.children.get(0).quantIndex >= root.children.get(1).quantIndex &&
+					(root.label.equals("SUB") || root.label.equals("DIV"))) {
+				label += "_REV";
+			}
 			LogicX logicX = new LogicX(
 					prob,
-					root.children.get(0).quantIndex,
-					root.children.get(1).quantIndex,
+					quantLeft,
+					quantRight,
 					Logic.getMathOp(
 							x.tokens,
-							x.schema.get(root.children.get(0).quantIndex),
-							x.schema.get(root.children.get(1).quantIndex),
+							x.schema.get(quantLeft),
+							x.schema.get(quantRight),
 							x.questionSchema),
 					root.infRuleType,
 					true);
-			LogicY logicY = new LogicY(root.label, null);
+			LogicY logicY = new LogicY(label, null);
 			problem.addExample(logicX, logicY);
 			for(int i=1; i<nodes.size(); ++i) {
 				Node node = nodes.get(i);
 				if(node.children.size() == 0) continue;
+				quantLeft = node.children.get(0).quantIndex < node.children.get(1).quantIndex ?
+						node.children.get(0).quantIndex :
+						node.children.get(1).quantIndex;
+				quantRight = node.children.get(0).quantIndex < node.children.get(1).quantIndex ?
+						node.children.get(1).quantIndex :
+						node.children.get(0).quantIndex;
 				logicX = new LogicX(
 						prob,
-						node.children.get(0).quantIndex,
-						node.children.get(1).quantIndex,
+						quantLeft,
+						quantRight,
 						Logic.getMathOp(
 								x.tokens,
-								x.schema.get(node.children.get(0).quantIndex),
-								x.schema.get(node.children.get(1).quantIndex),
+								x.schema.get(quantLeft),
+								x.schema.get(quantRight),
 								x.questionSchema),
 						node.infRuleType,
 						false);
-				logicY = new LogicY(node.label, null);
+				label = node.label;
+				if(node.children.get(0).quantIndex >= node.children.get(1).quantIndex &&
+						(node.label.equals("SUB") || node.label.equals("DIV"))) {
+					label += "_REV";
+				}
+				logicY = new LogicY(label, null);
 				problem.addExample(logicX, logicY);
 			}
 		}
@@ -116,8 +141,13 @@ public class LogicDriver {
 				System.out.println();
 				for(StanfordSchema schema : prob.schema) {
 					System.out.println(schema);
+					System.out.println("VerbCat:"+ Tools.getKeyForMaxValue(Verbs.verbClassify(
+							prob.tokens.get(schema.sentId).get(schema.verb).lemma(),
+							Tools.spanToLemmaList(prob.tokens.get(schema.sentId), schema.unit))));
 				}
 				System.out.println(prob.questionSchema);
+				System.out.println();
+				System.out.println("Wordnet: "+Arrays.asList(prob.wordnetRelations));
 				System.out.println();
 				System.out.println("Quantities : "+prob.quantities);
 				System.out.println("Quant of Interest: "+prob.quantIndex1+" "+prob.quantIndex2);

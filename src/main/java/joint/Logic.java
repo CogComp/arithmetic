@@ -1,6 +1,8 @@
 package joint;
 
 import edu.stanford.nlp.ling.CoreLabel;
+import reader.Reader;
+import structure.StanfordProblem;
 import structure.StanfordSchema;
 import utils.Tools;
 import java.util.*;
@@ -88,9 +90,11 @@ public class Logic {
         }
         if(key.equals("0_1") || key.equals("1_0")) {
             if(op.startsWith("SUB")) return "ADD";
-            if(op.equals("ADD")) {
-                if(vc1.equals("STATE")) return "SUB_REV";
-                else return "SUB";
+            if(op.equals("ADD") && key.equals("0_1")) {
+                return "SUB";
+            }
+            if(op.equals("ADD") && key.equals("1_0")) {
+                return "SUB_REV";
             }
         }
         return op;
@@ -147,6 +151,138 @@ public class Logic {
             return order+"MUL";
         }
         return null;
+    }
+
+    public static boolean irrelevance(List<StanfordSchema> schemas,
+                                      int quantIndex,
+                                      List<List<CoreLabel>> tokens) {
+        double maxSim = 0.0, minSim=1.0;
+        int n = schemas.size() - 1;
+        if(n == 2) return false;
+        StanfordSchema schema = schemas.get(quantIndex);
+        StanfordSchema quesSchema = schemas.get(n);
+        if(Tools.safeEquals(schema.qs.val, 1.0)) {
+            int tokenId = Tools.getTokenIdFromCharOffset(
+                    tokens.get(schema.sentId), schema.qs.start);
+            if(tokenId >= 1 && (tokens.get(schema.sentId).get(tokenId-1).lemma().equals("each") ||
+                    tokens.get(schema.sentId).get(tokenId-1).lemma().equals("every"))) {
+                return true;
+            }
+            if(schema.sentId == quesSchema.sentId) {
+                return true;
+            }
+            Set<Integer> quantTokenIdsInSameSentence = new HashSet<>();
+            for(StanfordSchema s : schemas) {
+                if(s.qs != null && Tools.getTokenIdFromCharOffset(
+                        tokens.get(schema.sentId), s.qs.start) != -1) {
+                    quantTokenIdsInSameSentence.add(
+                            Tools.getTokenIdFromCharOffset(
+                                    tokens.get(schema.sentId), s.qs.start));
+                }
+            }
+            for(int i=tokenId+1; i<tokens.get(schema.sentId).size(); ++i) {
+                if (tokens.get(schema.sentId).get(i).lemma().equals("if") ||
+                        tokens.get(schema.sentId).get(i).lemma().equals(",") ||
+                        tokens.get(schema.sentId).get(i).lemma().equals(";") ||
+                        tokens.get(schema.sentId).get(i).lemma().equals("and")) {
+                    break;
+                }
+                if (quantTokenIdsInSameSentence.contains(i)) {
+                    return true;
+                }
+            }
+            for(int i=tokenId-1; i>=0; --i) {
+                if (tokens.get(schema.sentId).get(i).lemma().equals("if") ||
+                        tokens.get(schema.sentId).get(i).lemma().equals(",") ||
+                        tokens.get(schema.sentId).get(i).lemma().equals(";") ||
+                        tokens.get(schema.sentId).get(i).lemma().equals("and")) {
+                    break;
+                }
+                if (quantTokenIdsInSameSentence.contains(i)) {
+                    return true;
+                }
+            }
+        }
+        if(schema.unit == null || schema.unit.getFirst() == schema.unit.getSecond()) {
+            return false;
+        }
+        double simIndex = 0.0;
+        for(int i=0; i<n; ++i) {
+            StanfordSchema schema1 = schemas.get(i);
+            double sim = Tools.jaccardSim(
+                    Tools.spanToLemmaList(tokens.get(schema1.sentId), schema1.unit),
+                    Tools.spanToLemmaList(tokens.get(quesSchema.sentId), quesSchema.unit));
+            if (tokens.get(quesSchema.sentId).get(quesSchema.verb).lemma().equals("cost") &&
+                    (Tools.spanToLemmaList(tokens.get(schema1.sentId), schema1.unit).contains("dollar")
+                            ||Tools.spanToLemmaList(tokens.get(schema1.sentId), schema1.unit).contains("cent")
+                            ||Tools.spanToLemmaList(tokens.get(schema1.sentId), schema1.unit).contains("buck")
+                            ||Tools.spanToLemmaList(tokens.get(schema1.sentId), schema1.unit).contains("$"))) {
+                sim = 1.0;
+            }
+            if(i==quantIndex) {
+                simIndex = sim;
+            } else {
+                if (sim > maxSim) {
+                    maxSim = sim;
+                }
+                if (sim < minSim) {
+                    minSim = sim;
+                }
+            }
+        }
+        if(minSim - simIndex > 0.5) {
+            boolean foundInRate = false;
+            for(int i=0; i<n; ++i) {
+                if(i==quantIndex) continue;
+                StanfordSchema schema1 = schemas.get(i);
+                if(Tools.jaccardSim(Tools.spanToLemmaList(tokens.get(schema1.sentId), schema1.rate),
+                        Tools.spanToLemmaList(tokens.get(schema.sentId), schema.unit))>0.5) {
+                    foundInRate = true;
+                }
+            }
+            if(!foundInRate) return true;
+        }
+        return false;
+    }
+
+    public static void testIrrelevanceWithDefaultExtraction(String dataset) throws Exception {
+        Set<Integer> incorrect = new HashSet<>();
+        Set<Integer> total = new HashSet<>();
+        int t = 0;
+        List<StanfordProblem> probs = Reader.readStanfordProblemsFromJson(dataset);
+        double acc = 0.0;
+        for (StanfordProblem prob : probs) {
+            total.add(prob.id);
+            for(int i=0; i<prob.quantities.size(); ++i) {
+                t++;
+                String gold = prob.expr.findRelevanceLabel(i);
+                List<StanfordSchema> schemas = new ArrayList<>();
+                schemas.addAll(prob.schema);
+                schemas.add(prob.questionSchema);
+                boolean pred = irrelevance(schemas, i, prob.tokens);
+                if((gold.equals("REL") && !pred) || (gold.equals("IRR") && pred)) {
+                    acc += 1.0;
+                } else {
+                    incorrect.add(prob.id);
+                    System.out.println(prob.id+" : "+prob.question);
+                    System.out.println();
+                    for(StanfordSchema schema : prob.schema) {
+                        System.out.println(schema);
+                    }
+                    System.out.println(prob.questionSchema);
+                    System.out.println();
+                    System.out.println("Quantities : "+prob.quantities);
+                    System.out.println("Quant of Interest: "+i);
+                    System.out.println();
+                    System.out.println("Gold : "+gold);
+                    System.out.println("Pred : "+pred);
+                    System.out.println();
+                }
+            }
+        }
+        System.out.println("Accuracy : = " + acc + " / " + t + " = " + (acc/t));
+        System.out.println("Strict Accuracy : = 1 - " + incorrect.size() + " / " +
+                total.size() + " = " + (1-1.0*incorrect.size()/total.size()));
     }
 
 }

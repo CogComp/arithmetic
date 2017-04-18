@@ -1,6 +1,5 @@
 package joint;
 
-import joint.LogicInput;
 import utils.Params;
 import utils.Tools;
 
@@ -72,28 +71,27 @@ public class Verbs {
     public static String verbCategory(String verb) {
         List<String> state = Arrays.asList("be", "have", "own");
         List<String> positive = Arrays.asList("get", "gain", "borrow", "receive", "increase");
-        List<String> negative = Arrays.asList("give", "lose", "lend", "eat", "decrease", "reduce");
+        List<String> negative = Arrays.asList("give", "lose", "lend", "eat", "decrease", "reduce", "spend");
         Map<String, Double> map = new HashMap<>();
         map.put("STATE", 0.0);
         map.put("POSITIVE", 0.0);
         map.put("NEGATIVE", 0.0);
-        map.put("STATE", Collections.max(Arrays.asList(
-                getVectorSim(verb, state.get(0)),
-                getVectorSim(verb, state.get(1)),
-                getVectorSim(verb, state.get(2)))));
-        map.put("POSITIVE", Collections.max(Arrays.asList(
-                getVectorSim(verb, positive.get(0)),
-                getVectorSim(verb, positive.get(1)),
-                getVectorSim(verb, positive.get(2)))));
-        map.put("NEGATIVE", Collections.max(Arrays.asList(
-                getVectorSim(verb, negative.get(0)),
-                getVectorSim(verb, negative.get(1)),
-                getVectorSim(verb, negative.get(2)))));
+        for(String s : state) {
+            if(getVectorSim(verb, s) > map.get("STATE")) {
+                map.put("STATE", getVectorSim(verb, s));
+            }
+        }
+        for(String s : positive) {
+            if(getVectorSim(verb, s) > map.get("POSITIVE")) {
+                map.put("POSITIVE", getVectorSim(verb, s));
+            }
+        }
+        for(String s : negative) {
+            if(getVectorSim(verb, s) > map.get("NEGATIVE")) {
+                map.put("NEGATIVE", getVectorSim(verb, s));
+            }
+        }
         return Tools.getKeyForMaxValue(map);
-    }
-
-    public static Map<String, Double> verbClassify(LogicInput num) {
-        return verbClassify(num.verbLemma, num.unit);
     }
 
     public static Map<String, Double> verbClassify(String verbLemma, List<String> unit) {
@@ -168,10 +166,4 @@ public class Verbs {
         return vectors;
     }
 
-    public static void main(String args[]) {
-        LogicInput inp = new LogicInput(0);
-        inp.verbLemma = "have";
-        inp.unit = Arrays.asList("");
-        System.out.println(Arrays.asList(verbClassify(inp)));
-    }
 }
