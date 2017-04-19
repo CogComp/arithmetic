@@ -25,7 +25,7 @@ public class LogicX implements IInstance {
 	public StanfordSchema questionSchema;
 	public Map<Pair<String, String>, String> wordnetRelations;
 	public StanfordSchema num1, num2;
-	public int infType;
+	public String infType;
 	public boolean isTopmost;
 	public String mathOp;
 
@@ -34,7 +34,7 @@ public class LogicX implements IInstance {
 	public IntPair questionSpan;
 
 	public LogicX(StanfordProblem prob, int quantIndex1, int quantIndex2,
-				  String mathOp, int infType, boolean isTopmost) {
+				  String mathOp, String infType, boolean isTopmost) {
 		this.problemId = prob.id;
 		this.quantIndex1 = quantIndex1;
 		this.quantIndex2 = quantIndex2;

@@ -95,7 +95,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 											  StanfordSchema num1,
 											  StanfordSchema num2,
 											  StanfordSchema ques,
-											  int infRuleType,
+											  String infRuleType,
 											  String key,
 											  boolean isTopmost) {
 		List<String> features = new ArrayList<>();
@@ -142,7 +142,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 			}
 		}
 		features.addAll(FeatGen.getConjunctions(features));
-		if(infRuleType == 3) {
+		if(infRuleType.startsWith("Rate")) {
 			if(key.startsWith("0")) {
 				features.addAll(FeatGen.getFeaturesConjWithLabels(
 						getSingleKeyFeatures(x, num1, isTopmost), "KEY"));

@@ -9,6 +9,6 @@ public class KushmanFormat {
 	public List<Integer> lAlignments;
 	public List<String> lEquations;
 	public List<Double> lSolutions;
-	public int infType;
+	public String infType;
 	public String key;
 }

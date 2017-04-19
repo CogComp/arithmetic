@@ -69,7 +69,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 													  StanfordSchema num1,
 													  StanfordSchema num2,
 													  StanfordSchema ques,
-													  int infRuleType,
+													  String infRuleType,
 													  String key,
 													  boolean isTopmost) {
 		List<String> features = getCombinationFeatures(
@@ -81,7 +81,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 													  StanfordSchema num1,
 													  StanfordSchema num2,
 													  StanfordSchema ques,
-													  int infRuleType,
+													  String infRuleType,
 													  String key,
 													  boolean isTopmost) {
 		List<String> infFeatures = new ArrayList<>();
@@ -94,7 +94,6 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		List<String> features = new ArrayList<>();
 		features.addAll(infFeatures);
 		features.addAll(keyFeatures);
-//		features.addAll(FeatGen.getConjunctions(keyFeatures));
 		return features;
 	}
 
@@ -102,18 +101,22 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 												  StanfordSchema num1,
 												  StanfordSchema num2,
 												  StanfordSchema ques,
-												  int infRuleType,
+												  String infRuleType,
 												  boolean isTopmost) {
 		List<String> features = new ArrayList<>();
-		features.addAll(getSingleInfTypeFeatures(x, num1, isTopmost));
-		features.addAll(getSingleInfTypeFeatures(x, num2, isTopmost));
-		features.addAll(getSingleInfTypeFeatures(x, ques, isTopmost));
-
-		if(!features.contains("RateDetected")) {
-			features.add("RateNotDetected");
-		}
-		if(!features.contains("MathDetected")) {
-			features.add("MathNotDetected");
+		if(infRuleType.startsWith("Rate")) {
+			if(infRuleType.startsWith("Rate0")) {
+				features.addAll(getRateFeatures(x, num1));
+				features.addAll(getNeighborhoodFeatures(x, num1));
+			}
+			if(infRuleType.startsWith("Rate1")) {
+				features.addAll(getRateFeatures(x, num2));
+				features.addAll(getNeighborhoodFeatures(x, num2));
+			}
+			if(infRuleType.startsWith("RateQues")) {
+				features.addAll(getRateFeatures(x, ques));
+				features.addAll(getNeighborhoodFeatures(x, ques));
+			}
 		}
 		if(x.tokens.get(num1.sentId).get(num1.verb).lemma().equals(
 				x.tokens.get(num2.sentId).get(num2.verb).lemma())) {
@@ -129,29 +132,6 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				"InfRule:"+infRuleType);
 	}
 
-
-
-	public static List<String> getSingleInfTypeFeatures(
-			LogicX x, StanfordSchema schema, boolean isTopmost) {
-		List<String> features = new ArrayList<>();
-		List<CoreLabel> tokens = x.tokens.get(schema.sentId);
-		if(isTopmost && schema.qs == null) {
-			for (int i = x.questionSpan.getFirst();
-				 i < x.questionSpan.getSecond();
-				 ++i) {
-				if (!tokens.get(i).tag().startsWith("N")) {
-					features.add("QuesUnigram_" + tokens.get(i).lemma());
-				}
-			}
-		}
-		if(schema.rate != null && schema.rate.getFirst() >= 0) {
-			features.add("RateDetected");
-		}
-		if(schema.math != -1) {
-			features.add("MathDetected");
-		}
-		return features;
-	}
 
 	public static List<String> getPhraseByMode(List<List<CoreLabel>> tokens,
 											   StanfordSchema schema,
@@ -202,42 +182,49 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 											  StanfordSchema num1,
 											  StanfordSchema num2,
 											  StanfordSchema ques,
-											  int infRuleType,
+											  String infRuleType,
 											  String key,
 											  boolean isTopmost) {
 		List<String> features = new ArrayList<>();
 		features.add(infRuleType+"_"+key);
-		if(key.equals("0_NUM") || key.equals("1_NUM")) {
-			features.addAll(getPairSchemaFeatures(x, num1, num2, "UNIT", "UNIT"));
+
+		if(infRuleType.startsWith("Verb") || infRuleType.startsWith("Math")) {
+			if(key.equals("0_0")) {
+				features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "SUBJ"));
+			}
+			if(key.equals("0_1")) {
+				features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "OBJ"));
+			}
+			if(key.equals("1_0")) {
+				features.addAll(getPairSchemaFeatures(x, num1, num2, "OBJ", "SUBJ"));
+			}
+			if(key.equals("QUES")) {
+				features.addAll(getPairSchemaFeatures(x, num1, ques, "SUBJ", "SUBJ"));
+			}
+			if(key.equals("QUES_REV")) {
+				features.addAll(getPairSchemaFeatures(x, num2, ques, "OBJ", "SUBJ"));
+			}
 		}
-		if(key.equals("0_DEN")) {
-			features.addAll(getPairSchemaFeatures(x, num1, num2, "RATE", "UNIT"));
+		if(infRuleType.startsWith("Rate")) {
+			if(key.equals("0_0")) {
+				features.addAll(getPairSchemaFeatures(x, num1, num2, "UNIT", "UNIT"));
+			}
+			if(key.equals("0_1")) {
+				features.addAll(getPairSchemaFeatures(x, num1, num2, "UNIT", "RATE"));
+			}
+			if(key.equals("1_0")) {
+				features.addAll(getPairSchemaFeatures(x, num1, num2, "RATE", "UNIT"));
+			}
+			if(key.equals("QUES")) {
+				features.addAll(getPairSchemaFeatures(x, num1, ques, "UNIT", "UNIT"));
+				features.addAll(getPairSchemaFeatures(x, num2, ques, "UNIT", "RATE"));
+			}
+			if(key.equals("QUES_REV")) {
+				features.addAll(getPairSchemaFeatures(x, num2, ques, "UNIT", "UNIT"));
+				features.addAll(getPairSchemaFeatures(x, num1, ques, "UNIT", "RATE"));
+			}
 		}
-		if(key.equals("1_DEN")) {
-			features.addAll(getPairSchemaFeatures(x, num1, num2, "UNIT", "RATE"));
-		}
-		if(key.equals("QUES")) {
-			features.addAll(getPairSchemaFeatures(x, num1, ques, "UNIT", "UNIT"));
-		}
-		if(key.equals("QUES_REV")) {
-			features.addAll(getPairSchemaFeatures(x, num2, ques, "UNIT", "UNIT"));
-		}
-		if(key.equals("0_0")) {
-			features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "SUBJ"));
-		}
-		if(key.equals("0_1")) {
-			features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "OBJ"));
-		}
-		if(key.equals("1_0")) {
-			features.addAll(getPairSchemaFeatures(x, num1, num2, "OBJ", "SUBJ"));
-		}
-		if(key.equals("0")) {
-			features.addAll(getPairSchemaFeatures(x, num1, ques, "SUBJ", "SUBJ"));
-		}
-		if(key.equals("1")) {
-			features.addAll(getPairSchemaFeatures(x, num2, ques, "OBJ", "SUBJ"));
-		}
-		if(key.equals("HYPO") || key.equals("HYPER") || key.equals("SIBLING")) {
+		if(infRuleType.equals("Partition")) {
 			features.addAll(FeatGen.getFeaturesConjWithLabels(
 					getPartitonFeatures(x, num1, num2), key));
 			for(int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
@@ -249,22 +236,6 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 			}
 		}
 		features.addAll(FeatGen.getConjunctions(features));
-		if(infRuleType == 3) {
-			if(key.startsWith("0")) {
-				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getSingleKeyFeatures(x, num1, isTopmost), "Key"));
-			}
-			if(key.startsWith("1")) {
-				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getSingleKeyFeatures(x, num2, isTopmost), "Key"));
-			}
-			if(key.startsWith("QUES")) {
-				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getSingleKeyFeatures(x, ques, isTopmost), "Key"));
-			}
-		}
-		features.addAll(FeatGen.getFeaturesConjWithLabels(
-				getSingleKeyFeatures(x, num2, isTopmost), key));
 		return features;
 	}
 
@@ -338,6 +309,58 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		}
 		return features;
 	}
+
+	public static List<String> getRateFeatures(LogicX x, StanfordSchema schema) {
+		List<String> features = new ArrayList<>();
+		List<CoreLabel> tokens = x.tokens.get(schema.sentId);
+		if(schema.qs == null) {
+			for(int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
+				if (tokens.get(i).lemma().equals("each") ||
+						tokens.get(i).lemma().equals("every") ||
+						tokens.get(i).lemma().equals("per")) {
+					features.add("RateStuffDetected");
+					break;
+				}
+			}
+		} else {
+			int tokenId = Tools.getTokenIdFromCharOffset(tokens, schema.qs.start);
+			for (int i = Math.max(0, tokenId - 3); i < Math.min(tokenId + 4, tokens.size()); ++i) {
+				if (tokens.get(i).lemma().equals("each") ||
+						tokens.get(i).lemma().equals("every") ||
+						tokens.get(i).lemma().equals("per")) {
+					features.add("RateStuffDetected");
+					break;
+				}
+			}
+		}
+		if(schema.rate != null && schema.rate.getFirst() >= 0) {
+			features.add("RateDetected");
+		}
+		return features;
+	}
+
+	public static List<String> getNeighborhoodFeatures(LogicX x, StanfordSchema schema) {
+		List<String> features = new ArrayList<>();
+		List<CoreLabel> tokens = x.tokens.get(schema.sentId);
+		if(schema.qs == null) {
+			for (int i = x.questionSpan.getFirst();
+				 i < x.questionSpan.getSecond();
+				 ++i) {
+				if (!tokens.get(i).tag().startsWith("N")) {
+					features.add("QuesUnigram_" + tokens.get(i).lemma());
+				}
+			}
+		} else {
+			int tokenId = Tools.getTokenIdFromCharOffset(tokens, schema.qs.start);
+			for (int i = Math.max(0, tokenId - 3); i < Math.min(tokenId + 4, tokens.size()); ++i) {
+				if (!tokens.get(i).tag().startsWith("N")) {
+					features.add("QuesUnigram_" + tokens.get(i).lemma());
+				}
+			}
+		}
+		return features;
+	}
+
 
 
 

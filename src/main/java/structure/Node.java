@@ -14,11 +14,10 @@ public class Node implements Serializable {
 	public int quantIndex; // Assign this to max_quant+1 for question
 	public QuantSpan qs;
 	public double val;
-	public int infRuleType;
+	public String infRuleType;
 	public String key;
 	
 	public Node() {
-		infRuleType = -1;
 		children = new ArrayList<>();
 	}
 
@@ -27,7 +26,6 @@ public class Node implements Serializable {
 		this();
 		this.label = label;
 		this.children = children;
-		this.infRuleType = -1;
 	}
 	
 	// For leaves
@@ -36,7 +34,6 @@ public class Node implements Serializable {
 		this.quantIndex = quantindex;
 		this.qs = qs;
 		this.label = label;
-		this.infRuleType = -1;
 	}
 
 	public Node(Node other) {

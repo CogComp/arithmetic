@@ -79,7 +79,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		schemas.add(x.questionSchema);
 		for(int i=0; i<n; ++i) {
 			Node node = new Node(i, x.quantities.get(i), "NUM");
-			node.infRuleType = -1;
+			node.infRuleType = null;
 			if(!Logic.irrelevance(schemas, i, x.tokens)) {
 				init.add(node);
 			}
@@ -145,34 +145,38 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		StanfordSchema ques = x.questionSchema;
 
 		String label, mathOp;
-		for(int infRuleType = 0; infRuleType< Logic.maxNumInferenceTypes; ++infRuleType) {
+		for(String infRuleType : Logic.inferenceTypes) {
 			mathOp = null;
 			if(num1.math != -1 || num2.math != -1 || (isTopmost && ques.math != -1)) {
-				mathOp = Logic.getMathOp(x.tokens, num1, num2, ques);
+				mathOp = Logic.getMathInfType(x.tokens, num1, num2, ques, isTopmost);
 			}
-			if(infRuleType == 2 && mathOp == null) continue;
-			if(infRuleType != 2 && mathOp != null) continue;
+			if(infRuleType.contains("Ques") && !isTopmost) continue;
+			if(mathOp != null && !infRuleType.equals(mathOp)) continue;
+			if(mathOp == null && infRuleType.startsWith("Math")) continue;
 			if(num1.rate.getFirst()>=0 || num2.rate.getFirst()>=0 || (isTopmost && ques.rate.getFirst()>=0)) {
-				if(infRuleType != 3) continue;
+				if(!infRuleType.startsWith("Rate")) continue;
 			}
-			for(String key : Logic.getRelevantKeys(infRuleType, isTopmost, mathOp)) {
+			for(String key : Logic.getRelevantKeys(infRuleType)) {
 				if(num1.rate.getFirst()>=0 || num2.rate.getFirst()>=0 || ques.rate.getFirst()>=0) {
 					if(key.startsWith("0") && num1.rate.getFirst() == -1) continue;
 					if(key.startsWith("1") && num2.rate.getFirst() == -1) continue;
 					if(key.startsWith("QUES") && ques.rate.getFirst() == -1) continue;
 				}
 				label = null;
-				if(infRuleType == 0) {
+				if(infRuleType.equals("Verb")) {
 					label = Logic.verb(x.tokens, num1, num2, key);
 				}
-				if(infRuleType == 1) {
+				if(infRuleType.equals("Partition")) {
 					label = Logic.partition(key);
 				}
-				if(infRuleType == 2) {
+				if(infRuleType.startsWith("Math")) {
 					label = Logic.math(mathOp, key);
 				}
-				if(infRuleType == 3) {
-					label = Logic.unitDependency(key);
+				if(infRuleType.startsWith("Rate")) {
+					label = Logic.unitDependency(infRuleType, key);
+				}
+				if(label.equals("SUB") && l.getValue() < r.getValue()) {
+					label = label + "_REV";
 				}
 				if(label == null) continue;
 //				System.out.println("Infrule: "+infRuleType+" Label: "+label+
@@ -187,25 +191,24 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				}
 				double score = wv.dotProduct(featGen.getCombinationFeatureVector(
 						x, num1, num2, ques, infRuleType, key, isTopmost));
-
 				Node node = new Node();
 				node.infRuleType = infRuleType;
 				node.key = key;
-				if(infRuleType==0 || infRuleType==1) {
+				if(infRuleType.startsWith("Verb") || infRuleType.startsWith("Partition")) {
 					if(label.endsWith("REV")) {
 						node.quantIndex = r.quantIndex;
 					} else {
 						node.quantIndex = l.quantIndex;
 					}
 				}
-				if(infRuleType==2) {
-					if(num1.math != -1) {
+				if(infRuleType.startsWith("Math")) {
+					if(infRuleType.contains("Math0")) {
 						node.quantIndex = r.quantIndex;
 					} else {
 						node.quantIndex = l.quantIndex;
 					}
 				}
-				if(infRuleType==3) {
+				if(infRuleType.startsWith("Rate")) {
 					if(num2.rate != null && num2.rate.getFirst() >= 0) {
 						node.quantIndex = l.quantIndex;
 					} else {
@@ -248,9 +251,9 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 						x, l.getFirst(), r.getFirst(), wv, isTopmost);
 				for(Pair<Node, Double> pair : pairList) {
 					if(!pair.getFirst().label.equals(expr.label)) continue;
-					if(pair.getFirst().infRuleType != expr.infRuleType) continue;
+					if(!pair.getFirst().infRuleType.equals(expr.infRuleType)) continue;
 					if(expr.key != null && !expr.key.equals(pair.getFirst().key)) continue;
-					if(expr.label.equals("DIV")) {
+					if(expr.label.equals("DIV") || expr.label.equals("SUB")) {
 						if(!(Tools.safeEquals(
 								pair.getFirst().children.get(0).getValue(),
 								expr.children.get(0).getValue()) &&

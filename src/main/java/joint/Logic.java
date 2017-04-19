@@ -18,51 +18,52 @@ public class Logic {
     public static List<String> mulTokens = Arrays.asList(
             "times", "twice", "thrice", "double", "triple");
 
-    public static int maxNumInferenceTypes = 4;
+    public static List<String> inferenceTypes = Arrays.asList("Math0_Add", "Math0_Sub", "Math0_Mul",
+            "Math1_Add", "Math1_Sub", "Math1_Mul", "MathQues_Add", "MathQues_Sub", "MathQues_Mul",
+            "Partition", "Verb", "Rate0", "Rate1", "RateQues");
 
-    // Classification for partition: 0_NUM, 1_NUM, 0_DEN, 1_DEN, QUES, QUES_REV
-    public static String unitDependency(String key) {
-        if(key.equals("0_NUM")) return "DIV_REV";
-        if(key.equals("1_NUM")) return "DIV";
-        if(key.equals("0_DEN") || key.equals("1_DEN")) return "MUL";
+    // Classification for partition: 0_0, 1_0, 0_0, QUES, QUES_REV
+    public static String unitDependency(String infType, String key) {
+        if(infType.endsWith("0") && key.equals("0_0")) return "DIV_REV";
+        if(infType.endsWith("1") && key.equals("0_0")) return "DIV";
+        if(key.equals("0_1") || key.equals("1_0")) return "MUL";
         if(key.equals("QUES")) return "DIV";
         if(key.equals("QUES_REV")) return "DIV_REV";
         return null;
     }
 
-    // Classification for partition: SIBLING, HYPO, HYPER, QUES_1_SIBLING, QUES_2_SIBLING
+    // Classification for partition: SIBLING, HYPO, HYPER
     public static String partition(String key) {
         if(key.equals("SIBLING")) return "ADD";
-        if(key.equals("HYPO")) return "SUB_REV";
+        if(key.equals("HYPO")) return "SUB";
         if(key.equals("HYPER")) return "SUB";
         return null;
     }
 
-    // Classification for math: 0_0, 0_1, 1_0, 0, 1,
-    public static String math(String mathOp, String key) {
-        if(mathOp.equals("FIRST_ADD") && key.equals("0_0")) return "SUB_REV";
-        if(mathOp.equals("SECOND_ADD") && key.equals("0_0")) return "SUB";
-        if(mathOp.equals("FIRST_SUB") && key.equals("0_0")) return "ADD";
-        if(mathOp.equals("SECOND_SUB") && key.equals("0_0")) return "ADD";
+    // Classification for math: 0_0, 0_1, 1_0, QUES, QUES_REV
+    public static String math(String infType, String key) {
+        if(infType.equals("Math0_Add") && key.equals("0_0")) return "SUB";
+        if(infType.equals("Math1_Add") && key.equals("0_0")) return "SUB";
+        if(infType.equals("Math0_Sub") && key.equals("0_0")) return "ADD";
+        if(infType.equals("Math1_Sub") && key.equals("0_0")) return "ADD";
 
-        if(mathOp.equals("FIRST_ADD") && key.equals("1_0")) return "ADD";
-        if(mathOp.equals("SECOND_ADD") && key.equals("0_1")) return "ADD";
-        if(mathOp.equals("FIRST_SUB") && key.equals("1_0")) return "SUB_REV";
-        if(mathOp.equals("SECOND_SUB") && key.equals("0_1")) return "SUB";
+        if(infType.equals("Math0_Add") && key.equals("1_0")) return "ADD";
+        if(infType.equals("Math1_Add") && key.equals("0_1")) return "ADD";
+        if(infType.equals("Math0_Sub") && key.equals("1_0")) return "SUB";
+        if(infType.equals("Math1_Sub") && key.equals("0_1")) return "SUB";
 
-        if(mathOp.equals("FIRST_MUL") && key.equals("0_0")) return "DIV_REV";
-        if(mathOp.equals("SECOND_MUL") && key.equals("0_0")) return "DIV";
-        if(mathOp.equals("FIRST_MUL") && key.equals("1_0")) return "MUL";
-        if(mathOp.equals("SECOND_MUL") && key.equals("0_1")) return "MUL";
+        if(infType.equals("Math0_Mul") && key.equals("0_0")) return "DIV_REV";
+        if(infType.equals("Math1_Mul") && key.equals("0_0")) return "DIV";
+        if(infType.equals("Math0_Mul") && key.equals("1_0")) return "MUL";
+        if(infType.equals("Math1_Mul") && key.equals("0_1")) return "MUL";
 
-        if(mathOp.equals("QUES_ADD") || mathOp.equals("QUES_SUB")) {
-            if(key.equals("0")) return "SUB";
-            if(key.equals("1")) return "SUB_REV";
+        if(infType.equals("MathQues_Add") || infType.equals("MathQues_Sub")) {
+            return "SUB";
         }
 
-        if(mathOp.equals("QUES_MUL")) {
-            if(key.equals("0")) return "DIV";
-            if(key.equals("1")) return "DIV_REV";
+        if(infType.equals("MathQues_Mul")) {
+            if(key.equals("QUES")) return "DIV";
+            if(key.equals("QUES_REV")) return "DIV_REV";
         }
         return null;
     }
@@ -127,55 +128,53 @@ public class Logic {
     }
 
 
-    public static List<String> getRelevantKeys(int infType, boolean isTopmost, String mathOp) {
+    public static List<String> getRelevantKeys(String infType) {
         List<String> keys = new ArrayList<>();
-        if(infType == 0) {
+        if(infType.equals("Verb")) {
             keys.addAll(Arrays.asList("0_0", "0_1", "1_0"));
         }
-        if(infType == 1) {
+        if(infType.equals("Partition")) {
             keys.addAll(Arrays.asList("SIBLING", "HYPO", "HYPER"));
         }
-        if(mathOp != null && infType == 2) {
-            if(mathOp.startsWith("QUES")) {
-                keys.addAll(Arrays.asList("0", "1"));
+        if(infType.startsWith("Math") || infType.startsWith("Rate")) {
+            if(infType.contains("Ques")) {
+                keys.addAll(Arrays.asList("QUES", "QUES_REV"));
             } else {
-                keys.addAll(Arrays.asList("0_0", "0_1", "1_0"));
-            }
-        }
-        if(infType == 3) {
-            if(isTopmost) {
-                keys.addAll(Arrays.asList("0_NUM", "1_NUM", "0_DEN",
-                        "1_DEN", "QUES", "QUES_REV"));
-            } else {
-                keys.addAll(Arrays.asList("0_NUM", "1_NUM", "0_DEN", "1_DEN"));
+                keys.addAll(Arrays.asList("0_0"));
+                if(infType.contains("1")) {
+                    keys.add("0_1");
+                } else {
+                    keys.add("1_0");
+                }
             }
         }
         return keys;
     }
 
-    public static String getMathOp(List<List<CoreLabel>> tokens,
-                                   StanfordSchema num1,
-                                   StanfordSchema num2,
-                                   StanfordSchema ques) {
+    public static String getMathInfType(List<List<CoreLabel>> tokens,
+                                        StanfordSchema num1,
+                                        StanfordSchema num2,
+                                        StanfordSchema ques,
+                                        boolean isTopmost) {
         String math = null, order = null;
         if(num1.math != -1) {
             math = tokens.get(num1.sentId).get(num1.math).word();
-            order = "FIRST_";
+            order = "0_";
         } else if(num2.math != -1) {
             math = tokens.get(num2.sentId).get(num2.math).word();
-            order = "SECOND_";
-        } else if(ques.math != -1) {
+            order = "1_";
+        } else if(ques.math != -1 && isTopmost) {
             math = tokens.get(ques.sentId).get(ques.math).word();
-            order = "QUES_";
+            order = "Ques_";
         }
         if(Logic.addTokens.contains(math)) {
-            return order+"ADD";
+            return "Math"+order+"Add";
         }
         if(Logic.subTokens.contains(math)) {
-            return order+"SUB";
+            return "Math"+order+"Sub";
         }
         if(Logic.mulTokens.contains(math)) {
-            return order+"MUL";
+            return "Math"+order+"Mul";
         }
         return null;
     }

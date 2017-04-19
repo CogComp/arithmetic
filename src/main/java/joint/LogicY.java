@@ -24,10 +24,6 @@ public class LogicY implements IStructure {
 		this.expr = expr;
 	}
 	
-	public LogicY(LogicY other) {
-		this.expr = other.expr;
-	}
-	
 	@Override
 	public String toString() {
 		return expr.toString();
@@ -82,7 +78,7 @@ public class LogicY implements IStructure {
 								boolean isTopmost,
 								List<Integer> rateAnnotations) {
 		if(expr.children.size() == 0) {
-			expr.infRuleType = -1;
+			expr.infRuleType = null;
 			expr.key = null;
 			return;
 		}
@@ -100,31 +96,22 @@ public class LogicY implements IStructure {
 		StanfordSchema num2 = x.schema.get(quantIndex2);
 		StanfordSchema ques= x.questionSchema;
 		int mathIndex = -1;
-		String mathToken = null;
-		if(num1.math != -1) {
-			mathIndex = 1;
-			mathToken = x.tokens.get(num1.sentId).get(num1.math).word();
-		}
-		if(mathIndex == -1 && num2.math != -1) {
-			mathIndex = 2;
-			mathToken = x.tokens.get(num2.sentId).get(num2.math).word();
-		}
-		if(mathIndex == -1 && ques.math != -1 && isTopmost) {
-			mathIndex = 0;
-			mathToken = x.tokens.get(ques.sentId).get(ques.math).word();
-		}
-		if(mathToken != null) {
+		String mathKey = Logic.getMathInfType(x.tokens, num1, num2, ques, isTopmost);
+		if(mathKey != null) {
 			if((expr.label.equals("ADD") || expr.label.equals("SUB")) &&
-					(Logic.addTokens.contains(mathToken) ||
-							Logic.subTokens.contains(mathToken))) {
-				expr.quantIndex = mathIndex == 2 ? quantIndex2 : quantIndex1;
-				expr.infRuleType = 2;
+					(mathKey.contains("Add") || mathKey.contains("Sub"))) {
+				expr.quantIndex = mathKey.charAt(4) == '1' ? quantIndex2 : quantIndex1;
+				if(mathKey.charAt(4) == 'Q') expr.infRuleType = "MathQues";
+				if(mathKey.charAt(4) == '0') expr.infRuleType = "Math0";
+				if(mathKey.charAt(4) == '1') expr.infRuleType = "Math1";
 				return;
 			}
 			if((expr.label.equals("MUL") || expr.label.equals("DIV")) &&
-					Logic.mulTokens.contains(mathToken)) {
-				expr.quantIndex = mathIndex == 2 ? quantIndex2 : quantIndex1;
-				expr.infRuleType = 2;
+					mathKey.contains("Mul")) {
+				expr.quantIndex = mathKey.charAt(4) == '1' ? quantIndex2 : quantIndex1;
+				if(mathKey.charAt(4) == 'Q') expr.infRuleType = "MathQues";
+				if(mathKey.charAt(4) == '0') expr.infRuleType = "Math0";
+				if(mathKey.charAt(4) == '1') expr.infRuleType = "Math1";
 				return;
 			}
 		}
@@ -135,7 +122,9 @@ public class LogicY implements IStructure {
 			} else {
 				expr.quantIndex = quantIndex1;
 			}
-			expr.infRuleType = 3;
+			if(rateAnnotations.contains(quantIndex1)) expr.infRuleType = "Rate0";
+			if(rateAnnotations.contains(quantIndex2)) expr.infRuleType = "Rate1";
+			if(rateAnnotations.contains(-1)) expr.infRuleType = "RateQues";
 			return;
 		}
 		if(expr.label.equals("ADD") || expr.label.equals("SUB")) {
@@ -144,7 +133,7 @@ public class LogicY implements IStructure {
 				boolean midVerb = midVerb(x.tokens, num1, num2);
 				boolean nowPresent = nowPresent(x.tokens, num1, num2);
 				if (!midVerb && !nowPresent) {
-					expr.infRuleType = 1;
+					expr.infRuleType = "Partition";
 					expr.quantIndex = quantIndex1;
 					return;
 				}
@@ -155,7 +144,7 @@ public class LogicY implements IStructure {
 				if (tokens.get(i).word().equals("remaining") ||
 						tokens.get(i).word().equals("rest") ||
 						tokens.get(i).word().toLowerCase().equals("either")) {
-					expr.infRuleType = 1;
+					expr.infRuleType = "Partition";
 					expr.quantIndex = quantIndex1;
 					return;
 				}
@@ -166,12 +155,12 @@ public class LogicY implements IStructure {
 				if (tokens.get(i).word().equals("remaining") ||
 						tokens.get(i).word().equals("rest") ||
 						tokens.get(i).word().toLowerCase().equals("either")) {
-					expr.infRuleType = 1;
+					expr.infRuleType = "Partition";
 					expr.quantIndex = quantIndex1;
 					return;
 				}
 			}
-			expr.infRuleType = 0;
+			expr.infRuleType = "Verb";
 			expr.quantIndex = quantIndex1;
 			return;
 		}

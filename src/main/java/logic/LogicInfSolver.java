@@ -45,19 +45,19 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		double bestScore = -Double.MAX_VALUE;
 		LogicY best = null;
 		String label;
-		for(String key : Logic.getRelevantKeys(x.infType, x.isTopmost, x.mathOp)) {
+		for(String key : Logic.getRelevantKeys(x.infType)) {
 			label = null;
-			if(x.infType == 0) {
+			if(x.infType.startsWith("Verb")) {
 				label = Logic.verb(x.tokens, x.num1, x.num2, key);
 			}
-			if(x.infType == 1) {
+			if(x.infType.startsWith("Partition")) {
 				label = Logic.partition(key);
 			}
-			if(x.infType == 2) {
+			if(x.infType.startsWith("Math")) {
 				label = Logic.math(x.mathOp, key);
 			}
-			if(x.infType == 3) {
-				label = Logic.unitDependency(key);
+			if(x.infType.startsWith("Rate")) {
+				label = Logic.unitDependency(x.infType, key);
 			}
 			if(label == null) continue;
 			if(labelCompletion) {
