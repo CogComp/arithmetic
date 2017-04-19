@@ -246,7 +246,7 @@ public class StanfordSchema {
 					|| tokens.get(i).word().equals(",") || tokens.get(i).word().equals(";")) {
 				break;
 			}
-			if(tokens.get(i).tag().startsWith("V")) foundVerb = true;
+			if(tokens.get(i).tag().startsWith("V") || tokens.get(i).lemma().equals("cost")) foundVerb = true;
 			if (tokens.get(i).lemma().equals("per") ||
 					tokens.get(i).lemma().equals("every") ||
 					tokens.get(i).lemma().equals("each") ||

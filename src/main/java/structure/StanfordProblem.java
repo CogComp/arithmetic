@@ -9,6 +9,7 @@ import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
 import reader.Reader;
+import utils.Params;
 import utils.Tools;
 
 import java.util.*;
@@ -86,6 +87,9 @@ public class StanfordProblem {
 		questionSchema = getQuestionSchema(this);
 		if(questionSchema.unit.equals(questionSchema.rate)) {
 			questionSchema.rate = new IntPair(-1, -1);
+		}
+		if(questionSchema.unit.equals(questionSchema.object)) {
+			questionSchema.object = new IntPair(-1, -1);
 		}
 		wordnetRelations = getWordnetRelations();
 	}
@@ -167,9 +171,16 @@ public class StanfordProblem {
 
 	public static void main(String args[]) throws Exception {
 		List<StanfordProblem> probs =
-				Reader.readStanfordProblemsFromJson("data/seed/");
+				Reader.readStanfordProblemsFromJson(Params.allArithDir);
 		for(StanfordProblem prob : probs) {
+			if(prob.id != 750) continue;
 			System.out.println(prob);
+			for(List<CoreLabel> tokens : prob.tokens) {
+				for(CoreLabel token : tokens) {
+					System.out.print("["+token.tag()+"_"+token.lemma()+"]");
+				}
+			}
+			System.out.println();
 			for(StanfordSchema schema : prob.schema) {
 				System.out.println(schema);
 			}

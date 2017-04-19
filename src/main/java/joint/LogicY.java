@@ -4,6 +4,7 @@ import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.stanford.nlp.ling.CoreLabel;
 import structure.Node;
 import structure.StanfordSchema;
+import utils.Tools;
 
 import java.util.List;
 
@@ -138,10 +139,32 @@ public class LogicY implements IStructure {
 			return;
 		}
 		if(expr.label.equals("ADD") || expr.label.equals("SUB")) {
-			if(x.tokens.get(num1.sentId).get(num1.verb).lemma().equals(
+			if (x.tokens.get(num1.sentId).get(num1.verb).lemma().equals(
 					x.tokens.get(num2.sentId).get(num2.verb).lemma())) {
 				boolean midVerb = midVerb(x.tokens, num1, num2);
-				if(!midVerb) {
+				if (!midVerb) {
+					expr.infRuleType = 1;
+					expr.quantIndex = quantIndex1;
+					return;
+				}
+			}
+			List<CoreLabel> tokens = x.tokens.get(num1.sentId);
+			int tokenId = Tools.getTokenIdFromCharOffset(tokens, num1.qs.start);
+			for (int i = tokenId + 1; i < tokens.size(); ++i) {
+				if (tokens.get(i).word().equals("remaining") ||
+						tokens.get(i).word().equals("rest") ||
+						tokens.get(i).word().toLowerCase().equals("either")) {
+					expr.infRuleType = 1;
+					expr.quantIndex = quantIndex1;
+					return;
+				}
+			}
+			tokens = x.tokens.get(num2.sentId);
+			tokenId = Tools.getTokenIdFromCharOffset(tokens, num2.qs.start);
+			for (int i = tokenId + 1; i < tokens.size(); ++i) {
+				if (tokens.get(i).word().equals("remaining") ||
+						tokens.get(i).word().equals("rest") ||
+						tokens.get(i).word().toLowerCase().equals("either")) {
 					expr.infRuleType = 1;
 					expr.quantIndex = quantIndex1;
 					return;

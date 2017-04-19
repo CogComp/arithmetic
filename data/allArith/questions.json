@@ -11661,7 +11661,7 @@
   },
   {
     "iIndex": 722,
-    "sQuestion": " On the first day of the week Pat had 39.0 stickers. Pat earned 22.0 more during the week. How many stickers did Pat have at the end of the  week?",
+    "sQuestion": " On the first day of the week, Pat had 39.0 stickers. Pat earned 22.0 more during the week. How many stickers did Pat have at the end of the  week?",
     "quantities": [
       {
         "start": 38,
@@ -11999,7 +11999,7 @@
   },
   {
     "iIndex": 737,
-    "sQuestion": " Sean has 45.0 whistles. He has 32.0 more whistles that Charles. How many whistles does Charles have?",
+    "sQuestion": " Sean has 45.0 whistles. He has 32.0 more whistles than Charles. How many whistles does Charles have?",
     "quantities": [
       {
         "start": 10,
@@ -20706,7 +20706,7 @@
   },
   {
     "iIndex": 1401,
-    "sQuestion": "Mike worked 3.0 hours, each day, for 5.0 days. How many hours did he work in total ?",
+    "sQuestion": "Mike worked 3.0 hours each day, for 5.0 days. How many hours did he work in total ?",
     "quantities": [
       {
         "start": 12,

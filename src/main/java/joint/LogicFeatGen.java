@@ -122,6 +122,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		}
 		boolean midVerb = LogicY.midVerb(x.tokens, num1, num2);
 		features.add("MidVerb:"+midVerb);
+		features.addAll(getPartitonFeatures(x, num1, num2));
 		return FeatGen.getFeaturesConjWithLabels(
 				features,
 				"InfRule:"+infRuleType);
@@ -235,15 +236,16 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(key.equals("1")) {
 			features.addAll(getPairSchemaFeatures(x, num2, ques, "OBJ", "SUBJ"));
 		}
-//		String wn;
 		if(key.equals("HYPO") || key.equals("HYPER") || key.equals("SIBLING")) {
-//			wn = Tools.wordnetIndicator(
-//					Tools.spanToLemmaList(x.tokens.get(num1.sentId), num1.unit),
-//					Tools.spanToLemmaList(x.tokens.get(num2.sentId), num2.unit),
-//					Tools.populatePos(x.tokens.get(num1.sentId), num1.unit),
-//					Tools.populatePos(x.tokens.get(num2.sentId), num2.unit),
-//					x.wordnetRelations);
-//			if(wn != null) features.add(wn);
+			features.addAll(FeatGen.getFeaturesConjWithLabels(
+					getPartitonFeatures(x, num1, num2), key));
+			for(int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
+				if(x.tokens.get(ques.sentId).get(i).word().equals("all") ||
+						x.tokens.get(ques.sentId).get(i).word().equals("altogether") ||
+						x.tokens.get(ques.sentId).get(i).word().equals("overall")) {
+					features.add("QuestionAll_"+key);
+				}
+			}
 		}
 		features.addAll(FeatGen.getConjunctions(features));
 		if(infRuleType == 3) {
@@ -260,14 +262,8 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 						getSingleKeyFeatures(x, ques, isTopmost), "Key"));
 			}
 		}
-//		features.addAll(FeatGen.getFeaturesConjWithLabels(
-//				getSingleKeyFeatures(x, num1, isTopmost), infRuleType+key));
 		features.addAll(FeatGen.getFeaturesConjWithLabels(
 				getSingleKeyFeatures(x, num2, isTopmost), key));
-//		if(isTopmost) {
-//			features.addAll(FeatGen.getFeaturesConjWithLabels(
-//					getSingleKeyFeatures(x, x.questionSchema, isTopmost), infRuleType+key));
-//		}
 		return features;
 	}
 
@@ -310,6 +306,34 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 			}
 		}
 		if(sim < 0.2) features.add("SimAbsolutelyNoMatch");
+		return features;
+	}
+
+	public static List<String> getPartitonFeatures(
+			LogicX x, StanfordSchema num1, StanfordSchema num2) {
+		List<String> features = new ArrayList<>();
+		List<CoreLabel> tokens = x.tokens.get(num1.sentId);
+		int tokenId = Tools.getTokenIdFromCharOffset(tokens, num1.qs.start);
+		for (int i = tokenId + 1; i < tokens.size(); ++i) {
+			if (tokens.get(i).word().equals("remaining") ||
+					tokens.get(i).word().equals("rest")) {
+				features.add("RemainingRest");
+			}
+			if (tokens.get(i).word().toLowerCase().equals("either")) {
+				features.add("Either");
+			}
+		}
+		tokens = x.tokens.get(num2.sentId);
+		tokenId = Tools.getTokenIdFromCharOffset(tokens, num2.qs.start);
+		for (int i = tokenId + 1; i < tokens.size(); ++i) {
+			if (tokens.get(i).word().equals("remaining") ||
+					tokens.get(i).word().equals("rest")) {
+				features.add("RemainingRest");
+			}
+			if (tokens.get(i).word().toLowerCase().equals("either")) {
+				features.add("Either");
+			}
+		}
 		return features;
 	}
 
