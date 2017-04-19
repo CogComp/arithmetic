@@ -82,6 +82,12 @@ public class StanfordProblem {
 			if(ss.unit.equals(ss.rate)) {
 				ss.rate = new IntPair(-1, -1);
 			}
+			if(ss.unit.equals(ss.object)) {
+				ss.object = new IntPair(-1, -1);
+			}
+			if(ss.unit.equals(ss.subject)) {
+				ss.subject = new IntPair(-1, -1);
+			}
 			schema.add(ss);
 		}
 		questionSchema = getQuestionSchema(this);
@@ -90,6 +96,9 @@ public class StanfordProblem {
 		}
 		if(questionSchema.unit.equals(questionSchema.object)) {
 			questionSchema.object = new IntPair(-1, -1);
+		}
+		if(questionSchema.unit.equals(questionSchema.subject)) {
+			questionSchema.subject = new IntPair(-1, -1);
 		}
 		wordnetRelations = getWordnetRelations();
 	}

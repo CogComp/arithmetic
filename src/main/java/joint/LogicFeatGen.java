@@ -88,12 +88,13 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		infFeatures.addAll(getInfTypeFeatures(x, num1, num2, ques, infRuleType, isTopmost));
 
 		List<String> keyFeatures = new ArrayList<>();
-		keyFeatures.addAll(getKeyFeatures(x, num1, num2, ques, infRuleType, key, isTopmost));
+		keyFeatures.addAll(FeatGen.getFeaturesConjWithLabels(
+				getKeyFeatures(x, num1, num2, ques, infRuleType, key, isTopmost), infRuleType+""));
 
 		List<String> features = new ArrayList<>();
 		features.addAll(infFeatures);
 		features.addAll(keyFeatures);
-		features.addAll(FeatGen.getConjunctions(keyFeatures));
+//		features.addAll(FeatGen.getConjunctions(keyFeatures));
 		return features;
 	}
 
@@ -295,7 +296,6 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		}
 		// If unit was not extracted, copy last unit over
 		if(emptyUnitSchema != null) {
-//			features.add("OneOfThemEmpty");
 			if(emptyUnitSchema.qs != null && emptyUnitSchema.quantId >= 1) {
 				StanfordSchema prevSchema = x.schema.get(emptyUnitSchema.quantId-1);
 				sim = Tools.jaccardSim(Tools.spanToLemmaList(
@@ -306,6 +306,8 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 			}
 		}
 		if(sim < 0.2) features.add("SimAbsolutelyNoMatch");
+		if(phrase1.size() == 0) features.add("Empty"+mode1);
+		if(phrase2.size() == 0) features.add("Empty"+mode2);
 		return features;
 	}
 
