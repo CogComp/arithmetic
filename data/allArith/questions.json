@@ -209,7 +209,7 @@
   },
   {
     "iIndex": 9,
-    "sQuestion": "Tom has 9.0 yellow balloons Sara has 8.0 yellow balloons . How many yellow balloons do they have in total ?",
+    "sQuestion": "Tom has 9.0 yellow balloons. Sara has 8.0 yellow balloons . How many yellow balloons do they have in total ?",
     "quantities": [
       {
         "start": 8,

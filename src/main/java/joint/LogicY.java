@@ -142,7 +142,8 @@ public class LogicY implements IStructure {
 			if (x.tokens.get(num1.sentId).get(num1.verb).lemma().equals(
 					x.tokens.get(num2.sentId).get(num2.verb).lemma())) {
 				boolean midVerb = midVerb(x.tokens, num1, num2);
-				if (!midVerb) {
+				boolean nowPresent = nowPresent(x.tokens, num1, num2);
+				if (!midVerb && !nowPresent) {
 					expr.infRuleType = 1;
 					expr.quantIndex = quantIndex1;
 					return;
@@ -192,6 +193,22 @@ public class LogicY implements IStructure {
 						!tokens.get(i).get(j).lemma().equals("be")) {
 					return true;
 				}
+			}
+		}
+		return false;
+	}
+
+	public static boolean nowPresent(List<List<CoreLabel>> tokens,
+									 StanfordSchema num1,
+									 StanfordSchema num2) {
+		for(int i=0; i<tokens.get(num1.sentId).size(); ++i) {
+			if(tokens.get(num1.sentId).get(i).word().toLowerCase().equals("now")) {
+				return true;
+			}
+		}
+		for(int i=0; i<tokens.get(num2.sentId).size(); ++i) {
+			if(tokens.get(num2.sentId).get(i).word().toLowerCase().equals("now")) {
+				return true;
 			}
 		}
 		return false;

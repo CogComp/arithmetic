@@ -69,36 +69,63 @@ public class Logic {
 
     // Classification for each verb: POSITIVE, NEGATIVE, STATE
     public static String verb(String verb1, String verb2, List<String> unit1,
-                              List<String> unit2, String key) {
+                              List<String> unit2, String key, boolean flipVerbOrder) {
         String vc1 = Tools.getKeyForMaxValue(Verbs.verbClassify(verb1, unit1));
         String vc2 = Tools.getKeyForMaxValue(Verbs.verbClassify(verb2, unit2));
         String op = null;
         if(vc1.equals("STATE")) {
-            if(vc2.equals("STATE")) op = "SUB_REV";
+            if(vc2.equals("STATE")) op = "SUB";
             if(vc2.equals("POSITIVE")) op = "ADD";
             if(vc2.equals("NEGATIVE")) op = "SUB";
         }
         if(vc1.equals("POSITIVE")) {
-            if(vc2.equals("STATE")) op = "SUB_REV";
+            if(vc2.equals("STATE")) op = "SUB";
             if(vc2.equals("POSITIVE")) op = "ADD";
             if(vc2.equals("NEGATIVE")) op = "SUB";
         }
         if(vc1.equals("NEGATIVE")) {
             if(vc2.equals("STATE")) op = "ADD";
-            if(vc2.equals("POSITIVE")) op = "SUB_REV";
+            if(vc2.equals("POSITIVE")) op = "SUB";
             if(vc2.equals("NEGATIVE")) op = "ADD";
         }
         if(key.equals("0_1") || key.equals("1_0")) {
             if(op.startsWith("SUB")) return "ADD";
-            if(op.equals("ADD") && key.equals("0_1")) {
-                return "SUB";
-            }
-            if(op.equals("ADD") && key.equals("1_0")) {
-                return "SUB_REV";
+            if(op.startsWith("ADD")) return "SUB";
+        }
+        if(flipVerbOrder) {
+            if(op.equals("SUB")) {
+                op = "ADD";
+            } else {
+                op = "SUB";
             }
         }
         return op;
     }
+
+
+    public static String verb(List<List<CoreLabel>> tokens,
+                              StanfordSchema num1,
+                              StanfordSchema num2,
+                              String key) {
+        boolean flipVerbOrder = false;
+        for(int i=Math.max(0, num2.verb-3);
+            i<Math.min(tokens.get(num2.sentId).size(), num2.verb+4);
+            ++i) {
+            String word = tokens.get(num2.sentId).get(i).word().toLowerCase();
+            if(word.equals("originally") || word.equals("before")) {
+                flipVerbOrder = true;
+            }
+        }
+        return  Logic.verb(
+                tokens.get(num1.sentId).get(num1.verb).lemma(),
+                tokens.get(num2.sentId).get(num2.verb).lemma(),
+                Tools.spanToLemmaList(tokens.get(num1.sentId), num1.unit),
+                Tools.spanToLemmaList(tokens.get(num2.sentId), num2.unit),
+                key,
+                false);
+
+    }
+
 
     public static List<String> getRelevantKeys(int infType, boolean isTopmost, String mathOp) {
         List<String> keys = new ArrayList<>();

@@ -70,6 +70,23 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 					features.add("Unigram_" + tokens.get(i).lemma());
 				}
 			}
+			for (int i = Math.max(0, tokenId - 3); i < Math.min(tokenId + 4, tokens.size()); ++i) {
+				if (tokens.get(i).lemma().equals("each") ||
+						tokens.get(i).lemma().equals("every") ||
+						tokens.get(i).lemma().equals("per")) {
+					features.add("RateStuffDetected");
+					break;
+				}
+			}
+		} else {
+			for(int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
+				if (tokens.get(i).lemma().equals("each") ||
+						tokens.get(i).lemma().equals("every") ||
+						tokens.get(i).lemma().equals("per")) {
+					features.add("RateStuffDetected");
+					break;
+				}
+			}
 		}
 		return features;
 	}
@@ -128,15 +145,15 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(infRuleType == 3) {
 			if(key.startsWith("0")) {
 				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getSingleKeyFeatures(x, num1, isTopmost), "Key"));
+						getSingleKeyFeatures(x, num1, isTopmost), "KEY"));
 			}
 			if(key.startsWith("1")) {
 				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getSingleKeyFeatures(x, num2, isTopmost), "Key"));
+						getSingleKeyFeatures(x, num2, isTopmost), "KEY"));
 			}
 			if(key.startsWith("QUES")) {
 				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getSingleKeyFeatures(x, ques, isTopmost), "Key"));
+						getSingleKeyFeatures(x, ques, isTopmost), "KEY"));
 			}
 		}
 		features.addAll(FeatGen.getFeaturesConjWithLabels(

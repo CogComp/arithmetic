@@ -143,6 +143,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		StanfordSchema num1 = x.schema.get(l.quantIndex);
 		StanfordSchema num2 = x.schema.get(r.quantIndex);
 		StanfordSchema ques = x.questionSchema;
+
 		String label, mathOp;
 		for(int infRuleType = 0; infRuleType< Logic.maxNumInferenceTypes; ++infRuleType) {
 			mathOp = null;
@@ -162,12 +163,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				}
 				label = null;
 				if(infRuleType == 0) {
-					label = Logic.verb(
-							x.tokens.get(num1.sentId).get(num1.verb).lemma(),
-							x.tokens.get(num2.sentId).get(num2.verb).lemma(),
-							Tools.spanToLemmaList(x.tokens.get(num1.sentId), num1.unit),
-							Tools.spanToLemmaList(x.tokens.get(num2.sentId), num2.unit),
-							key);
+					label = Logic.verb(x.tokens, num1, num2, key);
 				}
 				if(infRuleType == 1) {
 					label = Logic.partition(key);

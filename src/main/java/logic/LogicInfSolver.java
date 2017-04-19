@@ -48,12 +48,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		for(String key : Logic.getRelevantKeys(x.infType, x.isTopmost, x.mathOp)) {
 			label = null;
 			if(x.infType == 0) {
-				label = Logic.verb(
-						x.tokens.get(x.num1.sentId).get(x.num1.verb).lemma(),
-						x.tokens.get(x.num2.sentId).get(x.num2.verb).lemma(),
-						Tools.spanToLemmaList(x.tokens.get(x.num1.sentId), x.num1.unit),
-						Tools.spanToLemmaList(x.tokens.get(x.num2.sentId), x.num2.unit),
-						key);
+				label = Logic.verb(x.tokens, x.num1, x.num2, key);
 			}
 			if(x.infType == 1) {
 				label = Logic.partition(key);
