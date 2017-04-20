@@ -50,10 +50,7 @@ public class LogicY implements IStructure {
 		if(!node1.label.equals(node2.label)) {
 			return 1.0f;
 		}
-		if(node1.infRuleType != node2.infRuleType) {
-			return 1.0f;
-		}
-		if(node1.key != null && node2.key != null && !node1.key.equals(node2.key)) {
+		if(!node1.infRuleType.equals(node2.infRuleType)) {
 			return 1.0f;
 		}
 		float loss;
@@ -86,7 +83,11 @@ public class LogicY implements IStructure {
 		populateInfType(x, expr.children.get(1), false, rateAnnotations);
 		int quantIndex1 = expr.children.get(0).quantIndex;
 		int quantIndex2 = expr.children.get(1).quantIndex;
-		populateInfType(x, expr, quantIndex1, quantIndex2, isTopmost, rateAnnotations);
+		if(quantIndex1 < quantIndex2) {
+			populateInfType(x, expr, quantIndex1, quantIndex2, isTopmost, rateAnnotations);
+		} else {
+			populateInfType(x, expr, quantIndex2, quantIndex1, isTopmost, rateAnnotations);
+		}
 	}
 
 	// Here, quantIndex1 is the left child, quantIndex2 is the right child
@@ -101,17 +102,13 @@ public class LogicY implements IStructure {
 			if((expr.label.equals("ADD") || expr.label.equals("SUB")) &&
 					(mathKey.contains("Add") || mathKey.contains("Sub"))) {
 				expr.quantIndex = mathKey.charAt(4) == '1' ? quantIndex2 : quantIndex1;
-				if(mathKey.charAt(4) == 'Q') expr.infRuleType = "MathQues";
-				if(mathKey.charAt(4) == '0') expr.infRuleType = "Math0";
-				if(mathKey.charAt(4) == '1') expr.infRuleType = "Math1";
+				expr.infRuleType = mathKey;
 				return;
 			}
 			if((expr.label.equals("MUL") || expr.label.equals("DIV")) &&
 					mathKey.contains("Mul")) {
 				expr.quantIndex = mathKey.charAt(4) == '1' ? quantIndex2 : quantIndex1;
-				if(mathKey.charAt(4) == 'Q') expr.infRuleType = "MathQues";
-				if(mathKey.charAt(4) == '0') expr.infRuleType = "Math0";
-				if(mathKey.charAt(4) == '1') expr.infRuleType = "Math1";
+				expr.infRuleType = mathKey;
 				return;
 			}
 		}

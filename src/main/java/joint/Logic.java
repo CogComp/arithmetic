@@ -18,8 +18,9 @@ public class Logic {
     public static List<String> mulTokens = Arrays.asList(
             "times", "twice", "thrice", "double", "triple");
 
-    public static List<String> inferenceTypes = Arrays.asList("Math0_Add", "Math0_Sub", "Math0_Mul",
-            "Math1_Add", "Math1_Sub", "Math1_Mul", "MathQues_Add", "MathQues_Sub", "MathQues_Mul",
+    public static List<String> inferenceTypes = Arrays.asList(
+            "Math0_Add", "Math0_Sub", "Math0_Mul", "Math1_Add", "Math1_Sub",
+            "Math1_Mul", "MathQues_Add", "MathQues_Sub", "MathQues_Mul",
             "Partition", "Verb", "Rate0", "Rate1", "RateQues");
 
     // Classification for partition: 0_0, 1_0, 0_0, QUES, QUES_REV

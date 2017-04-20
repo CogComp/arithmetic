@@ -88,8 +88,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		infFeatures.addAll(getInfTypeFeatures(x, num1, num2, ques, infRuleType, isTopmost));
 
 		List<String> keyFeatures = new ArrayList<>();
-		keyFeatures.addAll(FeatGen.getFeaturesConjWithLabels(
-				getKeyFeatures(x, num1, num2, ques, infRuleType, key, isTopmost), infRuleType+""));
+		keyFeatures.addAll(getKeyFeatures(x, num1, num2, ques, infRuleType, key, isTopmost));
 
 		List<String> features = new ArrayList<>();
 		features.addAll(infFeatures);
@@ -107,15 +106,18 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(infRuleType.startsWith("Rate")) {
 			if(infRuleType.startsWith("Rate0")) {
 				features.addAll(getRateFeatures(x, num1));
-				features.addAll(getNeighborhoodFeatures(x, num1));
+				features.addAll(FeatGen.getFeaturesConjWithLabels(
+						getNeighborhoodFeatures(x, num1), "Rate"));
 			}
 			if(infRuleType.startsWith("Rate1")) {
 				features.addAll(getRateFeatures(x, num2));
-				features.addAll(getNeighborhoodFeatures(x, num2));
+				features.addAll(FeatGen.getFeaturesConjWithLabels(
+						getNeighborhoodFeatures(x, num2), "Rate"));
 			}
 			if(infRuleType.startsWith("RateQues")) {
 				features.addAll(getRateFeatures(x, ques));
-				features.addAll(getNeighborhoodFeatures(x, ques));
+				features.addAll(FeatGen.getFeaturesConjWithLabels(
+						getNeighborhoodFeatures(x, ques), "Rate"));
 			}
 		}
 		if(x.tokens.get(num1.sentId).get(num1.verb).lemma().equals(
@@ -125,7 +127,9 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 			features.add("Verb12Diff");
 		}
 		boolean midVerb = LogicY.midVerb(x.tokens, num1, num2);
+		boolean nowPresent = LogicY.nowPresent(x.tokens, num1, num2);
 		features.add("MidVerb:"+midVerb);
+		features.add("NowPresent:"+nowPresent);
 		features.addAll(getPartitonFeatures(x, num1, num2));
 		return FeatGen.getFeaturesConjWithLabels(
 				features,
@@ -149,33 +153,6 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 			return Tools.spanToLemmaList(tokens.get(schema.sentId), schema.rate);
 		}
 		return new ArrayList<>();
-	}
-
-	public static List<String> getSingleKeyFeatures(
-			LogicX x, StanfordSchema schema, boolean isTopmost) {
-		List<String> features = new ArrayList<>();
-		List<CoreLabel> tokens = x.tokens.get(schema.sentId);
-		if(schema.rate != null && schema.rate.getFirst() >= 0) {
-			features.add("RateDetected");
-		}
-		if(isTopmost && schema.qs == null) {
-			for (int i = x.questionSpan.getFirst();
-				 i < x.questionSpan.getSecond();
-				 ++i) {
-				if (!tokens.get(i).tag().startsWith("N")) {
-					features.add("Unigram_" + tokens.get(i).lemma());
-				}
-			}
-		}
-		if(schema.qs != null) {
-			int tokenId = Tools.getTokenIdFromCharOffset(tokens, schema.qs.start);
-			for(int i=Math.max(0, tokenId-3); i<Math.min(tokenId+4, tokens.size()); ++i) {
-				if (!tokens.get(i).tag().startsWith("N")) {
-					features.add("Unigram_" + tokens.get(i).lemma());
-				}
-			}
-		}
-		return features;
 	}
 
 	public static List<String> getKeyFeatures(LogicX x,
@@ -235,7 +212,6 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				}
 			}
 		}
-		features.addAll(FeatGen.getConjunctions(features));
 		return features;
 	}
 
@@ -324,7 +300,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 			}
 		} else {
 			int tokenId = Tools.getTokenIdFromCharOffset(tokens, schema.qs.start);
-			for (int i = Math.max(0, tokenId - 3); i < Math.min(tokenId + 4, tokens.size()); ++i) {
+			for (int i = Math.max(0, tokenId - 3); i < Math.min(tokenId + 3, tokens.size()); ++i) {
 				if (tokens.get(i).lemma().equals("each") ||
 						tokens.get(i).lemma().equals("every") ||
 						tokens.get(i).lemma().equals("per")) {
@@ -333,9 +309,15 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				}
 			}
 		}
+		if(!features.contains("RateStuffDetected")) {
+			features.add("NoRateStuffDetected");
+		}
 		if(schema.rate != null && schema.rate.getFirst() >= 0) {
 			features.add("RateDetected");
+		} else {
+			features.add("RateNotDetected");
 		}
+		features.addAll(FeatGen.getConjunctions(features));
 		return features;
 	}
 
@@ -347,14 +329,20 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				 i < x.questionSpan.getSecond();
 				 ++i) {
 				if (!tokens.get(i).tag().startsWith("N")) {
-					features.add("QuesUnigram_" + tokens.get(i).lemma());
+					features.add("Unigram_" + tokens.get(i).lemma());
 				}
 			}
 		} else {
 			int tokenId = Tools.getTokenIdFromCharOffset(tokens, schema.qs.start);
 			for (int i = Math.max(0, tokenId - 3); i < Math.min(tokenId + 4, tokens.size()); ++i) {
 				if (!tokens.get(i).tag().startsWith("N")) {
-					features.add("QuesUnigram_" + tokens.get(i).lemma());
+//					features.add("Unigram_" + tokens.get(i).lemma());
+					if(i<tokenId) {
+						features.add("UnigramBefore_" + tokens.get(i).lemma());
+					}
+					if(i>tokenId) {
+						features.add("UnigramAfter_" + tokens.get(i).lemma());
+					}
 				}
 			}
 		}

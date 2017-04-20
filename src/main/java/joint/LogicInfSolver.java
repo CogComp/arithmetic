@@ -52,11 +52,15 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				populateInfRuleType(x, gold.expr, weight, true, 2000);
 		if(beam.size() == 0) {
 			System.out.println("Prob: "+ Arrays.asList(x.tokens));
+			for(int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
+				System.out.print(x.tokens.get(x.questionSchema.sentId).get(i)+" ");
+			}
 			System.out.println();
 			for(StanfordSchema schema : x.schema) {
 				System.out.println(schema);
 			}
 			System.out.println(x.questionSchema);
+			System.out.println("Gold:" + gold);
 		}
 		LogicY y = new LogicY(beam.element().getFirst());
 		return y;
@@ -134,6 +138,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 												   Node r,
 												   WeightVector wv,
 												   boolean isTopmost) {
+//		System.out.println("Enumerating Merge ....");
 		List<Pair<Node, Double>> beam = new ArrayList<>();
 		if(l.quantIndex > r.quantIndex) {
 			Node tmp = l;
@@ -156,12 +161,8 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 			if(num1.rate.getFirst()>=0 || num2.rate.getFirst()>=0 || (isTopmost && ques.rate.getFirst()>=0)) {
 				if(!infRuleType.startsWith("Rate")) continue;
 			}
+//			System.out.println(infRuleType+" : "+Arrays.asList(Logic.getRelevantKeys(infRuleType)));
 			for(String key : Logic.getRelevantKeys(infRuleType)) {
-				if(num1.rate.getFirst()>=0 || num2.rate.getFirst()>=0 || ques.rate.getFirst()>=0) {
-					if(key.startsWith("0") && num1.rate.getFirst() == -1) continue;
-					if(key.startsWith("1") && num2.rate.getFirst() == -1) continue;
-					if(key.startsWith("QUES") && ques.rate.getFirst() == -1) continue;
-				}
 				label = null;
 				if(infRuleType.equals("Verb")) {
 					label = Logic.verb(x.tokens, num1, num2, key);

@@ -44,9 +44,9 @@ public class LogicDriver {
 		List<StanfordProblem> testProbs = split.get(2);
 		Map<Integer, List<Integer>> rateAnnotations =
 				Annotations.readRateAnnotations(dataset+"rateAnnotations.txt");
-		SLProblem seed = getSP(Reader.readStanfordProblemsFromJson("data/seed/"), rateAnnotations);
-		SLProblem train = getSP(trainProbs, rateAnnotations);
-		SLProblem test = getSP(testProbs, rateAnnotations);
+		SLProblem seed = getSP(Reader.readStanfordProblemsFromJson("data/seed/"), rateAnnotations, false);
+		SLProblem train = getSP(trainProbs, rateAnnotations, true);
+		SLProblem test = getSP(testProbs, rateAnnotations, false);
 		System.out.println("Train : "+train.instanceList.size()+" Test : "+test.instanceList.size());
 		if(isTrain.equalsIgnoreCase("true")) {
 			trainModel("models/Logic"+testFold+".save", train, seed);
@@ -55,11 +55,14 @@ public class LogicDriver {
 	}
 	
 	public static SLProblem getSP(List<StanfordProblem> problemList,
-								  Map<Integer, List<Integer>> rateAnnotations)
+								  Map<Integer, List<Integer>> rateAnnotations,
+								  boolean train)
 			throws Exception{
 		SLProblem problem = new SLProblem();
 		for(StanfordProblem prob : problemList){
 			if(prob.quantities.size() != 2) continue;
+			if(train && (prob.id == 793 || prob.id == 838 || prob.id == 777 ||
+					prob.id == 778 || prob.id == 837)) continue;
 			LogicX x = new LogicX(prob);
 			LogicY y = new LogicY(x, prob.expr, rateAnnotations.containsKey(prob.id)?
 					rateAnnotations.get(prob.id):new ArrayList<Integer>());
@@ -84,12 +87,6 @@ public class LogicDriver {
 				acc += 1;
 			} else {
 				incorrect.add(prob.problemId);
-			}
-			if(gold.expr.infRuleType == pred.expr.infRuleType) {
-				infTypeAcc += 1;
-			}
-			if(gold.expr.infRuleType == pred.expr.infRuleType &&
-					incorrect.contains(prob.problemId)) {
 				System.out.println(prob.problemId+" : "+prob.text);
 				for(List<CoreLabel> tokens : prob.tokens) {
 					for(CoreLabel token : tokens) {
@@ -107,6 +104,9 @@ public class LogicDriver {
 				System.out.println("Pred : "+pred);
 				System.out.println("Loss : "+ LogicY.getLoss(gold, pred));
 				System.out.println();
+			}
+			if(gold.expr.infRuleType == pred.expr.infRuleType) {
+				infTypeAcc += 1;
 			}
 		}
 		System.out.println("Inference Type Accuracy : = " + infTypeAcc + " / " +
