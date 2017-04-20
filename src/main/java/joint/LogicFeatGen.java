@@ -162,73 +162,39 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 											  String infRuleType,
 											  String key) {
 		List<String> features = new ArrayList<>();
+		features.add(infRuleType.substring(0,3)+"_"+key);
 		if(infRuleType.startsWith("Verb") || infRuleType.startsWith("Math")) {
 			if(key.equals("0_0")) {
 				features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "SUBJ"));
-				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getPairSchemaFeatures(x, num1, num2, "SUBJ", "OBJ"), "Against"));
-				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getPairSchemaFeatures(x, num1, num2, "OBJ", "SUBJ"), "Against"));
 			}
 			if(key.equals("0_1")) {
 				features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "OBJ"));
-				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getPairSchemaFeatures(x, num1, num2, "SUBJ", "SUBJ"), "Against"));
-//				features.addAll(FeatGen.getFeaturesConjWithLabels(
-//						getPairSchemaFeatures(x, num1, num2, "OBJ", "SUBJ"), "Against"));
 			}
 			if(key.equals("1_0")) {
 				features.addAll(getPairSchemaFeatures(x, num1, num2, "OBJ", "SUBJ"));
-				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getPairSchemaFeatures(x, num1, num2, "SUBJ", "SUBJ"), "Against"));
-//				features.addAll(FeatGen.getFeaturesConjWithLabels(
-//						getPairSchemaFeatures(x, num1, num2, "SUBJ", "OBJ"), "Against"));
 			}
 			if(key.equals("QUES")) {
 				features.addAll(getPairSchemaFeatures(x, num1, ques, "SUBJ", "SUBJ"));
-				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getPairSchemaFeatures(x, num2, ques, "SUBJ", "SUBJ"), "Against"));
 			}
 			if(key.equals("QUES_REV")) {
 				features.addAll(getPairSchemaFeatures(x, num2, ques, "SUBJ", "SUBJ"));
-				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getPairSchemaFeatures(x, num1, ques, "SUBJ", "SUBJ"), "Against"));
 			}
 		}
 		if(infRuleType.startsWith("Rate")) {
 			if(key.equals("0_0")) {
 				features.addAll(getPairSchemaFeatures(x, num1, num2, "UNIT", "UNIT"));
-				if(infRuleType.contains("Rate1")) {
-					features.addAll(FeatGen.getFeaturesConjWithLabels(
-							getPairSchemaFeatures(x, num1, num2, "UNIT", "RATE"), "Against"));
-				} else {
-					features.addAll(FeatGen.getFeaturesConjWithLabels(
-							getPairSchemaFeatures(x, num1, num2, "RATE", "UNIT"), "Against"));
-				}
 			}
 			if(key.equals("0_1")) {
 				features.addAll(getPairSchemaFeatures(x, num1, num2, "UNIT", "RATE"));
-				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getPairSchemaFeatures(x, num1, num2, "UNIT", "UNIT"), "Against"));
-//				features.addAll(FeatGen.getFeaturesConjWithLabels(
-//						getPairSchemaFeatures(x, num1, num2, "RATE", "UNIT"), "Against"));
 			}
 			if(key.equals("1_0")) {
 				features.addAll(getPairSchemaFeatures(x, num1, num2, "RATE", "UNIT"));
-				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getPairSchemaFeatures(x, num1, num2, "UNIT", "UNIT"), "Against"));
-//				features.addAll(FeatGen.getFeaturesConjWithLabels(
-//						getPairSchemaFeatures(x, num1, num2, "UNIT", "RATE"), "Against"));
 			}
 			if(key.equals("QUES")) {
 				features.addAll(getPairSchemaFeatures(x, num1, ques, "UNIT", "UNIT"));
-				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getPairSchemaFeatures(x, num2, ques, "UNIT", "UNIT"), "Against"));
 			}
 			if(key.equals("QUES_REV")) {
 				features.addAll(getPairSchemaFeatures(x, num2, ques, "UNIT", "UNIT"));
-				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getPairSchemaFeatures(x, num1, ques, "UNIT", "UNIT"), "Against"));
 			}
 		}
 		if(infRuleType.equals("Partition")) {
@@ -248,6 +214,8 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
                 features.add("InSentenceStartingWithIf" + key);
             }
 		}
+		features.addAll(FeatGen.getFeaturesConjWithLabels(
+				getNeighborhoodFeatures(x, num2), key));
 		return features;
 	}
 
