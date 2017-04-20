@@ -124,7 +124,7 @@ public class StanfordProblem {
 		IntPair quesSpan = getQuestionSpan(tokens);
 		SemanticGraph dependency = prob.dependencies.get(schema.sentId);
 		schema.verb = schema.getDependentVerb(tokens, dependency, quesSpan.getFirst());
-		schema.rate = schema.getRate(tokens, quesSpan.getFirst());
+		schema.rate = getRateForQuestion(tokens, quesSpan.getFirst());
 		schema.subject = schema.getSubject(tokens, dependency, schema.verb);
 		schema.object = schema.getObject(tokens, dependency, schema.verb);
 		Pair<IntPair, IntPair> unitPair = schema.getUnit(tokens, quesSpan.getFirst());
@@ -196,6 +196,41 @@ public class StanfordProblem {
 			System.out.println(prob.questionSchema);
 			System.out.println();
 		}
+	}
+
+
+	public static IntPair getRateForQuestion(List<CoreLabel> tokens, int tokenId) {
+		for(int i=tokenId+1; i<tokens.size(); ++i) {
+			if(tokens.get(i).word().equals("if") || tokens.get(i).word().equals("and") ||
+					tokens.get(i).word().equals(",") || tokens.get(i).word().equals(";")) {
+				break;
+			}
+			if (tokens.get(i).lemma().equals("per") ||
+					tokens.get(i).lemma().equals("every") ||
+					tokens.get(i).lemma().equals("each")) {
+				for(int j=i+1; j<tokens.size(); ++j) {
+					if(tokens.get(j).word().equals("if") || tokens.get(j).word().equals("and")
+							|| tokens.get(j).word().equals(",") || tokens.get(j).word().equals(";")
+							|| tokens.get(j).tag().equals("CD")) {
+						break;
+					}
+					if (tokens.get(j).tag().startsWith("N") ||
+							tokens.get(j).tag().startsWith("PRP")) {
+						return Tools.getMaximalNounPhraseSpan(tokens, j);
+					}
+				}
+				for(int j=tokenId-1; j>=0; --j) {
+					if (tokens.get(j).word().equals("if") || tokens.get(j).word().equals("and")
+							|| tokens.get(j).word().equals(",") || tokens.get(j).word().equals(";")) {
+						break;
+					}
+					if (tokens.get(j).tag().startsWith("N")) {
+						return Tools.getMaximalNounPhraseSpan(tokens, j);
+					}
+				}
+			}
+		}
+		return new IntPair(-1, -1);
 	}
 	
 }

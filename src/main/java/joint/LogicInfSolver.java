@@ -160,7 +160,11 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 			if(mathOp == null && infRuleType.startsWith("Math")) continue;
 			if(num1.rate.getFirst()>=0 || num2.rate.getFirst()>=0 || (isTopmost && ques.rate.getFirst()>=0)) {
 				if(!infRuleType.startsWith("Rate")) continue;
+				if(num1.rate.getFirst()==-1 && infRuleType.contains("0")) continue;
+				if(num2.rate.getFirst()==-1 && infRuleType.contains("1")) continue;
+				if(ques.rate.getFirst()==-1 && infRuleType.contains("Ques")) continue;
 			}
+
 //			System.out.println(infRuleType+" : "+Arrays.asList(Logic.getRelevantKeys(infRuleType)));
 			for(String key : Logic.getRelevantKeys(infRuleType)) {
 				label = null;

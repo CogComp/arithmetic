@@ -207,15 +207,6 @@ public class Tools {
 				phrase2.size() == 0) {
 			return 0.0;
 		}
-		if(phrase1.get(phrase1.size()-1).equalsIgnoreCase("her") ||
-				phrase2.get(phrase2.size()-1).equalsIgnoreCase("her") ||
-				phrase1.contains("him")  || phrase2.contains("him") ||
-				phrase1.contains("them") || phrase2.contains("them") ||
-				phrase1.contains("they") || phrase2.contains("they") ||
-				phrase1.contains("he") || phrase2.contains("he") ||
-				phrase1.contains("she") || phrase2.contains("she")) {
-			return 1.0;
-		}
 		if(phrase1.contains("$") || phrase1.contains("money") || phrase1.contains("dollar") ||
 				phrase1.contains("buck") || phrase1.contains("cent")) {
 			if(phrase2.contains("$") || phrase2.contains("money") || phrase2.contains("dollar") ||

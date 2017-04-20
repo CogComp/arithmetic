@@ -76,7 +76,7 @@ public class LogicDriver {
 		SLModel model = SLModel.loadModel(modelPath);
 		Set<Integer> incorrect = new HashSet<>();
 		Set<Integer> total = new HashSet<>();
-		double acc = 0.0, infTypeAcc = 0.0;
+		double answerAcc = 0.0, infTypeAcc = 0.0, overAllAcc = 0.0;
 		for (int i = 0; i < sp.instanceList.size(); i++) {
 			LogicX prob = (LogicX) sp.instanceList.get(i);
 			LogicY gold = (LogicY) sp.goldStructureList.get(i);
@@ -84,7 +84,15 @@ public class LogicDriver {
 			total.add(prob.problemId);
 			if(Tools.safeEquals(gold.expr.getValue(), pred.expr.getValue()) ||
 					Tools.safeEquals(-gold.expr.getValue(), pred.expr.getValue())) {
-				acc += 1;
+				answerAcc += 1;
+			}
+			if(pred.expr.infRuleType.equals(gold.expr.infRuleType)) {
+				infTypeAcc += 1;
+			}
+			if(pred.expr.infRuleType.equals(gold.expr.infRuleType) &&
+					(Tools.safeEquals(gold.expr.getValue(), pred.expr.getValue()) ||
+							Tools.safeEquals(-gold.expr.getValue(), pred.expr.getValue()))) {
+				overAllAcc += 1;
 			} else {
 				incorrect.add(prob.problemId);
 				System.out.println(prob.problemId+" : "+prob.text);
@@ -105,14 +113,13 @@ public class LogicDriver {
 				System.out.println("Loss : "+ LogicY.getLoss(gold, pred));
 				System.out.println();
 			}
-			if(gold.expr.infRuleType == pred.expr.infRuleType) {
-				infTypeAcc += 1;
-			}
 		}
 		System.out.println("Inference Type Accuracy : = " + infTypeAcc + " / " +
 				sp.instanceList.size() + " = " + (infTypeAcc/sp.instanceList.size()));
-		System.out.println("Accuracy : = " + acc + " / " + sp.instanceList.size()
-				+ " = " + (acc/sp.instanceList.size()));
+		System.out.println("Answer Accuracy : = " + answerAcc + " / " +
+				sp.instanceList.size() + " = " + (answerAcc/sp.instanceList.size()));
+		System.out.println("Overall Accuracy : = " + overAllAcc + " / " + sp.instanceList.size()
+				+ " = " + (overAllAcc/sp.instanceList.size()));
 		System.out.println("Strict Accuracy : ="+ (1-1.0*incorrect.size()/total.size()));
 		return new Pair<>(infTypeAcc/sp.instanceList.size(), 1-1.0*incorrect.size()/total.size());
 	}

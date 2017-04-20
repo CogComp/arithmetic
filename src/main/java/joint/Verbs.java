@@ -70,13 +70,14 @@ public class Verbs {
 
     public static String verbCategory(String verb) {
         List<String> state = Arrays.asList("be", "have", "own", "start");
-        List<String> positive = Arrays.asList("get", "gain", "borrow", "receive", "increase");
+        List<String> positive = Arrays.asList("get", "gain", "borrow", "receive", "increase", "take",
+                "collect");
         List<String> negative = Arrays.asList("give", "lose", "lend", "eat", "decrease", "reduce",
-                "spend", "share");
+                "spend", "share", "pay");
         Map<String, Double> map = new HashMap<>();
-        map.put("STATE", 0.0);
-        map.put("POSITIVE", 0.0);
-        map.put("NEGATIVE", 0.0);
+        map.put("STATE", -Double.MAX_VALUE);
+        map.put("POSITIVE", -Double.MAX_VALUE);
+        map.put("NEGATIVE", -Double.MAX_VALUE);
         for(String s : state) {
             if(getVectorSim(verb, s) > map.get("STATE")) {
                 map.put("STATE", getVectorSim(verb, s));
