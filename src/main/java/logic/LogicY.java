@@ -8,7 +8,7 @@ public class LogicY implements IStructure {
 	public String key;
 
 	public LogicY(String label, String key) {
-		this.label = label.startsWith("SUB")?label.substring(0,3):label;
+		this.label = label;
 		this.key = key;
 	}
 	
@@ -20,10 +20,6 @@ public class LogicY implements IStructure {
 	public static float getLoss(LogicY gold, LogicY pred) {
 		if(gold == null || pred == null) {
 			return 1.0f;
-		}
-		if(gold.label.startsWith("SUB") &&
-				gold.label.substring(0, 3).equals(pred.label.substring(0, 3))) {
-			return 0.0f;
 		}
 		if(gold.label.equals(pred.label)) {
 			return 0.0f;

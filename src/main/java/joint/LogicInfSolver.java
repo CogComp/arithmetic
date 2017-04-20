@@ -164,8 +164,6 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				if(num2.rate.getFirst()==-1 && infRuleType.contains("1")) continue;
 				if(ques.rate.getFirst()==-1 && infRuleType.contains("Ques")) continue;
 			}
-
-//			System.out.println(infRuleType+" : "+Arrays.asList(Logic.getRelevantKeys(infRuleType)));
 			for(String key : Logic.getRelevantKeys(infRuleType)) {
 				label = null;
 				if(infRuleType.equals("Verb")) {
@@ -184,8 +182,6 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 					label = label + "_REV";
 				}
 				if(label == null) continue;
-//				System.out.println("Infrule: "+infRuleType+" Label: "+label+
-//						" Mathop: "+mathOp+" Key: "+key);
 				if((label.equals("ADD") || label.startsWith("SUB")) &&
 						(l.label.startsWith("SUB") || r.label.startsWith("SUB"))) {
 					continue;

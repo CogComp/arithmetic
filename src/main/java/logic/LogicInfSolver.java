@@ -48,24 +48,25 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		for(String key : Logic.getRelevantKeys(x.infType)) {
 			label = null;
 			if(x.infType.startsWith("Verb")) {
-				label = Logic.verb(x.tokens, x.num1, x.num2, key);
+				label = Logic.verb(x.tokens, x.schema.get(x.quantIndex1),
+						x.schema.get(x.quantIndex2), key);
 			}
 			if(x.infType.startsWith("Partition")) {
 				label = Logic.partition(key);
 			}
 			if(x.infType.startsWith("Math")) {
-				label = Logic.math(x.mathOp, key);
+				label = Logic.math(x.infType, key);
 			}
 			if(x.infType.startsWith("Rate")) {
 				label = Logic.unitDependency(x.infType, key);
 			}
+			if(label.equals("SUB") &&
+					x.quantities.get(x.quantIndex1).val < x.quantities.get(x.quantIndex2).val) {
+				label = label + "_REV";
+			}
 			if(label == null) continue;
 			if(labelCompletion) {
-				if(!label.startsWith("SUB") && !label.equals(gold.label)) {
-					continue;
-				}
-				if(label.startsWith("SUB") && !(label.substring(0, 3).equals(
-						gold.label.substring(0, 3)))) {
+				if(!label.equals(gold.label)) {
 					continue;
 				}
 			}
@@ -79,7 +80,6 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		if(best == null) {
 			System.out.println(x.tokens);
 			System.out.println(x.quantIndex1+" "+x.quantIndex2);
-			System.out.println(x.infType+" "+x.isTopmost+" "+x.mathOp);
 			if(gold != null) System.out.println("Gold:"+gold.label);
 			System.out.println();
 			for(StanfordSchema schema : x.schema) {

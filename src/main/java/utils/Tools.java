@@ -35,7 +35,6 @@ import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.CcgTextAnnotationBuilder;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
-import structure.StanfordProblem;
 
 public class Tools {
 	
@@ -214,6 +213,12 @@ public class Tools {
 				return 1.0;
 			}
 		}
+		if(phrase1.size() == 0 && (phrase1.contains("he") || phrase1.contains("she"))) {
+			return 1.0;
+		}
+		if(phrase2.size() == 0 && (phrase2.contains("he") || phrase2.contains("she"))) {
+			return 1.0;
+		}
 		Set<String> tokens1 = new HashSet<>();
 		tokens1.addAll(phrase1);
 		Set<String> tokens2 = new HashSet<>();
@@ -236,7 +241,7 @@ public class Tools {
 		}
 		if(phrase1.get(phrase1.size()-1).equalsIgnoreCase("her") ||
 				phrase1.contains("him")  || phrase1.contains("them") ||
-				phrase1.contains("he") || phrase1.contains("she")) {
+				phrase1.contains("he") || phrase1.contains("she") ) {
 			return 1.0;
 		}
 		if(phrase2.contains("them") || phrase2.contains("they")) {
