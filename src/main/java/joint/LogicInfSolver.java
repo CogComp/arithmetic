@@ -199,7 +199,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				}
 				Node node = populateNode(l, r, num2, infRuleType, y.key, y.label);
 				double score = wv.dotProduct(featGen.getCombinationFeatureVector(
-						x, num1, num2, ques, infRuleType, y.key, isTopmost));
+						x, node, num1, num2, ques, infRuleType, y.key, isTopmost));
 				beam.add(new Pair<>(node, score));
 				continue;
 			}
@@ -229,9 +229,9 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 						(l.label.startsWith("DIV") || r.label.startsWith("DIV"))) {
 					continue;
 				}
-				double score = wv.dotProduct(featGen.getCombinationFeatureVector(
-						x, num1, num2, ques, infRuleType, key, isTopmost));
 				Node node = populateNode(l, r, num2, infRuleType, key, label);
+				double score = wv.dotProduct(featGen.getCombinationFeatureVector(
+						x, node, num1, num2, ques, infRuleType, key, isTopmost));
 				beam.add(new Pair<>(node, score));
 			}
 		}

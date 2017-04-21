@@ -66,6 +66,13 @@ public class Node implements Serializable {
 				children.get(1).toString()+")";
 	}
 
+	public String toTemplateString() {
+		if(children.size() == 0) return "NUM";
+		return "("+children.get(0).toTemplateString() + " " +
+				label + "_" +
+				children.get(1).toTemplateString()+")";
+	}
+
 	public String toStringForPython() {
 		if(children.size() == 0) return "" + qs.val + "||" + quantIndex;
 		String labelSym = null;

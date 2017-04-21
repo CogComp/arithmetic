@@ -44,6 +44,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(node.children.get(0).quantIndex < node.children.get(1).quantIndex) {
 			features.addAll(getCombinationFeatures(
 					x,
+					node,
 					x.schema.get(node.children.get(0).quantIndex),
 					x.schema.get(node.children.get(1).quantIndex),
 					x.questionSchema,
@@ -53,6 +54,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		} else {
 			features.addAll(getCombinationFeatures(
 					x,
+					node,
 					x.schema.get(node.children.get(1).quantIndex),
 					x.schema.get(node.children.get(0).quantIndex),
 					x.questionSchema,
@@ -66,6 +68,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 	}
 
 	public IFeatureVector getCombinationFeatureVector(LogicX x,
+													  Node node,
 													  StanfordSchema num1,
 													  StanfordSchema num2,
 													  StanfordSchema ques,
@@ -73,11 +76,12 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 													  String key,
 													  boolean isTopmost) {
 		List<String> features = getCombinationFeatures(
-				x, num1, num2, ques, infRuleType, key, isTopmost);
+				x, node, num1, num2, ques, infRuleType, key, isTopmost);
 		return FeatGen.getFeatureVectorFromListString(features, lm);
 	}
 
 	public static List<String> getCombinationFeatures(LogicX x,
+													  Node node,
 													  StanfordSchema num1,
 													  StanfordSchema num2,
 													  StanfordSchema ques,
@@ -88,6 +92,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		infFeatures.addAll(getInfTypeFeatures(x, num1, num2, ques, infRuleType, isTopmost));
 
 		List<String> features = new ArrayList<>();
+		features.add(node.toTemplateString());
 		features.addAll(infFeatures);
 
 		if(!LogicDriver.useInfModel) {
@@ -121,8 +126,6 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 //				features.addAll(FeatGen.getFeaturesConjWithLabels(
 //						getNeighborhoodFeatures(x, ques), "Rate"));
 			}
-		} else if(!infRuleType.startsWith("Math")) {
-			
 		}
 		if(x.tokens.get(num1.sentId).get(num1.verb).lemma().equals(
 				x.tokens.get(num2.sentId).get(num2.verb).lemma())) {
@@ -134,12 +137,22 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		boolean nowPresent = LogicY.nowPresent(x.tokens, num1, num2);
 		features.add("MidVerb:"+midVerb);
 		features.add("NowPresent:"+nowPresent);
-		features.addAll(getPartitonFeatures(x, num1, num2));
+		List<String> partitionFeats = getPartitonFeatures(x, num1, num2);
+		features.addAll(partitionFeats);
+		if(partitionFeats.size()>0) features.add("PartitionFeaturesPresent");
+		else features.add("PartitionFeaturesNotPresent");
 		return FeatGen.getFeaturesConjWithLabels(
 				features,
 				"InfRule:"+infRuleType.substring(0,4));
 	}
 
+
+
+	/***********************************************************************
+	 All functions below are used in InfType predictor, any change will effect
+	 inference type prediction scores. If you change any of the functions below,
+	 retrain InfType predictor before training Logic predictor.
+	 ***********************************************************************/
 
 	public static List<String> getPhraseByMode(List<List<CoreLabel>> tokens,
 											   StanfordSchema schema,
@@ -348,6 +361,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
         for(int i=0; i<x.schema.size(); ++i) {
             if(x.schema.get(i).rate.getFirst() >= 0) {
                 rateFound = true;
+				break;
             }
         }
         if(!rateFound && x.questionSchema.rate.getFirst() == -1) {
