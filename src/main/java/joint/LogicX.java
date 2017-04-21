@@ -36,4 +36,17 @@ public class LogicX implements IInstance {
 		this.wordnetRelations = prob.wordnetRelations;
 	}
 
+	public LogicX(LogicX prob) {
+		this.problemId = prob.problemId;
+		this.text = prob.text;
+		this.quantities = prob.quantities;
+		this.tokens = prob.tokens;
+		this.dependencies = prob.dependencies;
+		this.schema = prob.schema;
+		this.questionSchema = prob.questionSchema;
+		this.questionSpan = StanfordProblem.getQuestionSpan(
+				prob.tokens.get(questionSchema.sentId));
+		this.wordnetRelations = prob.wordnetRelations;
+	}
+
 }

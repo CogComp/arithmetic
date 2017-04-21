@@ -5,6 +5,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.sl.core.AbstractInferenceSolver;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
+import edu.illinois.cs.cogcomp.sl.core.SLModel;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 import structure.Node;
 import structure.PairComparator;
@@ -37,6 +38,18 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		LogicX x = (LogicX) ins;
 		MinMaxPriorityQueue<Pair<List<Node>, Double>> topExpressions =
 				getTopExpressions(x, weight, 200);
+		if(topExpressions.size() == 0) {
+			System.out.println("Prob: "+ Arrays.asList(x.tokens));
+			for(int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
+				System.out.print(x.tokens.get(x.questionSchema.sentId).get(i)+" ");
+			}
+			System.out.println();
+			for(StanfordSchema schema : x.schema) {
+				System.out.println(schema);
+			}
+			System.out.println(x.questionSchema);
+
+		}
 		Node node = topExpressions.element().getFirst().get(0);
 		LogicY y = new LogicY(node);
 		return y;
@@ -47,7 +60,8 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		return LogicY.getLoss((LogicY)gold, (LogicY)pred);
 	}
 
-	public LogicY getLatentBestStructure(LogicX x, LogicY gold, WeightVector weight) {
+	public LogicY getLatentBestStructure(LogicX x, LogicY gold, WeightVector weight)
+			throws Exception {
 		MinMaxPriorityQueue<Pair<Node, Double>> beam =
 				populateInfRuleType(x, gold.expr, weight, true, 2000);
 		if(beam.size() == 0) {
@@ -84,6 +98,14 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		for(int i=0; i<n; ++i) {
 			Node node = new Node(i, x.quantities.get(i), "NUM");
 			node.infRuleType = null;
+			if(i == n-1 && init.size() == 1) {
+				init.add(node);
+				continue;
+			}
+			if(i == n-2 && init.size() == 0) {
+				init.add(node);
+				continue;
+			}
 			if(!Logic.irrelevance(schemas, i, x.tokens)) {
 				init.add(node);
 			}
@@ -104,7 +126,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 	public List<Pair<List<Node>, Double>> enumerateSingleMerge(
 			LogicX x,
 			Pair<List<Node>, Double> state,
-			WeightVector wv) {
+			WeightVector wv) throws Exception {
 		List<Pair<List<Node>, Double>> nextStates = new ArrayList<>();
 		List<Node> nodeList = state.getFirst();
 		if(nodeList.size() == 1) {
@@ -137,7 +159,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 												   Node l,
 												   Node r,
 												   WeightVector wv,
-												   boolean isTopmost) {
+												   boolean isTopmost) throws Exception {
 //		System.out.println("Enumerating Merge ....");
 		List<Pair<Node, Double>> beam = new ArrayList<>();
 		if(l.quantIndex > r.quantIndex) {
@@ -148,7 +170,6 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		StanfordSchema num1 = x.schema.get(l.quantIndex);
 		StanfordSchema num2 = x.schema.get(r.quantIndex);
 		StanfordSchema ques = x.questionSchema;
-
 		String label, mathOp;
 		for(String infRuleType : Logic.inferenceTypes) {
 			mathOp = null;
@@ -158,11 +179,29 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 			if(infRuleType.contains("Ques") && !isTopmost) continue;
 			if(mathOp != null && !infRuleType.equals(mathOp)) continue;
 			if(mathOp == null && infRuleType.startsWith("Math")) continue;
-			if(num1.rate.getFirst()>=0 || num2.rate.getFirst()>=0 || (isTopmost && ques.rate.getFirst()>=0)) {
-				if(!infRuleType.startsWith("Rate")) continue;
-				if(num1.rate.getFirst()==-1 && infRuleType.contains("0")) continue;
-				if(num2.rate.getFirst()==-1 && infRuleType.contains("1")) continue;
-				if(ques.rate.getFirst()==-1 && infRuleType.contains("Ques")) continue;
+			if(num1.rate.getFirst()>=0 || num2.rate.getFirst()>=0 ||
+					(isTopmost && ques.rate.getFirst()>=0)) {
+				if(!infRuleType.startsWith("Math") && !infRuleType.startsWith("Rate")) continue;
+				if(infRuleType.startsWith("Rate")) {
+					if (num1.rate.getFirst() == -1 && infRuleType.contains("0")) continue;
+					if (num2.rate.getFirst() == -1 && infRuleType.contains("1")) continue;
+					if (ques.rate.getFirst() == -1 && infRuleType.contains("Ques")) continue;
+				}
+			}
+			if(LogicDriver.useInfModel) {
+				SLModel infModel = LogicDriver.infTypeModel;
+				logic.LogicY y = (logic.LogicY) LogicDriver.infTypeModel.
+						infSolver.getBestStructure(
+						infModel.wv,
+						new logic.LogicX(x, l.quantIndex, r.quantIndex, infRuleType));
+				if(l.getValue() < r.getValue() && y.label.equals("SUB")) {
+					y.label += "_REV";
+				}
+				Node node = populateNode(l, r, num2, infRuleType, y.key, y.label);
+				double score = wv.dotProduct(featGen.getCombinationFeatureVector(
+						x, num1, num2, ques, infRuleType, y.key, isTopmost));
+				beam.add(new Pair<>(node, score));
+				continue;
 			}
 			for(String key : Logic.getRelevantKeys(infRuleType)) {
 				label = null;
@@ -192,47 +231,54 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				}
 				double score = wv.dotProduct(featGen.getCombinationFeatureVector(
 						x, num1, num2, ques, infRuleType, key, isTopmost));
-				Node node = new Node();
-				node.infRuleType = infRuleType;
-				node.key = key;
-				if(infRuleType.startsWith("Verb") || infRuleType.startsWith("Partition")) {
-					if(label.endsWith("REV")) {
-						node.quantIndex = r.quantIndex;
-					} else {
-						node.quantIndex = l.quantIndex;
-					}
-				}
-				if(infRuleType.startsWith("Math")) {
-					if(infRuleType.contains("Math0")) {
-						node.quantIndex = r.quantIndex;
-					} else {
-						node.quantIndex = l.quantIndex;
-					}
-				}
-				if(infRuleType.startsWith("Rate")) {
-					if(num2.rate != null && num2.rate.getFirst() >= 0) {
-						node.quantIndex = l.quantIndex;
-					} else {
-						node.quantIndex = r.quantIndex;
-					}
-				}
-				if(label.endsWith("REV")) {
-					label = label.substring(0, 3);
-					node.children.add(r);
-					node.children.add(l);
-				} else {
-					node.children.add(l);
-					node.children.add(r);
-				}
-				node.label = label;
+				Node node = populateNode(l, r, num2, infRuleType, key, label);
 				beam.add(new Pair<>(node, score));
 			}
 		}
 		return beam;
 	}
 
+	public static Node populateNode(Node l, Node r, StanfordSchema num2,
+									String infRuleType, String key, String label) {
+		Node node = new Node();
+		node.infRuleType = infRuleType;
+		node.key = key;
+		if(infRuleType.startsWith("Verb") || infRuleType.startsWith("Partition")) {
+			if(label.endsWith("REV")) {
+				node.quantIndex = r.quantIndex;
+			} else {
+				node.quantIndex = l.quantIndex;
+			}
+		}
+		if(infRuleType.startsWith("Math")) {
+			if(infRuleType.contains("Math0")) {
+				node.quantIndex = r.quantIndex;
+			} else {
+				node.quantIndex = l.quantIndex;
+			}
+		}
+		if(infRuleType.startsWith("Rate")) {
+			if(num2.rate != null && num2.rate.getFirst() >= 0) {
+				node.quantIndex = l.quantIndex;
+			} else {
+				node.quantIndex = r.quantIndex;
+			}
+		}
+		if(label.endsWith("REV")) {
+			label = label.substring(0, 3);
+			node.children.add(r);
+			node.children.add(l);
+		} else {
+			node.children.add(l);
+			node.children.add(r);
+		}
+		node.label = label;
+		return node;
+	}
+
 	public MinMaxPriorityQueue<Pair<Node, Double>> populateInfRuleType(
-			LogicX x, Node expr, WeightVector wv, boolean isTopmost, int beamSize) {
+			LogicX x, Node expr, WeightVector wv, boolean isTopmost, int beamSize)
+			throws Exception {
 		PairComparator<Node> nodePairComparator = new PairComparator<Node>() {};
 		MinMaxPriorityQueue<Pair<Node, Double>> beam =
 				MinMaxPriorityQueue.orderedBy(nodePairComparator)

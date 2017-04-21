@@ -5,10 +5,7 @@ import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.sl.util.IFeatureVector;
 import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
-import edu.stanford.nlp.ling.CoreLabel;
-import structure.StanfordSchema;
 import utils.FeatGen;
-import utils.Tools;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -34,8 +31,12 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 	public static List<String> getFeatures(LogicX x, LogicY y) {
 		List<String> features = new ArrayList<>();
 		features.addAll(joint.LogicFeatGen.getKeyFeatures(
-				x, x.schema.get(x.quantIndex1), x.schema.get(x.quantIndex2), x.questionSchema,
-				x.infType, y.key));
+				x,
+				x.schema.get(x.quantIndex1),
+				x.schema.get(x.quantIndex2),
+				x.questionSchema,
+				x.infType,
+				y.key));
 		return features;
 	}
 

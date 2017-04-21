@@ -11,7 +11,6 @@ import edu.illinois.cs.cogcomp.sl.learner.LearnerFactory;
 import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 import edu.stanford.nlp.ling.CoreLabel;
-import reader.Reader;
 import run.Annotations;
 import structure.StanfordProblem;
 import structure.StanfordSchema;
@@ -22,7 +21,10 @@ import utils.Tools;
 import java.util.*;
 
 public class LogicDriver {
-	
+
+	public static SLModel infTypeModel;
+	public static boolean useInfModel = true;
+
 	@CommandDescription(description = "Params : train (true/false), dataset_folder")
 	public static void crossVal(String train, String dataset) 
 			throws Exception {
@@ -44,12 +46,11 @@ public class LogicDriver {
 		List<StanfordProblem> testProbs = split.get(2);
 		Map<Integer, List<Integer>> rateAnnotations =
 				Annotations.readRateAnnotations(dataset+"rateAnnotations.txt");
-		SLProblem seed = getSP(Reader.readStanfordProblemsFromJson("data/seed/"), rateAnnotations, false);
 		SLProblem train = getSP(trainProbs, rateAnnotations, true);
 		SLProblem test = getSP(testProbs, rateAnnotations, false);
 		System.out.println("Train : "+train.instanceList.size()+" Test : "+test.instanceList.size());
 		if(isTrain.equalsIgnoreCase("true")) {
-			trainModel("models/Logic"+testFold+".save", train, seed);
+			trainModel("models/Logic"+testFold+".save", train, "models/InfType"+testFold+".save");
 		}
 		return testModel("models/Logic"+testFold+".save", test);
 	}
@@ -60,9 +61,10 @@ public class LogicDriver {
 			throws Exception{
 		SLProblem problem = new SLProblem();
 		for(StanfordProblem prob : problemList){
-			if(prob.quantities.size() != 2) continue;
+//			if(prob.quantities.size() != 2) continue;
 			if(train && (prob.id == 793 || prob.id == 838 || prob.id == 777 ||
-					prob.id == 778 || prob.id == 837)) continue;
+					prob.id == 778 || prob.id == 837 || prob.id == 1600 ||
+					prob.id == 1610)) continue;
 			LogicX x = new LogicX(prob);
 			LogicY y = new LogicY(x, prob.expr, rateAnnotations.containsKey(prob.id)?
 					rateAnnotations.get(prob.id):new ArrayList<Integer>());
@@ -110,7 +112,7 @@ public class LogicDriver {
 				System.out.println("Quantities : "+prob.quantities);
 				System.out.println("Gold : "+gold);
 				System.out.println("Pred : "+pred);
-				System.out.println("Loss : "+ LogicY.getLoss(gold, pred));
+//				System.out.println("Loss : "+ LogicY.getLoss(gold, pred));
 				System.out.println();
 			}
 		}
@@ -124,7 +126,7 @@ public class LogicDriver {
 		return new Pair<>(infTypeAcc/sp.instanceList.size(), 1-1.0*incorrect.size()/total.size());
 	}
 
-	public static void trainModel(String modelPath, SLProblem train, SLProblem seed)
+	public static void trainModel(String modelPath, SLProblem train, String infModelPath)
 			throws Exception {
 		SLModel model = new SLModel();
 		Lexiconer lm = new Lexiconer();
@@ -135,11 +137,15 @@ public class LogicDriver {
 		model.infSolver = new LogicInfSolver(fg);
 		SLParameters para = new SLParameters();
 		para.loadConfigFile(Params.spConfigFile);
-		para.MAX_NUM_ITER = 5;
+		para.MAX_NUM_ITER = 10;
 		Learner learner = LearnerFactory.getLearner(model.infSolver, fg, para);
-//		model.wv = learner.train(seed);
-		model.wv = latentSVMLearner(learner, train,
-				(LogicInfSolver) model.infSolver, model.wv, 5);
+		if(useInfModel) {
+			infTypeModel = SLModel.loadModel(infModelPath);
+			model.wv = learner.train(train);
+		} else {
+			model.wv = latentSVMLearner(learner, train,
+					(LogicInfSolver) model.infSolver, model.wv, 5);
+		}
 		lm.setAllowNewFeatures(false);
 		model.saveModel(modelPath);
 	}

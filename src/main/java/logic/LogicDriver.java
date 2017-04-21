@@ -48,9 +48,9 @@ public class LogicDriver {
 		SLProblem test = getSP(testProbs, rateAnnotations);
 		System.out.println("Train : "+train.instanceList.size()+" Test : "+test.instanceList.size());
 		if(isTrain.equalsIgnoreCase("true")) {
-			trainModel("models/Logic"+testFold+".save", train);
+			trainModel("models/InfType"+testFold+".save", train);
 		}
-		return testModel("models/Logic"+testFold+".save", test);
+		return testModel("models/InfType"+testFold+".save", test);
 	}
 
 	public static SLProblem getSP(List<StanfordProblem> problemList,
@@ -58,9 +58,10 @@ public class LogicDriver {
 			throws Exception{
 		SLProblem problem = new SLProblem();
 		for(StanfordProblem prob : problemList){
-			if(prob.quantities.size() != 2) continue;
+//			if(prob.quantities.size() != 2) continue;
             if(prob.id == 793 || prob.id == 838 || prob.id == 777 ||
-                    prob.id == 778 || prob.id == 837) continue;
+                    prob.id == 778 || prob.id == 837 || prob.id == 1600 ||
+					prob.id == 1610) continue;
 			joint.LogicX x = new joint.LogicX(prob);
 			joint.LogicY y = new joint.LogicY(x, prob.expr,
 					rateAnnotations.containsKey(prob.id)?
@@ -75,12 +76,13 @@ public class LogicDriver {
                 LogicX logicX = new LogicX(prob, quantLeft, quantRight, node.infRuleType);
                 String label = node.label;
                 if(node.children.get(0).quantIndex >= node.children.get(1).quantIndex &&
-                        (node.label.equals("SUB") || node.label.equals("DIV"))) {
+                        node.label.equals("DIV")) {
                     label += "_REV";
                 }
                 LogicY logicY = new LogicY(label, null);
                 problem.addExample(logicX, logicY);
                 if(node.infRuleType == null) {
+					System.out.println("==========================================");
                     System.out.println(prob.id+" : "+prob.question);
                     System.out.println();
                     for(StanfordSchema schema : prob.schema) {
@@ -94,6 +96,7 @@ public class LogicDriver {
                     System.out.println("Quantities : "+prob.quantities);
                     System.out.println("Quant of Interest: "+quantLeft+" "+quantRight);
                     System.out.println();
+					System.out.println("==========================================");
                 }
             }
 		}

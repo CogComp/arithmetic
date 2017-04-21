@@ -15,4 +15,11 @@ public class LogicX extends joint.LogicX implements IInstance {
 		this.quantIndex2 = quantIndex2;
 		this.infType = infType;
 	}
+
+	public LogicX(joint.LogicX prob, int quantIndex1, int quantIndex2, String infType) {
+		super(prob);
+		this.quantIndex1 = quantIndex1;
+		this.quantIndex2 = quantIndex2;
+		this.infType = infType;
+	}
 }

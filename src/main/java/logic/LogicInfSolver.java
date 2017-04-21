@@ -60,10 +60,6 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 			if(x.infType.startsWith("Rate")) {
 				label = Logic.unitDependency(x.infType, key);
 			}
-			if(label.equals("SUB") &&
-					x.quantities.get(x.quantIndex1).val < x.quantities.get(x.quantIndex2).val) {
-				label = label + "_REV";
-			}
 			if(label == null) continue;
 			if(labelCompletion) {
 				if(!label.equals(gold.label)) {
@@ -78,6 +74,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 			}
 		}
 		if(best == null) {
+			System.out.println("==================================");
 			System.out.println(x.tokens);
 			System.out.println(x.quantIndex1+" "+x.quantIndex2);
 			if(gold != null) System.out.println("Gold:"+gold.label);
@@ -91,6 +88,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 			System.out.println(x.questionSchema);
 			System.out.println();
 			System.out.println("Quantities : "+x.quantities);
+			System.out.println("==================================");
 
 		}
 		return best;

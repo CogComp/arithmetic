@@ -87,12 +87,14 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		List<String> infFeatures = new ArrayList<>();
 		infFeatures.addAll(getInfTypeFeatures(x, num1, num2, ques, infRuleType, isTopmost));
 
-		List<String> keyFeatures = new ArrayList<>();
-		keyFeatures.addAll(getKeyFeatures(x, num1, num2, ques, infRuleType, key));
-
 		List<String> features = new ArrayList<>();
 		features.addAll(infFeatures);
-		features.addAll(keyFeatures);
+
+		if(!LogicDriver.useInfModel) {
+			List<String> keyFeatures = new ArrayList<>();
+			keyFeatures.addAll(getKeyFeatures(x, num1, num2, ques, infRuleType, key));
+			features.addAll(keyFeatures);
+		}
         return features;
 	}
 

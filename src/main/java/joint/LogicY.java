@@ -47,9 +47,9 @@ public class LogicY implements IStructure {
 				return 1.0f;
 			}
 		}
-		if(!node1.label.equals(node2.label)) {
-			return 1.0f;
-		}
+//		if(!node1.label.equals(node2.label)) {
+//			return 1.0f;
+//		}
 		if(!node1.infRuleType.equals(node2.infRuleType)) {
 			return 1.0f;
 		}
@@ -97,18 +97,18 @@ public class LogicY implements IStructure {
 		StanfordSchema num2 = x.schema.get(quantIndex2);
 		StanfordSchema ques= x.questionSchema;
 		int mathIndex = -1;
-		String mathKey = Logic.getMathInfType(x.tokens, num1, num2, ques, isTopmost);
-		if(mathKey != null) {
+		String mathInfType = Logic.getMathInfType(x.tokens, num1, num2, ques, isTopmost);
+		if(mathInfType != null) {
 			if((expr.label.equals("ADD") || expr.label.equals("SUB")) &&
-					(mathKey.contains("Add") || mathKey.contains("Sub"))) {
-				expr.quantIndex = mathKey.charAt(4) == '1' ? quantIndex2 : quantIndex1;
-				expr.infRuleType = mathKey;
+					(mathInfType.contains("Add") || mathInfType.contains("Sub"))) {
+				expr.quantIndex = mathInfType.charAt(4) == '1' ? quantIndex2 : quantIndex1;
+				expr.infRuleType = mathInfType;
 				return;
 			}
 			if((expr.label.equals("MUL") || expr.label.equals("DIV")) &&
-					mathKey.contains("Mul")) {
-				expr.quantIndex = mathKey.charAt(4) == '1' ? quantIndex2 : quantIndex1;
-				expr.infRuleType = mathKey;
+					mathInfType.contains("Mul")) {
+				expr.quantIndex = mathInfType.charAt(4) == '1' ? quantIndex2 : quantIndex1;
+				expr.infRuleType = mathInfType;
 				return;
 			}
 		}
