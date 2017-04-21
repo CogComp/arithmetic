@@ -37,6 +37,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				x.questionSchema,
 				x.infType,
 				y.key));
+		features.addAll(FeatGen.getConjunctions(features));
 		return features;
 	}
 

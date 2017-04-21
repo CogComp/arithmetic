@@ -127,6 +127,7 @@ public class LogicDriver {
 							Tools.spanToLemmaList(prob.tokens.get(schema.sentId), schema.unit))));
 				}
 				System.out.println(prob.questionSchema);
+				System.out.println("Wordnet: "+Arrays.asList(prob.wordnetRelations));
 				System.out.println();
                 System.out.println("InferenceType: "+prob.infType);
 				System.out.println("Quantities : "+prob.quantities);

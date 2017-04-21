@@ -1,5 +1,6 @@
 package joint;
 
+import org.apache.commons.io.FileUtils;
 import utils.Params;
 import utils.Tools;
 
@@ -174,6 +175,27 @@ public class Verbs {
         }
         br.close();
         return vectors;
+    }
+
+
+    public static void createFileWithVerbVectors(String vectorFile, String verbVectorFile)
+            throws IOException {
+        BufferedReader br;
+        String line;
+        String output = "";
+        br = new BufferedReader(new FileReader(new File(vectorFile)));
+        while((line = br.readLine()) != null) {
+            String strArr[] = line.split(" ");
+            String word = strArr[0].trim();
+            if (!verbCluster.keySet().contains(word)) continue;
+            output += line + "\n";
+        }
+        br.close();
+        FileUtils.writeStringToFile(new File(verbVectorFile), output);
+    }
+
+    public static void main(String args[]) throws Exception {
+        createFileWithVerbVectors("/shared/bronte/sroy9/glove/glove.6B.300d.txt", "glove.6B.300d.verbs.txt");
     }
 
 }

@@ -98,11 +98,11 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		for(int i=0; i<n; ++i) {
 			Node node = new Node(i, x.quantities.get(i), "NUM");
 			node.infRuleType = null;
-			if(i == n-1 && init.size() == 1) {
+			if(i == (n-1) && init.size() == 1) {
 				init.add(node);
 				continue;
 			}
-			if(i == n-2 && init.size() == 0) {
+			if(i == (n-2) && init.size() == 0) {
 				init.add(node);
 				continue;
 			}

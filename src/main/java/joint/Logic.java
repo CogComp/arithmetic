@@ -114,7 +114,7 @@ public class Logic {
             i<Math.min(tokens.get(num2.sentId).size(), num2.verb+4);
             ++i) {
             String word = tokens.get(num2.sentId).get(i).word().toLowerCase();
-            if(word.equals("originally") || word.equals("before")) {
+            if(word.equals("originally")) {
                 flipVerbOrder = true;
             }
         }
@@ -124,7 +124,7 @@ public class Logic {
                 Tools.spanToLemmaList(tokens.get(num1.sentId), num1.unit),
                 Tools.spanToLemmaList(tokens.get(num2.sentId), num2.unit),
                 key,
-                false);
+                flipVerbOrder);
 
     }
 

@@ -213,12 +213,12 @@ public class Tools {
 				return 1.0;
 			}
 		}
-		if(phrase1.size() == 0 && (phrase1.contains("he") || phrase1.contains("she"))) {
-			return 1.0;
-		}
-		if(phrase2.size() == 0 && (phrase2.contains("he") || phrase2.contains("she"))) {
-			return 1.0;
-		}
+//		if(phrase1.size() == 0 && (phrase1.contains("he") || phrase1.contains("she"))) {
+//			return 1.0;
+//		}
+//		if(phrase2.size() == 0 && (phrase2.contains("he") || phrase2.contains("she"))) {
+//			return 1.0;
+//		}
 		Set<String> tokens1 = new HashSet<>();
 		tokens1.addAll(phrase1);
 		Set<String> tokens2 = new HashSet<>();

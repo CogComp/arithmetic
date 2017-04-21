@@ -200,7 +200,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 			}
 		}
 		if(infRuleType.equals("Partition")) {
-		    features.add(infRuleType+"_"+key);
+//		    features.add(infRuleType+"_"+key);
 			features.addAll(FeatGen.getFeaturesConjWithLabels(
 					getPartitonFeatures(x, num1, num2), key));
 			for(int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
@@ -266,27 +266,36 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 	public static List<String> getPartitonFeatures(
 			LogicX x, StanfordSchema num1, StanfordSchema num2) {
 		List<String> features = new ArrayList<>();
-		List<CoreLabel> tokens = x.tokens.get(num1.sentId);
-		int tokenId = Tools.getTokenIdFromCharOffset(tokens, num1.qs.start);
-		for (int i = tokenId + 1; i < tokens.size(); ++i) {
-			if (tokens.get(i).word().equals("remaining") ||
-					tokens.get(i).word().equals("rest")) {
+		List<CoreLabel> tokens1 = x.tokens.get(num1.sentId);
+		int tokenId1 = Tools.getTokenIdFromCharOffset(tokens1, num1.qs.start);
+		for (int i = tokenId1 + 1; i < tokens1.size(); ++i) {
+			if (tokens1.get(i).word().equals("remaining") ||
+					tokens1.get(i).word().equals("rest")) {
 				features.add("RemainingRest");
 			}
-			if (tokens.get(i).word().toLowerCase().equals("either")) {
+			if (tokens1.get(i).word().toLowerCase().equals("either")) {
 				features.add("Either");
 			}
 		}
-		tokens = x.tokens.get(num2.sentId);
-		tokenId = Tools.getTokenIdFromCharOffset(tokens, num2.qs.start);
-		for (int i = tokenId + 1; i < tokens.size(); ++i) {
-			if (tokens.get(i).word().equals("remaining") ||
-					tokens.get(i).word().equals("rest")) {
+		List<CoreLabel> tokens2 = x.tokens.get(num2.sentId);
+		int tokenId2 = Tools.getTokenIdFromCharOffset(tokens2, num2.qs.start);
+		for (int i = tokenId2 + 1; i < tokens2.size(); ++i) {
+			if (tokens2.get(i).word().equals("remaining") ||
+					tokens2.get(i).word().equals("rest")) {
 				features.add("RemainingRest");
 			}
-			if (tokens.get(i).word().toLowerCase().equals("either")) {
+			if (tokens2.get(i).word().toLowerCase().equals("either")) {
 				features.add("Either");
 			}
+		}
+		if(num1.sentId == num2.sentId) {
+			features.add("SameSentence");
+			if(num1.verb == num2.verb) {
+				features.add("VerbSameInstance");
+			}
+		}
+		if(tokens1.get(num1.verb).lemma().equals(tokens2.get(num2.verb))) {
+			features.add("SameVerbLemma");
 		}
 		return features;
 	}
