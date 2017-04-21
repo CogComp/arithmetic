@@ -157,6 +157,18 @@ public class LogicY implements IStructure {
 					return;
 				}
 			}
+			if(expr.label.equals("ADD")) {
+				for(int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
+					CoreLabel token = x.tokens.get(x.questionSchema.sentId).get(i);
+					if(token.word().equals("all") || token.word().equals("altogether") ||
+							token.word().equals("overall") || token.word().equals("total") ||
+							token.word().equals("sum")) {
+						expr.infRuleType = "Partition";
+						expr.quantIndex = quantIndex1;
+						return;
+					}
+				}
+			}
 			expr.infRuleType = "Verb";
 			expr.quantIndex = quantIndex1;
 			return;

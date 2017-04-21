@@ -121,6 +121,8 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				features.addAll(FeatGen.getFeaturesConjWithLabels(
 						getNeighborhoodFeatures(x, ques), "Rate"));
 			}
+		} else if(!infRuleType.startsWith("Math")) {
+			
 		}
 		if(x.tokens.get(num1.sentId).get(num1.verb).lemma().equals(
 				x.tokens.get(num2.sentId).get(num2.verb).lemma())) {
@@ -185,12 +187,32 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(infRuleType.startsWith("Rate")) {
 			if(key.equals("0_0")) {
 				features.addAll(getPairSchemaFeatures(x, num1, num2, "UNIT", "UNIT"));
+				if(infRuleType.contains("Rate0") && Tools.jaccardSim(
+						Tools.spanToLemmaList(x.tokens.get(num1.sentId), num1.rate),
+						Tools.spanToLemmaList(x.tokens.get(ques.sentId), ques.unit)) > 0) {
+					features.add("SupportFromQuestion");
+				}
+				if(infRuleType.contains("Rate1") && Tools.jaccardSim(
+						Tools.spanToLemmaList(x.tokens.get(num2.sentId), num2.rate),
+						Tools.spanToLemmaList(x.tokens.get(ques.sentId), ques.unit)) > 0) {
+					features.add("SupportFromQuestion");
+				}
 			}
 			if(key.equals("0_1")) {
 				features.addAll(getPairSchemaFeatures(x, num1, num2, "UNIT", "RATE"));
+				if(Tools.jaccardSim(
+						Tools.spanToLemmaList(x.tokens.get(num2.sentId), num2.unit),
+						Tools.spanToLemmaList(x.tokens.get(ques.sentId), ques.unit)) > 0) {
+					features.add("SupportFromQuestion");
+				}
 			}
 			if(key.equals("1_0")) {
 				features.addAll(getPairSchemaFeatures(x, num1, num2, "RATE", "UNIT"));
+				if(Tools.jaccardSim(
+						Tools.spanToLemmaList(x.tokens.get(num1.sentId), num1.unit),
+						Tools.spanToLemmaList(x.tokens.get(ques.sentId), ques.unit)) > 0) {
+					features.add("SupportFromQuestion");
+				}
 			}
 			if(key.equals("QUES")) {
 				features.addAll(getPairSchemaFeatures(x, num1, ques, "UNIT", "UNIT"));
@@ -200,21 +222,8 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 			}
 		}
 		if(infRuleType.equals("Partition")) {
-//		    features.add(infRuleType+"_"+key);
 			features.addAll(FeatGen.getFeaturesConjWithLabels(
 					getPartitonFeatures(x, num1, num2), key));
-			for(int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
-				if(x.tokens.get(ques.sentId).get(i).word().equals("all") ||
-						x.tokens.get(ques.sentId).get(i).word().equals("altogether") ||
-						x.tokens.get(ques.sentId).get(i).word().equals("overall")) {
-					features.add("QuestionAll_"+key);
-				}
-			}
-            List<CoreLabel> tokens = x.tokens.get(num2.sentId);
-            int tokenId = Tools.getTokenIdFromCharOffset(tokens, num2.qs.start);
-            if(tokens.get(0).lemma().equals("if") && tokenId <= 5) {
-                features.add("InSentenceStartingWithIf" + key);
-            }
 		}
 		features.addAll(FeatGen.getFeaturesConjWithLabels(
 				getNeighborhoodFeatures(x, num2), key));
@@ -288,15 +297,25 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				features.add("Either");
 			}
 		}
+		if(tokens2.get(0).lemma().equals("if") && tokenId2 <= 5) {
+			features.add("InSentenceStartingWithIf");
+		}
+		for(int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
+			CoreLabel token = x.tokens.get(x.questionSchema.sentId).get(i);
+			if(token.word().equals("all") || token.word().equals("altogether") ||
+					token.word().equals("overall") || token.word().equals("total") ||
+					token.word().equals("sum")) {
+				features.add("AllPresentInQuestion");
+			}
+		}
 		if(num1.sentId == num2.sentId) {
-			features.add("SameSentence");
 			if(num1.verb == num2.verb) {
 				features.add("VerbSameInstance");
 			}
 		}
-		if(tokens1.get(num1.verb).lemma().equals(tokens2.get(num2.verb))) {
-			features.add("SameVerbLemma");
-		}
+//		if(tokens1.get(num1.verb).lemma().equals(tokens2.get(num2.verb))) {
+//			features.add("SameVerbLemma");
+//		}
 		return features;
 	}
 
