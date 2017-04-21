@@ -88,7 +88,8 @@ public class Reader {
 //			System.out.println(Arrays.asList(kushmanProb.lSolutions));
 			Problem prob = new Problem(kushmanProb.iIndex, kushmanProb.sQuestion, 
 					kushmanProb.lSolutions.get(0));
-			prob.quantities = kushmanProb.quantities;
+//			prob.quantities = kushmanProb.quantities;
+			prob.extractQuantities();
 			prob.expr = Node.parseNode(kushmanProb.lEquations.get(0));
 			assert prob.expr.getLeaves().size() == kushmanProb.lAlignments.size();
 			for(int j=0; j<prob.expr.getLeaves().size(); ++j) {

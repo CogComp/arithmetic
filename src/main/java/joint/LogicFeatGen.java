@@ -108,18 +108,18 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(infRuleType.startsWith("Rate")) {
 			if(infRuleType.startsWith("Rate0")) {
 				features.addAll(getRateFeatures(x, num1));
-				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getNeighborhoodFeatures(x, num1), "Rate"));
+//				features.addAll(FeatGen.getFeaturesConjWithLabels(
+//						getNeighborhoodFeatures(x, num1), "Rate"));
 			}
 			if(infRuleType.startsWith("Rate1")) {
 				features.addAll(getRateFeatures(x, num2));
-				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getNeighborhoodFeatures(x, num2), "Rate"));
+//				features.addAll(FeatGen.getFeaturesConjWithLabels(
+//						getNeighborhoodFeatures(x, num2), "Rate"));
 			}
 			if(infRuleType.startsWith("RateQues")) {
 				features.addAll(getRateFeatures(x, ques));
-				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getNeighborhoodFeatures(x, ques), "Rate"));
+//				features.addAll(FeatGen.getFeaturesConjWithLabels(
+//						getNeighborhoodFeatures(x, ques), "Rate"));
 			}
 		} else if(!infRuleType.startsWith("Math")) {
 			
@@ -137,7 +137,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		features.addAll(getPartitonFeatures(x, num1, num2));
 		return FeatGen.getFeaturesConjWithLabels(
 				features,
-				"InfRule:"+infRuleType);
+				"InfRule:"+infRuleType.substring(0,4));
 	}
 
 
@@ -313,9 +313,6 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				features.add("VerbSameInstance");
 			}
 		}
-//		if(tokens1.get(num1.verb).lemma().equals(tokens2.get(num2.verb))) {
-//			features.add("SameVerbLemma");
-//		}
 		return features;
 	}
 

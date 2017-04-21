@@ -61,7 +61,7 @@ public class LogicDriver {
 			throws Exception{
 		SLProblem problem = new SLProblem();
 		for(StanfordProblem prob : problemList){
-//			if(prob.quantities.size() != 2) continue;
+			if(prob.quantities.size() != 2) continue;
 			if(train && (prob.id == 793 || prob.id == 838 || prob.id == 777 ||
 					prob.id == 778 || prob.id == 837 || prob.id == 1600 ||
 					prob.id == 1610)) continue;
