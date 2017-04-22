@@ -105,6 +105,9 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 			features.addAll(keyFeatures);
 		}
 //		features.addAll(FeatGen.getConjunctions(features));
+		if(node.children.get(0).children.size() == 0 && node.children.get(1).children.size() == 0) {
+			return FeatGen.getFeaturesConjWithLabels(features, "JoiningLeaves");
+		}
         return features;
 	}
 
@@ -119,18 +122,16 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(infRuleType.startsWith("Rate")) {
 			if(infRuleType.startsWith("Rate0")) {
 				features.addAll(getRateFeatures(x, num1));
-				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getNeighborhoodFeatures(x, num1), "Rate"));
+//				features.addAll(FeatGen.getFeaturesConjWithLabels(
+//						getNeighborhoodFeatures(x, num1), "Rate"));
 			}
 			if(infRuleType.startsWith("Rate1")) {
 				features.addAll(getRateFeatures(x, num2));
-				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getNeighborhoodFeatures(x, num2), "Rate"));
+//				features.addAll(FeatGen.getFeaturesConjWithLabels(
+//						getNeighborhoodFeatures(x, num2), "Rate"));
 			}
 			if(infRuleType.startsWith("RateQues")) {
 				features.addAll(getRateFeatures(x, ques));
-//				features.addAll(FeatGen.getFeaturesConjWithLabels(
-//						getNeighborhoodFeatures(x, ques), "Rate"));
 			}
 		}
 		boolean partitionOrVerb = LogicY.isPartitionOrVerb(x, node.label, num1, num2);
@@ -141,6 +142,57 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		return FeatGen.getFeaturesConjWithLabels(
 				features,
 				"InfRule:"+infRuleType.substring(0,4));
+	}
+
+
+	public static List<String> getRateFeatures(LogicX x, StanfordSchema schema) {
+		List<String> features = new ArrayList<>();
+		List<CoreLabel> tokens = x.tokens.get(schema.sentId);
+		if(schema.qs == null) {
+			for(int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
+				if (tokens.get(i).lemma().equals("each") ||
+						tokens.get(i).lemma().equals("every") ||
+						tokens.get(i).lemma().equals("per")) {
+					features.add("RateStuffDetected");
+					break;
+				}
+			}
+		} else {
+			int tokenId = Tools.getTokenIdFromCharOffset(tokens, schema.qs.start);
+			for (int i = Math.max(0, tokenId - 3); i < Math.min(tokenId + 4, tokens.size()); ++i) {
+				if (tokens.get(i).lemma().equals("each") ||
+						tokens.get(i).lemma().equals("every") ||
+						tokens.get(i).lemma().equals("per")) {
+					features.add("RateStuffDetected");
+					break;
+				}
+			}
+			if(tokenId>=2 && tokens.get(tokenId-1).lemma().equals("of") &&
+					tokens.get(tokenId-2).tag().equals("NNS")) {
+				features.add("RateDetected");
+			}
+			if(tokenId < tokens.size()-2 && (tokens.get(tokenId+1).lemma().equals("a") ||
+					tokens.get(tokenId+2).lemma().equals("a"))) {
+				features.add("RateDetected");
+			}
+		}
+		if(schema.rate != null && schema.rate.getFirst() >= 0) {
+			features.add("RateDetected");
+		}
+//		if(!features.contains("RateDetected")){
+//			features.add("RateNotDetected");
+//		}
+		boolean rateFound = false;
+		for(int i=0; i<x.schema.size(); ++i) {
+			if(x.schema.get(i).rate.getFirst() >= 0) {
+				rateFound = true;
+				break;
+			}
+		}
+		if(!rateFound && x.questionSchema.rate.getFirst() == -1) {
+			features.add("RateNotFoundAnywhere");
+		}
+		return features;
 	}
 
 
@@ -323,54 +375,6 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				features.add("VerbSameInstance");
 			}
 		}
-		return features;
-	}
-
-	public static List<String> getRateFeatures(LogicX x, StanfordSchema schema) {
-		List<String> features = new ArrayList<>();
-		List<CoreLabel> tokens = x.tokens.get(schema.sentId);
-		if(schema.qs == null) {
-			for(int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
-				if (tokens.get(i).lemma().equals("each") ||
-						tokens.get(i).lemma().equals("every") ||
-						tokens.get(i).lemma().equals("per")) {
-					features.add("RateStuffDetected");
-					break;
-				}
-			}
-		} else {
-			int tokenId = Tools.getTokenIdFromCharOffset(tokens, schema.qs.start);
-			for (int i = Math.max(0, tokenId - 3); i < Math.min(tokenId + 4, tokens.size()); ++i) {
-				if (tokens.get(i).lemma().equals("each") ||
-						tokens.get(i).lemma().equals("every") ||
-						tokens.get(i).lemma().equals("per")) {
-					features.add("RateStuffDetected");
-					break;
-				}
-			}
-			if(tokenId>=1 && tokens.get(tokenId-1).lemma().equals("of")) {
-				features.add("RateStuffDetected");
-			}
-			if(tokenId < tokens.size()-2 && (tokens.get(tokenId+1).lemma().equals("a") ||
-					tokens.get(tokenId+2).lemma().equals("a"))) {
-				features.add("RateStuffDetected");
-			}
-		}
-		if(schema.rate != null && schema.rate.getFirst() >= 0) {
-			features.add("RateDetected");
-		} else {
-			features.add("RateNotDetected");
-		}
-        boolean rateFound = false;
-        for(int i=0; i<x.schema.size(); ++i) {
-            if(x.schema.get(i).rate.getFirst() >= 0) {
-                rateFound = true;
-				break;
-            }
-        }
-        if(!rateFound && x.questionSchema.rate.getFirst() == -1) {
-            features.add("RateNotFoundAnywhere");
-        }
 		return features;
 	}
 

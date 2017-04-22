@@ -207,7 +207,8 @@ public class StanfordProblem {
 			}
 			if (tokens.get(i).lemma().equals("per") ||
 					tokens.get(i).lemma().equals("every") ||
-					tokens.get(i).lemma().equals("each")) {
+					tokens.get(i).lemma().equals("each") ||
+					tokens.get(i).lemma().equals("1.0")) {
 				for(int j=i+1; j<tokens.size(); ++j) {
 					if(tokens.get(j).word().equals("if") || tokens.get(j).word().equals("and")
 							|| tokens.get(j).word().equals(",") || tokens.get(j).word().equals(";")
