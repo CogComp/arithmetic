@@ -24,6 +24,7 @@ public class LogicDriver {
 
 	public static SLModel infTypeModel;
 	public static boolean useInfModel = true;
+	public static boolean useGoldRelevance = true;
 
 	@CommandDescription(description = "Params : train (true/false), dataset_folder")
 	public static void crossVal(String train, String dataset) 
@@ -87,10 +88,10 @@ public class LogicDriver {
 					Tools.safeEquals(-gold.expr.getValue(), pred.expr.getValue())) {
 				answerAcc += 1;
 			}
-			if(pred.expr.infRuleType.equals(gold.expr.infRuleType)) {
+			if(LogicY.getLoss(pred, gold) < 0.01) {
 				infTypeAcc += 1;
 			}
-			if(pred.expr.infRuleType.equals(gold.expr.infRuleType) &&
+			if(LogicY.getLoss(pred, gold) < 0.01 &&
 					(Tools.safeEquals(gold.expr.getValue(), pred.expr.getValue()) ||
 							Tools.safeEquals(-gold.expr.getValue(), pred.expr.getValue()))) {
 				overAllAcc += 1;
@@ -105,6 +106,9 @@ public class LogicDriver {
 				System.out.println();
 				for(StanfordSchema schema : prob.schema) {
 					System.out.println(schema);
+					System.out.println("VerbCat:"+ Tools.getKeyForMaxValue(Verbs.verbClassify(
+							prob.tokens.get(schema.sentId).get(schema.verb).lemma(),
+							Tools.spanToLemmaList(prob.tokens.get(schema.sentId), schema.unit))));
 				}
 				System.out.println(prob.questionSchema);
 				System.out.println();
@@ -121,8 +125,7 @@ public class LogicDriver {
 				sp.instanceList.size() + " = " + (answerAcc/sp.instanceList.size()));
 		System.out.println("Overall Accuracy : = " + overAllAcc + " / " + sp.instanceList.size()
 				+ " = " + (overAllAcc/sp.instanceList.size()));
-		System.out.println("Strict Accuracy : ="+ (1-1.0*incorrect.size()/total.size()));
-		return new Pair<>(infTypeAcc/sp.instanceList.size(), 1-1.0*incorrect.size()/total.size());
+		return new Pair<>(infTypeAcc/sp.instanceList.size(), answerAcc/sp.instanceList.size());
 	}
 
 	public static void trainModel(String modelPath, SLProblem train, String infModelPath)

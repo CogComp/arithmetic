@@ -125,49 +125,10 @@ public class LogicY implements IStructure {
 			return;
 		}
 		if(expr.label.equals("ADD") || expr.label.equals("SUB")) {
-			if (x.tokens.get(num1.sentId).get(num1.verb).lemma().equals(
-					x.tokens.get(num2.sentId).get(num2.verb).lemma())) {
-				boolean midVerb = midVerb(x.tokens, num1, num2);
-				boolean nowPresent = nowPresent(x.tokens, num1, num2);
-				if (!midVerb && !nowPresent) {
-					expr.infRuleType = "Partition";
-					expr.quantIndex = quantIndex1;
-					return;
-				}
-			}
-			List<CoreLabel> tokens = x.tokens.get(num1.sentId);
-			int tokenId = Tools.getTokenIdFromCharOffset(tokens, num1.qs.start);
-			for (int i = tokenId + 1; i < tokens.size(); ++i) {
-				if (tokens.get(i).word().equals("remaining") ||
-						tokens.get(i).word().equals("rest") ||
-						tokens.get(i).word().toLowerCase().equals("either")) {
-					expr.infRuleType = "Partition";
-					expr.quantIndex = quantIndex1;
-					return;
-				}
-			}
-			tokens = x.tokens.get(num2.sentId);
-			tokenId = Tools.getTokenIdFromCharOffset(tokens, num2.qs.start);
-			for (int i = tokenId + 1; i < tokens.size(); ++i) {
-				if (tokens.get(i).word().equals("remaining") ||
-						tokens.get(i).word().equals("rest") ||
-						tokens.get(i).word().toLowerCase().equals("either")) {
-					expr.infRuleType = "Partition";
-					expr.quantIndex = quantIndex1;
-					return;
-				}
-			}
-			if(expr.label.equals("ADD")) {
-				for(int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
-					CoreLabel token = x.tokens.get(x.questionSchema.sentId).get(i);
-					if(token.word().equals("all") || token.word().equals("altogether") ||
-							token.word().equals("overall") || token.word().equals("total") ||
-							token.word().equals("sum")) {
-						expr.infRuleType = "Partition";
-						expr.quantIndex = quantIndex1;
-						return;
-					}
-				}
+			if(isPartitionOrVerb(x, expr.label, num1, num2)) {
+				expr.infRuleType = "Partition";
+				expr.quantIndex = quantIndex1;
+				return;
 			}
 			expr.infRuleType = "Verb";
 			expr.quantIndex = quantIndex1;
@@ -208,6 +169,70 @@ public class LogicY implements IStructure {
 		for(int i=0; i<tokens.get(num2.sentId).size(); ++i) {
 			if(tokens.get(num2.sentId).get(i).word().toLowerCase().equals("now")) {
 				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean isPartitionOrVerb(LogicX x,
+											String label,
+											StanfordSchema num1,
+											StanfordSchema num2) {
+
+		if (x.tokens.get(num1.sentId).get(num1.verb).lemma().equals(
+				x.tokens.get(num2.sentId).get(num2.verb).lemma())) {
+			boolean midVerb = midVerb(x.tokens, num1, num2);
+			boolean nowPresent = nowPresent(x.tokens, num1, num2);
+			if (!midVerb && !nowPresent) {
+				return true;
+			}
+		}
+		List<CoreLabel> tokens = x.tokens.get(num1.sentId);
+		int tokenId = Tools.getTokenIdFromCharOffset(tokens, num1.qs.start);
+		for (int i = tokenId + 1; i < tokens.size(); ++i) {
+			if (tokens.get(i).word().equals("remaining") ||
+					tokens.get(i).word().equals("rest") ||
+					tokens.get(i).word().toLowerCase().equals("either")) {
+				return true;
+			}
+		}
+		tokens = x.tokens.get(num2.sentId);
+		tokenId = Tools.getTokenIdFromCharOffset(tokens, num2.qs.start);
+		for (int i = tokenId + 1; i < tokens.size(); ++i) {
+			if (tokens.get(i).word().equals("remaining") ||
+					tokens.get(i).word().equals("rest") ||
+					tokens.get(i).word().toLowerCase().equals("either")) {
+				return true;
+			}
+		}
+		if(label.equals("ADD")) {
+			for(int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
+				CoreLabel token = x.tokens.get(x.questionSchema.sentId).get(i);
+				if(token.word().equals("all") || token.word().equals("altogether") ||
+						token.word().equals("overall") || token.word().equals("total") ||
+						token.word().equals("sum")) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public static boolean midNumber(List<List<CoreLabel>> tokens,
+									StanfordSchema num1,
+									StanfordSchema num2) {
+		int start1 = num1.sentId < num2.sentId ? num1.sentId : num2.sentId;
+		int start2 = num1.sentId < num2.sentId ? num1.verb : num2.verb;
+		int end1 = num1.sentId >= num2.sentId ? num1.sentId : num2.sentId;
+		int end2 = num1.sentId >= num2.sentId ? num1.verb : num2.verb;
+		for(int i=start1; i<=end1; ++i) {
+			int start = 0, end = tokens.get(i).size();
+			if(i==start1) start = start2+1;
+			if(i==end1) end = end2;
+			for(int j=start; j<end; ++j) {
+				if(tokens.get(i).get(j).tag().startsWith("CD")) {
+					return true;
+				}
 			}
 		}
 		return false;

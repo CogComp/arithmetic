@@ -106,8 +106,14 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				init.add(node);
 				continue;
 			}
-			if(!Logic.irrelevance(schemas, i, x.tokens)) {
-				init.add(node);
+			if(LogicDriver.useGoldRelevance) {
+				if(x.relevantQuantIndices.contains(i)) {
+					init.add(node);
+				}
+			} else {
+				if (!Logic.irrelevance(schemas, i, x.tokens)) {
+					init.add(node);
+				}
 			}
 		}
 		n = init.size();
@@ -188,6 +194,10 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 					if (ques.rate.getFirst() == -1 && infRuleType.contains("Ques")) continue;
 				}
 			}
+			if(l.children.size() > 0 && (infRuleType.startsWith("Rate0") ||
+					infRuleType.startsWith("Math0"))) continue;
+			if(r.children.size() > 0 && (infRuleType.startsWith("Rate1") ||
+					infRuleType.startsWith("Math1"))) continue;
 			if(LogicDriver.useInfModel) {
 				SLModel infModel = LogicDriver.infTypeModel;
 				logic.LogicY y = (logic.LogicY) LogicDriver.infTypeModel.
@@ -197,6 +207,21 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				if(l.getValue() < r.getValue() && y.label.equals("SUB")) {
 					y.label += "_REV";
 				}
+				if((y.label.equals("ADD") || y.label.startsWith("SUB")) &&
+						(l.label.startsWith("SUB") || r.label.startsWith("SUB"))) {
+					continue;
+				}
+				if((y.label.equals("MUL") || y.label.startsWith("DIV")) &&
+						(l.label.startsWith("DIV") || r.label.startsWith("DIV"))) {
+					continue;
+				}
+				if(y.label.startsWith("ADD") || y.label.startsWith("SUB")) {
+					if(infRuleType.equals("Verb") &&
+							LogicY.isPartitionOrVerb(x, y.label, num1, num2)) continue;
+					if(infRuleType.equals("Partition") &&
+							!LogicY.isPartitionOrVerb(x, y.label, num1, num2)) continue;
+				}
+				if(y.label.equals("ADD") && r.label.equals("ADD")) continue;
 				Node node = populateNode(l, r, num2, infRuleType, y.key, y.label);
 				double score = wv.dotProduct(featGen.getCombinationFeatureVector(
 						x, node, num1, num2, ques, infRuleType, y.key, isTopmost));

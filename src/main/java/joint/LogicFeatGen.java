@@ -88,11 +88,15 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 													  String infRuleType,
 													  String key,
 													  boolean isTopmost) {
-		List<String> infFeatures = new ArrayList<>();
-		infFeatures.addAll(getInfTypeFeatures(x, num1, num2, ques, infRuleType, isTopmost));
-
 		List<String> features = new ArrayList<>();
 		features.add(node.toTemplateString());
+		features.add("MidNumber:"+LogicY.midNumber(x.tokens, num1, num2));
+		if(num1.sentId == num2.sentId) {
+			features.add("NumbersPresentInSameSentence");
+		}
+
+		List<String> infFeatures = new ArrayList<>();
+		infFeatures.addAll(getInfTypeFeatures(x, node, num1, num2, ques, infRuleType, isTopmost));
 		features.addAll(infFeatures);
 
 		if(!LogicDriver.useInfModel) {
@@ -100,10 +104,12 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 			keyFeatures.addAll(getKeyFeatures(x, num1, num2, ques, infRuleType, key));
 			features.addAll(keyFeatures);
 		}
+//		features.addAll(FeatGen.getConjunctions(features));
         return features;
 	}
 
 	public static List<String> getInfTypeFeatures(LogicX x,
+												  Node node,
 												  StanfordSchema num1,
 												  StanfordSchema num2,
 												  StanfordSchema ques,
@@ -113,13 +119,13 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(infRuleType.startsWith("Rate")) {
 			if(infRuleType.startsWith("Rate0")) {
 				features.addAll(getRateFeatures(x, num1));
-//				features.addAll(FeatGen.getFeaturesConjWithLabels(
-//						getNeighborhoodFeatures(x, num1), "Rate"));
+				features.addAll(FeatGen.getFeaturesConjWithLabels(
+						getNeighborhoodFeatures(x, num1), "Rate"));
 			}
 			if(infRuleType.startsWith("Rate1")) {
 				features.addAll(getRateFeatures(x, num2));
-//				features.addAll(FeatGen.getFeaturesConjWithLabels(
-//						getNeighborhoodFeatures(x, num2), "Rate"));
+				features.addAll(FeatGen.getFeaturesConjWithLabels(
+						getNeighborhoodFeatures(x, num2), "Rate"));
 			}
 			if(infRuleType.startsWith("RateQues")) {
 				features.addAll(getRateFeatures(x, ques));
@@ -127,20 +133,11 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 //						getNeighborhoodFeatures(x, ques), "Rate"));
 			}
 		}
-		if(x.tokens.get(num1.sentId).get(num1.verb).lemma().equals(
-				x.tokens.get(num2.sentId).get(num2.verb).lemma())) {
-			features.add("Verb12Same");
-		} else {
-			features.add("Verb12Diff");
+		boolean partitionOrVerb = LogicY.isPartitionOrVerb(x, node.label, num1, num2);
+		if(node.label.equals("ADD") || node.label.equals("SUB")) {
+			features.add("PartitionOrVerb:"+partitionOrVerb);
 		}
-		boolean midVerb = LogicY.midVerb(x.tokens, num1, num2);
-		boolean nowPresent = LogicY.nowPresent(x.tokens, num1, num2);
-		features.add("MidVerb:"+midVerb);
-		features.add("NowPresent:"+nowPresent);
-		List<String> partitionFeats = getPartitonFeatures(x, num1, num2);
-		features.addAll(partitionFeats);
-		if(partitionFeats.size()>0) features.add("PartitionFeaturesPresent");
-		else features.add("PartitionFeaturesNotPresent");
+
 		return FeatGen.getFeaturesConjWithLabels(
 				features,
 				"InfRule:"+infRuleType.substring(0,4));
