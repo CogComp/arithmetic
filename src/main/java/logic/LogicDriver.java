@@ -10,6 +10,7 @@ import edu.illinois.cs.cogcomp.sl.learner.Learner;
 import edu.illinois.cs.cogcomp.sl.learner.LearnerFactory;
 import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
+import edu.stanford.nlp.ling.CoreLabel;
 import joint.Verbs;
 import run.Annotations;
 import structure.Node;
@@ -44,8 +45,8 @@ public class LogicDriver {
 		List<StanfordProblem> testProbs = split.get(2);
 		Map<Integer, List<Integer>> rateAnnotations =
 				Annotations.readRateAnnotations(dataset+"rateAnnotations.txt");
-		SLProblem train = getSP(trainProbs, rateAnnotations);
-		SLProblem test = getSP(testProbs, rateAnnotations);
+		SLProblem train = getSP(trainProbs, rateAnnotations, true);
+		SLProblem test = getSP(testProbs, rateAnnotations, false);
 		System.out.println("Train : "+train.instanceList.size()+" Test : "+test.instanceList.size());
 		if(isTrain.equalsIgnoreCase("true")) {
 			trainModel("models/InfType"+testFold+".save", train);
@@ -54,7 +55,8 @@ public class LogicDriver {
 	}
 
 	public static SLProblem getSP(List<StanfordProblem> problemList,
-								  Map<Integer, List<Integer>> rateAnnotations)
+								  Map<Integer, List<Integer>> rateAnnotations,
+								  boolean train)
 			throws Exception{
 		SLProblem problem = new SLProblem();
 		for(StanfordProblem prob : problemList){
@@ -117,7 +119,15 @@ public class LogicDriver {
 				acc += 1;
 			} else {
 				incorrect.add(prob.problemId);
+//			}
+//			LogicY ruleBased = LogicInfSolver.ruleBasedKey(prob);
+//			if(ruleBased != null && LogicY.getLoss(gold, ruleBased) > 0.5) {
 				System.out.println(prob.problemId+" : "+prob.text);
+				for(List<CoreLabel> tokens : prob.tokens) {
+					for(CoreLabel token : tokens) {
+						System.out.print(token.lemma()+"/"+token.tag()+" ");
+					}
+				}
 				System.out.println();
 				for(StanfordSchema schema : prob.schema) {
 					System.out.println(schema);

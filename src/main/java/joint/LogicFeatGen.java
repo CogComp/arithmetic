@@ -176,7 +176,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 											  String infRuleType,
 											  String key) {
 		List<String> features = new ArrayList<>();
-		features.add(infRuleType.substring(0,3)+"_"+key);
+		features.add(infRuleType.substring(0, 3) + "_" + key);
 		if(infRuleType.startsWith("Verb") || infRuleType.startsWith("Math")) {
 			if(key.equals("0_0")) {
 				features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "SUBJ"));
@@ -233,7 +233,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		}
 		if(infRuleType.equals("Partition")) {
 			features.addAll(FeatGen.getFeaturesConjWithLabels(
-					getPartitonFeatures(x, num1, num2), key));
+					getPartitionFeatures(x, num1, num2), key));
 		}
 		features.addAll(FeatGen.getFeaturesConjWithLabels(
 				getNeighborhoodFeatures(x, num2), key));
@@ -282,7 +282,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
         return features;
 	}
 
-	public static List<String> getPartitonFeatures(
+	public static List<String> getPartitionFeatures(
 			LogicX x, StanfordSchema num1, StanfordSchema num2) {
 		List<String> features = new ArrayList<>();
 		List<CoreLabel> tokens1 = x.tokens.get(num1.sentId);
@@ -347,6 +347,13 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 					features.add("RateStuffDetected");
 					break;
 				}
+			}
+			if(tokenId>=1 && tokens.get(tokenId-1).lemma().equals("of")) {
+				features.add("RateStuffDetected");
+			}
+			if(tokenId < tokens.size()-2 && (tokens.get(tokenId+1).lemma().equals("a") ||
+					tokens.get(tokenId+2).lemma().equals("a"))) {
+				features.add("RateStuffDetected");
 			}
 		}
 		if(schema.rate != null && schema.rate.getFirst() >= 0) {

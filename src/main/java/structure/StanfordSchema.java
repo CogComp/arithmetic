@@ -212,7 +212,7 @@ public class StanfordSchema {
 		for(int i=tokenId+1; i<tokens.size(); ++i) {
 			if(tokens.get(i).word().equals("if") || tokens.get(i).word().equals("and") ||
 					tokens.get(i).word().equals(",") || tokens.get(i).word().equals(";") ||
-					tokens.get(i).tag().startsWith("V") || tokens.get(i).tag().equals("CD")) {
+					tokens.get(i).tag().equals("CD")) {
 				break;
 			}
 			if (tokens.get(i).lemma().equals("per") ||

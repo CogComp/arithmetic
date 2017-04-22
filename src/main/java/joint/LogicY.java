@@ -148,6 +148,9 @@ public class LogicY implements IStructure {
 			if(i==start1) start = start2+1;
 			if(i==end1) end = end2;
 			for(int j=start; j<end; ++j) {
+				if(j>=1 && tokens.get(i).get(j-1).lemma().equals("to")) {
+					continue;
+				}
 				if(tokens.get(i).get(j).tag().startsWith("V") &&
 						!tokens.get(i).get(j).lemma().equals("be") &&
 						!tokens.get(i).get(j).lemma().equals("have")) {

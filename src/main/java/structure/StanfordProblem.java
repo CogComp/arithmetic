@@ -92,14 +92,14 @@ public class StanfordProblem {
 		}
 		questionSchema = getQuestionSchema(this);
 		if(questionSchema.unit.equals(questionSchema.rate)) {
-			questionSchema.rate = new IntPair(-1, -1);
+			questionSchema.unit = new IntPair(-1, -1);
 		}
-		if(questionSchema.unit.equals(questionSchema.object)) {
-			questionSchema.object = new IntPair(-1, -1);
-		}
-		if(questionSchema.unit.equals(questionSchema.subject)) {
-			questionSchema.subject = new IntPair(-1, -1);
-		}
+//		if(questionSchema.unit.equals(questionSchema.object)) {
+//			questionSchema.object = new IntPair(-1, -1);
+//		}
+//		if(questionSchema.unit.equals(questionSchema.subject)) {
+//			questionSchema.subject = new IntPair(-1, -1);
+//		}
 		wordnetRelations = getWordnetRelations();
 	}
 

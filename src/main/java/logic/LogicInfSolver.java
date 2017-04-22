@@ -10,6 +10,8 @@ import structure.StanfordSchema;
 import utils.Tools;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LogicInfSolver extends AbstractInferenceSolver implements Serializable {
 
@@ -73,6 +75,8 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				bestScore = score;
 			}
 		}
+//		LogicY ruleBased = ruleBasedKey(x);
+//		if(ruleBased != null) return ruleBased;
 		if(best == null) {
 			System.out.println("==================================");
 			System.out.println(x.tokens);
@@ -92,6 +96,100 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 
 		}
 		return best;
+	}
+
+	public static LogicY ruleBasedKey(LogicX x) {
+		List<String> possibleKeys = new ArrayList<>();
+		if(x.infType.startsWith("Verb") || x.infType.startsWith("Math")) {
+			for(String key : Logic.getRelevantKeys(x.infType)) {
+				List<String> phrase1 = new ArrayList<>();
+				List<String> phrase2 = new ArrayList<>();
+				if(key.startsWith("0")) {
+					phrase1 = joint.LogicFeatGen.getPhraseByMode(
+							x.tokens, x.schema.get(x.quantIndex1), "SUBJ");
+				} else if(key.startsWith("1")) {
+					phrase1 = joint.LogicFeatGen.getPhraseByMode(
+							x.tokens, x.schema.get(x.quantIndex1), "OBJ");
+				}
+//				else if(key.equals("QUES")) {
+//					phrase1 = joint.LogicFeatGen.getPhraseByMode(
+//							x.tokens, x.schema.get(x.quantIndex1), "SUBJ");
+//				} else {
+//					phrase1 = joint.LogicFeatGen.getPhraseByMode(
+//							x.tokens, x.schema.get(x.quantIndex2), "SUBJ");
+//				}
+				if(key.endsWith("0")) {
+					phrase2 = joint.LogicFeatGen.getPhraseByMode(
+							x.tokens, x.schema.get(x.quantIndex2), "SUBJ");
+				} else if(key.endsWith("1")) {
+					phrase2 = joint.LogicFeatGen.getPhraseByMode(
+							x.tokens, x.schema.get(x.quantIndex2), "OBJ");
+				}
+//				else {
+//					phrase2 = joint.LogicFeatGen.getPhraseByMode(
+//							x.tokens, x.questionSchema, "SUBJ");
+//				}
+				if(Tools.jaccardSim(phrase1, phrase2) > 0.2 ||
+						phrase2.contains("he") || phrase2.contains("she")) {
+					possibleKeys.add(key);
+				}
+			}
+		}
+		if(x.infType.startsWith("Rate")) {
+			for(String key : Logic.getRelevantKeys(x.infType)) {
+				List<String> phrase1 = new ArrayList<>();
+				List<String> phrase2 = new ArrayList<>();
+				if(key.startsWith("0")) {
+					phrase1 = joint.LogicFeatGen.getPhraseByMode(
+							x.tokens, x.schema.get(x.quantIndex1), "UNIT");
+				} else if(key.startsWith("1")) {
+					phrase1 = joint.LogicFeatGen.getPhraseByMode(
+							x.tokens, x.schema.get(x.quantIndex1), "RATE");
+				}
+//				else if(key.equals("QUES")) {
+//					phrase1 = joint.LogicFeatGen.getPhraseByMode(
+//							x.tokens, x.schema.get(x.quantIndex1), "UNIT");
+//				}
+//				else {
+//					phrase1 = joint.LogicFeatGen.getPhraseByMode(
+//							x.tokens, x.schema.get(x.quantIndex2), "UNIT");
+//				}
+				if(key.endsWith("0")) {
+					phrase2 = joint.LogicFeatGen.getPhraseByMode(
+							x.tokens, x.schema.get(x.quantIndex2), "UNIT");
+				} else if(key.endsWith("1")) {
+					phrase2 = joint.LogicFeatGen.getPhraseByMode(
+							x.tokens, x.schema.get(x.quantIndex2), "RATE");
+				}
+//				else {
+//					phrase2 = joint.LogicFeatGen.getPhraseByMode(
+//							x.tokens, x.questionSchema, "UNIT");
+//				}
+				if(Tools.jaccardSim(phrase1, phrase2) > 0.2 ||
+						phrase2.contains("he") || phrase2.contains("she")) {
+					possibleKeys.add(key);
+				}
+			}
+		}
+		if(possibleKeys.size() == 1) {
+			String key = possibleKeys.get(0);
+			String label = null;
+			if(x.infType.startsWith("Verb")) {
+				label = Logic.verb(x.tokens, x.schema.get(x.quantIndex1),
+						x.schema.get(x.quantIndex2), key);
+			}
+			if(x.infType.startsWith("Partition")) {
+				label = Logic.partition(key);
+			}
+			if(x.infType.startsWith("Math")) {
+				label = Logic.math(x.infType, key);
+			}
+			if(x.infType.startsWith("Rate")) {
+				label = Logic.unitDependency(x.infType, key);
+			}
+			if(label != null) return new LogicY(label, key);
+		}
+		return null;
 	}
 
 }
