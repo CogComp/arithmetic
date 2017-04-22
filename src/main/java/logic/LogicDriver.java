@@ -44,7 +44,7 @@ public class LogicDriver {
 		List<StanfordProblem> trainProbs = split.get(0);
 		List<StanfordProblem> testProbs = split.get(2);
 		Map<Integer, List<Integer>> rateAnnotations =
-				Annotations.readRateAnnotations(dataset+"rateAnnotations.txt");
+				Annotations.readRateAnnotations(Params.ratesFile);
 		SLProblem train = getSP(trainProbs, rateAnnotations, true);
 		SLProblem test = getSP(testProbs, rateAnnotations, false);
 		System.out.println("Train : "+train.instanceList.size()+" Test : "+test.instanceList.size());

@@ -18,6 +18,7 @@ import com.google.gson.reflect.TypeToken;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import structure.*;
+import utils.Params;
 import utils.Tools;
 
 class QuantSchemaPython {
@@ -77,8 +78,8 @@ class ProblemPython {
 
 public class Reader {
 	
-	public static List<Problem> readProblemsFromJson(String dir) throws Exception {
-		String json = FileUtils.readFileToString(new File(dir+"/questions.json"));
+	public static List<Problem> readProblemsFromJson() throws Exception {
+		String json = FileUtils.readFileToString(new File(Params.questionsFile));
 		List<KushmanFormat> kushmanProbs = new Gson().fromJson(json, 
 				new TypeToken<List<KushmanFormat>>(){}.getType());
 		List<Problem> problemList = new ArrayList<>();
@@ -107,9 +108,9 @@ public class Reader {
 		return problemList;
 	}
 
-	public static List<StanfordProblem> readStanfordProblemsFromJson(String dir)
+	public static List<StanfordProblem> readStanfordProblemsFromJson()
 			throws Exception {
-		String json = FileUtils.readFileToString(new File(dir+"/questions.json"));
+		String json = FileUtils.readFileToString(new File(Params.questionsFile));
 		List<KushmanFormat> kushmanProbs = new Gson().fromJson(json,
 				new TypeToken<List<KushmanFormat>>(){}.getType());
 		List<StanfordProblem> problemList = new ArrayList<>();
@@ -136,27 +137,27 @@ public class Reader {
 		}
 		return problemList;
 	}
-	
-	public static void performConsistencyChecks(String dir) throws Exception {
-		List<Problem> probs = Reader.readProblemsFromJson(dir);
-		System.out.println("Problems read : "+probs.size());
-		Set<String> ids = new HashSet<>();
-		for(Problem prob : probs) {
-//			ids.add(Dataset.getNormalizedText(prob.ta.getText()));
-			add(ids, Dataset.getNormalizedText(prob.ta.getText()));
-			for(Node leaf : prob.expr.getLeaves()) {
-				if(!Tools.safeEquals(leaf.val, prob.quantities.get(leaf.quantIndex).val)) {
-					System.out.println("Number do not match");
-					System.out.println(prob.id+" "+leaf.val+" "+prob.quantities.get(leaf.quantIndex).val);
-				}
-			}
-			if(!Tools.safeEquals(prob.expr.getValue(), prob.answer)) {
-				System.out.println("Solution do not match");
-				System.out.println(prob.id+" "+prob.expr.getValue()+" "+prob.answer);
-			}
-		}
-		System.out.println("Unique ids found : "+ids.size());
-	}
+//
+//	public static void performConsistencyChecks(String dir) throws Exception {
+//		List<Problem> probs = Reader.readProblemsFromJson(dir);
+//		System.out.println("Problems read : "+probs.size());
+//		Set<String> ids = new HashSet<>();
+//		for(Problem prob : probs) {
+////			ids.add(Dataset.getNormalizedText(prob.ta.getText()));
+//			add(ids, Dataset.getNormalizedText(prob.ta.getText()));
+//			for(Node leaf : prob.expr.getLeaves()) {
+//				if(!Tools.safeEquals(leaf.val, prob.quantities.get(leaf.quantIndex).val)) {
+//					System.out.println("Number do not match");
+//					System.out.println(prob.id+" "+leaf.val+" "+prob.quantities.get(leaf.quantIndex).val);
+//				}
+//			}
+//			if(!Tools.safeEquals(prob.expr.getValue(), prob.answer)) {
+//				System.out.println("Solution do not match");
+//				System.out.println(prob.id+" "+prob.expr.getValue()+" "+prob.answer);
+//			}
+//		}
+//		System.out.println("Unique ids found : "+ids.size());
+//	}
 	
 	public static boolean add(Set<String> ids, String normalizedText) {
 		boolean allow = true;
@@ -261,8 +262,8 @@ public class Reader {
 
 	}
 
-	public static void printQuestionsForPython(String dir, String outputFile) throws Exception {
-		List<Problem> probs = readProblemsFromJson(dir);
+	public static void printQuestionsForPython(String outputFile) throws Exception {
+		List<Problem> probs = readProblemsFromJson();
 		List<ProblemPython> probsPython = new ArrayList<>();
 		for(Problem prob : probs) {
 			probsPython.add(new ProblemPython(prob));
@@ -293,7 +294,7 @@ public class Reader {
 
 //		analyzeResults("log/InfLCA_v2.out", "log/InfAll_v2.out");
 
-		printQuestionsForPython("data/allArith/", "allArithPython.txt");
+		printQuestionsForPython("allArithPython.txt");
 	}
 
 }

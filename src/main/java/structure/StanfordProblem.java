@@ -180,7 +180,7 @@ public class StanfordProblem {
 
 	public static void main(String args[]) throws Exception {
 		List<StanfordProblem> probs =
-				Reader.readStanfordProblemsFromJson(Params.allArithDir);
+				Reader.readStanfordProblemsFromJson();
 		for(StanfordProblem prob : probs) {
 			if(prob.id != 750) continue;
 			System.out.println(prob);

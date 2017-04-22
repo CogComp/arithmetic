@@ -93,12 +93,12 @@ public class ConsDriver {
 			RunDriver.trainModel("models/Run"+i+".save", Annotations.getSP(
 					split.get(0),
 //					ExtractRate.computeRateAnnotations(dataset)));
-					Annotations.readRateAnnotations(dataset+"rateAnnotations.txt")));
+					Annotations.readRateAnnotations(Params.ratesFile)));
 			System.out.println("Training Rate model ... ");
 			RateDriver.trainModel("models/Rate"+i+".save", RateDriver.getSP(
 					split.get(0),
 //					ExtractRate.computeRateAnnotations(dataset)));
-					Annotations.readRateAnnotations(dataset+"rateAnnotations.txt")));
+					Annotations.readRateAnnotations(Params.ratesFile)));
 			tune(i, dataset);
 			System.out.println("Tuned parameters");
 			System.out.println("wRate : "+ConsInfSolver.wRate);
@@ -115,12 +115,12 @@ public class ConsDriver {
 			RunDriver.trainModel("models/Run"+i+".save", Annotations.getSP(
 					split.get(0),
 //					ExtractRate.computeRateAnnotations(dataset)));
-					Annotations.readRateAnnotations(dataset+"rateAnnotations.txt")));
+					Annotations.readRateAnnotations(Params.ratesFile)));
 			System.out.println("Training Rate model ... ");
 			RateDriver.trainModel("models/Rate"+i+".save", RateDriver.getSP(
 					split.get(0),
 //					ExtractRate.computeRateAnnotations(dataset)));
-					Annotations.readRateAnnotations(dataset+"rateAnnotations.txt")));
+					Annotations.readRateAnnotations(Params.ratesFile)));
 			Params.printMistakes = true;
 			acc += doTest(i, dataset);
 		}

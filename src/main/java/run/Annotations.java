@@ -177,7 +177,7 @@ public class Annotations {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		getRateAnnotationsFromMrinmaya(Reader.readProblemsFromJson(Params.allArithDir),
-				readRateAnnotations(Params.allArithDir+"/rateAnnotations.txt"));
+		getRateAnnotationsFromMrinmaya(Reader.readProblemsFromJson(),
+				readRateAnnotations(Params.ratesFile));
 	}
 }

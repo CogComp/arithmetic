@@ -281,7 +281,7 @@ public class Logic {
         Set<Integer> incorrect = new HashSet<>();
         Set<Integer> total = new HashSet<>();
         int t = 0;
-        List<StanfordProblem> probs = Reader.readStanfordProblemsFromJson(dataset);
+        List<StanfordProblem> probs = Reader.readStanfordProblemsFromJson();
         double acc = 0.0;
         for (StanfordProblem prob : probs) {
             total.add(prob.id);

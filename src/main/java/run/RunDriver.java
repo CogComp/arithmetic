@@ -42,10 +42,8 @@ public class RunDriver {
 		List<List<Problem>> split = Folds.getDataSplit(dataset, testFold);
 		List<Problem> trainProbs = split.get(0);
 		List<Problem> testProbs = split.get(2);
-		SLProblem train = Annotations.getSP(trainProbs, Annotations.readRateAnnotations(
-				dataset+"rateAnnotations.txt"));
-		SLProblem test = Annotations.getSP(testProbs, Annotations.readRateAnnotations(
-				dataset+"rateAnnotations.txt"));
+		SLProblem train = Annotations.getSP(trainProbs, Annotations.readRateAnnotations(Params.ratesFile));
+		SLProblem test = Annotations.getSP(testProbs, Annotations.readRateAnnotations(Params.ratesFile));
 		System.out.println("Train : "+train.instanceList.size()+" Test : "+test.instanceList.size());
 		if(isTrain.equalsIgnoreCase("true")) {
 			trainModel("models/Run"+testFold+".save", train);

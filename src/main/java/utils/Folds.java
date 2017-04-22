@@ -35,16 +35,25 @@ public class Folds {
 		List<Problem> train = new ArrayList<Problem>();
 		List<Problem> val = new ArrayList<Problem>();
 		List<Problem> test = new ArrayList<Problem>();
-		List<Problem> probs = Reader.readProblemsFromJson(dir);
-		String str = FileUtils.readFileToString(new File(dir+"/fold"+fold+".txt"));
-		Set<Integer> foldIndices = new HashSet<>();
-		for(String index : str.split("\n")) {
-			foldIndices.add(Integer.parseInt(index));
+		List<Problem> probs = Reader.readProblemsFromJson();
+		Set<Integer> testIndices = new HashSet<>();
+		Set<Integer> trainIndices = new HashSet<>();
+		int numFolds = getNumFolds(dir);
+		for(int i=0; i<numFolds; ++i) {
+			String str = FileUtils.readFileToString(new File(dir + "/fold" + i + ".txt"));
+			for (String index : str.split("\n")) {
+				if(i==fold) {
+					testIndices.add(Integer.parseInt(index));
+				} else {
+					trainIndices.add(Integer.parseInt(index));
+				}
+			}
 		}
 		for(Problem prob : probs) {
-			if(foldIndices.contains(prob.id)) {
+			if(testIndices.contains(prob.id)) {
 				test.add(prob);
-			} else {
+			}
+			if(trainIndices.contains(prob.id)) {
 				allTrain.add(prob);
 			}
 		}
@@ -61,20 +70,29 @@ public class Folds {
 	// Returns List of 3 elements : train, val, test
 	public static List<List<StanfordProblem>> getDataSplitForStanford(String dir, int fold)
 			throws Exception {
-		List<StanfordProblem> allTrain = new ArrayList<>();
-		List<StanfordProblem> train = new ArrayList<>();
-		List<StanfordProblem> val = new ArrayList<>();
-		List<StanfordProblem> test = new ArrayList<>();
-		List<StanfordProblem> probs = Reader.readStanfordProblemsFromJson(dir);
-		String str = FileUtils.readFileToString(new File(dir+"/fold"+fold+".txt"));
-		Set<Integer> foldIndices = new HashSet<>();
-		for(String index : str.split("\n")) {
-			foldIndices.add(Integer.parseInt(index));
+		List<StanfordProblem> allTrain = new ArrayList<StanfordProblem>();
+		List<StanfordProblem> train = new ArrayList<StanfordProblem>();
+		List<StanfordProblem> val = new ArrayList<StanfordProblem>();
+		List<StanfordProblem> test = new ArrayList<StanfordProblem>();
+		List<StanfordProblem> probs = Reader.readStanfordProblemsFromJson();
+		Set<Integer> testIndices = new HashSet<>();
+		Set<Integer> trainIndices = new HashSet<>();
+		int numFolds = getNumFolds(dir);
+		for(int i=0; i<numFolds; ++i) {
+			String str = FileUtils.readFileToString(new File(dir + "/fold" + i + ".txt"));
+			for (String index : str.split("\n")) {
+				if(i==fold) {
+					testIndices.add(Integer.parseInt(index));
+				} else {
+					trainIndices.add(Integer.parseInt(index));
+				}
+			}
 		}
 		for(StanfordProblem prob : probs) {
-			if(foldIndices.contains(prob.id)) {
+			if(testIndices.contains(prob.id)) {
 				test.add(prob);
-			} else {
+			}
+			if(trainIndices.contains(prob.id)) {
 				allTrain.add(prob);
 			}
 		}

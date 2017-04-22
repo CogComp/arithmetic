@@ -2,6 +2,7 @@ package structure;
 
 import reader.Reader;
 import run.Annotations;
+import utils.Params;
 import utils.Tools;
 
 import java.util.*;
@@ -10,10 +11,10 @@ public class ExtractRate {
 
     // Hack to compute rate annotations for old datasets
     public static Map<Integer, List<Integer>> computeRateAnnotations(String dir) throws Exception {
-        List<Problem> oldProblems = Reader.readProblemsFromJson(dir);
-        List<Problem> newProblems = Reader.readProblemsFromJson("data/allArith/");
+        List<Problem> oldProblems = Reader.readProblemsFromJson();
+        List<Problem> newProblems = Reader.readProblemsFromJson();
         Map<Integer, List<Integer>> newRateAnnotations =
-                Annotations.readRateAnnotations("data/allArith/rateAnnotations.txt");
+                Annotations.readRateAnnotations(Params.ratesFile);
         Map<Integer, List<Integer>> oldRateAnnotations = new HashMap<>();
         int count = 0;
         for(Problem oldProb : oldProblems) {

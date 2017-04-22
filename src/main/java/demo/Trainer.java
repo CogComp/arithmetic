@@ -39,10 +39,10 @@ public class Trainer {
 		PairDriver.trainModel("models/Pair.save", PairDriver.getSP(split.get(0)));
 		System.out.println("Training Run model ... ");
 		RunDriver.trainModel("models/Run.save", Annotations.getSP(split.get(0), 
-				Annotations.readRateAnnotations(dataset+"ratesAnnotations.txt")));
+				Annotations.readRateAnnotations(Params.ratesFile)));
 		System.out.println("Training Rate model ... ");
 		RateDriver.trainModel("models/Rate.save", RateDriver.getSP(split.get(0),
-				Annotations.readRateAnnotations(dataset+"ratesAnnotations.txt")));
+				Annotations.readRateAnnotations(Params.ratesFile)));
 		loadModels();
 		ConsDriver.tune(split.get(2), relModel, pairModel, runModel, rateModel);
 		System.out.println("Tuned parameters");
@@ -50,17 +50,17 @@ public class Trainer {
 		System.out.println("wRun : "+ConsInfSolver.wRun);
 		System.out.println("wRel : "+ConsInfSolver.wRel);
 		System.out.println("Retraining on all training data");
-		List<Problem> allProbs = Reader.readProblemsFromJson(dataset);
+		List<Problem> allProbs = Reader.readProblemsFromJson();
 		System.out.println("Training Relevance model ... ");
 		RelDriver.trainModel("models/Rel.save", RelDriver.getSP(allProbs));
 		System.out.println("Training Pair model ... ");
 		PairDriver.trainModel("models/Pair.save", PairDriver.getSP(allProbs));
 		System.out.println("Training Run model ... ");
 		RunDriver.trainModel("models/Run.save", Annotations.getSP(
-				allProbs, Annotations.readRateAnnotations(dataset+"rateAnnotations.txt")));
+				allProbs, Annotations.readRateAnnotations(Params.ratesFile)));
 		System.out.println("Training Rate model ... ");
 		RateDriver.trainModel("models/Rate.save", RateDriver.getSP(
-				allProbs, Annotations.readRateAnnotations(dataset+"rateAnnotations.txt")));
+				allProbs, Annotations.readRateAnnotations(Params.ratesFile)));
 	}
 	
 	public static String genTableHtml(Problem prob, String answer) throws Exception {

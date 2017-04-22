@@ -70,9 +70,9 @@ public class GraphInfSolver {
 
 	public static List<String> getGoldLabels(Problem prob) throws Exception {
 		SLProblem rateSp = RateDriver.getSP(Arrays.asList(prob),
-				Annotations.readRateAnnotations(Params.allArithDir+"rateAnnotations.txt"));
+				Annotations.readRateAnnotations(Params.ratesFile));
 		SLProblem runSp = Annotations.getSP(Arrays.asList(prob),
-				Annotations.readRateAnnotations(Params.allArithDir+"rateAnnotations.txt"));
+				Annotations.readRateAnnotations(Params.ratesFile));
 		List<String> labels = new ArrayList<>();
 		for(int i=1; i<rateSp.size(); i++) {
 			labels.add(((RateY)rateSp.goldStructureList.get(i)).label);

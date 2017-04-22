@@ -105,9 +105,9 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 			features.addAll(keyFeatures);
 		}
 //		features.addAll(FeatGen.getConjunctions(features));
-		if(node.children.get(0).children.size() == 0 && node.children.get(1).children.size() == 0) {
-			return FeatGen.getFeaturesConjWithLabels(features, "JoiningLeaves");
-		}
+//		if(node.children.get(0).children.size() == 0 && node.children.get(1).children.size() == 0) {
+//			return FeatGen.getFeaturesConjWithLabels(features, "JoiningLeaves");
+//		}
         return features;
 	}
 
@@ -277,18 +277,16 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				}
 			}
 			if(key.equals("QUES")) {
-				features.addAll(getPairSchemaFeatures(x, num1, ques, "UNIT", "UNIT"));
+				features.addAll(getPairSchemaFeatures(x, num2, ques, "UNIT", "RATE"));
 			}
 			if(key.equals("QUES_REV")) {
-				features.addAll(getPairSchemaFeatures(x, num2, ques, "UNIT", "UNIT"));
+				features.addAll(getPairSchemaFeatures(x, num1, ques, "UNIT", "RATE"));
 			}
 		}
 		if(infRuleType.equals("Partition")) {
 			features.addAll(FeatGen.getFeaturesConjWithLabels(
 					getPartitionFeatures(x, num1, num2), key));
 		}
-		features.addAll(FeatGen.getFeaturesConjWithLabels(
-				getNeighborhoodFeatures(x, num2), key));
 		return features;
 	}
 
