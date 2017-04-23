@@ -181,7 +181,6 @@ public class LogicY implements IStructure {
 											String label,
 											StanfordSchema num1,
 											StanfordSchema num2) {
-
 		if (x.tokens.get(num1.sentId).get(num1.verb).lemma().equals(
 				x.tokens.get(num2.sentId).get(num2.verb).lemma())) {
 			boolean midVerb = midVerb(x.tokens, num1, num2);
@@ -214,6 +213,13 @@ public class LogicY implements IStructure {
 				if(token.word().equals("all") || token.word().equals("altogether") ||
 						token.word().equals("overall") || token.word().equals("total") ||
 						token.word().equals("sum")) {
+					return true;
+				}
+			}
+			for(int i=0; i<2; ++i) {
+				CoreLabel token = x.tokens.get(x.questionSchema.sentId).get(i);
+				if(token.word().equals("all") || token.word().equals("altogether") ||
+						token.word().equals("overall") || token.word().equals("total")) {
 					return true;
 				}
 			}

@@ -72,9 +72,9 @@ public class Verbs {
     public static String verbCategory(String verb) {
         List<String> state = Arrays.asList("be", "have", "own", "start", "worth", "need");
         List<String> positive = Arrays.asList("get", "gain", "borrow", "receive",
-                "increase", "take", "collect", "add", "score", "save", "win");
+                "increase", "take", "collect", "add", "score", "save", "win", "build");
         List<String> negative = Arrays.asList("give", "lose", "lend", "eat",
-                "decrease", "reduce", "spend", "pay", "remove", "use");
+                "decrease", "reduce", "spend", "pay", "remove", "use", "throw", "leave", "defeat");
         Map<String, Double> map = new HashMap<>();
         map.put("STATE", -Double.MAX_VALUE);
         map.put("POSITIVE", -Double.MAX_VALUE);

@@ -1,5 +1,6 @@
 package joint;
 
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.sl.core.AbstractFeatureGenerator;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
@@ -13,6 +14,7 @@ import utils.Tools;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class LogicFeatGen extends AbstractFeatureGenerator implements Serializable {
@@ -228,7 +230,9 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 											  String infRuleType,
 											  String key) {
 		List<String> features = new ArrayList<>();
-		features.add(infRuleType.substring(0, 3) + "_" + key);
+		if(!key.equals("0_1") && !key.equals("1_0")) {
+			features.add(infRuleType.substring(0, 3) + "_" + key);
+		}
 		if(infRuleType.startsWith("Verb") || infRuleType.startsWith("Math")) {
 			if(key.equals("0_0")) {
 				features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "SUBJ"));
@@ -287,6 +291,21 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 			features.addAll(FeatGen.getFeaturesConjWithLabels(
 					getPartitionFeatures(x, num1, num2), key));
 		}
+		List<CoreLabel> tokens1 = x.tokens.get(num1.sentId);
+		int tokenId1 = Tools.getTokenIdFromCharOffset(tokens1, num1.qs.start);
+		List<CoreLabel> tokens2 = x.tokens.get(num2.sentId);
+		int tokenId2 = Tools.getTokenIdFromCharOffset(tokens2, num2.qs.start);
+//		for (int i = Math.max(0, tokenId1 - 3); i < Math.min(tokenId1 + 4, tokens1.size()); ++i) {
+//			if (!tokens1.get(i).tag().startsWith("N")) {
+//				features.add(infRuleType.substring(0,4)+key+"1_Unigram_" + tokens1.get(i).lemma());
+//			}
+//		}
+		for (int i = Math.max(0, tokenId2 - 3); i < Math.min(tokenId2 + 4, tokens2.size()); ++i) {
+			if (!tokens2.get(i).tag().startsWith("N")) {
+				features.add(infRuleType.substring(0,4)+key+"2_Unigram_" + tokens2.get(i).lemma());
+			}
+		}
+
 		return features;
 	}
 
@@ -297,38 +316,58 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		List<String> features = new ArrayList<>();
 		List<String> phrase1 = getPhraseByMode(x.tokens, schema1, mode1);
 		List<String> phrase2 = getPhraseByMode(x.tokens, schema2, mode2);
-		double sim = Tools.jaccardSim(phrase1, phrase2);
-		if(sim > 0.4 && sim < 0.9) features.add("SimMoreThanHalfPhraseMatch");
-		if(sim > 0.9) features.add("SimExactPhraseMatch");
-
-		double entail = Tools.jaccardEntail(phrase1, phrase2);
-		if(entail > 0.4 && entail < 0.9) features.add("EntailMoreThanHalfPhraseMatch");
-		if(entail > 0.9) features.add("EntailExactPhraseMatch");
-
-		StanfordSchema emptyUnitSchema = null;
-		List<String> phraseOther = null;
-		if(phrase1.size() == 0 && mode1.equals("UNIT")) {
-			emptyUnitSchema = schema1;
-			phraseOther = phrase2;
+		if(mode1.equals("UNIT") && phrase1.size() == 0 && schema1.quantId >= 1) {
+			StanfordSchema prevSchema = x.schema.get(schema1.quantId-1);
+			phrase1 = Tools.spanToLemmaList(x.tokens.get(prevSchema.sentId), prevSchema.unit);
 		}
-		if(phrase2.size() == 0 && mode2.equals("UNIT")) {
-			emptyUnitSchema = schema2;
-			phraseOther = phrase1;
+		if(mode2.equals("UNIT") && phrase2.size() == 0 && schema2.quantId >= 1) {
+			StanfordSchema prevSchema = x.schema.get(schema2.quantId-1);
+			phrase2 = Tools.spanToLemmaList(x.tokens.get(prevSchema.sentId), prevSchema.unit);
 		}
-		// If unit was not extracted, copy last unit over
-		if(emptyUnitSchema != null) {
-			if(emptyUnitSchema.qs != null && emptyUnitSchema.quantId >= 1) {
-				StanfordSchema prevSchema = x.schema.get(emptyUnitSchema.quantId-1);
-				sim = Tools.jaccardSim(Tools.spanToLemmaList(
-						x.tokens.get(prevSchema.sentId),
-						prevSchema.unit), phraseOther);
-				if(sim > 0.4 && sim < 0.9) features.add("SimMoreThanHalfPhraseMatch");
-				if(sim > 0.9) features.add("SimExactPhraseMatch");
-			}
-		}
-		if(sim < 0.2) features.add("SimAbsolutelyNoMatch");
 		if(phrase1.size() == 0) features.add(mode1+"_Empty");
 		if(phrase2.size() == 0) features.add(mode2+"_Empty");
+		double sim;
+		if(mode1.equals("SUBJ") && mode2.equals("SUBJ")) {
+			sim = Math.max(Tools.jaccardSim(phrase1, phrase2), Tools.jaccardSim(
+					getPhraseByMode(x.tokens, schema1, "OBJ"),
+					getPhraseByMode(x.tokens, schema1, "OBJ")
+			));
+		} else {
+			sim = Tools.jaccardSim(phrase1, phrase2);
+		}
+		if(sim > 0.2) features.add("NonZeroSimilarity");
+		if(sim < 0.2) features.add("AbsolutelyNoMatch");
+
+		List<Pair<String, String>> subjObjCandidates = Arrays.asList(
+				new Pair<>("SUBJ", "SUBJ"),
+				new Pair<>("SUBJ", "OBJ"),
+				new Pair<>("OBJ", "SUBJ"));
+		List<Pair<String, String>> unitRateCandidates = Arrays.asList(
+				new Pair<>("UNIT", "UNIT"),
+				new Pair<>("UNIT", "RATE"),
+				new Pair<>("RATE", "UNIT"));
+		List<Pair<String, String>> candidates;
+		if(mode1.equals("SUBJ") || mode1.equals("OBJ")) {
+			candidates = subjObjCandidates;
+		} else {
+			candidates = unitRateCandidates;
+		}
+		double maxSim = 0.0;
+		for(Pair<String, String> modePair : candidates) {
+			double s = Tools.jaccardSim(
+					getPhraseByMode(x.tokens, schema1, modePair.getFirst()),
+					getPhraseByMode(x.tokens, schema2, modePair.getSecond()));
+			if(s > maxSim) maxSim = s;
+		}
+		if(maxSim > sim+0.001) {
+			features.add("BetterCandidatePresent");
+		} else if(maxSim > 0.1){
+			features.add("BestOption");
+		}
+		if(maxSim < 0.1) {
+			features.add("NoGoodOption_"+mode1+mode2);
+		}
+
         return features;
 	}
 
@@ -359,6 +398,11 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		}
 		if(tokens2.get(0).lemma().equals("if") && tokenId2 <= 5) {
 			features.add("InSentenceStartingWithIf");
+		}
+		for(int i=tokenId2-1; i>=Math.max(0, tokenId2-4); --i) {
+			if(tokens2.get(i).lemma().equals("already")) {
+				features.add("InSentenceWithAlready");
+			}
 		}
 		for(int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
 			CoreLabel token = x.tokens.get(x.questionSchema.sentId).get(i);
