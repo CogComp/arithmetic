@@ -230,6 +230,10 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 											  String infRuleType,
 											  String key) {
 		List<String> features = new ArrayList<>();
+		List<CoreLabel> tokens1 = x.tokens.get(num1.sentId);
+		int tokenId1 = Tools.getTokenIdFromCharOffset(tokens1, num1.qs.start);
+		List<CoreLabel> tokens2 = x.tokens.get(num2.sentId);
+		int tokenId2 = Tools.getTokenIdFromCharOffset(tokens2, num2.qs.start);
 		if(!key.equals("0_1") && !key.equals("1_0")) {
 			features.add(infRuleType.substring(0, 3) + "_" + key);
 		}
@@ -289,23 +293,24 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		}
 		if(infRuleType.equals("Partition")) {
 			features.addAll(FeatGen.getFeaturesConjWithLabels(
-					getPartitionFeatures(x, num1, num2), key));
+					getPartitionFeatures(x, num1, num2), key.equals("SIBLING")?"SIBLING":"H"));
 		}
-		List<CoreLabel> tokens1 = x.tokens.get(num1.sentId);
-		int tokenId1 = Tools.getTokenIdFromCharOffset(tokens1, num1.qs.start);
-		List<CoreLabel> tokens2 = x.tokens.get(num2.sentId);
-		int tokenId2 = Tools.getTokenIdFromCharOffset(tokens2, num2.qs.start);
-//		for (int i = Math.max(0, tokenId1 - 3); i < Math.min(tokenId1 + 4, tokens1.size()); ++i) {
-//			if (!tokens1.get(i).tag().startsWith("N")) {
-//				features.add(infRuleType.substring(0,4)+key+"1_Unigram_" + tokens1.get(i).lemma());
-//			}
-//		}
+		if(infRuleType.equals("Verb")) {
+			if(num1.sentId == num2.sentId) {
+				features.add(key+"SameSentence");
+			}
+			if(tokenId1 < 2 || tokenId2 < 2) {
+				features.add(key+"StartOfSentence");
+			}
+			if(num1.verb < tokens1.size()-1 && tokens1.get(num1.verb+1).tag().startsWith("R")) {
+				features.add(key+"PhrasalVerb");
+			}
+		}
 		for (int i = Math.max(0, tokenId2 - 3); i < Math.min(tokenId2 + 4, tokens2.size()); ++i) {
 			if (!tokens2.get(i).tag().startsWith("N")) {
 				features.add(infRuleType.substring(0,4)+key+"2_Unigram_" + tokens2.get(i).lemma());
 			}
 		}
-
 		return features;
 	}
 
@@ -361,13 +366,14 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		}
 		if(maxSim > sim+0.001) {
 			features.add("BetterCandidatePresent");
+			features.add("BetterCandidatePresent"+mode1+mode2);
 		} else if(maxSim > 0.1){
 			features.add("BestOption");
+			features.add("BestOption"+mode1+mode2);
 		}
 		if(maxSim < 0.1) {
 			features.add("NoGoodOption_"+mode1+mode2);
 		}
-
         return features;
 	}
 
@@ -396,14 +402,30 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				features.add("Either");
 			}
 		}
-		if(tokens2.get(0).lemma().equals("if") && tokenId2 <= 5) {
-			features.add("InSentenceStartingWithIf");
+		if(tokens2.get(0).lemma().equals("if") &&
+				tokens2.get(tokens2.size()-1).word().equals("?")) {
+			boolean comma = false;
+			for(int i=0; i<tokenId2; ++i) {
+				if(tokens2.get(i).word().equals(",")) {
+					comma = true;
+					break;
+				}
+			}
+			if(!comma) features.add("InSentenceStartingWithIf");
 		}
 		for(int i=tokenId2-1; i>=Math.max(0, tokenId2-4); --i) {
 			if(tokens2.get(i).lemma().equals("already")) {
 				features.add("InSentenceWithAlready");
+				break;
 			}
 		}
+//		for(int i=tokenId2-1; i>=0; --i) {
+//			if(tokens2.get(i).word().equals(",")) break;
+//			if(tokens2.get(i).lemma().equals("but")) {
+//				features.add("InSentenceWithBut");
+//				break;
+//			}
+//		}
 		for(int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
 			CoreLabel token = x.tokens.get(x.questionSchema.sentId).get(i);
 			if(token.word().equals("all") || token.word().equals("altogether") ||
@@ -412,7 +434,15 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				features.add("AllPresentInQuestion");
 			}
 		}
+		for(int i=0; i<2; ++i) {
+			CoreLabel token = x.tokens.get(x.questionSchema.sentId).get(i);
+			if(token.word().equals("all") || token.word().equals("altogether") ||
+					token.word().equals("overall") || token.word().equals("total")) {
+				features.add("AllPresentInQuestion");
+			}
+		}
 		if(num1.sentId == num2.sentId) {
+			features.add("SameSentence");
 			if(num1.verb == num2.verb) {
 				features.add("VerbSameInstance");
 			}

@@ -227,7 +227,8 @@ public class Tools {
 		tokens1.addAll(phrase1);
 		Set<String> tokens2 = new HashSet<>();
 		tokens2.addAll(phrase2);
-		int union = tokens1.size(), intersection = 0;
+		int union = tokens1.size();
+		int intersection = 0;
 		for (String token : tokens2) {
 			if (tokens1.contains(token)) {
 				intersection++;
