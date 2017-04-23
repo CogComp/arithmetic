@@ -106,10 +106,6 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 			keyFeatures.addAll(getKeyFeatures(x, num1, num2, ques, infRuleType, key));
 			features.addAll(keyFeatures);
 		}
-//		features.addAll(FeatGen.getConjunctions(features));
-//		if(node.children.get(0).children.size() == 0 && node.children.get(1).children.size() == 0) {
-//			return FeatGen.getFeaturesConjWithLabels(features, "JoiningLeaves");
-//		}
         return features;
 	}
 
@@ -124,13 +120,13 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(infRuleType.startsWith("Rate")) {
 			if(infRuleType.startsWith("Rate0")) {
 				features.addAll(getRateFeatures(x, num1));
-//				features.addAll(FeatGen.getFeaturesConjWithLabels(
-//						getNeighborhoodFeatures(x, num1), "Rate"));
+				features.addAll(FeatGen.getFeaturesConjWithLabels(
+						getNeighborhoodFeatures(x, num1), "Rate"));
 			}
 			if(infRuleType.startsWith("Rate1")) {
 				features.addAll(getRateFeatures(x, num2));
-//				features.addAll(FeatGen.getFeaturesConjWithLabels(
-//						getNeighborhoodFeatures(x, num2), "Rate"));
+				features.addAll(FeatGen.getFeaturesConjWithLabels(
+						getNeighborhoodFeatures(x, num2), "Rate"));
 			}
 			if(infRuleType.startsWith("RateQues")) {
 				features.addAll(getRateFeatures(x, ques));
@@ -181,9 +177,9 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(schema.rate != null && schema.rate.getFirst() >= 0) {
 			features.add("RateDetected");
 		}
-//		if(!features.contains("RateDetected")){
-//			features.add("RateNotDetected");
-//		}
+		if(!features.contains("RateDetected")){
+			features.add("RateNotDetected");
+		}
 		boolean rateFound = false;
 		for(int i=0; i<x.schema.size(); ++i) {
 			if(x.schema.get(i).rate.getFirst() >= 0) {
@@ -239,24 +235,24 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		}
 		if(infRuleType.startsWith("Verb") || infRuleType.startsWith("Math")) {
 			if(key.equals("0_0")) {
-				features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "SUBJ"));
+				features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "SUBJ", infRuleType));
 			}
 			if(key.equals("0_1")) {
-				features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "OBJ"));
+				features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "OBJ", infRuleType));
 			}
 			if(key.equals("1_0")) {
-				features.addAll(getPairSchemaFeatures(x, num1, num2, "OBJ", "SUBJ"));
+				features.addAll(getPairSchemaFeatures(x, num1, num2, "OBJ", "SUBJ", infRuleType));
 			}
 			if(key.equals("QUES")) {
-				features.addAll(getPairSchemaFeatures(x, num1, ques, "SUBJ", "SUBJ"));
+				features.addAll(getPairSchemaFeatures(x, num1, ques, "SUBJ", "SUBJ", infRuleType));
 			}
 			if(key.equals("QUES_REV")) {
-				features.addAll(getPairSchemaFeatures(x, num2, ques, "SUBJ", "SUBJ"));
+				features.addAll(getPairSchemaFeatures(x, num2, ques, "SUBJ", "SUBJ", infRuleType));
 			}
 		}
 		if(infRuleType.startsWith("Rate")) {
 			if(key.equals("0_0")) {
-				features.addAll(getPairSchemaFeatures(x, num1, num2, "UNIT", "UNIT"));
+				features.addAll(getPairSchemaFeatures(x, num1, num2, "UNIT", "UNIT", infRuleType));
 				if(infRuleType.contains("Rate0") && Tools.jaccardSim(
 						Tools.spanToLemmaList(x.tokens.get(num1.sentId), num1.rate),
 						Tools.spanToLemmaList(x.tokens.get(ques.sentId), ques.unit)) > 0) {
@@ -269,7 +265,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				}
 			}
 			if(key.equals("0_1")) {
-				features.addAll(getPairSchemaFeatures(x, num1, num2, "UNIT", "RATE"));
+				features.addAll(getPairSchemaFeatures(x, num1, num2, "UNIT", "RATE", infRuleType));
 				if(Tools.jaccardSim(
 						Tools.spanToLemmaList(x.tokens.get(num2.sentId), num2.unit),
 						Tools.spanToLemmaList(x.tokens.get(ques.sentId), ques.unit)) > 0) {
@@ -277,7 +273,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				}
 			}
 			if(key.equals("1_0")) {
-				features.addAll(getPairSchemaFeatures(x, num1, num2, "RATE", "UNIT"));
+				features.addAll(getPairSchemaFeatures(x, num1, num2, "RATE", "UNIT", infRuleType));
 				if(Tools.jaccardSim(
 						Tools.spanToLemmaList(x.tokens.get(num1.sentId), num1.unit),
 						Tools.spanToLemmaList(x.tokens.get(ques.sentId), ques.unit)) > 0) {
@@ -285,10 +281,10 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				}
 			}
 			if(key.equals("QUES")) {
-				features.addAll(getPairSchemaFeatures(x, num2, ques, "UNIT", "RATE"));
+				features.addAll(getPairSchemaFeatures(x, num2, ques, "UNIT", "RATE", infRuleType));
 			}
 			if(key.equals("QUES_REV")) {
-				features.addAll(getPairSchemaFeatures(x, num1, ques, "UNIT", "RATE"));
+				features.addAll(getPairSchemaFeatures(x, num1, ques, "UNIT", "RATE", infRuleType));
 			}
 		}
 		if(infRuleType.equals("Partition")) {
@@ -317,7 +313,8 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 	// Mode has to be one of "SUBJ", "OBJ", "UNIT", "RATE"
 	// Note that this is a symmetric similarity function, lets keep it that way
 	public static List<String> getPairSchemaFeatures(
-			LogicX x, StanfordSchema schema1, StanfordSchema schema2, String mode1, String mode2) {
+			LogicX x, StanfordSchema schema1, StanfordSchema schema2, String mode1, String mode2,
+			String infType) {
 		List<String> features = new ArrayList<>();
 		List<String> phrase1 = getPhraseByMode(x.tokens, schema1, mode1);
 		List<String> phrase2 = getPhraseByMode(x.tokens, schema2, mode2);
@@ -419,13 +416,13 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				break;
 			}
 		}
-//		for(int i=tokenId2-1; i>=0; --i) {
-//			if(tokens2.get(i).word().equals(",")) break;
-//			if(tokens2.get(i).lemma().equals("but")) {
-//				features.add("InSentenceWithBut");
-//				break;
-//			}
-//		}
+		for(int i=tokenId2-1; i>=0; --i) {
+			if(tokens2.get(i).word().equals(",")) break;
+			if(tokens2.get(i).lemma().equals("but")) {
+				features.add("InSentenceWithAlready");
+				break;
+			}
+		}
 		for(int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
 			CoreLabel token = x.tokens.get(x.questionSchema.sentId).get(i);
 			if(token.word().equals("all") || token.word().equals("altogether") ||
