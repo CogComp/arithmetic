@@ -70,6 +70,40 @@ public class LogicY implements IStructure {
 		return 0.0f;
 	}
 
+	public static float getLossForParenthesis(Node node1, Node node2) {
+		if(node1.children.size() != node2.children.size()) {
+			return 1.0f;
+		}
+		if(node1.children.size() == 0) {
+			if(node1.quantIndex == node2.quantIndex) {
+				return 0.0f;
+			} else {
+				return 1.0f;
+			}
+		}
+//		if(!node1.label.equals(node2.label)) {
+//			return 1.0f;
+//		}
+//		if(!node1.infRuleType.equals(node2.infRuleType)) {
+//			return 1.0f;
+//		}
+		float loss;
+		if(node1.label.equals("ADD") || node1.label.equals("MUL")) {
+			loss = Math.min(
+					getLossForParenthesis(node1.children.get(0), node2.children.get(0)) +
+							getLossForParenthesis(node1.children.get(1), node2.children.get(1)),
+					getLossForParenthesis(node1.children.get(0), node2.children.get(1)) +
+							getLossForParenthesis(node1.children.get(1), node2.children.get(0)));
+		} else {
+			loss = getLossForParenthesis(node1.children.get(0), node2.children.get(0)) +
+					getLossForParenthesis(node1.children.get(1), node2.children.get(1));
+		}
+		if(loss > 0.5) {
+			return 1.0f;
+		}
+		return 0.0f;
+	}
+
 	public void populateInfType(LogicX x,
 								Node expr,
 								boolean isTopmost,

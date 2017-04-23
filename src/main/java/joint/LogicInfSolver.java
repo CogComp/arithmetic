@@ -221,7 +221,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 					if(infRuleType.equals("Partition") &&
 							!LogicY.isPartitionOrVerb(x, y.label, num1, num2)) continue;
 				}
-				if(y.label.equals("ADD") && r.label.equals("ADD")) continue;
+//				if(y.label.equals("ADD") && r.label.equals("ADD")) continue;
 				Node node = populateNode(l, r, num2, infRuleType, y.key, y.label);
 				double score = wv.dotProduct(featGen.getCombinationFeatureVector(
 						x, node, num1, num2, ques, infRuleType, y.key, isTopmost));

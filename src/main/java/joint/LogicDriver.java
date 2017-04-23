@@ -78,23 +78,26 @@ public class LogicDriver {
 		SLModel model = SLModel.loadModel(modelPath);
 		Set<Integer> incorrect = new HashSet<>();
 		Set<Integer> total = new HashSet<>();
-		double answerAcc = 0.0, infTypeAcc = 0.0, overAllAcc = 0.0;
+		double answerAcc = 0.0, infTypeAcc = 0.0, overAllAcc = 0.0, parAcc = 0.0;
 		for (int i = 0; i < sp.instanceList.size(); i++) {
 			LogicX prob = (LogicX) sp.instanceList.get(i);
 			LogicY gold = (LogicY) sp.goldStructureList.get(i);
 			LogicY pred = (LogicY) model.infSolver.getBestStructure(model.wv, prob);
 			total.add(prob.problemId);
-			if(Tools.safeEquals(gold.expr.getValue(), pred.expr.getValue()) ||
-					Tools.safeEquals(-gold.expr.getValue(), pred.expr.getValue())) {
-				answerAcc += 1;
-			}
 			if(LogicY.getLoss(pred, gold) < 0.01) {
 				infTypeAcc += 1;
+			}
+			if(LogicY.getLossForParenthesis(pred.expr, gold.expr) < 0.01) {
+				parAcc += 1;
 			}
 			if(LogicY.getLoss(pred, gold) < 0.01 &&
 					(Tools.safeEquals(gold.expr.getValue(), pred.expr.getValue()) ||
 							Tools.safeEquals(-gold.expr.getValue(), pred.expr.getValue()))) {
 				overAllAcc += 1;
+			}
+			if(Tools.safeEquals(gold.expr.getValue(), pred.expr.getValue()) ||
+					Tools.safeEquals(-gold.expr.getValue(), pred.expr.getValue())) {
+				answerAcc += 1;
 			} else {
 				incorrect.add(prob.problemId);
 				System.out.println(prob.problemId+" : "+prob.text);
@@ -110,17 +113,21 @@ public class LogicDriver {
 							prob.tokens.get(schema.sentId).get(schema.verb).lemma(),
 							Tools.spanToLemmaList(prob.tokens.get(schema.sentId), schema.unit))));
 				}
+				System.out.println();
+				System.out.println(Tools.spanToLemmaList(
+						prob.tokens.get(prob.questionSchema.sentId), prob.questionSpan));
 				System.out.println(prob.questionSchema);
 				System.out.println();
 				System.out.println("Quantities : "+prob.quantities);
 				System.out.println("Gold : "+gold);
 				System.out.println("Pred : "+pred);
-//				System.out.println("Loss : "+ LogicY.getLoss(gold, pred));
 				System.out.println();
 			}
 		}
 		System.out.println("Inference Type Accuracy : = " + infTypeAcc + " / " +
 				sp.instanceList.size() + " = " + (infTypeAcc/sp.instanceList.size()));
+		System.out.println("Parenthesis Accuracy : = " + parAcc + " / " +
+				sp.instanceList.size() + " = " + (parAcc/sp.instanceList.size()));
 		System.out.println("Answer Accuracy : = " + answerAcc + " / " +
 				sp.instanceList.size() + " = " + (answerAcc/sp.instanceList.size()));
 		System.out.println("Overall Accuracy : = " + overAllAcc + " / " + sp.instanceList.size()

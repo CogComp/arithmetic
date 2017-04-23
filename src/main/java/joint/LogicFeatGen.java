@@ -91,11 +91,10 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 													  String key,
 													  boolean isTopmost) {
 		List<String> features = new ArrayList<>();
-		features.add(node.toTemplateString());
-		features.add("MidNumber:"+LogicY.midNumber(x.tokens, num1, num2));
-		if(num1.sentId == num2.sentId) {
-			features.add("NumbersPresentInSameSentence");
-		}
+
+		List<String> nodeFeatures = new ArrayList<>();
+		nodeFeatures.addAll(getNodeFeatures(x, node, num1, num2, ques, infRuleType, key, isTopmost));
+		features.addAll(nodeFeatures);
 
 		List<String> infFeatures = new ArrayList<>();
 		infFeatures.addAll(getInfTypeFeatures(x, node, num1, num2, ques, infRuleType, isTopmost));
@@ -109,6 +108,40 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
         return features;
 	}
 
+	public static List<String> getNodeFeatures(LogicX x,
+											   Node node,
+											   StanfordSchema num1,
+											   StanfordSchema num2,
+											   StanfordSchema ques,
+											   String infRuleType,
+											   String key,
+											   boolean isTopmost) {
+		List<String> features = new ArrayList<>();
+		features.add(node.toTemplateString());
+		features.add("MidNumber:"+LogicY.midNumber(x.tokens, num1, num2));
+		List<CoreLabel> tokens1 = x.tokens.get(num1.sentId);
+		int tokenId1 = Tools.getTokenIdFromCharOffset(tokens1, num1.qs.start);
+		List<CoreLabel> tokens2 = x.tokens.get(num2.sentId);
+		int tokenId2 = Tools.getTokenIdFromCharOffset(tokens2, num2.qs.start);
+		if(num1.sentId == num2.sentId) {
+			features.add("NumbersPresentInSameSentence");
+			if(node.children.get(0).children.size() == 0 &&
+					node.children.get(1).children.size() == 0) {
+				features.add("LeavesFromSameSentence");
+				for(int i=Math.min(tokenId1, tokenId2); i<Math.max(tokenId1, tokenId2); ++i) {
+					if(tokens1.get(i).lemma().equals(",") || tokens1.get(i).lemma().equals("and")) {
+						features.add(infRuleType.substring(0,4)+"Add");
+						break;
+					}
+				}
+				if(!features.contains(infRuleType.substring(0,4)+"Add")) {
+					features.add(infRuleType.substring(0,4)+"Mul");
+				}
+			}
+		}
+		return features;
+	}
+
 	public static List<String> getInfTypeFeatures(LogicX x,
 												  Node node,
 												  StanfordSchema num1,
@@ -120,13 +153,13 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(infRuleType.startsWith("Rate")) {
 			if(infRuleType.startsWith("Rate0")) {
 				features.addAll(getRateFeatures(x, num1));
-				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getNeighborhoodFeatures(x, num1), "Rate"));
+//				features.addAll(FeatGen.getFeaturesConjWithLabels(
+//						getNeighborhoodFeatures(x, num1), "Rate"));
 			}
 			if(infRuleType.startsWith("Rate1")) {
 				features.addAll(getRateFeatures(x, num2));
-				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						getNeighborhoodFeatures(x, num2), "Rate"));
+//				features.addAll(FeatGen.getFeaturesConjWithLabels(
+//						getNeighborhoodFeatures(x, num2), "Rate"));
 			}
 			if(infRuleType.startsWith("RateQues")) {
 				features.addAll(getRateFeatures(x, ques));
@@ -154,6 +187,20 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 					features.add("RateStuffDetected");
 					break;
 				}
+				if(i < x.questionSpan.getSecond()-1) {
+					if(tokens.get(i).lemma().equals("how") &&
+							tokens.get(i+1).lemma().equals("far")) {
+						features.add("RateStuffDetected");
+						break;
+					}
+				}
+				if(i < x.questionSpan.getSecond()-1) {
+					if(tokens.get(i).lemma().equals("what") &&
+							tokens.get(i+1).lemma().equals("speed")) {
+						features.add("RateStuffDetected");
+						break;
+					}
+				}
 			}
 		} else {
 			int tokenId = Tools.getTokenIdFromCharOffset(tokens, schema.qs.start);
@@ -167,11 +214,11 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 			}
 			if(tokenId>=2 && tokens.get(tokenId-1).lemma().equals("of") &&
 					tokens.get(tokenId-2).tag().equals("NNS")) {
-				features.add("RateDetected");
+				features.add("RateStuffDetected");
 			}
 			if(tokenId < tokens.size()-2 && (tokens.get(tokenId+1).lemma().equals("a") ||
 					tokens.get(tokenId+2).lemma().equals("a"))) {
-				features.add("RateDetected");
+				features.add("RateStuffDetected");
 			}
 		}
 		if(schema.rate != null && schema.rate.getFirst() >= 0) {
