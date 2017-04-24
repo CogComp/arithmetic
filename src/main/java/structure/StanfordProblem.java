@@ -94,12 +94,6 @@ public class StanfordProblem {
 		if(questionSchema.unit.equals(questionSchema.rate)) {
 			questionSchema.unit = new IntPair(-1, -1);
 		}
-//		if(questionSchema.unit.equals(questionSchema.object)) {
-//			questionSchema.object = new IntPair(-1, -1);
-//		}
-//		if(questionSchema.unit.equals(questionSchema.subject)) {
-//			questionSchema.subject = new IntPair(-1, -1);
-//		}
 		wordnetRelations = getWordnetRelations();
 	}
 

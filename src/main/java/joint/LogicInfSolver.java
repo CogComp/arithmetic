@@ -92,9 +92,6 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 						.maximumSize(beamSize).create();
 		int n = x.quantities.size();
 		List<Node> init = new ArrayList<>();
-		List<StanfordSchema> schemas = new ArrayList<>();
-		schemas.addAll(x.schema);
-		schemas.add(x.questionSchema);
 		for(int i=0; i<n; ++i) {
 			Node node = new Node(i, x.quantities.get(i), "NUM");
 			node.infRuleType = null;
@@ -111,7 +108,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 					init.add(node);
 				}
 			} else {
-				if (!Logic.irrelevance(schemas, i, x.tokens)) {
+				if (!Relevance.irrelevance(x, i)) {
 					init.add(node);
 				}
 			}

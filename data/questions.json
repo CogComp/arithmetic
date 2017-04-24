@@ -8948,7 +8948,7 @@
   },
   {
     "iIndex": 586,
-    "sQuestion": "Carolyn starts with 47.0 marbles and 6.0 oranges. She shares 42.0 with Diana. How many marbles does Carolyn end with?",
+    "sQuestion": "Carolyn starts with 47.0 marbles and 6.0 oranges. She shares 42.0 marbles with Diana. How many marbles does Carolyn end with?",
     "quantities": [
       {
         "start": 20,
@@ -8979,7 +8979,7 @@
   },
   {
     "iIndex": 587,
-    "sQuestion": "Willie has 48.0 bananas. Charles has 14.0 bananas. He loses 35.0. How many bananas will Willie have?",
+    "sQuestion": "Willie has 48.0 bananas. Charles has 14.0 bananas. Willie loses 35.0. How many bananas will Willie have?",
     "quantities": [
       {
         "start": 11,
@@ -13256,13 +13256,14 @@
     ],
     "lAlignments": [
       0,
-      1
+      1,
+      2
     ],
     "lEquations": [
-      "X=(4.0*10.0)"
+      "X=((4.0*10.0)+6.0)"
     ],
     "lSolutions": [
-      40.0
+      46.0
     ]
   },
   {
@@ -13734,13 +13735,14 @@
     ],
     "lAlignments": [
       0,
-      1
+      1,
+      2
     ],
     "lEquations": [
-      "X=(3.0*4.0)"
+      "X=((3.0*4.0)-5.0)"
     ],
     "lSolutions": [
-      12.0
+      7.0
     ]
   },
   {
@@ -14415,13 +14417,14 @@
     ],
     "lAlignments": [
       0,
-      1
+      1,
+      2
     ],
     "lEquations": [
-      "X=(16.0+14.0)"
+      "X=((16.0+14.0)/5.0)"
     ],
     "lSolutions": [
-      30.0
+      6.0
     ]
   },
   {

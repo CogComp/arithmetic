@@ -35,7 +35,7 @@ public class Driver {
                             true),
                     Params.modelDir+Params.corefPrefix+i+Params.modelSuffix);
             Params.printMistakes = true;
-            LogicDriver.useGoldRelevance = true;
+            LogicDriver.useGoldRelevance = false;
             SLProblem test = new SLProblem();
             for(StanfordProblem prob : split.get(2)) {
                 LogicX x = new LogicX(prob);

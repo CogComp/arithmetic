@@ -47,9 +47,14 @@ then
 	echo "Running InfType"
 	java -cp target/classes/:target/dependency/* logic.LogicDriver crossVal true $1 
 fi    
-if [ "$2" = "Logic" ] 
+if [ "$2" = "E2ELogic" ] 
 then
 	echo "Running End to End Logic"
 	java -cp target/classes/:target/dependency/* joint.Driver runLogicSolver $1 
+fi    
+if [ "$2" = "Logic" ] 
+then
+	echo "Running Logic"
+	java -cp target/classes/:target/dependency/* joint.LogicDriver crossVal true $1 
 fi    
 

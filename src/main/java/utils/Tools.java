@@ -239,6 +239,44 @@ public class Tools {
 		return intersection*1.0/union;
 	}
 
+	public static double relevanceSim(List<String> phrase1, List<String> phrase2) {
+		if((phrase1 == null || phrase1.size() == 0) &&
+				(phrase2 == null || phrase2.size() == 0)) {
+			return 0.0;
+		}
+		if(phrase1 != null && phrase2 != null) {
+			if (phrase1.contains("$") || phrase1.contains("money") || phrase1.contains("dollar") ||
+					phrase1.contains("buck") || phrase1.contains("cent")) {
+				if (phrase2.contains("$") || phrase2.contains("money") || phrase2.contains("dollar") ||
+						phrase2.contains("buck") || phrase2.contains("cent")) {
+					return 1.0;
+				}
+			}
+		}
+		if(phrase1 != null && (phrase1.contains("he") || phrase1.contains("she") ||
+				phrase1.contains("this") || phrase1.contains("they"))) {
+			return 1.0;
+		}
+		if(phrase2 != null && (phrase2.contains("he") || phrase2.contains("she") ||
+				phrase2.contains("this") || phrase2.contains("they"))) {
+			return 1.0;
+		}
+		Set<String> tokens1 = new HashSet<>();
+		tokens1.addAll(phrase1);
+		Set<String> tokens2 = new HashSet<>();
+		tokens2.addAll(phrase2);
+		int union = tokens1.size();
+		int intersection = 0;
+		for (String token : tokens2) {
+			if (tokens1.contains(token)) {
+				intersection++;
+			} else {
+				union++;
+			}
+		}
+		return intersection*1.0/Math.min(phrase1.size(), phrase2.size());
+	}
+
 	public static double jaccardEntail(List<String> phrase1, List<String> phrase2) {
 		if(phrase1 == null || phrase2 == null ||
 				phrase1.size() == 0 || phrase2.size() == 0) {

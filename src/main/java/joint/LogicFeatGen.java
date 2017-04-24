@@ -119,7 +119,6 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		List<String> features = new ArrayList<>();
 		List<String> addSub = Arrays.asList("ADD", "SUB");
 		List<String> mulDiv = Arrays.asList("MUL", "DIV");
-//		features.add(node.toTemplateString());
 		if(addSub.contains(node.label)) {
 			if((mulDiv.contains(node.children.get(0).label) ||
 					mulDiv.contains(node.children.get(1).label))) {
@@ -167,13 +166,9 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(infRuleType.startsWith("Rate")) {
 			if(infRuleType.startsWith("Rate0")) {
 				features.addAll(getRateFeatures(x, num1));
-//				features.addAll(FeatGen.getFeaturesConjWithLabels(
-//						getNeighborhoodFeatures(x, num1), "Rate"));
 			}
 			if(infRuleType.startsWith("Rate1")) {
 				features.addAll(getRateFeatures(x, num2));
-//				features.addAll(FeatGen.getFeaturesConjWithLabels(
-//						getNeighborhoodFeatures(x, num2), "Rate"));
 			}
 			if(infRuleType.startsWith("RateQues")) {
 				features.addAll(getRateFeatures(x, ques));
