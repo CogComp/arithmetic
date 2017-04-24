@@ -76,7 +76,12 @@ public class LogicDriver {
 	public static Pair<Double, Double> testModel(String modelPath, SLProblem sp)
 			throws Exception {
 		SLModel model = SLModel.loadModel(modelPath);
-		Set<Integer> incorrect = new HashSet<>();
+		Set<Integer> incorrectKeys = new HashSet<>();
+		incorrectKeys.addAll(Arrays.asList(164, 1108, 870, 136, 347, 1243, 1171,
+				4, 916, 69, 1112, 1434, 1195, 1435, 1181, 1168, 1107, 1188, 151,
+				907, 1227, 142, 158, 1231, 161, 3, 644, 1189, 902, 968, 1450, 747,
+				1164, 1613, 1167, 1174, 951, 794, 117, 758, 1098, 1594, 1163, 140,
+				1229, 1102, 831));
 		Set<Integer> total = new HashSet<>();
 		double answerAcc = 0.0, infTypeAcc = 0.0, overAllAcc = 0.0, parAcc = 0.0;
 		for (int i = 0; i < sp.instanceList.size(); i++) {
@@ -98,8 +103,7 @@ public class LogicDriver {
 			if(Tools.safeEquals(gold.expr.getValue(), pred.expr.getValue()) ||
 					Tools.safeEquals(-gold.expr.getValue(), pred.expr.getValue())) {
 				answerAcc += 1;
-			} else {
-				incorrect.add(prob.problemId);
+			} else if(!incorrectKeys.contains(prob.problemId)){
 				System.out.println(prob.problemId+" : "+prob.text);
 				for(List<CoreLabel> tokens : prob.tokens) {
 					for(CoreLabel token : tokens) {

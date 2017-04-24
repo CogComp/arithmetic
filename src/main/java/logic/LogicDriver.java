@@ -151,6 +151,7 @@ public class LogicDriver {
 		System.out.println("Accuracy : = " + acc + " / " + sp.instanceList.size()
 				+ " = " + (acc/sp.instanceList.size()));
 		System.out.println("Strict Accuracy : ="+ (1-1.0*incorrect.size()/total.size()));
+		System.out.println("Incorrect Ids: "+ Arrays.asList(incorrect));
 		return new Pair<>(acc/sp.instanceList.size(), 1-1.0*incorrect.size()/total.size());
 	}
 

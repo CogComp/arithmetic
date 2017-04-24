@@ -264,6 +264,18 @@ public class StanfordSchema {
 				}
 			}
 		}
+		if(tokenId+2 < tokens.size() && (tokens.get(tokenId+1).word().equals("a") ||
+				tokens.get(tokenId+1).word().equals("an")) &&
+				tokens.get(tokenId+2).tag().startsWith("N")) {
+			return Tools.getMaximalNounPhraseSpan(tokens, tokenId+2);
+
+		}
+		if(tokenId+3 < tokens.size() && tokens.get(tokenId+1).tag().startsWith("N") &&
+				(tokens.get(tokenId+2).word().equals("a") ||
+						tokens.get(tokenId+2).word().equals("an")) &&
+				tokens.get(tokenId+3).tag().startsWith("N")) {
+			return Tools.getMaximalNounPhraseSpan(tokens, tokenId+3);
+		}
 		return new IntPair(-1, -1);
 	}
 }

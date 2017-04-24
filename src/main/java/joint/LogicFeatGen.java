@@ -117,7 +117,21 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 											   String key,
 											   boolean isTopmost) {
 		List<String> features = new ArrayList<>();
-		features.add(node.toTemplateString());
+		List<String> addSub = Arrays.asList("ADD", "SUB");
+		List<String> mulDiv = Arrays.asList("MUL", "DIV");
+//		features.add(node.toTemplateString());
+		if(addSub.contains(node.label)) {
+			if((mulDiv.contains(node.children.get(0).label) ||
+					mulDiv.contains(node.children.get(1).label))) {
+				features.add("AddConnectingMul");
+			}
+		}
+		if(mulDiv.contains(node.label)) {
+			if((addSub.contains(node.children.get(0).label) ||
+					addSub.contains(node.children.get(1).label))) {
+				features.add("MulConnectingAdd");
+			}
+		}
 		features.add("MidNumber:"+LogicY.midNumber(x.tokens, num1, num2));
 		List<CoreLabel> tokens1 = x.tokens.get(num1.sentId);
 		int tokenId1 = Tools.getTokenIdFromCharOffset(tokens1, num1.qs.start);
@@ -189,7 +203,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				}
 				if(i < x.questionSpan.getSecond()-1) {
 					if(tokens.get(i).lemma().equals("how") &&
-							tokens.get(i+1).lemma().equals("far")) {
+							tokens.get(i+1).lemma().equals("fast")) {
 						features.add("RateStuffDetected");
 						break;
 					}
@@ -216,8 +230,13 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 					tokens.get(tokenId-2).tag().equals("NNS")) {
 				features.add("RateStuffDetected");
 			}
+			if(tokenId>=2 && tokens.get(tokenId-2).lemma().equals("how") &&
+					tokens.get(tokenId-1).lemma().equals("many")) {
+				features.add("RateStuffDetected");
+			}
 			if(tokenId < tokens.size()-2 && (tokens.get(tokenId+1).lemma().equals("a") ||
-					tokens.get(tokenId+2).lemma().equals("a"))) {
+					(tokens.get(tokenId+2).lemma().equals("a") &&
+							tokens.get(tokenId+1).tag().startsWith("N")))) {
 				features.add("RateStuffDetected");
 			}
 		}

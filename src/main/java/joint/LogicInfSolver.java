@@ -38,7 +38,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 		LogicX x = (LogicX) ins;
 		MinMaxPriorityQueue<Pair<List<Node>, Double>> topExpressions =
 				getTopExpressions(x, weight, 200);
-		if(topExpressions.size() == 0) {
+		if(topExpressions.size() == 0 || topExpressions.element().getFirst().size() == 0) {
 			System.out.println("Prob: "+ Arrays.asList(x.tokens));
 			for(int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
 				System.out.print(x.tokens.get(x.questionSchema.sentId).get(i)+" ");
