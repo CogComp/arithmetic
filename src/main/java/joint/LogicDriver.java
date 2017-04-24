@@ -103,7 +103,7 @@ public class LogicDriver {
 			if(Tools.safeEquals(gold.expr.getValue(), pred.expr.getValue()) ||
 					Tools.safeEquals(-gold.expr.getValue(), pred.expr.getValue())) {
 				answerAcc += 1;
-			} else if(!incorrectKeys.contains(prob.problemId)){
+			} else if(Params.printMistakes){
 				System.out.println(prob.problemId+" : "+prob.text);
 				for(List<CoreLabel> tokens : prob.tokens) {
 					for(CoreLabel token : tokens) {
@@ -128,15 +128,15 @@ public class LogicDriver {
 				System.out.println();
 			}
 		}
-		System.out.println("Inference Type Accuracy : = " + infTypeAcc + " / " +
-				sp.instanceList.size() + " = " + (infTypeAcc/sp.instanceList.size()));
-		System.out.println("Parenthesis Accuracy : = " + parAcc + " / " +
-				sp.instanceList.size() + " = " + (parAcc/sp.instanceList.size()));
+//		System.out.println("Inference Type Accuracy : = " + infTypeAcc + " / " +
+//				sp.instanceList.size() + " = " + (infTypeAcc/sp.instanceList.size()));
+//		System.out.println("Parenthesis Accuracy : = " + parAcc + " / " +
+//				sp.instanceList.size() + " = " + (parAcc/sp.instanceList.size()));
 		System.out.println("Answer Accuracy : = " + answerAcc + " / " +
 				sp.instanceList.size() + " = " + (answerAcc/sp.instanceList.size()));
-		System.out.println("Overall Accuracy : = " + overAllAcc + " / " + sp.instanceList.size()
-				+ " = " + (overAllAcc/sp.instanceList.size()));
-		return new Pair<>(infTypeAcc/sp.instanceList.size(), answerAcc/sp.instanceList.size());
+//		System.out.println("Overall Accuracy : = " + overAllAcc + " / " + sp.instanceList.size()
+//				+ " = " + (overAllAcc/sp.instanceList.size()));
+		return new Pair<>(answerAcc/sp.instanceList.size(), answerAcc/sp.instanceList.size());
 	}
 
 	public static void trainModel(String modelPath, SLProblem train, String infModelPath)

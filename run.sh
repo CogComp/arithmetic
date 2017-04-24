@@ -42,7 +42,7 @@ then
 	echo "Running UnitDep solver"
 	java -cp target/classes/:target/dependency/* constraints.ConsDriver tunedCrossValAndRetrain $1 false 1>log/UnitDep.out
 fi    
-if [ "$2" = "InfType" ] 
+if [ "$2" = "Coref" ] 
 then
 	echo "Running InfType"
 	java -cp target/classes/:target/dependency/* logic.LogicDriver crossVal true $1 
@@ -50,6 +50,6 @@ fi
 if [ "$2" = "Logic" ] 
 then
 	echo "Running End to End Logic"
-	java -cp target/classes/:target/dependency/* joint.LogicDriver crossVal true $1 
+	java -cp target/classes/:target/dependency/* joint.Driver runLogicSolver $1 
 fi    
 

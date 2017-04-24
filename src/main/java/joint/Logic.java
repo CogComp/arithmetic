@@ -4,6 +4,7 @@ import edu.stanford.nlp.ling.CoreLabel;
 import reader.Reader;
 import structure.StanfordProblem;
 import structure.StanfordSchema;
+import utils.Params;
 import utils.Tools;
 import java.util.*;
 
@@ -193,9 +194,10 @@ public class Logic {
         if(n == 2) return false;
         StanfordSchema schema = schemas.get(quantIndex);
         StanfordSchema quesSchema = schemas.get(n);
+        int tokenId = Tools.getTokenIdFromCharOffset(
+                tokens.get(schema.sentId), schema.qs.start);
         if(Tools.safeEquals(schema.qs.val, 1.0)) {
-            int tokenId = Tools.getTokenIdFromCharOffset(
-                    tokens.get(schema.sentId), schema.qs.start);
+            if(tokenId <=2) return true;
             if(tokenId >= 1 && (tokens.get(schema.sentId).get(tokenId-1).lemma().equals("each") ||
                     tokens.get(schema.sentId).get(tokenId-1).lemma().equals("every"))) {
                 return true;
@@ -277,7 +279,7 @@ public class Logic {
         return false;
     }
 
-    public static void testIrrelevanceWithDefaultExtraction(String dataset) throws Exception {
+    public static void testIrrelevanceWithDefaultExtraction() throws Exception {
         Set<Integer> incorrect = new HashSet<>();
         Set<Integer> total = new HashSet<>();
         int t = 0;
@@ -315,6 +317,10 @@ public class Logic {
         System.out.println("Accuracy : = " + acc + " / " + t + " = " + (acc/t));
         System.out.println("Strict Accuracy : = 1 - " + incorrect.size() + " / " +
                 total.size() + " = " + (1-1.0*incorrect.size()/total.size()));
+    }
+
+    public static void main(String[] args) throws Exception {
+        testIrrelevanceWithDefaultExtraction();
     }
 
 }

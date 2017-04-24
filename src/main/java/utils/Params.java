@@ -20,5 +20,14 @@ public class Params {
 
 	public static double validationFrac;
 
+	public static String modelDir = "models/";
+	public static String relPrefix = "Rel";
+	public static String pairPrefix = "Pair";
+	public static String ratePrefix = "Rate";
+	public static String runPrefix = "Run";
+	public static String corefPrefix = "Coref";
+	public static String logicPrefix = "Logic";
+	public static String modelSuffix = ".save";
+
 	
 }
