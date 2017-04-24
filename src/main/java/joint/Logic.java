@@ -4,7 +4,6 @@ import edu.stanford.nlp.ling.CoreLabel;
 import reader.Reader;
 import structure.StanfordProblem;
 import structure.StanfordSchema;
-import utils.Params;
 import utils.Tools;
 import java.util.*;
 
@@ -187,17 +186,52 @@ public class Logic {
     }
 
     public static boolean irrelevance(List<StanfordSchema> schemas,
+                                      StanfordSchema quesSchema,
                                       int quantIndex,
                                       List<List<CoreLabel>> tokens) {
         double maxSim = 0.0, minSim=1.0;
-        int n = schemas.size() - 1;
+        int n = schemas.size();
         if(n == 2) return false;
         StanfordSchema schema = schemas.get(quantIndex);
-        StanfordSchema quesSchema = schemas.get(n);
         int tokenId = Tools.getTokenIdFromCharOffset(
                 tokens.get(schema.sentId), schema.qs.start);
+
+        Set<Integer> quantTokenIdsInSameSentence = new HashSet<>();
+        boolean otherDependentNumber = false;
+        for(StanfordSchema s : schemas) {
+            if(Tools.getTokenIdFromCharOffset(
+                    tokens.get(schema.sentId), s.qs.start) != -1) {
+                quantTokenIdsInSameSentence.add(
+                        Tools.getTokenIdFromCharOffset(
+                                tokens.get(schema.sentId), s.qs.start));
+            }
+        }
+        for(int i=tokenId+1; i<tokens.get(schema.sentId).size(); ++i) {
+            if (tokens.get(schema.sentId).get(i).lemma().equals("if") ||
+                    tokens.get(schema.sentId).get(i).lemma().equals(",") ||
+                    tokens.get(schema.sentId).get(i).lemma().equals(";") ||
+                    tokens.get(schema.sentId).get(i).lemma().equals("and")) {
+                break;
+            }
+            if (quantTokenIdsInSameSentence.contains(i)) {
+                otherDependentNumber = true;
+                break;
+            }
+        }
+        for(int i=tokenId-1; i>=0; --i) {
+            if (tokens.get(schema.sentId).get(i).lemma().equals("if") ||
+                    tokens.get(schema.sentId).get(i).lemma().equals(",") ||
+                    tokens.get(schema.sentId).get(i).lemma().equals(";") ||
+                    tokens.get(schema.sentId).get(i).lemma().equals("and")) {
+                break;
+            }
+            if (quantTokenIdsInSameSentence.contains(i)) {
+                otherDependentNumber = true;
+                break;
+            }
+        }
         if(Tools.safeEquals(schema.qs.val, 1.0)) {
-            if(tokenId <=2) return true;
+            if(tokenId < 2) return true;
             if(tokenId >= 1 && (tokens.get(schema.sentId).get(tokenId-1).lemma().equals("each") ||
                     tokens.get(schema.sentId).get(tokenId-1).lemma().equals("every"))) {
                 return true;
@@ -205,25 +239,8 @@ public class Logic {
             if(schema.sentId == quesSchema.sentId) {
                 return true;
             }
-            Set<Integer> quantTokenIdsInSameSentence = new HashSet<>();
-            for(StanfordSchema s : schemas) {
-                if(s.qs != null && Tools.getTokenIdFromCharOffset(
-                        tokens.get(schema.sentId), s.qs.start) != -1) {
-                    quantTokenIdsInSameSentence.add(
-                            Tools.getTokenIdFromCharOffset(
-                                    tokens.get(schema.sentId), s.qs.start));
-                }
-            }
-            for(int i=tokenId+1; i<tokens.get(schema.sentId).size(); ++i) {
-                if (tokens.get(schema.sentId).get(i).lemma().equals("if") ||
-                        tokens.get(schema.sentId).get(i).lemma().equals(",") ||
-                        tokens.get(schema.sentId).get(i).lemma().equals(";") ||
-                        tokens.get(schema.sentId).get(i).lemma().equals("and")) {
-                    break;
-                }
-                if (quantTokenIdsInSameSentence.contains(i)) {
-                    return true;
-                }
+            if(otherDependentNumber) {
+                return true;
             }
             for(int i=tokenId-1; i>=0; --i) {
                 if (tokens.get(schema.sentId).get(i).lemma().equals("if") ||
@@ -237,15 +254,30 @@ public class Logic {
                 }
             }
         }
-        if(schema.unit == null || schema.unit.getFirst() == schema.unit.getSecond()) {
+        if(schema.unit == null || schema.unit.getFirst() == -1) {
             return false;
         }
+        List<StanfordSchema> allSchemas = new ArrayList<>();
+        allSchemas.addAll(schemas);
+        allSchemas.add(quesSchema);
         double simIndex = 0.0;
         for(int i=0; i<n; ++i) {
-            StanfordSchema schema1 = schemas.get(i);
-            double sim = Tools.jaccardSim(
-                    Tools.spanToLemmaList(tokens.get(schema1.sentId), schema1.unit),
-                    Tools.spanToLemmaList(tokens.get(quesSchema.sentId), quesSchema.unit));
+            StanfordSchema schema1 = allSchemas.get(i);
+
+            double sim = Collections.max(Arrays.asList(
+                    Tools.jaccardSim(
+                            Tools.spanToLemmaList(tokens.get(schema1.sentId), schema1.unit),
+                            Tools.spanToLemmaList(tokens.get(quesSchema.sentId), quesSchema.unit)),
+                    Tools.jaccardSim(
+                            Tools.spanToLemmaList(tokens.get(schema1.sentId), schema1.rate),
+                            Tools.spanToLemmaList(tokens.get(quesSchema.sentId), quesSchema.unit)),
+                    Tools.jaccardSim(
+                            Tools.spanToLemmaList(tokens.get(schema1.sentId), schema1.unit),
+                            Tools.spanToLemmaList(tokens.get(quesSchema.sentId), quesSchema.rate)),
+                    Tools.jaccardSim(
+                            Tools.spanToLemmaList(tokens.get(schema1.sentId), schema1.rate),
+                            Tools.spanToLemmaList(tokens.get(quesSchema.sentId), quesSchema.rate))));
+
             if (tokens.get(quesSchema.sentId).get(quesSchema.verb).lemma().equals("cost") &&
                     (Tools.spanToLemmaList(tokens.get(schema1.sentId), schema1.unit).contains("dollar")
                             ||Tools.spanToLemmaList(tokens.get(schema1.sentId), schema1.unit).contains("cent")
@@ -264,12 +296,13 @@ public class Logic {
                 }
             }
         }
-        if(minSim - simIndex > 0.5) {
+        if(minSim - simIndex > 0.4 && !otherDependentNumber) {
             boolean foundInRate = false;
             for(int i=0; i<n; ++i) {
                 if(i==quantIndex) continue;
                 StanfordSchema schema1 = schemas.get(i);
-                if(Tools.jaccardSim(Tools.spanToLemmaList(tokens.get(schema1.sentId), schema1.rate),
+                if(Tools.jaccardSim(
+                        Tools.spanToLemmaList(tokens.get(schema1.sentId), schema1.rate),
                         Tools.spanToLemmaList(tokens.get(schema.sentId), schema.unit))>0.5) {
                     foundInRate = true;
                 }
@@ -290,10 +323,7 @@ public class Logic {
             for(int i=0; i<prob.quantities.size(); ++i) {
                 t++;
                 String gold = prob.expr.findRelevanceLabel(i);
-                List<StanfordSchema> schemas = new ArrayList<>();
-                schemas.addAll(prob.schema);
-                schemas.add(prob.questionSchema);
-                boolean pred = irrelevance(schemas, i, prob.tokens);
+                boolean pred = irrelevance(prob.schema, prob.questionSchema, i, prob.tokens);
                 if((gold.equals("REL") && !pred) || (gold.equals("IRR") && pred)) {
                     acc += 1.0;
                 } else {
