@@ -106,6 +106,9 @@ public class StanfordSchema {
 			return new Pair<>(new IntPair(tokenId-1, tokenId), new IntPair(-1, -1));
 		}
 		for(int i=tokenId + 1; i<tokens.size(); ++i) {
+//			if(tokens.get(i).word().equals("at") ||
+//					tokens.get(i).word().equals("during") ||
+//					tokens.get(i).tag().startsWith("V")) break;
 			if(tokens.get(i).word().equals("many") ||
 					tokens.get(i).word().equals("much")) continue;
 			if(tokens.get(i).word().equals("to") || tokens.get(i).word().equals("from")) {
