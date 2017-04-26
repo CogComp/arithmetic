@@ -40,8 +40,10 @@ public class LogicX implements IInstance {
 				prob.tokens.get(questionSchema.sentId));
 		this.wordnetRelations = prob.wordnetRelations;
 		this.relevantQuantIndices = new HashSet<>();
-		for(Node leaf : prob.expr.getLeaves()) {
-			relevantQuantIndices.add(leaf.quantIndex);
+		if(prob.expr != null) {
+			for (Node leaf : prob.expr.getLeaves()) {
+				relevantQuantIndices.add(leaf.quantIndex);
+			}
 		}
 	}
 
