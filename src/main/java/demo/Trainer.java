@@ -227,7 +227,10 @@ public class Trainer {
 			double pred = answerQuestion(kf.sQuestion.trim());
 			double gold = kf.lSolutions.get(0);
 			if(Tools.safeEquals(pred, gold) || Tools.safeEquals(pred, -gold)) {
+				System.out.println("Right: "+kf.sQuestion);
 				acc += 1.0;
+			} else {
+				System.out.println("Wrong: "+kf.sQuestion);
 			}
 		}
 		System.out.println("Acc = "+acc+" / "+kfs.size()+" = "+(acc / kfs.size()));
@@ -274,7 +277,7 @@ public class Trainer {
 		if(kushmanProbs != null) {
 			testModel(kushmanProbs);
 		}
-		commandLineDemo();
+//		commandLineDemo();
 	}
 
 }
