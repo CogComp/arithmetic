@@ -137,6 +137,16 @@ public class Reader {
 		}
 		return problemList;
 	}
+
+	public static void createTabSeparatedFile(List<StanfordProblem> problems, String tabFile)
+			throws IOException {
+		String str = "";
+		for(StanfordProblem prob : problems) {
+			str += prob.question + "\t" + prob.expr.toString() + "="+prob.answer + "\n";
+		}
+		FileUtils.writeStringToFile(new File(tabFile), str);
+	}
+
 //
 //	public static void performConsistencyChecks(String dir) throws Exception {
 //		List<Problem> probs = Reader.readProblemsFromJson(dir);
@@ -294,7 +304,10 @@ public class Reader {
 
 //		analyzeResults("log/InfLCA_v2.out", "log/InfAll_v2.out");
 
-		printQuestionsForPython("allArithPython.txt");
+//		printQuestionsForPython("allArithPython.txt");
+
+		createTabSeparatedFile(Reader.readStanfordProblemsFromJson(), "tabFile");
 	}
+
 
 }

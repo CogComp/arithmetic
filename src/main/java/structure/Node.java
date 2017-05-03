@@ -60,10 +60,9 @@ public class Node implements Serializable {
 		case "DIV" : labelSym = "/"; break;
 		}
 		return "("+children.get(0).toString() + " " +
-				label + "_" +
-				infRuleType + "_" +
-				key + " " +
-				children.get(1).toString()+")";
+				labelSym +
+//				"_" + infRuleType + "_" + key +
+				" " + children.get(1).toString()+")";
 	}
 
 	public String toTemplateString() {
@@ -196,10 +195,13 @@ public class Node implements Serializable {
 			}
 		}
 		if(label.equals("ADD") || label.equals("MUL")) {
-			return (children.get(0).isEqual(node.children.get(0)) && children.get(1).isEqual(node.children.get(1))) ||
-					(children.get(0).isEqual(node.children.get(1)) && children.get(1).isEqual(node.children.get(0)));
+			return (children.get(0).isEqual(node.children.get(0)) &&
+					children.get(1).isEqual(node.children.get(1))) ||
+					(children.get(0).isEqual(node.children.get(1)) &&
+							children.get(1).isEqual(node.children.get(0)));
 		}
-		return (children.get(0).isEqual(node.children.get(0)) && children.get(1).isEqual(node.children.get(1)));
+		return (children.get(0).isEqual(node.children.get(0)) &&
+				children.get(1).isEqual(node.children.get(1)));
 	}
 	
 	public static Node parseNode(String eqString) {
