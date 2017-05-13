@@ -147,6 +147,50 @@ public class Reader {
 		FileUtils.writeStringToFile(new File(tabFile), str);
 	}
 
+	public static void createTabSeparatedAnswerPerturbFile(
+			List<StanfordProblem> problems, String tabFile) throws IOException {
+		String str = "";
+		List<String> labels = Arrays.asList("ADD", "SUB", "MUL", "DIV", "SUB_REV", "DIV_REV");
+		for(StanfordProblem prob : problems) {
+			Node copy = new Node(prob.expr);
+			for(Node node : copy.getAllSubNodes()) {
+				if(!labels.contains(node.label)) continue;
+				String origLabel = node.label;
+				for(String label : labels) {
+					if((origLabel.equals("ADD") || origLabel.equals("SUB")) &&
+							(label.startsWith("MUL") || label.startsWith("DIV"))) continue;
+					if((origLabel.equals("MUL") || origLabel.equals("DIV")) &&
+							(label.startsWith("ADD") || label.startsWith("SUB"))) continue;
+					if(label.equals(origLabel)) continue;
+					if(label.endsWith("REV")) {
+						node.label = label.substring(0, 3);
+						node.children.add(node.children.get(0));
+						node.children.remove(0);
+					} else {
+						node.label = label;
+					}
+					double val = copy.getValue();
+					boolean answerSame = false;
+					if(Tools.safeEquals(val, prob.answer)) {
+						System.out.println("Problem here between "+
+								prob.expr.toString()+" and "+copy.toString());
+						answerSame = true;
+					}
+					if(val > 1.0 && !answerSame) {
+						str += prob.question + "\t" + copy.toString() + "=" +
+								copy.getValue() + "\n";
+					}
+					if(label.endsWith("REV")) {
+						node.children.add(node.children.get(0));
+						node.children.remove(0);
+					}
+				}
+				node.label = origLabel;
+			}
+		}
+		FileUtils.writeStringToFile(new File(tabFile), str);
+	}
+
 //
 //	public static void performConsistencyChecks(String dir) throws Exception {
 //		List<Problem> probs = Reader.readProblemsFromJson(dir);
@@ -306,7 +350,9 @@ public class Reader {
 
 //		printQuestionsForPython("allArithPython.txt");
 
-		createTabSeparatedFile(Reader.readStanfordProblemsFromJson(), "tabFile");
+//		createTabSeparatedFile(Reader.readStanfordProblemsFromJson(), "tabFile");
+		createTabSeparatedAnswerPerturbFile(
+				Reader.readStanfordProblemsFromJson(), "perturbFile");
 	}
 
 
