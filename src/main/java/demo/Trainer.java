@@ -8,7 +8,6 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import constraints.ConsDriver;
 import constraints.ConsInfSolver;
 import edu.illinois.cs.cogcomp.sl.core.SLModel;
 import joint.LogicDriver;
@@ -23,7 +22,6 @@ import relevance.RelX;
 import run.Annotations;
 import run.RunDriver;
 import structure.*;
-import utils.Folds;
 import utils.Params;
 import utils.Tools;
 
@@ -149,11 +147,11 @@ public class Trainer {
 		str = str.substring(0, str.length()-1)+"}}";
 		if(!Params.noUDG) {
 			// TODO : Implementation for rate and run tables
-//			for(int i=-1; i<prob.quantities.size(); ++i) {
+//			for(int i=-1; i<prob.quants.size(); ++i) {
 //				str += rateModel.infSolver.getBestStructure(rateModel.wv, new RateX(prob, i)) + "  ";
 //			}
-//			for(int i=0; i<prob.quantities.size(); ++i) {
-//				for(int j=i+1; j<prob.quantities.size(); ++j) {
+//			for(int i=0; i<prob.quants.size(); ++i) {
+//				for(int j=i+1; j<prob.quants.size(); ++j) {
 //					str += runModel.infSolver.getBestStructure(runModel.wv, new RunX(prob, i, j)) + "  ";
 //				}
 //				str += runModel.infSolver.getBestStructure(runModel.wv, new RunX(prob, i, -1)) + "  ";
@@ -221,9 +219,9 @@ public class Trainer {
 		return 0.0;
 	}
 
-	public static void testModel(List<KushmanFormat> kfs) throws Exception {
+	public static void testModel(List<DataFormat> kfs) throws Exception {
 		double acc = 0.0;
-		for(KushmanFormat kf : kfs) {
+		for(DataFormat kf : kfs) {
 			double pred = answerQuestion(kf.sQuestion.trim());
 			double gold = kf.lSolutions.get(0);
 			if(Tools.safeEquals(pred, gold) || Tools.safeEquals(pred, -gold)) {
@@ -256,12 +254,12 @@ public class Trainer {
 		}
 		if(mode.equals("LCA")) Params.noUDG = true;
 		if(mode.equals("UnitDep")) Params.noUDG = false;
-		List<KushmanFormat> kushmanProbs = null;
+		List<DataFormat> kushmanProbs = null;
 		if(args.length >= 2) {
 			String questionsFile = args[1];
 			String json = FileUtils.readFileToString(new File(questionsFile));
 			kushmanProbs = new Gson().fromJson(
-					json, new TypeToken<List<KushmanFormat>>(){}.getType());
+					json, new TypeToken<List<DataFormat>>(){}.getType());
 		}
 		if(mode.equals("Logic")) {
 			trainLogicModel();

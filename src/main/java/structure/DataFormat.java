@@ -2,13 +2,12 @@ package structure;
 
 import java.util.List;
 
-public class KushmanFormat {
+public class DataFormat {
 	public int iIndex;
 	public String sQuestion;
-	public List<QuantSpan> quantities;
+	public List<Double> quants;
 	public List<Integer> lAlignments;
 	public List<String> lEquations;
 	public List<Double> lSolutions;
-	public String infType;
-	public String key;
+	public List<Integer> rates;
 }

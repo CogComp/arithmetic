@@ -9,7 +9,6 @@ import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
 import reader.Reader;
-import utils.Params;
 import utils.Tools;
 
 import java.util.*;
@@ -41,30 +40,11 @@ public class StanfordProblem {
 		this.id = id;
 		question = q;
 		answer = a;
-		quantities = new ArrayList<QuantSpan>();
+		quantities = new ArrayList<>();
 	}
 	
 	public void extractQuantities() throws Exception {
-		List<QuantSpan> spanArray = Tools.quantifier.getSpans(question);
-		quantities = new ArrayList<QuantSpan>();
-		for(QuantSpan span:spanArray){
-			boolean containsDigit = false;
-			for(int i=span.start; i<span.end; ++i) {
-				if(Character.isDigit(question.charAt(i))) {
-					containsDigit = true;
-					break;
-				}
-			}
-			if(containsDigit){
-				if(Character.isLowerCase(question.charAt(span.end-1)) ||
-						Character.isUpperCase(question.charAt(span.end-1))) continue;
-				if(span.start>0 && (Character.isLowerCase(question.charAt(span.start-1))
-						|| Character.isUpperCase(question.charAt(span.start-1)))) continue;
-				quantities.add(span);
-			} else {
-				quantities.add(span);
-			}
-		}
+		quantities = Tools.quantifier.getSpans(question);
 	}
 	
 	public void extractAnnotations() throws Exception {

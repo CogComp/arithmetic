@@ -119,7 +119,26 @@ public class SimpleQuantifier {
 				return (int)Math.signum(o1.start-o2.start);
 			}
 		});
-		return qsList;
+		List<QuantSpan> quantities = new ArrayList<>();
+		for(QuantSpan span:qsList){
+			boolean containsDigit = false;
+			for(int i=span.start; i<span.end; ++i) {
+				if(Character.isDigit(text.charAt(i))) {
+					containsDigit = true;
+					break;
+				}
+			}
+			if(containsDigit){
+				if(Character.isLowerCase(text.charAt(span.end-1)) ||
+						Character.isUpperCase(text.charAt(span.end-1))) continue;
+				if(span.start>0 && (Character.isLowerCase(text.charAt(span.start-1))
+						|| Character.isUpperCase(text.charAt(span.start-1)))) continue;
+				quantities.add(span);
+			} else {
+				quantities.add(span);
+			}
+		}
+		return quantities;
 	}
 	
 	public static void main(String args[]) {

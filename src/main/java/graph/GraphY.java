@@ -7,7 +7,7 @@ import java.util.List;
 
 public class GraphY implements IStructure {
 
-    // Labels only for relevant quantities, and for question
+    // Labels only for relevant quants, and for question
     // Order : Vertex label for each quantity, followed by vertex label of question,
     // next, edge labels for all edges (following order of for loop on the above
     // vertex order)

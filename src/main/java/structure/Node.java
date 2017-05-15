@@ -51,7 +51,7 @@ public class Node implements Serializable {
 	
 	@Override
 	public String toString() {
-		if(children.size() == 0) return "" + qs.val;
+		if(children.size() == 0) return "" + val;
 		String labelSym = null;
 		switch(label) {
 		case "ADD" : labelSym = "+"; break;
