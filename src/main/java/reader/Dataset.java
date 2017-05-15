@@ -53,50 +53,58 @@ public class Dataset {
 		List<CrowdFlower> cfProblems = CrowdFlower.readCrowdFlowerFile(crowdFlowerFile);
 		List<DataFormat> newProbs = new ArrayList<>();
 		for(CrowdFlower prob : cfProblems) {
-			DataFormat ks = new DataFormat();
-			ks.iIndex = prob.id;
-			ks.sQuestion = prob.results.judgments.get(0).data.question1;
-			ks.quants = new ArrayList<>();
-			for(QuantSpan qs : Tools.quantifier.getSpans(ks.sQuestion)) {
-				ks.quants.add(qs.val);
-			}
-			ks.lEquations = new ArrayList<>();
-			String exp = prob.data.answer.split("=")[0].trim();
-			String monotonic = covertExpressionToMonotonic(exp);
-//			if(!exp.trim().equals(monotonic.trim())) {
-//				System.out.println(exp + " converted to "+monotonic);
-//			}
-			ks.lEquations.add(monotonic);
-			ks.lSolutions = new ArrayList<>();
-			ks.lSolutions.add(Double.parseDouble(prob.data.answer.split("=")[1].trim()));
-			ks.lAlignments = new ArrayList<>();
-			Node expr = Node.parseNode(ks.lEquations.get(0));
-			List<Node> leaves = expr.getLeaves();
-			for(int j=0; j<leaves.size(); ++j) {
-				Node leaf = leaves.get(j);
-				List<Integer> matchedQuantIndices = new ArrayList<>();
-				for(int i = 0; i<ks.quants.size(); ++i) {
-					if(Tools.safeEquals(ks.quants.get(i), leaf.val)) {
-						matchedQuantIndices.add(i);
+			for(int judgment = 0; judgment < prob.results.judgments.size(); ++judgment) {
+				if(prob.results.judgments.get(judgment).tainted) continue;
+				DataFormat ks = new DataFormat();
+				ks.iIndex = prob.id;
+				ks.sQuestion = prob.results.judgments.get(judgment).data.question1;
+				ks.quants = new ArrayList<>();
+				for (QuantSpan qs : Tools.quantifier.getSpans(ks.sQuestion)) {
+					ks.quants.add(qs.val);
+				}
+				ks.lEquations = new ArrayList<>();
+				String exp = prob.data.answer.split("=")[0].trim();
+				String monotonic = covertExpressionToMonotonic(exp);
+				//			if(!exp.trim().equals(monotonic.trim())) {
+				//				System.out.println(exp + " converted to "+monotonic);
+				//			}
+				ks.lEquations.add(monotonic);
+				ks.lSolutions = new ArrayList<>();
+				ks.lSolutions.add(Double.parseDouble(prob.data.answer.split("=")[1].trim()));
+				ks.rates = new ArrayList<>();
+				ks.lAlignments = new ArrayList<>();
+				Node expr = Node.parseNode(ks.lEquations.get(0));
+				List<Node> leaves = expr.getLeaves();
+				for (int j = 0; j < leaves.size(); ++j) {
+					Node leaf = leaves.get(j);
+					List<Integer> matchedQuantIndices = new ArrayList<>();
+					for (int i = 0; i < ks.quants.size(); ++i) {
+						if (Tools.safeEquals(ks.quants.get(i), leaf.val)) {
+							matchedQuantIndices.add(i);
+						}
+					}
+					if (matchedQuantIndices.size() == 0) {
+						System.out.println(ks.iIndex + ": Quantity not found in " + leaf.val);
+						System.out.println("Initial Problem: " + prob.data.question);
+						System.out.println("Modified Problem: " + ks.sQuestion);
+						System.out.println("WorkerId: " + prob.results.judgments.get(judgment).worker_id);
+						System.out.println("Quantities: " + Arrays.asList(ks.quants));
+						System.out.println("Answer: " + ks.lEquations.get(0) + " = " + ks.lSolutions.get(0));
+						System.out.println();
+					} else if (matchedQuantIndices.size() > 1) {
+						System.out.println(ks.iIndex + ": More than 1 match found with " + leaf.val);
+						System.out.println("Initial Problem: " + prob.data.question);
+						System.out.println("Modified Problem: " + ks.sQuestion);
+						System.out.println("WorkerId: " + prob.results.judgments.get(judgment).worker_id);
+						System.out.println("Quantities: " + Arrays.asList(ks.quants));
+						System.out.println("Answer: " + ks.lEquations.get(0) + " = " + ks.lSolutions.get(0));
+						System.out.println();
+					} else {
+						ks.lAlignments.add(matchedQuantIndices.get(0));
 					}
 				}
-				if(matchedQuantIndices.size() == 0) {
-					System.out.println(ks.iIndex+": Quantity not found in "+leaf.val);
-					System.out.println("Problem: " + ks.sQuestion);
-					System.out.println("Quantities: " + Arrays.asList(ks.quants));
-					System.out.println("Answer: " + ks.lEquations.get(0) + " = " + ks.lSolutions.get(0));
-					System.out.println();
-				} else if(matchedQuantIndices.size() > 1) {
-					System.out.println(ks.iIndex+": More than 1 match found with "+leaf.val);
-					System.out.println("Problem: " + ks.sQuestion);
-					System.out.println("Quantities: " + Arrays.asList(ks.quants));
-					System.out.println("Answer: " + ks.lEquations.get(0) + " = " + ks.lSolutions.get(0));
-					System.out.println();
-				} else {
-					ks.lAlignments.add(matchedQuantIndices.get(0));
-				}
+				newProbs.add(ks);
 			}
-			newProbs.add(ks);
 		}
 		return newProbs;
 	}

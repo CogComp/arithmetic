@@ -14,6 +14,8 @@ class CFJudgmentData {
 }
 
 class CFJudgment {
+    public int worker_id;
+    public boolean tainted;
     public CFJudgmentData data;
 }
 
