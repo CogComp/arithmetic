@@ -14080,7 +14080,7 @@
   },
   {
     "iIndex": 1232856431,
-    "sQuestion": "Keith picked 47.0 pears  and Mike picked 12.0 pears from the pear tree . Keith gave Mike 46.0 pears. How many pears does Keith and Mike have left ?",
+    "sQuestion": "Keith picked 47.0 pears  and Mike picked 12.0 pears from the pear tree . Keith gave away 46.0 pears. How many pears does Keith and Mike have left ?",
     "quants": [
       47.0,
       12.0,
@@ -14184,27 +14184,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232856436,
-    "sQuestion": "Jason went to 11.0 football games this month but failed to show up for 17.0 last month. He will go to 16.0 next month. How many games will he attend?",
-    "quants": [
-      11.0,
-      17.0,
-      16.0
-    ],
-    "lAlignments": [
-      0,
-      2,
-      1
-    ],
-    "lEquations": [
-      "((11.0 + 16.0) - 17.0)"
-    ],
-    "lSolutions": [
-      10.0
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232856437,
     "sQuestion": "Jason went to 11.0 football games this month.  He went to 17.0 games last month and plants to go to 16.0 games next month.  How many more games will he attend in the previous month and in the next month than he did in this month?",
     "quants": [
@@ -14284,9 +14263,9 @@
   },
   {
     "iIndex": 1232856441,
-    "sQuestion": "Benny received 97.0 dollars for his birthday. He spent an extra 33.0 dollars at the sporting goods store, above his birthday money. How much did he spend total?",
+    "sQuestion": "Benny received 67.0 dollars for his birthday. He spent an extra 33.0 dollars at the sporting goods store, above his birthday money. How much did he spend total?",
     "quants": [
-      97.0,
+      67.0,
       33.0
     ],
     "lAlignments": [
@@ -14454,7 +14433,7 @@
   },
   {
     "iIndex": 1232856450,
-    "sQuestion": "Dan has 64.0 violet marbles , Mary gave him 14.0 red marbles . How many marbles does he now have ?",
+    "sQuestion": "Dan has 64.0 violet marbles . Mary gave him 14.0 red marbles . How many marbles does he now have ?",
     "quants": [
       64.0,
       14.0
@@ -14511,7 +14490,7 @@
   },
   {
     "iIndex": 1232856453,
-    "sQuestion": "Joan found 79.0 seashells. Mike gave her 63.0 seashells. How many does she have totl?",
+    "sQuestion": "Joan found 79.0 seashells. Mike gave her 63.0 seashells. How many does she have total?",
     "quants": [
       79.0,
       63.0
@@ -15167,35 +15146,16 @@
     "rates": []
   },
   {
-    "iIndex": 1232856487,
-    "sQuestion": "A farmer harvested 48097.0 bushels of wheat.  The weather is perfect during the growing season, so he harvest 684.0 bushels of wheat than expected.  How many bushels of wheat did the farmer plan to harvest?",
+    "iIndex": 1232856488,
+    "sQuestion": "Christina has withdrawn $69.0 from her bank account. She now has only $26935.0. How much did she have before the transfer ?",
     "quants": [
-      48097.0,
-      684.0
+      69.0,
+      26935.0
     ],
     "lAlignments": [
-      0,
-      1
+      1, 
+      0
     ],
-    "lEquations": [
-      "(48097.0 - 684.0)"
-    ],
-    "lSolutions": [
-      47413.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232856488,
-    "sQuestion": "Christina has transferred $69.0 from her bank account. She now has only $26935.0. How much did she have before the transfer?\n(26935.0 + 69.0) = 27004",
-    "quants": [
-      69.0,
-      26935.0,
-      26935.0,
-      69.0,
-      27004.0
-    ],
-    "lAlignments": [],
     "lEquations": [
       "(26935.0 - 69.0)"
     ],
@@ -15206,7 +15166,7 @@
   },
   {
     "iIndex": 1232856489,
-    "sQuestion": "Last yeat at Newberg's airport, 14507.0 passengers landed.  Unfortunately, 213.0 passengers landed late.  In all, how many passengers landed in Newberg last year?",
+    "sQuestion": "Last year at Newberg's airport, 14507.0 passengers landed.  Unfortunately, 213.0 passengers landed late.  In all, how many passengers landed in Newberg on time last year?",
     "quants": [
       14507.0,
       213.0
@@ -15260,7 +15220,7 @@
   },
   {
     "iIndex": 1232856492,
-    "sQuestion": "Last year, 90171.0 people were born in a country, and 16320.0 people immigrated to it.  What is the difference between births and immigration in the county last year.",
+    "sQuestion": "Last year, 90171.0 people were born in a country, and 16320.0 people immigrated to it.  What is the difference between births and immigration in the county last year ?",
     "quants": [
       90171.0,
       16320.0
@@ -15717,7 +15677,7 @@
   },
   {
     "iIndex": 1232856517,
-    "sQuestion": "A construction company is repaving a damaged road. So far, they had repaved a total of 4938.0 inches of the road. Today, they repaved 805.0 inches of the road . How many inches of the road had they repaved then?",
+    "sQuestion": "A construction company is repaving a damaged road. So far, they had repaved a total of 4938.0 inches of the road. Today, they will repave 805.0 inches of the road . How many inches of the road had they will repave in all ?",
     "quants": [
       4938.0,
       805.0
@@ -15826,26 +15786,6 @@
     ],
     "lSolutions": [
       1.3333333333333335
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232856523,
-    "sQuestion": "When Jake had 1.0 cat , he needed to serve 0.5 can of cat food each day . Now that Jake has adopted a second cat , he needs to serve a total of 0.9 can each day . How much food does Jake need  each day to feed both cats?",
-    "quants": [
-      1.0,
-      0.5,
-      0.9
-    ],
-    "lAlignments": [
-      2,
-      1
-    ],
-    "lEquations": [
-      "(0.9 + 0.5)"
-    ],
-    "lSolutions": [
-      1.4
     ],
     "rates": []
   },
@@ -15983,25 +15923,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232856531,
-    "sQuestion": "As part of a lesson on earthquakes , a science class is researching the movement of a nearby fault line . The fault line moved 1.25 inches during the past year and 5.25 inches the year before . How far did the fault line move between the two years ?",
-    "quants": [
-      1.25,
-      5.25
-    ],
-    "lAlignments": [
-      1,
-      0
-    ],
-    "lEquations": [
-      "(5.25 - 1.25)"
-    ],
-    "lSolutions": [
-      4.0
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232856532,
     "sQuestion": "Hoping to be named Salesperson of the month, Rosa is going to call names from 10.2 pages of the phone book. Last week she called 8.6 pages. How many pages will she call this week?",
     "quants": [
@@ -16117,7 +16038,7 @@
   },
   {
     "iIndex": 1232856538,
-    "sQuestion": "Wendy ran 19.833333333333332 miles and walked 9.166666666666666 miles . How far did Wendy travel.",
+    "sQuestion": "Wendy ran 19.833333333333332 miles and walked 9.166666666666666 miles . How far did Wendy travel ?",
     "quants": [
       19.833333333333332,
       9.166666666666666
@@ -16214,7 +16135,7 @@
   },
   {
     "iIndex": 1232856543,
-    "sQuestion": "It rained 0.9 inches on Monday . On Tuesday , it rained 0.7 inches more . How much did it rain on Monday and Tuesday ?",
+    "sQuestion": "It rained 0.9 inches on Monday . On Tuesday , it rained 0.7 inches . How much did it rain on Monday and Tuesday ?",
     "quants": [
       0.9,
       0.7
@@ -16467,7 +16388,7 @@
   },
   {
     "iIndex": 1232856556,
-    "sQuestion": "Park worker have planted 57 short trees today What is the difference between the 57 planted today and the previously existing number of 41?",
+    "sQuestion": "Park worker have planted 57 short trees today. What is the difference between the 57 planted today and the previously existing number of 41?",
     "quants": [
       57.0,
       57.0,
@@ -16600,26 +16521,6 @@
     ],
     "lSolutions": [
       10.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232856563,
-    "sQuestion": "There were a total of 8.0 football games this year , 6.0 are played at night . Keith attended 4.0 of the preseason  games . How many football games did Keith go to in total ?",
-    "quants": [
-      8.0,
-      6.0,
-      4.0
-    ],
-    "lAlignments": [
-      0,
-      2
-    ],
-    "lEquations": [
-      "(8.0 + 4.0)"
-    ],
-    "lSolutions": [
-      12.0
     ],
     "rates": []
   },
@@ -16787,31 +16688,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232856572,
-    "sQuestion": "Part 1 : Keith spent $ 136.01 on speakers , $ 139.38 on a CD player , and $ 112.46 on new tires . He wanted 3.0 CD 's for $ 6.16 , but didn't buy them . In total , how much did he spend ?\nPart 2 :((136.01 + 139.38) - 112.46)=162.93",
-    "quants": [
-      1.0,
-      136.01,
-      139.38,
-      112.46,
-      3.0,
-      6.16,
-      2.0,
-      136.01,
-      139.38,
-      112.46,
-      162.93
-    ],
-    "lAlignments": [],
-    "lEquations": [
-      "((136.01 + 139.38) - 112.46)"
-    ],
-    "lSolutions": [
-      162.93
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232856573,
     "sQuestion": "Keith spent $ 136.01 on speakers and returned to the shop a CD player worth $ 139.38, which he got reimbursed. He also spent $ 112.46 on new tires . He wanted 3.0 CD 's for $ 6.16 , but did n't buy them . In total , how much did he spend ?",
     "quants": [
@@ -16836,18 +16712,18 @@
   },
   {
     "iIndex": 1232856574,
-    "sQuestion": "Keith returned  a CD player for $ 139.38 ,  spent $ 136.01 on speakers , and $ 112.46 on new tires . He wanted 3.0 CD 's for $ 6.16 , but did n't buy them . In total , how much did he spend",
+    "sQuestion": "Keith returned  a CD player for $ 136.01 ,  spent $ 139.38 on speakers , and $ 112.46 on new tires . He wanted 3.0 CD 's for $ 6.16 , but did n't buy them . In total , how much did he spend",
     "quants": [
-      139.38,
       136.01,
+      139.38,
       112.46,
       3.0,
       6.16
     ],
     "lAlignments": [
-      0,
+      1,
       2,
-      1
+      0
     ],
     "lEquations": [
       "((139.38 + 112.46) - 136.01)"
@@ -16942,26 +16818,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232856579,
-    "sQuestion": "Last week, Fred had 23.0 dollars, and Jason had 46.0 dollars . Fred washed cars over the weekend and now has 86.0 dollars . How much money did Fred make washing cars total ?",
-    "quants": [
-      23.0,
-      46.0,
-      86.0
-    ],
-    "lAlignments": [
-      2,
-      0
-    ],
-    "lEquations": [
-      "(86.0 + 23.0)"
-    ],
-    "lSolutions": [
-      109.0
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232856580,
     "sQuestion": "There are 95.0 short trees and 32.0 tall trees currently in the park. Park workers will plant 31.0 short trees today. When the workers are finished, how many short trees will be in the park?",
     "quants": [
@@ -16983,7 +16839,7 @@
   },
   {
     "iIndex": 1232856581,
-    "sQuestion": "There were 9.0 red orchids and 3.0 white orchids in the vase . Sally cut 15.0 red orchids from her flower garden . How many red orchids are there now in the vase?",
+    "sQuestion": "There were 9.0 red orchids and 3.0 white orchids in the vase . Sally cut 15.0 red orchids from her flower garden and put them in the vase . How many red orchids are there now in the vase?",
     "quants": [
       9.0,
       3.0,
@@ -17043,7 +16899,7 @@
   },
   {
     "iIndex": 1232856584,
-    "sQuestion": "How many slice of pie are served today if 7 are sold in total of which 5 where sold yesterday?",
+    "sQuestion": "How many slice of pie are served today, if 7 are sold in total of which 5 where sold yesterday?",
     "quants": [
       7.0,
       5.0
@@ -17189,7 +17045,7 @@
   },
   {
     "iIndex": 1232856591,
-    "sQuestion": "In one part of the park there are 5.0 dogwood trees. Park workers plan to cut down 7.0 dogwood trees today. In another part of the park there are 4.0 dogwood trees. 8.0 park workers are on the job. After they are done with their work, how many dogwood tress will be left in the park?",
+    "sQuestion": "In one part of the park, there are 5.0 dogwood trees. Park workers plan to cut down 7.0 dogwood trees today. In another part of the park, there are 4.0 dogwood trees. 8.0 park workers are on the job. After they are done with their work, how many dogwood tress will be left in the park?",
     "quants": [
       5.0,
       7.0,
@@ -17232,28 +17088,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232856593,
-    "sQuestion": "Nancy went to 9.0 football games this month . She went to 8.0 games last month , and plans to go to 7.0 games next month . She paid 3.0 dollars for the tickets .  How games will Nancy attend over this month compared to last month, in addition to next month?",
-    "quants": [
-      9.0,
-      8.0,
-      7.0,
-      3.0
-    ],
-    "lAlignments": [
-      0,
-      2,
-      1
-    ],
-    "lEquations": [
-      "((9.0 + 7.0) - 8.0)"
-    ],
-    "lSolutions": [
-      8.0
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232856594,
     "sQuestion": "Nancy had 8.0 dollars to spend on tickets for football games but it costs 9.0. She was given an extra 7.0 to cover the costs. How much money does she have left over?",
     "quants": [
@@ -17271,28 +17105,6 @@
     ],
     "lSolutions": [
       6.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232856596,
-    "sQuestion": "Nancy grew 2.0 onions , Dan grew 9.0 onions , and Mike 4.0 onions did not grow . They worked for 6.0 days on the farm . How many onions did they grow in total ?",
-    "quants": [
-      2.0,
-      9.0,
-      4.0,
-      6.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((2.0 + 9.0) - 4.0)"
-    ],
-    "lSolutions": [
-      7.0
     ],
     "rates": []
   },
@@ -17340,30 +17152,8 @@
     "rates": []
   },
   {
-    "iIndex": 1232856599,
-    "sQuestion": "fred has 5 ballons, sam has 6 ballooons, mary has 7 baloons.  the baloons cost 9 dollars each.  how much did they spend in total?",
-    "quants": [
-      5.0,
-      6.0,
-      7.0,
-      9.0
-    ],
-    "lAlignments": [
-      0,
-      2,
-      1
-    ],
-    "lEquations": [
-      "((5.0 + 7.0) - 6.0)"
-    ],
-    "lSolutions": [
-      6.0
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232856600,
-    "sQuestion": "Sam gives 5.0 of his 6.0 yellow balloons to Fred, and Mary has 7.0 yellow balloons . The balloons cost 9.0 dollars . How many yellow balloons do they have in total?",
+    "sQuestion": "Sam gives 5.0 of his 6.0 yellow balloons to Fred, and Mary has 7.0 yellow balloons . The balloons cost 9.0 dollars . How many yellow balloons do Sam and Mary have in total?",
     "quants": [
       5.0,
       6.0,
@@ -17467,50 +17257,8 @@
     "rates": []
   },
   {
-    "iIndex": 1232856605,
-    "sQuestion": "Alyssa went to 11.0 soccer games this year, and went to 13.0 games last year. For each game she misses, she loses one point. She missed 15.0 games over two years. How many points does Alyssa have for both years?",
-    "quants": [
-      11.0,
-      13.0,
-      15.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((11.0 + 13.0) - 15.0)"
-    ],
-    "lSolutions": [
-      9.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232856606,
-    "sQuestion": "Alyssa wanted to go to 11.0 soccer games this year ,  she missed 13.0 games last year and plans to go to 15.0 games next year . How many soccer games will Alyssa go to in all ?",
-    "quants": [
-      11.0,
-      13.0,
-      15.0
-    ],
-    "lAlignments": [
-      0,
-      2,
-      1
-    ],
-    "lEquations": [
-      "((11.0 + 15.0) - 13.0)"
-    ],
-    "lSolutions": [
-      13.0
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232856607,
-    "sQuestion": "There were 13.0 soccer games this year, but Alyssa missed to go to 11.0 of them. She went to 15.0 games last year and plans to go to 15.0 games next year . How many soccer games did Alyssa go to so far?",
+    "sQuestion": "There were 13.0 soccer games this year, but Alyssa missed to go to 11.0 of them. She went to 15.0 games last year and plans to go to 15.0 games next year . How many soccer games will Alyssa go to?",
     "quants": [
       13.0,
       11.0,
@@ -17552,7 +17300,7 @@
   },
   {
     "iIndex": 1232856609,
-    "sQuestion": "Sam has 46.0 red balloons, Sam gives Fred 10.0 red balloons , and Dan has 16.0 red balloons . The balloons cost 10.0 dollars . How many red balloons do they have in all ?",
+    "sQuestion": "Sam has 46.0 red balloons, Sam gives Fred 10.0 red balloons , and Dan has 16.0 red balloons . The balloons cost 10.0 dollars . How many red balloons do Sam and Dan have in all ?",
     "quants": [
       46.0,
       10.0,
@@ -17632,7 +17380,7 @@
   },
   {
     "iIndex": 1232856613,
-    "sQuestion": "Jose starts with 7.0 bottle caps. He give 2.0 to Rebecca. How many bottle caps does Jose have left?",
+    "sQuestion": "Jose starts with 7.0 bottle caps. He gives 2.0 to Rebecca. How many bottle caps does Jose have left?",
     "quants": [
       7.0,
       2.0
@@ -17651,7 +17399,7 @@
   },
   {
     "iIndex": 1232856614,
-    "sQuestion": "Carol collects 5.0 peanuts. She gives Her father 2.0. How many peanuts does Carol have left?",
+    "sQuestion": "Carol collects 5.0 peanuts. She gives her father 2.0. How many peanuts does Carol have left?",
     "quants": [
       5.0,
       2.0
@@ -17708,7 +17456,7 @@
   },
   {
     "iIndex": 1232856617,
-    "sQuestion": "Mildred collects 77.0 oranges. Mildred's father eats two 2.0 of them. How many oranges does Mildred have now?",
+    "sQuestion": "Mildred collects 77.0 oranges. Mildred's father eats 2.0 of them. How many oranges does Mildred have now?",
     "quants": [
       77.0,
       2.0
@@ -17746,7 +17494,7 @@
   },
   {
     "iIndex": 1232856619,
-    "sQuestion": "Joshua buy 7 bottle caps, he previously had 40 how many does he now have?",
+    "sQuestion": "Joshua sold 7 bottle caps. He previously had 40. How many does he now have?",
     "quants": [
       7.0,
       40.0
@@ -17784,7 +17532,7 @@
   },
   {
     "iIndex": 1232856621,
-    "sQuestion": "Barbara has 18.0 candies. She uses 9.0 more. How many candies does Barbara have left?",
+    "sQuestion": "Barbara has 18.0 candies. She uses 9.0. How many candies does Barbara have left?",
     "quants": [
       18.0,
       9.0
@@ -17917,7 +17665,7 @@
   },
   {
     "iIndex": 1232856628,
-    "sQuestion": "Virginia starts with 96.0 eggs. Amy gives 3.0 more. How many eggs does Virginia end with?",
+    "sQuestion": "Virginia starts with 96.0 eggs. Amy gives her 3.0 more. How many eggs does Virginia end with?",
     "quants": [
       96.0,
       3.0
