@@ -46,11 +46,16 @@ public class CrowdFlower {
 
     public static void main(String args[]) throws Exception {
         List<CrowdFlower> probs = readCrowdFlowerFile("data/job_1012604.json");
-        System.out.println("Number of problems: "+probs.size());
-        System.out.println("Input Problem: "+probs.get(50).data.question);
-        System.out.println("Input Answer: "+probs.get(50).data.answer);
-        System.out.println("Perturbed Problem: "+
-                probs.get(50).results.judgments.get(0).data.question1);
+        for(CrowdFlower prob : probs) {
+            String inp = prob.data.question;
+            for(CFJudgment judgment : prob.results.judgments) {
+                if(judgment.tainted) continue;
+                String mod = judgment.data.question1;
+                if(inp.trim().equals(mod.trim())) {
+                    System.out.println(prob.id+" : Same Problem");
+                }
+            }
+        }
     }
 
 }

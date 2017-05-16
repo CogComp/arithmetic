@@ -23851,174 +23851,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232857052,
-    "sQuestion": "While playing at the arcade, Frank won 33.0 tickets playing 'whack a mole' and 9.0 tickets playing 'skee ball'. If he was trying to buy candy that cost 6.0 tickets a piece, how many could he buy?",
-    "quants": [
-      33.0,
-      9.0,
-      6.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((33.0 + 9.0) * 6.0)"
-    ],
-    "lSolutions": [
-      252.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857053,
-    "sQuestion": "Frank won 33 tickets playing  whack-a-mole and 9 tickets playing skeeball. If he buys candy that costs 6 tickets a piece, how many can he buy?",
-    "quants": [
-      33.0,
-      9.0,
-      6.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((33.0 - 9.0) / 6.0)"
-    ],
-    "lSolutions": [
-      4.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857054,
-    "sQuestion": "For Halloween Megan received 11.0 pieces of candy from neighbors and 5.0 pieces from her older sister. If she had them in 8.0 places, how many will she have?",
-    "quants": [
-      11.0,
-      5.0,
-      8.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((11.0 + 5.0) * 8.0)"
-    ],
-    "lSolutions": [
-      128.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857055,
-    "sQuestion": "At a company picnic 23.0 managers more 7.0 employees decided to start a game of volleyball. If they split into 6.0 teams, how many people would be on each team?",
-    "quants": [
-      23.0,
-      7.0,
-      6.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((23.0 + 7.0) * 6.0)"
-    ],
-    "lSolutions": [
-      180.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857056,
-    "sQuestion": "At a company picnic 23.0 managers and 7.0 employees decided to start a game of volleyball. If they split 6.0 teams, how many people would be on each team?",
-    "quants": [
-      23.0,
-      7.0,
-      6.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((23.0 - 7.0) / 6.0)"
-    ],
-    "lSolutions": [
-      2.6666666666666665
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857057,
-    "sQuestion": "A new building needed 14.0 windows. The builder had already installed 5.0 of them. If it takes 4.0 hours to install each window, how long will it take him?",
-    "quants": [
-      14.0,
-      5.0,
-      4.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((14.0 - 5.0) / 4.0)"
-    ],
-    "lSolutions": [
-      2.25
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857058,
-    "sQuestion": "A new building needed 14.0 windows. The builder had already installed 5.0 of them. If it takes 4.0 hours to install each window, how long will it take him to install the rest?",
-    "quants": [
-      14.0,
-      5.0,
-      4.0
-    ],
-    "lAlignments": [
-      2,
-      0,
-      1
-    ],
-    "lEquations": [
-      "(4.0 * (14.0 + 5.0))"
-    ],
-    "lSolutions": [
-      76.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857059,
-    "sQuestion": "A chef needs to cook 16.0 potatoes. He has already cooked 7.0. If each potato takes 5.0 minutes to cook, how long will it take him to cook the rest?",
-    "quants": [
-      16.0,
-      7.0,
-      5.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((16.0 - 7.0) / 5.0)"
-    ],
-    "lSolutions": [
-      1.8
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857060,
     "sQuestion": "A chef needs to cook 16.0 potatoes. He more  already cooked 7.0. If each potato takes 5.0 minutes to cook, how long will it take him to cook the rest?",
     "quants": [
@@ -24040,65 +23872,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232857061,
-    "sQuestion": "Ned bought 14 boxes of chocolate candy and gave 7 to his little brother. If each box has 6 pieces of candy inside it, how many pieces did Ned still have?",
-    "quants": [
-      14.0,
-      7.0,
-      6.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((14.0 - 7.0) / 6.0)"
-    ],
-    "lSolutions": [
-      1.1666666666666667
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857062,
-    "sQuestion": "Ned bought 6.0 boxes of chocolate candy and gave 14.0 to his little brother. If each box has 6.0 pieces inside it, how many pieces did Ned still have?",
-    "quants": [
-      6.0,
-      14.0,
-      6.0
-    ],
-    "lAlignments": [
-      1
-    ],
-    "lEquations": [
-      "(6.0 * (14.0 + 7.0))"
-    ],
-    "lSolutions": [
-      126.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857063,
-    "sQuestion": "There were 11.0 friends playing a video game online when 5.0 players quit. If all players had a combined 5.0 lives left, how many lives will each player get?",
-    "quants": [
-      11.0,
-      5.0,
-      5.0
-    ],
-    "lAlignments": [
-      0
-    ],
-    "lEquations": [
-      "((11.0 - 5.0) / 5.0)"
-    ],
-    "lSolutions": [
-      1.2
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857064,
     "sQuestion": "There were 11.0 friends playing a video game online when 5.0 players joined. If each player left had 5.0 lives, how many lives did they have total?",
     "quants": [
@@ -24114,27 +23887,6 @@
     ],
     "lSolutions": [
       80.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857065,
-    "sQuestion": "Henry earned $ 5.0 for every lawn he cut. If I had 12.0 lawns to cut, and I had already cut 7.0 of them, how much money did they actually earn?",
-    "quants": [
-      5.0,
-      12.0,
-      7.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "(5.0 * (12.0 + 7.0))"
-    ],
-    "lSolutions": [
-      95.0
     ],
     "rates": []
   },
@@ -24160,191 +23912,8 @@
     "rates": []
   },
   {
-    "iIndex": 1232857067,
-    "sQuestion": "A trivia team has 5 members, but during a game 2 members didn't show up. How badly do they lose against the dweebs from California City, Poptropica?",
-    "quants": [
-      5.0,
-      2.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(6.0 * (5.0 + 2.0))"
-    ],
-    "lSolutions": [
-      42.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857068,
-    "sQuestion": "A painter has 8 hours to paint 10 rooms. If he has already finished 8 rooms, how many hours does he need to finish the rest, assuming all rooms take the same amount of time?",
-    "quants": [
-      8.0,
-      10.0,
-      8.0
-    ],
-    "lAlignments": [
-      1
-    ],
-    "lEquations": [
-      "(8.0 / (10.0 - 8.0))"
-    ],
-    "lSolutions": [
-      4.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857069,
-    "sQuestion": "It takes 8.0 hours to paint a room for the painter. The painter needs to paint 10.0 rooms in a building. He had finished painting 8.0 rooms. How many more hours does he have to spend painting the remaining rooms?",
-    "quants": [
-      8.0,
-      10.0,
-      8.0
-    ],
-    "lAlignments": [
-      1
-    ],
-    "lEquations": [
-      "(8.0 * (10.0 + 8.0))"
-    ],
-    "lSolutions": [
-      144.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857070,
-    "sQuestion": "In a video game, each enemy defeated gives you 1/3 points. If a level has 6.0 enemies total and you destroy all but 2.0 of them, how many points would you earn?",
-    "quants": [
-      1.0,
-      3.0,
-      6.0,
-      2.0
-    ],
-    "lAlignments": [
-      2,
-      3,
-      1
-    ],
-    "lEquations": [
-      "((6.0 - 2.0) / 3.0)"
-    ],
-    "lSolutions": [
-      1.3333333333333333
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857071,
-    "sQuestion": "In a video game, each enemy defeated gives you 3.0 points. If a level has 6.0 enemies total and you destroy all but 2.0 of them, how many points would you earn?",
-    "quants": [
-      3.0,
-      6.0,
-      2.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "(3.0 * (6.0 + 2.0))"
-    ],
-    "lSolutions": [
-      24.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857072,
-    "sQuestion": "Wendy earned 5.0 points for each bag of cans she recycled. If she had 11.0 bags, but didn't recycle 9.0 of them, how many points would she have earned?",
-    "quants": [
-      5.0,
-      11.0,
-      9.0
-    ],
-    "lAlignments": [
-      1,
-      0
-    ],
-    "lEquations": [
-      "((11.0 - 2.0) / 5.0)"
-    ],
-    "lSolutions": [
-      1.8
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857073,
-    "sQuestion": "Wendy earned 5.0 points for each bag of cans she recycled. If she had 11.0 bags, more 2.0 of them, how many points would she have earned?",
-    "quants": [
-      5.0,
-      11.0,
-      2.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "(5.0 * (11.0 + 2.0))"
-    ],
-    "lSolutions": [
-      65.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857074,
-    "sQuestion": "Each chocolate bar in a box cost $3.0. If a box had 7.0 bars total, and Olivia buy all but 4.0 bars, how much money would she have made?",
-    "quants": [
-      3.0,
-      7.0,
-      4.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "(3.0 * (7.0 + 4.0))"
-    ],
-    "lSolutions": [
-      33.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857075,
-    "sQuestion": "At a restaurant, each adult meal costs $3.0, and kids eat free. If a group of 12.0 people came in and 7.0 were kids, how much would it cost for the group of adult to eat?",
-    "quants": [
-      3.0,
-      12.0,
-      7.0
-    ],
-    "lAlignments": [
-      1,
-      2,
-      0
-    ],
-    "lEquations": [
-      "((12.0 - 7.0) / 3.0)"
-    ],
-    "lSolutions": [
-      1.6666666666666667
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857076,
-    "sQuestion": "At a restaurant, each adult meal costs $3.0, and kids eat for $3.0. If a group of 12.0 people came in and 7.0 were kids, how much would it cost for the group to eat?",
+    "sQuestion": "At a restaurant, each meal costs $3.0 . If a group of 12.0 adults and 7.0 kids came in, how much would it cost for the group to eat?",
     "quants": [
       3.0,
       3.0,
@@ -24360,71 +23929,6 @@
     ],
     "lSolutions": [
       57.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857077,
-    "sQuestion": "Jerry had 7.0 action figures, but needed 16.0 total for a complete collection. If each 1.0 costs .80 how much money would he need to finish his collection?",
-    "quants": [
-      7.0,
-      16.0,
-      1.0,
-      0.8
-    ],
-    "lAlignments": [
-      1,
-      0
-    ],
-    "lEquations": [
-      "((16.0 - 7.0) / 8.0)"
-    ],
-    "lSolutions": [
-      1.125
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857078,
-    "sQuestion": "Jerry has 7 out of 16 action figures needed. If each figure costs $8, how much will he need to finish the collection?",
-    "quants": [
-      7.0,
-      16.0,
-      8.0
-    ],
-    "lAlignments": [
-      2,
-      1,
-      0
-    ],
-    "lEquations": [
-      "(8.0 * (16.0 + 7.0))"
-    ],
-    "lSolutions": [
-      184.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857079,
-    "sQuestion": "Part 1 : Mike had 16.0 video games, but 8.0 of them weren't working. If he wanted to sell the working games for $7.0 each, how much money could he earn?\nPart 2 :((16.0 - 8.0) / 7.0)=1.1428571428571428",
-    "quants": [
-      1.0,
-      16.0,
-      8.0,
-      7.0,
-      2.0,
-      16.0,
-      8.0,
-      7.0,
-      1.1428571428571428
-    ],
-    "lAlignments": [],
-    "lEquations": [
-      "((16.0 - 8.0) / 7.0)"
-    ],
-    "lSolutions": [
-      1.1428571428571428
     ],
     "rates": []
   },
@@ -24450,67 +23954,8 @@
     "rates": []
   },
   {
-    "iIndex": 1232857081,
-    "sQuestion": "Mike invited 13.0 friends to his birthday party. 7.0 friends could not make it. If he was to buy enough cupcakes to each friend who could go  was to have 4.0 each, how many cupcakes should he buy?",
-    "quants": [
-      13.0,
-      7.0,
-      4.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((13.0 - 7.0) / 4.0)"
-    ],
-    "lSolutions": [
-      1.5
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857082,
-    "sQuestion": "Mike invited 13 friends to his birthday party. How many will get drunk?",
-    "quants": [
-      13.0
-    ],
-    "lAlignments": [
-      0
-    ],
-    "lEquations": [
-      "(4.0 * (13.0 + 7.0))"
-    ],
-    "lSolutions": [
-      80.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857083,
-    "sQuestion": "A magician was selling magic card decks for 2 dollars each. He started with 5 decks, and by the end of the day, he had 3 left. How much money did he earn?",
-    "quants": [
-      2.0,
-      5.0,
-      3.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "(2.0 * (5.0 + 3.0))"
-    ],
-    "lSolutions": [
-      16.0
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857084,
-    "sQuestion": "At the fair Adam bought 13.0 tickets. After riding the ferris wheel he deciced to buy 4.0 more tickets. If each ticket cost 9.0 dollars, how much money did Adam spend riding the ferris wheel?",
+    "sQuestion": "At the fair, Adam bought 13.0 tickets. After riding the ferris wheel he deciced to buy 4.0 more tickets. If each ticket cost 9.0 dollars, how much money did Adam spend riding the ferris wheel?",
     "quants": [
       13.0,
       4.0,
@@ -24531,7 +23976,7 @@
   },
   {
     "iIndex": 1232857085,
-    "sQuestion": "At lunch a waiter collected 10 dollars in tips but his boss kept 5 dollar bills. If the remainder is evenly split across all 3 servers including himself, how much does everyone get?",
+    "sQuestion": "At lunch a waiter collected 10 dollars in tips but his boss kept 5 dollars. If the remainder is evenly split across all 3 servers including himself, how much does each server get?",
     "quants": [
       10.0,
       5.0,
@@ -24552,7 +23997,7 @@
   },
   {
     "iIndex": 1232857086,
-    "sQuestion": "A waiter got $3.0 as a tip from each tipping customer. During lunch the waiter had 10.0 customers, but 5.0 of them didn't leave a tip. How much money did he earn during lunch?",
+    "sQuestion": "A waiter got $3.0 as a tip from each tipping customer. During lunch, the waiter had 10.0 customers, but 5.0 of them didn't leave a tip. How much money did he earn during lunch?",
     "quants": [
       3.0,
       10.0,
@@ -24564,31 +24009,10 @@
       2
     ],
     "lEquations": [
-      "(3.0 * (10.0 + 5.0))"
+      "(3.0 * (10.0 - 5.0))"
     ],
     "lSolutions": [
-      45.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857087,
-    "sQuestion": "A worksheet has 4.0 problems. If a teacher had 9.0 worksheets per night for 5.0 nights, how many problems does she have to grade?",
-    "quants": [
-      4.0,
-      9.0,
-      5.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "(4.0 * (9.0 + 5.0))"
-    ],
-    "lSolutions": [
-      56.0
+      15.0
     ],
     "rates": []
   },
@@ -24610,69 +24034,6 @@
     ],
     "lSolutions": [
       1.4
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857089,
-    "sQuestion": "April's discount flowers was having a sale where each rose was 7.0 dollars. If April started with 9.0 roses and then sell 4.0 roses left, how much money did she earn?",
-    "quants": [
-      7.0,
-      9.0,
-      4.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "(7.0 * (9.0 + 4.0))"
-    ],
-    "lSolutions": [
-      91.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857090,
-    "sQuestion": "Zoe baked 5.0 brownies, but needed 11.0 total for her party. If she used 7.0 cups of flour, how much cups of flour does she still need?",
-    "quants": [
-      5.0,
-      11.0,
-      7.0
-    ],
-    "lAlignments": [
-      2,
-      1,
-      0
-    ],
-    "lEquations": [
-      "(7.0 / (11.0 - 5.0))"
-    ],
-    "lSolutions": [
-      1.1666666666666667
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857091,
-    "sQuestion": "Zoe baked 5 brownies, but needed 11 total for her party. If she used 7 cups of flour on each one, how much cups of flour does she still need?",
-    "quants": [
-      5.0,
-      11.0,
-      7.0
-    ],
-    "lAlignments": [
-      2,
-      1,
-      0
-    ],
-    "lEquations": [
-      "(7.0 * (11.0 + 5.0))"
-    ],
-    "lSolutions": [
-      112.0
     ],
     "rates": []
   },
@@ -24742,7 +24103,7 @@
   },
   {
     "iIndex": 1232857095,
-    "sQuestion": "A pet store had 18.0 puppies. In 1.0 day, they buy 3.0 of them and put the rest into cages with 5.0 in each cage. How many cages did they use?",
+    "sQuestion": "A pet store had 18.0 puppies. In 1.0 day, they buy 3.0 puppies and put all of them into cages with 5.0 in each cage. How many cages did they use?",
     "quants": [
       18.0,
       1.0,
@@ -24780,27 +24141,6 @@
     ],
     "lSolutions": [
       150.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857097,
-    "sQuestion": "Luke had 47.0 pieces of clothing to wash. He put 17.0 of them decided to split the rest into 5.0 equal loads. How many pieces of clothing could go in each of the small loads?",
-    "quants": [
-      47.0,
-      17.0,
-      5.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((47.0 + 17.0) / 5.0)"
-    ],
-    "lSolutions": [
-      12.8
     ],
     "rates": []
   },
@@ -26048,25 +25388,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232857161,
-    "sQuestion": "Mike worked 3.0 hours each day, for 5.0 days. How many hours did he work in total ?",
-    "quants": [
-      3.0,
-      5.0
-    ],
-    "lAlignments": [
-      1,
-      0
-    ],
-    "lEquations": [
-      "(5.0 / 3.0)"
-    ],
-    "lSolutions": [
-      1.6666666666666667
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857162,
     "sQuestion": "Melanie is selling 4.0 gumballs for 8.0 cents. How much is one gumball?",
     "quants": [
@@ -26634,29 +25955,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232857189,
-    "sQuestion": "On Friday, Fred paid $5.92 each on 2.0 tickets to a movie theater. He also borrowed a movie for $6.79. Fred paid with a $20.0 bill. How much change did Fred receive?",
-    "quants": [
-      5.92,
-      2.0,
-      6.79,
-      20.0
-    ],
-    "lAlignments": [
-      3,
-      1,
-      0,
-      2
-    ],
-    "lEquations": [
-      "((20.0 + (2.0 * 5.92)) - 6.79)"
-    ],
-    "lSolutions": [
-      25.05
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857190,
     "sQuestion": "On Friday Fred had a $20.0 bill, earlier Fred got 5.92kilos of fish for $2.0 in a fish shop but decided to buy half that kilos of fish instead. He also borrowed a movie for $6.79. Fred paid with a $20.0 bill. How much change will Fred have?",
     "quants": [
@@ -26779,30 +26077,6 @@
     ],
     "lSolutions": [
       26866.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857196,
-    "sQuestion": "Jonathan wants to buy a dictionary that costs $11.0, a dinosaur book that costs $19.0, and a children's cookbook that costs $7.0. He has saved $8.0 from his allowance. How much more money does Jonathan need to buy all 3.0 books?",
-    "quants": [
-      11.0,
-      19.0,
-      7.0,
-      8.0,
-      3.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "lEquations": [
-      "(((11.0 + 19.0) + 7.0) + 8.0)"
-    ],
-    "lSolutions": [
-      45.0
     ],
     "rates": []
   },
@@ -27191,29 +26465,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232857218,
-    "sQuestion": "Carrie's mom gave her $91.0 to go shopping. She bought a sweater for $24.0, a T-shirt for $6.0, and a pair of shoes for $11.0. How much money does Carrie have left?",
-    "quants": [
-      91.0,
-      24.0,
-      6.0,
-      11.0
-    ],
-    "lAlignments": [
-      0,
-      3,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((91.0 + 11.0) - (24.0 + 6.0))"
-    ],
-    "lSolutions": [
-      72.0
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857219,
     "sQuestion": "Carrie's mom gave her $91.0 to go shopping. She sold a sweater for $24.0, a T-shirt for $6.0, and bought a pair of shoes for $11.0. How much money does Carrie have left?",
     "quants": [
@@ -27551,29 +26802,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232857234,
-    "sQuestion": "Seth bought 20.0 cartons of ice cream and 2.0 cartons of yogurt. Each carton of ice cream cost $6.0, and each carton of yogurt cost $1.0. How much more did Seth spend on ice cream than on yogurt?",
-    "quants": [
-      20.0,
-      2.0,
-      6.0,
-      1.0
-    ],
-    "lAlignments": [
-      0,
-      2,
-      3,
-      1
-    ],
-    "lEquations": [
-      "((20.0 * 6.0) - (1.0 / 2.0))"
-    ],
-    "lSolutions": [
-      119.5
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857235,
     "sQuestion": "Dalton wants to buy a jump rope that costs $7.0, a board game that costs $12.0, and a playground ball that costs $4.0. He also $6.0 to his sister and $13.0 to his uncle. How much money does Dalton need to buy the jump rope, the game, and the ball and repay his relatives?",
     "quants": [
@@ -27691,29 +26919,6 @@
     ],
     "lSolutions": [
       128.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857240,
-    "sQuestion": "Vincent bought 10.0 books about animals, 1.0 book about outer space, and 3.0 books about trains. Each book cost $16.0. How much did Vincent spend on the books?",
-    "quants": [
-      10.0,
-      1.0,
-      3.0,
-      16.0
-    ],
-    "lAlignments": [
-      0,
-      2,
-      1,
-      3
-    ],
-    "lEquations": [
-      "(((10.0 + 3.0) - 1.0) * 16.0)"
-    ],
-    "lSolutions": [
-      192.0
     ],
     "rates": []
   },
@@ -28006,52 +27211,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232857254,
-    "sQuestion": "Paula's aunt gave her $109.0 to spend on clothes at the mall. She bought 2.0 shirts that cost $11.0 each and a pair of pants that cost $13.0. How much money does Paula have left to buy more clothes?",
-    "quants": [
-      109.0,
-      2.0,
-      11.0,
-      13.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "lEquations": [
-      "((109.0 + (2.0 * 11.0)) - 13.0)"
-    ],
-    "lSolutions": [
-      118.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857255,
-    "sQuestion": "Paula's aunt gave her $109.0 to spend on clothes at the mall. She bought 2.0 shirts that cost $11.0 each and a pair of pants that cost $13.0. How much money does Paula have left to buy more clothes?",
-    "quants": [
-      109.0,
-      2.0,
-      11.0,
-      13.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "lEquations": [
-      "(109.0 - ((2.0 / 11.0) + 13.0))"
-    ],
-    "lSolutions": [
-      95.81818181818181
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857256,
     "sQuestion": "Paula's aunt gave her $109.0 to spend on clothes at the mall. She bought 2.0 shirts that cost $11.0 total and a pair of pants that cost $13.0. How much money does Paula have left to buy more clothes?",
     "quants": [
@@ -28239,27 +27398,6 @@
     ],
     "lSolutions": [
       5.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857265,
-    "sQuestion": "Maggie bought 4.0 packs of red bouncy balls, 8.0 packs of yellow bouncy balls, and 4.0 packs of green bouncy balls. There were 10.0 bouncy balls in each package. How many bouncy balls did Maggie buy in all?",
-    "quants": [
-      4.0,
-      8.0,
-      4.0,
-      10.0
-    ],
-    "lAlignments": [
-      1,
-      3
-    ],
-    "lEquations": [
-      "(((4.0 + 8.0) + 4.0) / 10.0)"
-    ],
-    "lSolutions": [
-      1.6
     ],
     "rates": []
   },
@@ -28516,25 +27654,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232857279,
-    "sQuestion": "For the final act, the circus brought out dancing animals wearing crowns. If each crown is made with 7.0 different colored feathers, how many feathers are needed for 934.0 crowns?",
-    "quants": [
-      7.0,
-      934.0
-    ],
-    "lAlignments": [
-      1,
-      0
-    ],
-    "lEquations": [
-      "(934.0 / 7.0)"
-    ],
-    "lSolutions": [
-      133.42857142857142
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857280,
     "sQuestion": "The library has books everyone. How would you count them all?",
     "quants": [],
@@ -28711,44 +27830,6 @@
     ],
     "lSolutions": [
       1600.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857290,
-    "sQuestion": "Christian and the junior ranger brought a bag of 140.0 nails as they visited every station assigned to the junior ranger. If they left exactly 7.0 nails in every station they visited, how many stations did Joline and the junior ranger visit?",
-    "quants": [
-      140.0,
-      7.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(140.0 * 7.0)"
-    ],
-    "lSolutions": [
-      980.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857291,
-    "sQuestion": "Sunday morning was spent for making wood carvings which can be sold as souvenir for tourists. They were placed in shelves that can contain 8.0 wood carvings at a time. If 56.0 wood carvings were displayed, how many shelves were filled with carvings?",
-    "quants": [
-      8.0,
-      56.0
-    ],
-    "lAlignments": [
-      1,
-      0
-    ],
-    "lEquations": [
-      "(56.0 * 8.0)"
-    ],
-    "lSolutions": [
-      448.0
     ],
     "rates": []
   },
