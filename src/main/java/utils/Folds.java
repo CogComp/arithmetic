@@ -1,54 +1,32 @@
 package utils;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.io.IOException;
+import java.util.*;
 
 import org.apache.commons.io.FileUtils;
-
-import reader.Reader;
 import structure.Problem;
 import structure.StanfordProblem;
 
 public class Folds {
-	
-	public static int getNumFolds(String dir) {
-		File directory = null;
-		int fold = 0;
-		directory = new File(dir);
-		for(File file : directory.listFiles()) {
-			if(file.getName().contains("fold")) {
-				fold++;
-			}
+
+	public static List<Integer> readFoldIndices(String foldFile) throws IOException {
+		String str = FileUtils.readFileToString(new File(foldFile));
+		List<Integer> foldIndices = new ArrayList<>();
+		for(String index : str.split("\n")) {
+			foldIndices.add(Integer.parseInt(index));
 		}
-		return fold;
+		return foldIndices;
 	}
 
 	// Returns List of 3 elements : train, val, test
-	public static List<List<Problem>> getDataSplit(String dir, int fold)
-			throws Exception {
-		List<Problem> allTrain = new ArrayList<Problem>();
-		List<Problem> train = new ArrayList<Problem>();
-		List<Problem> val = new ArrayList<Problem>();
-		List<Problem> test = new ArrayList<Problem>();
-		List<Problem> probs = Reader.readProblemsFromJson();
-		Set<Integer> testIndices = new HashSet<>();
-		Set<Integer> trainIndices = new HashSet<>();
-		int numFolds = getNumFolds(dir);
-		for(int i=0; i<numFolds; ++i) {
-			String str = FileUtils.readFileToString(new File(dir + "/fold" + i + ".txt"));
-			for (String index : str.split("\n")) {
-				if(i==fold) {
-					testIndices.add(Integer.parseInt(index));
-				} else {
-					trainIndices.add(Integer.parseInt(index));
-				}
-			}
-		}
+	public static List<List<Problem>> getDataSplit(
+			List<Problem> probs, List<Integer> trainIndices,
+			List<Integer> testIndices, double validationFrac) throws Exception {
+		List<Problem> allTrain = new ArrayList<>();
+		List<Problem> train = new ArrayList<>();
+		List<Problem> val = new ArrayList<>();
+		List<Problem> test = new ArrayList<>();
 		for(Problem prob : probs) {
 			if(testIndices.contains(prob.id)) {
 				test.add(prob);
@@ -58,8 +36,8 @@ public class Folds {
 			}
 		}
 		Collections.shuffle(allTrain, new Random(0));
-		val.addAll(allTrain.subList(0, (int)(Params.validationFrac*allTrain.size())));
-		train.addAll(allTrain.subList((int)(Params.validationFrac*allTrain.size()), allTrain.size()));
+		val.addAll(allTrain.subList(0, (int)(validationFrac*allTrain.size())));
+		train.addAll(allTrain.subList((int)(validationFrac*allTrain.size()), allTrain.size()));
 		List<List<Problem>> splits = new ArrayList<>();
 		splits.add(train);
 		splits.add(val);
@@ -68,26 +46,13 @@ public class Folds {
 	}
 
 	// Returns List of 3 elements : train, val, test
-	public static List<List<StanfordProblem>> getDataSplitForStanford(String dir, int fold)
-			throws Exception {
-		List<StanfordProblem> allTrain = new ArrayList<StanfordProblem>();
-		List<StanfordProblem> train = new ArrayList<StanfordProblem>();
-		List<StanfordProblem> val = new ArrayList<StanfordProblem>();
-		List<StanfordProblem> test = new ArrayList<StanfordProblem>();
-		List<StanfordProblem> probs = Reader.readStanfordProblemsFromJson();
-		Set<Integer> testIndices = new HashSet<>();
-		Set<Integer> trainIndices = new HashSet<>();
-		int numFolds = getNumFolds(dir);
-		for(int i=0; i<numFolds; ++i) {
-			String str = FileUtils.readFileToString(new File(dir + "/fold" + i + ".txt"));
-			for (String index : str.split("\n")) {
-				if(i==fold) {
-					testIndices.add(Integer.parseInt(index));
-				} else {
-					trainIndices.add(Integer.parseInt(index));
-				}
-			}
-		}
+	public static List<List<StanfordProblem>> getDataSplitForStanford(
+			List<StanfordProblem> probs, List<Integer> trainIndices,
+			List<Integer> testIndices, double validationFrac) throws Exception {
+		List<StanfordProblem> allTrain = new ArrayList<>();
+		List<StanfordProblem> train = new ArrayList<>();
+		List<StanfordProblem> val = new ArrayList<>();
+		List<StanfordProblem> test = new ArrayList<>();
 		for(StanfordProblem prob : probs) {
 			if(testIndices.contains(prob.id)) {
 				test.add(prob);
@@ -97,8 +62,8 @@ public class Folds {
 			}
 		}
 		Collections.shuffle(allTrain, new Random(0));
-		val.addAll(allTrain.subList(0, (int)(Params.validationFrac*allTrain.size())));
-		train.addAll(allTrain.subList((int)(Params.validationFrac*allTrain.size()), allTrain.size()));
+		val.addAll(allTrain.subList(0, (int)(validationFrac*allTrain.size())));
+		train.addAll(allTrain.subList((int)(validationFrac*allTrain.size()), allTrain.size()));
 		List<List<StanfordProblem>> splits = new ArrayList<>();
 		splits.add(train);
 		splits.add(val);

@@ -1,8 +1,6 @@
-package joint;
+package logic;
 
 import edu.stanford.nlp.ling.CoreLabel;
-import reader.Reader;
-import structure.StanfordProblem;
 import structure.StanfordSchema;
 import utils.Tools;
 import java.util.*;

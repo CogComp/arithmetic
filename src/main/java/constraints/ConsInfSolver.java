@@ -26,7 +26,6 @@ import com.google.common.collect.MinMaxPriorityQueue;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.commands.InteractiveShell;
 import edu.illinois.cs.cogcomp.sl.core.SLModel;
 
 public class ConsInfSolver {
@@ -35,26 +34,28 @@ public class ConsInfSolver {
 	
 	public static Node constrainedInf(Problem prob, SLModel relModel, SLModel pairModel,
 			SLModel runModel, SLModel rateModel) throws Exception {
-		Map<String, Double> rateScores = new HashMap<String, Double>();
-		Map<String, Double> runScores = new HashMap<String, Double>();
-		Map<String, Double> pairScores = new HashMap<String, Double>();
-		Map<String, Double> relScores = new HashMap<String, Double>();
+		Map<String, Double> rateScores = new HashMap<>();
+		Map<String, Double> runScores = new HashMap<>();
+		Map<String, Double> pairScores = new HashMap<>();
+		Map<String, Double> relScores = new HashMap<>();
 		int numQuantities = prob.quantities.size();
 		for(int i=0; i<numQuantities; ++i) {
 			for(int j=i+1; j<numQuantities; ++j) {
 				pairScores.putAll(PairDriver.getLabelsWithScores(
 						new PairX(prob, i, j), pairModel));
-				runScores.putAll(RunDriver.getLabelsWithScores(
+				if(!Params.noUDG) runScores.putAll(RunDriver.getLabelsWithScores(
 						new RunX(prob, i, j), runModel));
 			}
-			runScores.putAll(RunDriver.getLabelsWithScores(
+			if(!Params.noUDG) runScores.putAll(RunDriver.getLabelsWithScores(
 					new RunX(prob, i, -1), runModel));
 		}
 		for(int i=0; i<numQuantities; ++i) {
 			relScores.putAll(RelDriver.getLabelsWithScores(new RelX(prob, i), relModel));
 		}
 		for(int i=-1; i<numQuantities; ++i) {
-			rateScores.putAll(RateDriver.getLabelsWithScores(new RateX(prob, i), rateModel));
+			if(!Params.noUDG) {
+				rateScores.putAll(RateDriver.getLabelsWithScores(new RateX(prob, i), rateModel));
+			}
 		}
 		return ConsInfSolver.getBestStructure(
 				prob.ta, prob.quantities, relScores, pairScores, runScores, rateScores);
@@ -118,24 +119,24 @@ public class ConsInfSolver {
 			if(!isPositive) continue;
 //			boolean isInteger = Constraints.isInteger(ta, state.getFirst().get(0).getValue());
 //			if(!isInteger) continue;
-			beam2.add(new Pair<List<Node>, Double>(state.getFirst(), state.getSecond()));
+			beam2.add(new Pair<>(state.getFirst(), state.getSecond()));
 		}
 		// Adding Run scores
 		beam1.clear();
 		beam1.addAll(beam2);
 		beam2.clear();
 		for(Pair<List<Node>, Double> state : beam1) {
-			beam2.add(new Pair<List<Node>, Double>(state.getFirst(), state.getSecond()+
+			beam2.add(new Pair<>(state.getFirst(), state.getSecond()+
                 getRunScore(quantities, state.getFirst().get(0), new ArrayList<Integer>(), runScores)));
 			for(int i=-1; i<quantities.size(); ++i) {
 				if(isRateListAllowable(state.getFirst().get(0), Arrays.asList(i))) {
-					beam2.add(new Pair<List<Node>, Double>(state.getFirst(), state.getSecond()+
+					beam2.add(new Pair<>(state.getFirst(), state.getSecond()+
 							getRunScore(quantities, state.getFirst().get(0), Arrays.asList(i), runScores)+
 							getRateScore(quantities, state.getFirst().get(0), Arrays.asList(i), rateScores)));
 				}
 				for(int j=i+1; j<quantities.size(); ++j) {
 					if(isRateListAllowable(state.getFirst().get(0), Arrays.asList(i, j))) {
-						beam2.add(new Pair<List<Node>, Double>(state.getFirst(), state.getSecond()+
+						beam2.add(new Pair<>(state.getFirst(), state.getSecond()+
 								getRunScore(quantities, state.getFirst().get(0), Arrays.asList(i, j), runScores)+
 								getRateScore(quantities, state.getFirst().get(0), Arrays.asList(i, j), rateScores)));
 					}
@@ -160,14 +161,14 @@ public class ConsInfSolver {
 		beam1.add(new Pair<List<Node>, Double>(new ArrayList<Node>(), 0.0));
 		for(int i=0; i<init.size(); ++i) {
 			for(Pair<List<Node>, Double> pair : beam1) {
-				List<Node> nodeList = new ArrayList<Node>();
+				List<Node> nodeList = new ArrayList<>();
 				nodeList.addAll(pair.getFirst());
-				beam2.add(new Pair<List<Node>, Double>(
+				beam2.add(new Pair<>(
 						nodeList, pair.getSecond()+getIrrelevanceScore(i, scores)));
-				nodeList = new ArrayList<Node>();
+				nodeList = new ArrayList<>();
 				nodeList.addAll(pair.getFirst());
 				nodeList.add(init.get(i));
-				beam2.add(new Pair<List<Node>, Double>(nodeList, pair.getSecond()));
+				beam2.add(new Pair<>(nodeList, pair.getSecond()));
 			}
 			beam1.clear();
 			beam1.addAll(beam2);
@@ -187,24 +188,23 @@ public class ConsInfSolver {
 		List<Pair<List<Node>, Double>> nextStates = new ArrayList<>();
 		List<Node> nodeList = state.getFirst();
 		if(nodeList.size() == 1) {
-			List<Pair<List<Node>, Double>> tmpNodeList = 
-					new ArrayList<Pair<List<Node>, Double>>();
+			List<Pair<List<Node>, Double>> tmpNodeList = new ArrayList<>();
 			tmpNodeList.add(state);
 			return tmpNodeList;
 		}
 		double initScore = state.getSecond();
 		for(int i=0; i<nodeList.size(); ++i) {
 			for(int j=i+1; j<nodeList.size(); ++j) {
-				List<Node> tmpNodeList = new ArrayList<Node>();
+				List<Node> tmpNodeList = new ArrayList<>();
 				tmpNodeList.addAll(nodeList);
 				tmpNodeList.remove(i);
 				tmpNodeList.remove(j-1);
 				for(Pair<Node, Double> pair : enumerateMerge(
 						nodeList.get(i), nodeList.get(j), pairScores)) {
-					List<Node> newNodeList = new ArrayList<Node>();
+					List<Node> newNodeList = new ArrayList<>();
 					newNodeList.addAll(tmpNodeList);
 					newNodeList.add(pair.getFirst());
-					nextStates.add(new Pair<List<Node>, Double>(newNodeList, 
+					nextStates.add(new Pair<>(newNodeList,
 							initScore + pair.getSecond()));
 				}
 			}
@@ -230,11 +230,11 @@ public class ConsInfSolver {
 				label = label.substring(0,3);
 				mergeScore = getScore(node2, node1, label, pairScores);
 				Node node = new Node(label, Arrays.asList(node2, node1));
-				nextStates.add(new Pair<Node, Double>(node, mergeScore));
+				nextStates.add(new Pair<>(node, mergeScore));
 			} else {
 				mergeScore = getScore(node1, node2, label, pairScores);
 				Node node = new Node(label, Arrays.asList(node1, node2));
-				nextStates.add(new Pair<Node, Double>(node, mergeScore));
+				nextStates.add(new Pair<>(node, mergeScore));
 			}
 		}
 		return nextStates;
@@ -341,16 +341,4 @@ public class ConsInfSolver {
 		}
 		return false;
 	}
-
-	public static void main(String[] args) throws Exception {
-		InteractiveShell<ConsInfSolver> tester = new InteractiveShell<ConsInfSolver>(
-				ConsInfSolver.class);
-		if (args.length == 0) {
-			tester.showDocumentation();
-		} else {
-			tester.runCommand(args);
-		}
-	}
-	
-	
 }

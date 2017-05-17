@@ -1,26 +1,15 @@
 package demo;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.List;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import constraints.ConsInfSolver;
 import edu.illinois.cs.cogcomp.sl.core.SLModel;
-import joint.LogicDriver;
-import joint.LogicY;
-import org.apache.commons.io.FileUtils;
-import pair.PairDriver;
+import logic.LogicDriver;
+import logic.LogicY;
 import pair.PairX;
-import rate.RateDriver;
-import reader.Reader;
-import relevance.RelDriver;
 import relevance.RelX;
-import run.Annotations;
-import run.RunDriver;
 import structure.*;
 import utils.Params;
 import utils.Tools;
@@ -33,87 +22,14 @@ public class Trainer {
 
 	public static void loadModels() throws Exception {
 		if(mode.equals("LCA") || mode.equals("UnitDep")) {
-			relModel = SLModel.loadModel("models/Rel.save");
-			pairModel = SLModel.loadModel("models/Pair.save");
-			runModel = SLModel.loadModel("models/Run.save");
-			rateModel = SLModel.loadModel("models/Rate.save");
+			relModel = SLModel.loadModel(Params.modelDir+Params.relPrefix+Params.modelSuffix);
+			pairModel = SLModel.loadModel(Params.modelDir+Params.pairPrefix+Params.modelSuffix);
+			runModel = SLModel.loadModel(Params.modelDir+Params.runPrefix+Params.modelSuffix);
+			rateModel = SLModel.loadModel(Params.modelDir+Params.ratePrefix+Params.modelSuffix);
 		} else {
-			corefModel = SLModel.loadModel("models/Coref.save");
-			logicModel = SLModel.loadModel("models/Logic.save");
+			corefModel = SLModel.loadModel(Params.modelDir+Params.corefPrefix+Params.modelSuffix);
+			logicModel = SLModel.loadModel(Params.modelDir+Params.logicPrefix+Params.modelSuffix);
 		}
-	}
-	
-	public static void tuneAndRetrain(String dataset) throws Exception {
-		System.out.println("Tuning ...");
-		Params.printMistakes = false;
-		Params.validationFrac = 0.0;
-//		List<List<Problem>> split = Folds.getDataSplit(dataset, 0);
-//		System.out.println("Training Relevance model ... ");
-//		RelDriver.trainModel("models/Rel.save", RelDriver.getSP(split.get(0)));
-//		System.out.println("Training Pair model ... ");
-//		PairDriver.trainModel("models/Pair.save", PairDriver.getSP(split.get(0)));
-//		System.out.println("Training Run model ... ");
-//		RunDriver.trainModel("models/Run.save", Annotations.getSP(split.get(0),
-//				Annotations.readRateAnnotations(Params.ratesFile)));
-//		System.out.println("Training Rate model ... ");
-//		RateDriver.trainModel("models/Rate.save", RateDriver.getSP(split.get(0),
-//				Annotations.readRateAnnotations(Params.ratesFile)));
-//		loadModels();
-//		ConsDriver.tune(split.get(2), relModel, pairModel, runModel, rateModel);
-		/**
-		 * UnitDep
-		 * wRate : 1.0
-		 * wRun : 0.01
-		 * wRel : 100.0
-		 *
-		 * LCA
-		 * wRate : 0.0
-		 * wRun : 0.0
-		 * wRel : 100.0
-		 */
-		if(mode.equals("UnitDep")) {
-			ConsInfSolver.wRate = 1.0;
-			ConsInfSolver.wRun = 0.01;
-			ConsInfSolver.wRel = 100.0;
-		} else {
-			ConsInfSolver.wRate = 0.0;
-			ConsInfSolver.wRun = 0.0;
-			ConsInfSolver.wRel = 100.0;
-		}
-		System.out.println("Tuned parameters");
-		System.out.println("wRate : "+ConsInfSolver.wRate);
-		System.out.println("wRun : "+ConsInfSolver.wRun);
-		System.out.println("wRel : "+ConsInfSolver.wRel);
-		System.out.println("Retraining on all training data");
-		List<Problem> allProbs = Reader.readProblemsFromJson();
-		System.out.println("Training Relevance model ... ");
-		RelDriver.trainModel("models/Rel.save", RelDriver.getSP(allProbs));
-		System.out.println("Training Pair model ... ");
-		PairDriver.trainModel("models/Pair.save", PairDriver.getSP(allProbs));
-		System.out.println("Training Run model ... ");
-		RunDriver.trainModel("models/Run.save", Annotations.getSP(
-				allProbs, Annotations.readRateAnnotations(Params.ratesFile)));
-		System.out.println("Training Rate model ... ");
-		RateDriver.trainModel("models/Rate.save", RateDriver.getSP(
-				allProbs, Annotations.readRateAnnotations(Params.ratesFile)));
-	}
-
-	public static void trainLogicModel() throws Exception {
-		System.out.println("Tuning ...");
-		Params.printMistakes = false;
-		Params.validationFrac = 0.0;
-		LogicDriver.useGoldRelevance = true;
-		System.out.println("Training on all training data");
-		List<StanfordProblem> allProbs = Reader.readStanfordProblemsFromJson();
-		System.out.println("Training Coref model ... ");
-		logic.LogicDriver.trainModel("models/Coref.save", logic.LogicDriver.getSP(allProbs,
-				Annotations.readRateAnnotations(Params.ratesFile), true));
-		System.out.println("Training Logic model ... ");
-		joint.LogicDriver.trainModel(
-				"models/Logic.save",
-				joint.LogicDriver.getSP(
-						allProbs, Annotations.readRateAnnotations(Params.ratesFile), true),
-				"models/Coref.save");
 	}
 	
 	public static String genTableHtml(Problem prob, String answer) throws Exception {
@@ -204,8 +120,8 @@ public class Trainer {
 		problem.quantities = Tools.quantifier.getSpans(problem.question);
 		if(problem.quantities.size() < 2) return 0.0;
 		problem.extractAnnotations();
-		joint.LogicY y = (LogicY) logicModel.infSolver.getBestStructure(
-				logicModel.wv, new joint.LogicX(problem));
+		logic.LogicY y = (LogicY) logicModel.infSolver.getBestStructure(
+				logicModel.wv, new logic.LogicX(problem));
 		return y.expr.getValue();
 	}
 
@@ -242,40 +158,6 @@ public class Trainer {
 			if(question.trim().equals("END")) break;
 			System.out.println("Answer: "+answerQuestion(question.trim()));
 		}
-	}
-
-	public static void main(String args[]) throws Exception {
-		if(args.length < 1) {
-			System.err.println("Usage: Command <mode>(LCA/UnitDep/Logic) <questions_file>(optional)");
-		}
-		mode = args[0];
-		if(!Arrays.asList("LCA", "UnitDep", "Logic").contains(mode)) {
-			System.err.println("Mode has to be one of LCA, UnitDep, Logic");
-		}
-		if(mode.equals("LCA")) Params.noUDG = true;
-		if(mode.equals("UnitDep")) Params.noUDG = false;
-		List<DataFormat> kushmanProbs = null;
-		if(args.length >= 2) {
-			String questionsFile = args[1];
-			String json = FileUtils.readFileToString(new File(questionsFile));
-			kushmanProbs = new Gson().fromJson(
-					json, new TypeToken<List<DataFormat>>(){}.getType());
-		}
-		if(mode.equals("Logic")) {
-			trainLogicModel();
-			corefModel = SLModel.loadModel("models/Coref.save");
-			logicModel = SLModel.loadModel("models/Logic.save");
-		} else {
-			tuneAndRetrain(Params.allArithDir);
-			relModel = SLModel.loadModel("models/Rel.save");
-			pairModel = SLModel.loadModel("models/Pair.save");
-			runModel = SLModel.loadModel("models/Run.save");
-			rateModel = SLModel.loadModel("models/Rate.save");
-		}
-		if(kushmanProbs != null) {
-			testModel(kushmanProbs);
-		}
-//		commandLineDemo();
 	}
 
 }

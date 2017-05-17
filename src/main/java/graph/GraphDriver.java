@@ -6,8 +6,6 @@ import structure.Problem;
 import utils.Folds;
 import utils.Params;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.core.utilities.commands.CommandDescription;
-import edu.illinois.cs.cogcomp.core.utilities.commands.InteractiveShell;
 import edu.illinois.cs.cogcomp.sl.core.SLModel;
 import edu.illinois.cs.cogcomp.sl.core.SLParameters;
 import edu.illinois.cs.cogcomp.sl.core.SLProblem;
@@ -17,33 +15,33 @@ import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
 
 public class GraphDriver {
 
-    @CommandDescription(description = "Params : train (true/false), dataset_folder")
-    public static void crossVal(String train, String dataset)
+    public static void crossVal(List<Problem> probs, List<List<Integer>> foldIndices)
             throws Exception {
         double acc1 = 0.0, acc2 = 0.0;
-        int numFolds = Folds.getNumFolds(dataset);
-        for(int i=0;i<numFolds; i++) {
-            Pair<Double, Double> pair = doTrainTest(i, train, dataset);
+        for(int i=0;i<foldIndices.size(); i++) {
+            List<Integer> train = new ArrayList<>();
+            List<Integer> test = new ArrayList<>();
+            for(int j=0; j<foldIndices.size(); ++j) {
+                if(i==j) test.addAll(foldIndices.get(j));
+                else train.addAll(foldIndices.get(j));
+            }
+            Pair<Double, Double> pair = doTrainTest(probs, train, test, i);
             acc1 += pair.getFirst();
             acc2 += pair.getSecond();
         }
-        System.out.println("CV : " + (acc1/numFolds) + " " + (acc2/numFolds));
+        System.out.println("CV : " + (acc1/foldIndices.size()) + " " + (acc2/foldIndices.size()));
     }
 
-    @CommandDescription(description = "Params : testFold, train (true/false), dataset_folder")
-    public static Pair<Double, Double> doTrainTest(int testFold, String isTrain, String dataset)
-            throws Exception {
-        List<List<Problem>> split = Folds.getDataSplit(dataset, testFold);
+    public static Pair<Double, Double> doTrainTest(List<Problem> probs, List<Integer> trainIndices,
+                                                   List<Integer> testIndices, int id) throws Exception {
+        List<List<Problem>> split = Folds.getDataSplit(probs, trainIndices, testIndices, 0.0);
         List<Problem> trainProbs = split.get(0);
         List<Problem> testProbs = split.get(2);
         SLProblem train = getSP(trainProbs);
         SLProblem test = getSP(testProbs);
-        System.out.println("Train : "+train.instanceList.size()+" Test : "+
-                test.instanceList.size());
-        if(isTrain.equalsIgnoreCase("true")) {
-            trainModel(Params.modelDir+Params.graphPrefix+testFold+Params.modelSuffix, train);
-        }
-        return testModel(Params.modelDir+Params.graphPrefix+testFold+Params.modelSuffix, test);
+        System.out.println("Train : "+train.instanceList.size()+" Test : "+test.instanceList.size());
+        trainModel(Params.modelDir+Params.graphPrefix+id+Params.modelSuffix, train);
+        return testModel(Params.modelDir+Params.graphPrefix+id+Params.modelSuffix, test);
     }
 
     public static SLProblem getSP(List<Problem> problemList) throws Exception{
@@ -106,12 +104,4 @@ public class GraphDriver {
         model.saveModel(modelPath);
     }
 
-    public static void main(String[] args) throws Exception {
-        InteractiveShell<GraphDriver> tester = new InteractiveShell<>(GraphDriver.class);
-        if (args.length == 0) {
-            tester.showDocumentation();
-        } else {
-            tester.runCommand(args);
-        }
-    }
 }

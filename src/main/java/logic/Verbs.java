@@ -1,4 +1,4 @@
-package joint;
+package logic;
 
 import org.apache.commons.io.FileUtils;
 import utils.Params;

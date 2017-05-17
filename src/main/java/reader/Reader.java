@@ -1,5 +1,6 @@
 package reader;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,7 +16,6 @@ import structure.*;
 import utils.Params;
 import utils.Tools;
 
-
 public class Reader {
 	
 	public static List<Problem> readProblemsFromJson() throws Exception {
@@ -27,6 +27,7 @@ public class Reader {
 			Problem prob = new Problem(kushmanProb.iIndex, kushmanProb.sQuestion, 
 					kushmanProb.lSolutions.get(0));
 //			prob.quants = kushmanProb.quants;
+			prob.rates = kushmanProb.rates;
 			prob.extractQuantities();
 			prob.expr = Node.parseNode(kushmanProb.lEquations.get(0));
 			assert prob.expr.getLeaves().size() == kushmanProb.lAlignments.size();
@@ -53,6 +54,7 @@ public class Reader {
 					kushmanProb.sQuestion,
 					kushmanProb.lSolutions.get(0));
 //			prob.quants = kushmanProb.quants;
+			prob.rates = kushmanProb.rates;
 			prob.extractQuantities();
 			prob.expr = Node.parseNode(kushmanProb.lEquations.get(0));
 			assert prob.expr.getLeaves().size() == kushmanProb.lAlignments.size();

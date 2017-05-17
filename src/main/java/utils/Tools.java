@@ -45,48 +45,6 @@ public class Tools {
 
 	static {
 		try {
-			if (Params.useIllinoisTools) {
-				ResourceManager rm = new ResourceManager(Params.pipelineConfig);
-
-				IllinoisTokenizer tokenizer = new IllinoisTokenizer();
-				TextAnnotationBuilder taBuilder = new CcgTextAnnotationBuilder(tokenizer);
-				IllinoisPOSHandler pos = new IllinoisPOSHandler();
-				IllinoisChunkerHandler chunk = new IllinoisChunkerHandler();
-				IllinoisNerHandler nerConll = new IllinoisNerHandler(rm, ViewNames.NER_CONLL);
-				IllinoisLemmatizerHandler lemma = new IllinoisLemmatizerHandler(rm);
-
-				Properties stanfordProps = new Properties();
-				stanfordProps.put("annotators", "pos, parse");
-				stanfordProps.put("parse.originalDependencies", true);
-
-				POSTaggerAnnotator posAnnotator = new POSTaggerAnnotator("pos", stanfordProps);
-				ParserAnnotator parseAnnotator = new ParserAnnotator("parse", stanfordProps);
-
-				StanfordParseHandler parser = new StanfordParseHandler(posAnnotator, parseAnnotator);
-				StanfordDepHandler depParser = new StanfordDepHandler(posAnnotator, parseAnnotator);
-
-				Map<String, Annotator> extraViewGenerators = new HashMap<>();
-
-				extraViewGenerators.put(ViewNames.POS, pos);
-				extraViewGenerators.put(ViewNames.SHALLOW_PARSE, chunk);
-				extraViewGenerators.put(ViewNames.LEMMA, lemma);
-				extraViewGenerators.put(ViewNames.NER_CONLL, nerConll);
-				extraViewGenerators.put(ViewNames.PARSE_STANFORD, parser);
-				extraViewGenerators.put(ViewNames.DEPENDENCY_STANFORD, depParser);
-
-				Map<String, Boolean> requestedViews = new HashMap<>();
-				for (String view : extraViewGenerators.keySet())
-					requestedViews.put(view, false);
-
-				pipeline = new SimpleCachingPipeline(taBuilder, extraViewGenerators, rm);
-			}
-
-			if(Params.useStanfordTools) {
-				Properties props = new Properties();
-				props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse");
-				stanfordPipeline = new StanfordCoreNLP(props);
-			}
-
 			quantifier = new SimpleQuantifier();
 			cache = MapDB.newDefaultDb("cache", "cache").make().getHashMap("cache");
 
@@ -526,6 +484,47 @@ public class Tools {
 			}
 		}
 		return new IntPair(start, end);
+	}
+
+	public static void initIllinoisTools() throws Exception {
+		ResourceManager rm = new ResourceManager(Params.pipelineConfig);
+		IllinoisTokenizer tokenizer = new IllinoisTokenizer();
+		TextAnnotationBuilder taBuilder = new CcgTextAnnotationBuilder(tokenizer);
+		IllinoisPOSHandler pos = new IllinoisPOSHandler();
+		IllinoisChunkerHandler chunk = new IllinoisChunkerHandler();
+		IllinoisNerHandler nerConll = new IllinoisNerHandler(rm, ViewNames.NER_CONLL);
+		IllinoisLemmatizerHandler lemma = new IllinoisLemmatizerHandler(rm);
+
+		Properties stanfordProps = new Properties();
+		stanfordProps.put("annotators", "pos, parse");
+		stanfordProps.put("parse.originalDependencies", true);
+
+		POSTaggerAnnotator posAnnotator = new POSTaggerAnnotator("pos", stanfordProps);
+		ParserAnnotator parseAnnotator = new ParserAnnotator("parse", stanfordProps);
+
+		StanfordParseHandler parser = new StanfordParseHandler(posAnnotator, parseAnnotator);
+		StanfordDepHandler depParser = new StanfordDepHandler(posAnnotator, parseAnnotator);
+
+		Map<String, Annotator> extraViewGenerators = new HashMap<>();
+
+		extraViewGenerators.put(ViewNames.POS, pos);
+		extraViewGenerators.put(ViewNames.SHALLOW_PARSE, chunk);
+		extraViewGenerators.put(ViewNames.LEMMA, lemma);
+		extraViewGenerators.put(ViewNames.NER_CONLL, nerConll);
+		extraViewGenerators.put(ViewNames.PARSE_STANFORD, parser);
+		extraViewGenerators.put(ViewNames.DEPENDENCY_STANFORD, depParser);
+
+		Map<String, Boolean> requestedViews = new HashMap<>();
+		for (String view : extraViewGenerators.keySet())
+			requestedViews.put(view, false);
+
+		Tools.pipeline = new SimpleCachingPipeline(taBuilder, extraViewGenerators, rm);
+	}
+
+	public static void initStanfordTools() {
+		Properties props = new Properties();
+		props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse");
+		Tools.stanfordPipeline = new StanfordCoreNLP(props);
 	}
 
 	public static void main(String args[]) {

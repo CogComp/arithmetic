@@ -1,4 +1,4 @@
-package joint;
+package logic;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.stanford.nlp.ling.CoreLabel;

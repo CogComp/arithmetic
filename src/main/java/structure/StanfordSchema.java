@@ -6,7 +6,7 @@ import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.ling.IndexedWord;
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphEdge;
-import joint.Logic;
+import logic.Logic;
 import utils.Tools;
 
 import java.util.Arrays;

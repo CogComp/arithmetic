@@ -12,10 +12,8 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 
 import edu.illinois.cs.cogcomp.sl.core.SLProblem;
-import reader.Reader;
 import structure.Node;
 import structure.Problem;
-import utils.Params;
 
 public class Annotations {
 	
@@ -58,7 +56,7 @@ public class Annotations {
 		return "NO_REL";
  	}
 	
-	public static SLProblem getSP(List<Problem> problemList, Map<Integer, List<Integer>> rates)
+	public static SLProblem getSP(List<Problem> problemList)
 			throws Exception{
 		SLProblem problem = new SLProblem();
 		for(Problem prob : problemList) {
@@ -69,17 +67,15 @@ public class Annotations {
 					// Relation with j
 					List<String> path = prob.expr.getPath(i, j);
 					RunX x = new RunX(prob, i, j);
-					RunY y = new RunY(getLabel(path, 
-							rates.containsKey(prob.id) && rates.get(prob.id).contains(i), 
-							rates.containsKey(prob.id) && rates.get(prob.id).contains(j)));
+					RunY y = new RunY(getLabel(path, prob.rates.contains(i),
+							prob.rates.contains(j)));
 					problem.addExample(x, y);
 				}
 				// Relation with question
 				List<String> path = prob.expr.getPathToRoot(i);
 				RunX x = new RunX(prob, i, -1);
-				RunY y = new RunY(getLabel(path, 
-						rates.containsKey(prob.id) && rates.get(prob.id).contains(i), 
-						rates.containsKey(prob.id) && rates.get(prob.id).contains(-1)));
+				RunY y = new RunY(getLabel(path, prob.rates.contains(i),
+						prob.rates.contains(-1)));
 				problem.addExample(x, y);
 			}
 			
@@ -175,9 +171,5 @@ public class Annotations {
 			System.out.println();
 		}
 	}
-	
-	public static void main(String[] args) throws Exception {
-		getRateAnnotationsFromMrinmaya(Reader.readProblemsFromJson(),
-				readRateAnnotations(Params.ratesFile));
-	}
+
 }

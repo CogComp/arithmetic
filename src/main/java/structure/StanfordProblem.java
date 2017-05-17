@@ -25,6 +25,7 @@ public class StanfordProblem {
 	public List<StanfordSchema> schema;
 	public StanfordSchema questionSchema;
 	public Map<Pair<String, String>, String> wordnetRelations;
+	public List<Integer> rates;
 
 
 	@Override

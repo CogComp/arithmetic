@@ -1,19 +1,11 @@
 package rate;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import run.Annotations;
 import structure.Problem;
 import utils.Folds;
 import utils.Params;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.core.utilities.commands.CommandDescription;
-import edu.illinois.cs.cogcomp.core.utilities.commands.InteractiveShell;
 import edu.illinois.cs.cogcomp.sl.core.AbstractFeatureGenerator;
 import edu.illinois.cs.cogcomp.sl.core.SLModel;
 import edu.illinois.cs.cogcomp.sl.core.SLParameters;
@@ -23,33 +15,35 @@ import edu.illinois.cs.cogcomp.sl.learner.LearnerFactory;
 import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
 
 public class RateDriver {
-	
-	@CommandDescription(description = "Params : train (true/false), dataset_folder")
-	public static void crossVal(String train, String dataset) 
+
+	public static void crossVal(List<Problem> probs, List<List<Integer>> foldIndices)
 			throws Exception {
 		double acc1 = 0.0, acc2 = 0.0;
-		int numFolds = Folds.getNumFolds(dataset);
-		for(int i=0; i<numFolds; i++) {
-			Pair<Double, Double> pair = doTrainTest(i, train, dataset);
+		for(int i=0;i<foldIndices.size(); i++) {
+			List<Integer> train = new ArrayList<>();
+			List<Integer> test = new ArrayList<>();
+			for(int j=0; j<foldIndices.size(); ++j) {
+				if(i==j) test.addAll(foldIndices.get(j));
+				else train.addAll(foldIndices.get(j));
+			}
+			Pair<Double, Double> pair = doTrainTest(probs, train, test, i);
 			acc1 += pair.getFirst();
 			acc2 += pair.getSecond();
 		}
-		System.out.println("CV : " + (acc1/numFolds) + " " + (acc2/numFolds));
+		System.out.println("CV : " + (acc1/foldIndices.size()) + " " + (acc2/foldIndices.size()));
 	}
 
-	@CommandDescription(description = "Params : testFold, train (true/false), dataset_folder")
-	public static Pair<Double, Double> doTrainTest(int testFold, String isTrain, String dataset) 
-			throws Exception {
-		List<List<Problem>> split = Folds.getDataSplit(dataset, testFold);
+	public static Pair<Double, Double> doTrainTest(
+			List<Problem> probs, List<Integer> trainIndices,
+			List<Integer> testIndices, int id) throws Exception {
+		List<List<Problem>> split = Folds.getDataSplit(probs, trainIndices, testIndices, 0.0);
 		List<Problem> trainProbs = split.get(0);
 		List<Problem> testProbs = split.get(2);
-		SLProblem train = getSP(trainProbs, Annotations.readRateAnnotations(Params.ratesFile));
-		SLProblem test = getSP(testProbs, Annotations.readRateAnnotations(Params.ratesFile));
+		SLProblem train = getSP(trainProbs);
+		SLProblem test = getSP(testProbs);
 		System.out.println("Train : "+train.instanceList.size()+" Test : "+test.instanceList.size());
-		if(isTrain.equalsIgnoreCase("true")) {
-			trainModel(Params.modelDir+Params.ratePrefix+testFold+Params.modelSuffix, train);
-		}
-		return testModel(Params.modelDir+Params.ratePrefix+testFold+Params.modelSuffix, test);
+		trainModel(Params.modelDir+Params.ratePrefix+id+Params.modelSuffix, train);
+		return testModel(Params.modelDir+Params.ratePrefix+id+Params.modelSuffix, test);
 	}
 	
 	public static Pair<Double, Double> testModel(String modelPath, SLProblem sp)
@@ -66,11 +60,11 @@ public class RateDriver {
 			RateY gold = (RateY) sp.goldStructureList.get(i);
 			RateY pred = (RateY) model.infSolver.getBestStructure(model.wv, prob);
 			total.add(prob.problemId);
-			if(!counts.containsKey(new Pair<String, String>(gold.label, pred.label))) {
-				counts.put(new Pair<String, String>(gold.label, pred.label), 1);
+			if(!counts.containsKey(new Pair<>(gold.label, pred.label))) {
+				counts.put(new Pair<>(gold.label, pred.label), 1);
 			} else {
-				counts.put(new Pair<String, String>(gold.label, pred.label), 
-						counts.get(new Pair<String, String>(gold.label, pred.label))+1);
+				counts.put(new Pair<>(gold.label, pred.label),
+						counts.get(new Pair<>(gold.label, pred.label))+1);
 			}
 			if(prob.quantIndex != -1 && gold.label.equalsIgnoreCase("RATE")) {
 				totalRates += 1.0;
@@ -145,15 +139,13 @@ public class RateDriver {
 		return labelsWithScores;
 	}
 	
-	public static SLProblem getSP(List<Problem> problemList, Map<Integer, List<Integer>> rates)
-			throws Exception{
+	public static SLProblem getSP(List<Problem> problemList) throws Exception{
 		SLProblem problem = new SLProblem();
 		for(Problem prob : problemList) {
 			for(int i=-1; i<prob.quantities.size(); ++i) {
 				if(i>=0 && !prob.expr.hasLeaf(i)) continue;
 				RateX x = new RateX(prob, i);
-				String label = (rates.containsKey(prob.id) && rates.get(prob.id).contains(i)) ? 
-						"RATE" : "NOT_RATE";
+				String label = (prob.rates.contains(i)) ? "RATE" : "NOT_RATE";
 				RateY y = new RateY(label);
 				problem.addExample(x, y);
 			}
@@ -162,13 +154,4 @@ public class RateDriver {
 		return problem;
 	}
 
-	public static void main(String[] args) throws Exception {
-		InteractiveShell<RateDriver> tester = new InteractiveShell<RateDriver>(
-				RateDriver.class);
-		if (args.length == 0) {
-			tester.showDocumentation();
-		} else {
-			tester.runCommand(args);
-		}
-	}
 }

@@ -14,7 +14,6 @@ import constraints.ConsInfSolver;
 import structure.Node;
 import structure.Problem;
 import structure.QuantSpan;
-import utils.Params;
 import utils.Tools;
 
 public class Server {
@@ -61,7 +60,7 @@ public class Server {
 	}
 
 	public static void main(String[] args) throws Exception {
-		Trainer.tuneAndRetrain(Params.allArithDir);
+//		Trainer.tuneAndRetrain(Params.allArithDir);
 		Trainer.loadModels();
 		startServer(8182);
 //		String input = "";
