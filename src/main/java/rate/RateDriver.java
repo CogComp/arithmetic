@@ -47,9 +47,9 @@ public class RateDriver {
 		SLProblem test = getSP(testProbs, Annotations.readRateAnnotations(Params.ratesFile));
 		System.out.println("Train : "+train.instanceList.size()+" Test : "+test.instanceList.size());
 		if(isTrain.equalsIgnoreCase("true")) {
-			trainModel("models/Rate"+testFold+".save", train);
+			trainModel(Params.modelDir+Params.ratePrefix+testFold+Params.modelSuffix, train);
 		}
-		return testModel("models/Rate"+testFold+".save", test);
+		return testModel(Params.modelDir+Params.ratePrefix+testFold+Params.modelSuffix, test);
 	}
 	
 	public static Pair<Double, Double> testModel(String modelPath, SLProblem sp)

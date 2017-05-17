@@ -46,9 +46,9 @@ public class RunDriver {
 		SLProblem test = Annotations.getSP(testProbs, Annotations.readRateAnnotations(Params.ratesFile));
 		System.out.println("Train : "+train.instanceList.size()+" Test : "+test.instanceList.size());
 		if(isTrain.equalsIgnoreCase("true")) {
-			trainModel("models/Run"+testFold+".save", train);
+			trainModel(Params.modelDir+Params.runPrefix+testFold+Params.modelSuffix, train);
 		}
-		return testModel("models/Run"+testFold+".save", test);
+		return testModel(Params.modelDir+Params.runPrefix+testFold+Params.modelSuffix, test);
 	}
 	
 	public static Pair<Double, Double> testModel(String modelPath, SLProblem sp)

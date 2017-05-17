@@ -47,9 +47,9 @@ public class RelDriver {
 		System.out.println("Train : "+train.instanceList.size()+" Test : "+
 				test.instanceList.size());
 		if(isTrain.equalsIgnoreCase("true")) {
-			trainModel("models/Rel"+testFold+".save", train);
+			trainModel(Params.modelDir+Params.relPrefix+testFold+Params.modelSuffix, train);
 		}
-		return testModel("models/Rel"+testFold+".save", test);
+		return testModel(Params.modelDir+Params.relPrefix+testFold+Params.modelSuffix, test);
 	}
 	
 	public static SLProblem getSP(List<Problem> problemList) throws Exception{

@@ -17,10 +17,10 @@ public class ConsDriver {
 
 	public static double doTest(int testFold, String dataset) throws Exception {
 		List<List<Problem>> split = Folds.getDataSplit(dataset, testFold);
-		SLModel relModel = SLModel.loadModel("models/Rel"+testFold+".save");
-		SLModel pairModel = SLModel.loadModel("models/Pair"+testFold+".save");
-		SLModel runModel = SLModel.loadModel("models/Run"+testFold+".save");
-		SLModel rateModel = SLModel.loadModel("models/Rate"+testFold+".save");
+		SLModel relModel = SLModel.loadModel(Params.modelDir+Params.relPrefix+testFold+Params.modelSuffix);
+		SLModel pairModel = SLModel.loadModel(Params.modelDir+Params.pairPrefix+testFold+Params.modelSuffix);
+		SLModel runModel = SLModel.loadModel(Params.modelDir+Params.runPrefix+testFold+Params.modelSuffix);
+		SLModel rateModel = SLModel.loadModel(Params.modelDir+Params.ratePrefix+testFold+Params.modelSuffix);
 		return ConsInfSolver.constrainedInf(split.get(2), relModel, pairModel, 
 				runModel, rateModel);
 	}
@@ -69,10 +69,10 @@ public class ConsDriver {
 	
 	public static void tune(int testFold, String dataset) throws Exception {
 		List<List<Problem>> split = Folds.getDataSplit(dataset, testFold);
-		SLModel relModel = SLModel.loadModel("models/Rel"+testFold+".save");
-		SLModel pairModel = SLModel.loadModel("models/Pair"+testFold+".save");
-		SLModel runModel = SLModel.loadModel("models/Run"+testFold+".save");
-		SLModel rateModel = SLModel.loadModel("models/Rate"+testFold+".save");
+		SLModel relModel = SLModel.loadModel(Params.modelDir+Params.relPrefix+testFold+Params.modelSuffix);
+		SLModel pairModel = SLModel.loadModel(Params.modelDir+Params.pairPrefix+testFold+Params.modelSuffix);
+		SLModel runModel = SLModel.loadModel(Params.modelDir+Params.runPrefix+testFold+Params.modelSuffix);
+		SLModel rateModel = SLModel.loadModel(Params.modelDir+Params.ratePrefix+testFold+Params.modelSuffix);
 		tune(split.get(1), relModel, pairModel, runModel, rateModel);
 	}
 	
@@ -86,15 +86,17 @@ public class ConsDriver {
 			Params.validationFrac = 0.2;
 			List<List<Problem>> split = Folds.getDataSplit(dataset, i);
 			System.out.println("Training Relevance model ... ");
-			RelDriver.trainModel("models/Rel"+i+".save", RelDriver.getSP(split.get(0)));
+			RelDriver.trainModel(Params.modelDir+Params.relPrefix+i+Params.modelSuffix,
+					RelDriver.getSP(split.get(0)));
 			System.out.println("Training Pair model ... ");
-			PairDriver.trainModel("models/Pair"+i+".save", PairDriver.getSP(split.get(0)));
+			PairDriver.trainModel(Params.modelDir+Params.pairPrefix+i+Params.modelSuffix,
+					PairDriver.getSP(split.get(0)));
 			System.out.println("Training Run model ... ");
-			RunDriver.trainModel("models/Run"+i+".save", Annotations.getSP(
+			RunDriver.trainModel(Params.modelDir+Params.runPrefix+i+Params.modelSuffix, Annotations.getSP(
 					split.get(0),
 					Annotations.readRateAnnotations(Params.ratesFile)));
 			System.out.println("Training Rate model ... ");
-			RateDriver.trainModel("models/Rate"+i+".save", RateDriver.getSP(
+			RateDriver.trainModel(Params.modelDir+Params.ratePrefix+i+Params.modelSuffix, RateDriver.getSP(
 					split.get(0),
 					Annotations.readRateAnnotations(Params.ratesFile)));
 			tune(i, dataset);
@@ -106,15 +108,17 @@ public class ConsDriver {
 			Params.validationFrac = 0.0;
 			split = Folds.getDataSplit(dataset, i);
 			System.out.println("Training Relevance model ... ");
-			RelDriver.trainModel("models/Rel"+i+".save", RelDriver.getSP(split.get(0)));
+			RelDriver.trainModel(Params.modelDir+Params.relPrefix+i+Params.modelSuffix,
+					RelDriver.getSP(split.get(0)));
 			System.out.println("Training Pair model ... ");
-			PairDriver.trainModel("models/Pair"+i+".save", PairDriver.getSP(split.get(0)));
+			PairDriver.trainModel(Params.modelDir+Params.pairPrefix+i+Params.modelSuffix,
+					PairDriver.getSP(split.get(0)));
 			System.out.println("Training Run model ... ");
-			RunDriver.trainModel("models/Run"+i+".save", Annotations.getSP(
+			RunDriver.trainModel(Params.modelDir+Params.runPrefix+i+Params.modelSuffix, Annotations.getSP(
 					split.get(0),
 					Annotations.readRateAnnotations(Params.ratesFile)));
 			System.out.println("Training Rate model ... ");
-			RateDriver.trainModel("models/Rate"+i+".save", RateDriver.getSP(
+			RateDriver.trainModel(Params.modelDir+Params.ratePrefix+Params.modelSuffix, RateDriver.getSP(
 					split.get(0),
 					Annotations.readRateAnnotations(Params.ratesFile)));
 			Params.printMistakes = true;
@@ -124,7 +128,7 @@ public class ConsDriver {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		InteractiveShell<ConsDriver> tester = new InteractiveShell<ConsDriver>(
+		InteractiveShell<ConsDriver> tester = new InteractiveShell<>(
 				ConsDriver.class);
 		if (args.length == 0) {
 			tester.showDocumentation();

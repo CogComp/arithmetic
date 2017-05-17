@@ -15,8 +15,8 @@ public class GraphDriver {
 
 	public static double doTest(int testFold, String dataset) throws Exception {
 		List<List<Problem>> split = Folds.getDataSplit(dataset, testFold);
-		SLModel runModel = SLModel.loadModel("models/Run"+testFold+".save");
-		SLModel rateModel = SLModel.loadModel("models/Rate"+testFold+".save");
+		SLModel runModel = SLModel.loadModel(Params.modelDir+Params.runPrefix+testFold+Params.modelSuffix);
+		SLModel rateModel = SLModel.loadModel(Params.modelDir+Params.ratePrefix+testFold+Params.modelSuffix);
 		return GraphInfSolver.constrainedInf(split.get(2), runModel, rateModel);
 	}
 
@@ -38,8 +38,8 @@ public class GraphDriver {
 
 	public static void tune(int testFold, String dataset) throws Exception {
 		List<List<Problem>> split = Folds.getDataSplit(dataset, testFold);
-		SLModel runModel = SLModel.loadModel("models/Run"+testFold+".save");
-		SLModel rateModel = SLModel.loadModel("models/Rate"+testFold+".save");
+		SLModel runModel = SLModel.loadModel(Params.modelDir+Params.runPrefix+testFold+Params.modelSuffix);
+		SLModel rateModel = SLModel.loadModel(Params.modelDir+Params.ratePrefix+testFold+Params.modelSuffix);
 		tune(split.get(1), runModel, rateModel);
 	}
 
@@ -52,13 +52,11 @@ public class GraphDriver {
 			Params.validationFrac = 0.2;
 			List<List<Problem>> split = Folds.getDataSplit(dataset, i);
 			System.out.println("Training Run model ... ");
-			RunDriver.trainModel("models/Run"+i+".save", Annotations.getSP(
-					split.get(0),
-					Annotations.readRateAnnotations(Params.ratesFile)));
+			RunDriver.trainModel(Params.modelDir+Params.runPrefix+i+Params.modelSuffix,
+					Annotations.getSP(split.get(0), Annotations.readRateAnnotations(Params.ratesFile)));
 			System.out.println("Training Rate model ... ");
-			RateDriver.trainModel("models/Rate"+i+".save", RateDriver.getSP(
-					split.get(0),
-					Annotations.readRateAnnotations(Params.ratesFile)));
+			RateDriver.trainModel(Params.modelDir+Params.ratePrefix+i+Params.modelSuffix,
+					RateDriver.getSP(split.get(0), Annotations.readRateAnnotations(Params.ratesFile)));
 			tune(i, dataset);
 			System.out.println("Tuned parameters");
 			System.out.println("wRun : "+GraphInfSolver.wRun);
@@ -66,13 +64,11 @@ public class GraphDriver {
 			Params.validationFrac = 0.0;
 			split = Folds.getDataSplit(dataset, i);
 			System.out.println("Training Run model ... ");
-			RunDriver.trainModel("models/Run"+i+".save", Annotations.getSP(
-					split.get(0),
-					Annotations.readRateAnnotations(Params.ratesFile)));
+			RunDriver.trainModel(Params.modelDir+Params.runPrefix+i+Params.modelSuffix,
+					Annotations.getSP(split.get(0), Annotations.readRateAnnotations(Params.ratesFile)));
 			System.out.println("Training Rate model ... ");
-			RateDriver.trainModel("models/Rate"+i+".save", RateDriver.getSP(
-					split.get(0),
-					Annotations.readRateAnnotations(Params.ratesFile)));
+			RateDriver.trainModel(Params.modelDir+Params.ratePrefix+i+Params.modelSuffix,
+					RateDriver.getSP(split.get(0), Annotations.readRateAnnotations(Params.ratesFile)));
 			Params.printMistakes = true;
 			acc += doTest(i, dataset);
 		}

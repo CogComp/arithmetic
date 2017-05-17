@@ -51,9 +51,10 @@ public class LogicDriver {
 		SLProblem test = getSP(testProbs, rateAnnotations, false);
 		System.out.println("Train : "+train.instanceList.size()+" Test : "+test.instanceList.size());
 		if(isTrain.equalsIgnoreCase("true")) {
-			trainModel("models/Logic"+testFold+".save", train, "models/InfType"+testFold+".save");
+			trainModel(Params.modelDir+Params.logicPrefix+testFold+Params.modelSuffix, train,
+					Params.modelDir+Params.logicPrefix+testFold+Params.modelSuffix);
 		}
-		return testModel("models/Logic"+testFold+".save", test);
+		return testModel(Params.modelDir+Params.logicPrefix+testFold+Params.modelSuffix, test);
 	}
 	
 	public static SLProblem getSP(List<StanfordProblem> problemList,

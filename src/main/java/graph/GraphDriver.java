@@ -41,9 +41,9 @@ public class GraphDriver {
         System.out.println("Train : "+train.instanceList.size()+" Test : "+
                 test.instanceList.size());
         if(isTrain.equalsIgnoreCase("true")) {
-            trainModel("models/Graph"+testFold+".save", train);
+            trainModel(Params.modelDir+Params.graphPrefix+testFold+Params.modelSuffix, train);
         }
-        return testModel("models/Graph"+testFold+".save", test);
+        return testModel(Params.modelDir+Params.graphPrefix+testFold+Params.modelSuffix, test);
     }
 
     public static SLProblem getSP(List<Problem> problemList) throws Exception{

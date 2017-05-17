@@ -46,9 +46,9 @@ public class PairDriver {
 		SLProblem test = getSP(testProbs);
 		System.out.println("Train : "+train.instanceList.size()+" Test : "+test.instanceList.size());
 		if(isTrain.equalsIgnoreCase("true")) {
-			trainModel("models/Pair"+testFold+".save", train);
+			trainModel(Params.modelDir+Params.pairPrefix+testFold+Params.modelSuffix, train);
 		}
-		return testModel("models/Pair"+testFold+".save", test);
+		return testModel(Params.modelDir+Params.pairPrefix+testFold+Params.modelSuffix, test);
 	}
 	
 	public static SLProblem getSP(List<Problem> problemList) throws Exception{
