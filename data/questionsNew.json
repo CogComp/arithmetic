@@ -24187,26 +24187,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232857101,
-    "sQuestion": "Katie baked 18.0 cupcakes for her school's bake sale. If her brother, Todd, ate 8.0 of them how many packages could she make if she put .50 cupcake in each package?",
-    "quants": [
-      18.0,
-      8.0,
-      0.5
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "((18.0 - 8.0) * 2.0)"
-    ],
-    "lSolutions": [
-      20.0
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857102,
     "sQuestion": "Kate baked 18.0 cupcakes for her school's bake sale. Her brother Todd baked 8.0 and gave them to Katie. How many packages could she make if she put 2.0 cupcakes in each package?",
     "quants": [
@@ -24224,27 +24204,6 @@
     ],
     "lSolutions": [
       13.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857103,
-    "sQuestion": "Megan had 93 files on her computer. She deleted 21 of them and put the rest into folders with 8 files in each one. How many folders did Megan end up to put her sensual personal massage tapes in?",
-    "quants": [
-      93.0,
-      21.0,
-      8.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((93.0 - 21.0) * 8.0)"
-    ],
-    "lSolutions": [
-      576.0
     ],
     "rates": []
   },
@@ -24271,29 +24230,8 @@
     "rates": []
   },
   {
-    "iIndex": 1232857105,
-    "sQuestion": "Wendy uploaded 79 pictures to Facebook and put 44 pictures into one album and 5 into a different album. How many people will be angry for having to scroll through those pictures?",
-    "quants": [
-      79.0,
-      44.0,
-      5.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((79.0 - 44.0) * 5.0)"
-    ],
-    "lSolutions": [
-      175.0
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857106,
-    "sQuestion": "Wendy uploaded 79.0 pictures to Facebook on Monday. She uploaded 44.0 pictures to Facebook on Tuesday then split all the pictures into 5.0 different albums. How many pictures were in each album ?",
+    "sQuestion": "Wendy uploaded 79.0 pictures to Facebook on Monday. She uploaded 44.0 pictures to Facebook on Tuesday, then split all the pictures into 5.0 different albums. How many pictures were in each album ?",
     "quants": [
       79.0,
       44.0,
@@ -24330,132 +24268,6 @@
     ],
     "lSolutions": [
       200.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857108,
-    "sQuestion": "Isabel had 72 homework problems and finished 32 but still hade 5 pages left to do. Each page has an equal number of problems on it. How many are on each page?",
-    "quants": [
-      72.0,
-      32.0,
-      5.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((72.0 + 32.0) / 5.0)"
-    ],
-    "lSolutions": [
-      20.8
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857109,
-    "sQuestion": "The cafeteria has 62.0 apples. For lunch they handed out 8.0 to students and decided to use the rest to make pies. If each pie takes 9.0 apples, how many pies could they make?",
-    "quants": [
-      62.0,
-      8.0,
-      9.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((62.0 - 8.0) * 9.0)"
-    ],
-    "lSolutions": [
-      486.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857110,
-    "sQuestion": "To make a pie takes 9.0 apples. If the cafeteria had 62.0 apples, then handed out 8.0 apples to students during lunch, how many pies could they make with the remaining apples?",
-    "quants": [
-      9.0,
-      62.0,
-      8.0
-    ],
-    "lAlignments": [
-      1,
-      2,
-      0
-    ],
-    "lEquations": [
-      "((62.0 + 8.0) / 9.0)"
-    ],
-    "lSolutions": [
-      7.777777777777778
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857111,
-    "sQuestion": "Mike made 101.0 dollars mowing lawns over the summer. If he spent 47.0 dollars buying new mower blades, how much money would he make in 6.0 summers?",
-    "quants": [
-      101.0,
-      47.0,
-      6.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((101.0 - 47.0) * 6.0)"
-    ],
-    "lSolutions": [
-      324.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857112,
-    "sQuestion": "Mike earned 101.0 dollars by mowing lawns during summer time. He spent 47.0 dollars on new mower blades. How many 6.0 dollar games can he afford with the money he has left over?",
-    "quants": [
-      101.0,
-      47.0,
-      6.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((101.0 + 47.0) / 6.0)"
-    ],
-    "lSolutions": [
-      24.666666666666668
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857113,
-    "sQuestion": "Paige's team won their dodgeball game and scored 41 points total. If Paige scored 11 of the points, and everyone else scored 6 points each, how many players were on her team?",
-    "quants": [
-      41.0,
-      11.0,
-      6.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((41.0 - 11.0) * 6.0)"
-    ],
-    "lSolutions": [
-      180.0
     ],
     "rates": []
   },
@@ -24503,7 +24315,7 @@
   },
   {
     "iIndex": 1232857116,
-    "sQuestion": "Oliver is at the library helping put away books. There are 46.0 book to put away total but a librarian Add 10.0 of them and leaves Oliver with the rest. If he can fit 4.0 books on a shelf, how many shelves will he need?",
+    "sQuestion": "Oliver is at the library helping put away books. There are 46.0 book to put away but a librarian adds 10.0 to the pile, and asks Oliver to arrange them in shelves. If he can fit 4.0 books on a shelf, how many shelves will he need?",
     "quants": [
       46.0,
       10.0,
@@ -24523,31 +24335,8 @@
     "rates": []
   },
   {
-    "iIndex": 1232857117,
-    "sQuestion": "Part 1 : Emily was planting vegetables in her garden. She started with 41.0 seeds and planted 29.0 all 4.0 of her small gardens. How many seeds did Emily have?\nPart 2 :((41.0 - 29.0) * 4.0)=48.0",
-    "quants": [
-      1.0,
-      41.0,
-      29.0,
-      4.0,
-      2.0,
-      41.0,
-      29.0,
-      4.0,
-      48.0
-    ],
-    "lAlignments": [],
-    "lEquations": [
-      "((41.0 - 29.0) * 4.0)"
-    ],
-    "lSolutions": [
-      48.0
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857118,
-    "sQuestion": "Emily was planting vegetables in her garden. She started with 41.0 seeds and then bought 29.0 more.  in each of her small gardens, put 4.0 seeds each. How many small gardens did Emily have?",
+    "sQuestion": "Emily was planting vegetables in her garden. She started with 41.0 seeds and then bought 29.0 more.  In each of her small gardens, she put 4.0 seeds each. How many small gardens did Emily have?",
     "quants": [
       41.0,
       29.0,
@@ -24568,13 +24357,15 @@
   },
   {
     "iIndex": 1232857119,
-    "sQuestion": "There are 65.0 students trying out for the school's trivia teams in each of eight different schools. If 17.0 of them didn't get picked for each team, how many total students make the teams?",
+    "sQuestion": "There are 65.0 students trying out for the school's trivia teams in each of 8.0 different schools. If 17.0 of them didn't get picked for each team, how many total students make the teams?",
     "quants": [
       65.0,
+      8.0,
       17.0
     ],
     "lAlignments": [
       0,
+      2,
       1
     ],
     "lEquations": [
@@ -24603,28 +24394,6 @@
     ],
     "lSolutions": [
       10.25
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857121,
-    "sQuestion": "Isabel picked 66.0 flowers for a friend's wedding. She made  bouquets with 8.0 flowers in each 1.0. If 10.0 flowers wilted before wedding day, how many bouquets was she able to make with the remaining flowers?",
-    "quants": [
-      66.0,
-      8.0,
-      1.0,
-      10.0
-    ],
-    "lAlignments": [
-      0,
-      3,
-      1
-    ],
-    "lEquations": [
-      "((66.0 - 10.0) * 8.0)"
-    ],
-    "lSolutions": [
-      448.0
     ],
     "rates": []
   },
@@ -24672,38 +24441,17 @@
     "rates": []
   },
   {
-    "iIndex": 1232857124,
-    "sQuestion": "For Halloween Sarah received 108.0 pieces of candy. She ate 36.0 pieces then placed the rest into piles with 9.0 in each pile. How many total piles could she make?",
+    "iIndex": 1232857125,
+    "sQuestion": "Edward was selling his old games. He started out with 35.0 but sold 19.0 of them. If he sells the rest for 8 $ each, how much money would he make ?",
     "quants": [
-      108.0,
-      36.0,
-      9.0
+      35.0,
+      19.0,
+      8.0
     ],
     "lAlignments": [
       0,
       1,
       2
-    ],
-    "lEquations": [
-      "((108.0 + 36.0) / 9.0)"
-    ],
-    "lSolutions": [
-      16.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857125,
-    "sQuestion": "Edward was selling his old games. He started out with 35.0 but sold 19.0 of them. He packed the rest up putting 8.0 games into each box. If he sells the rest in 8 $ how much money would he to sell?",
-    "quants": [
-      35.0,
-      19.0,
-      8.0,
-      8.0
-    ],
-    "lAlignments": [
-      0,
-      1
     ],
     "lEquations": [
       "((35.0 - 19.0) * 8.0)"
@@ -24714,50 +24462,8 @@
     "rates": []
   },
   {
-    "iIndex": 1232857126,
-    "sQuestion": "Edward sold 19.0 out of the 35.0 old games he had. He packed the rest up in boxes of 8.0 games each. How many boxes did he need to fill?",
-    "quants": [
-      19.0,
-      35.0,
-      8.0
-    ],
-    "lAlignments": [
-      1,
-      0,
-      2
-    ],
-    "lEquations": [
-      "((35.0 + 19.0) / 8.0)"
-    ],
-    "lSolutions": [
-      6.75
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857127,
-    "sQuestion": "A company invited 18 people to a luncheon, but 12 of them didn't show up. If the tables they had held 3 people each, how many tables do they need?",
-    "quants": [
-      18.0,
-      12.0,
-      3.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((18.0 - 12.0) * 3.0)"
-    ],
-    "lSolutions": [
-      18.0
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857128,
-    "sQuestion": "A company invited 18.0 people to a luncheon, more 12.0 of them  show up. If the tables they had held 3.0 people each, how many tables do they need?",
+    "sQuestion": "A company invited 18.0 people to a luncheon; 12.0 more people showed up. If the tables they had held 3.0 people each, how many tables do they need?",
     "quants": [
       18.0,
       12.0,
@@ -24841,7 +24547,7 @@
   },
   {
     "iIndex": 1232857132,
-    "sQuestion": "A store had 40.0 coloring books in stock. They ended up putting them on sale and  of 20.0 of them. The put the ones they still had onto shelves with 4.0 on each shelf. How many shelves did they use?",
+    "sQuestion": "A store had 40.0 coloring books in stock. They acquired 20.0 more books. They put them on shelves with 4.0 on each shelf. How many shelves did they use?",
     "quants": [
       40.0,
       20.0,
@@ -24899,107 +24605,8 @@
     "rates": []
   },
   {
-    "iIndex": 1232857135,
-    "sQuestion": "There are 43 pencils in the drawer and 19  pencils on the desk. Dan placed 16 more pencils on the desk. How many pencils are now there in total?",
-    "quants": [
-      43.0,
-      19.0,
-      16.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((43.0 + 19.0) - 16.0)"
-    ],
-    "lSolutions": [
-      46.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857136,
-    "sQuestion": "There are 19 pencils on the desk and 43 in the desk drawer. Dan placed 16 more pencils on the desk. How many pencils are there?",
-    "quants": [
-      19.0,
-      43.0,
-      16.0
-    ],
-    "lAlignments": [
-      1,
-      2,
-      0
-    ],
-    "lEquations": [
-      "((43.0 + 16.0) - 19.0)"
-    ],
-    "lSolutions": [
-      40.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857137,
-    "sQuestion": "Sally went to the orchard to stock up her roadside fruit stand. Before she left there were 13.0 peaches left. Now her fruit stand has 55.0 peaches. How many peaches did she pick at the orchard?",
-    "quants": [
-      13.0,
-      55.0
-    ],
-    "lAlignments": [
-      1,
-      0
-    ],
-    "lEquations": [
-      "(55.0 + 13.0)"
-    ],
-    "lSolutions": [
-      68.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857138,
-    "sQuestion": "There were a total of 7 football games this year. Melanie missed 4 of the games. How many football games did Melanie go to in all?",
-    "quants": [
-      7.0,
-      4.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(7.0 + 4.0)"
-    ],
-    "lSolutions": [
-      11.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857139,
-    "sQuestion": "Benny's school played 39 baseball games. Of those games he attended 14, how many games did he miss?",
-    "quants": [
-      39.0,
-      14.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(39.0 + 14.0)"
-    ],
-    "lSolutions": [
-      53.0
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857140,
-    "sQuestion": "Mike has 45.0 of 5.0 dollar bills. How many dollars does he have ?",
+    "sQuestion": "Mike has 45.0 5.0 dollar bills. How many dollars does he have ?",
     "quants": [
       45.0,
       5.0
@@ -25013,51 +24620,12 @@
     ],
     "lSolutions": [
       225.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857141,
-    "sQuestion": "Sandy worked 45.0 hours in the in 5.0 days. Assuming that she worked the same amount of hours each day, how long did she work each day ?",
-    "quants": [
-      45.0,
-      5.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(45.0 * 5.0)"
-    ],
-    "lSolutions": [
-      225.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857142,
-    "sQuestion": "There were a total of 27.0 soccer games during the 3.0 month season. how many soccer games are played in 9.0 month ?",
-    "quants": [
-      27.0,
-      3.0,
-      9.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(27.0 * 3.0)"
-    ],
-    "lSolutions": [
-      81.0
     ],
     "rates": []
   },
   {
     "iIndex": 1232857143,
-    "sQuestion": "Fred has 110 blue marbles. Fred has 22 times more blue marbles than Tim. How many blue marbles does Tim have?",
+    "sQuestion": "Fred has 110 blue marbles. Tim has 22 times more blue marbles than Fred. How many blue marbles does Tim have?",
     "quants": [
       110.0,
       22.0
@@ -25094,41 +24662,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232857145,
-    "sQuestion": "Sam has 5 apples. He got 4 apples from Adam. How many does he have now ?",
-    "quants": [
-      5.0,
-      4.0
-    ],
-    "lAlignments": [],
-    "lEquations": [
-      "(315.0 * 45.0)"
-    ],
-    "lSolutions": [
-      14175.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857146,
-    "sQuestion": "Each pack of crayons has 15.0 crayons. Nancy bought 615.0 crayons. How many packs of crayons did Nancy purchase?",
-    "quants": [
-      15.0,
-      615.0
-    ],
-    "lAlignments": [
-      1,
-      0
-    ],
-    "lEquations": [
-      "(615.0 * 15.0)"
-    ],
-    "lSolutions": [
-      9225.0
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857147,
     "sQuestion": "Mary earns $46.0 cleaning a home. How many dollars did she earn, if she cleaned 276.0 homes?",
     "quants": [
@@ -25149,14 +24682,15 @@
   },
   {
     "iIndex": 1232857148,
-    "sQuestion": "There were a total of 323.0 football games in one month. The season is played for 17.0 months. How many football games were played in total, if each month has the same number of games?",
+    "sQuestion": "There were a total of 323.0 football games in 1.0 month. The season is played for 17.0 months. How many football games were played in total, if each month has the same number of games?",
     "quants": [
       323.0,
+      1.0,
       17.0
     ],
     "lAlignments": [
       0,
-      1
+      2
     ],
     "lEquations": [
       "(323.0 * 17.0)"
@@ -25167,37 +24701,16 @@
     "rates": []
   },
   {
-    "iIndex": 1232857149,
-    "sQuestion": "A teacher has 344.0 of candy.  There are 43.0 students in their class. If the candy was divided equally among them, how many pieces does each student receive?",
+    "iIndex": 1232857150,
+    "sQuestion": "There are 5.0 candy bars. How many candy bars will each person get if split between 3.0 ?",
     "quants": [
-      344.0,
-      43.0
+      5.0,
+      3.0
     ],
     "lAlignments": [
       0,
       1
     ],
-    "lEquations": [
-      "(344.0 * 43.0)"
-    ],
-    "lSolutions": [
-      14792.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857150,
-    "sQuestion": "Part 1 : There are 5.0 candy bar.s How many candy bars will each person get if split between 3.0 ?\nPart 2 :(5.0 / 3.0)=1.6666666666666667",
-    "quants": [
-      1.0,
-      5.0,
-      3.0,
-      2.0,
-      5.0,
-      3.0,
-      1.6666666666666667
-    ],
-    "lAlignments": [],
     "lEquations": [
       "(5.0 / 3.0)"
     ],
@@ -25207,139 +24720,15 @@
     "rates": []
   },
   {
-    "iIndex": 1232857151,
-    "sQuestion": "There are 4.0 children in the classroom, the teacher will give a pencil to half of the children  How many pencils will the teacher have to give out ?",
-    "quants": [
-      4.0
-    ],
-    "lAlignments": [
-      0
-    ],
-    "lEquations": [
-      "(4.0 / 2.0)"
-    ],
-    "lSolutions": [
-      2.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857152,
-    "sQuestion": "Sally cleans houses for $12.5 an hour. How much would Sally make if she worked 12.0 hours?",
-    "quants": [
-      12.5,
-      12.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(12.5 / 12.0)"
-    ],
-    "lSolutions": [
-      1.0416666666666667
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857153,
-    "sQuestion": "Fred earns money cleaning houses. How many houses do you clean?",
-    "quants": [],
-    "lAlignments": [],
-    "lEquations": [
-      "(12.5 / 8.0)"
-    ],
-    "lSolutions": [
-      1.5625
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857154,
-    "sQuestion": "Melanie goes fishing with Tom. Melanie catches 8.0 trout. Tom catches half as many trout as Melanie. How many trout did Tom catch ?",
-    "quants": [
-      8.0
-    ],
-    "lAlignments": [
-      0
-    ],
-    "lEquations": [
-      "(8.0 / 2.0)"
-    ],
-    "lSolutions": [
-      4.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857155,
-    "sQuestion": "Tom spent 5 days a the beach and each day he found 7 seashells. How many shells in all did Tom end up finding.",
-    "quants": [
-      5.0,
-      7.0
-    ],
-    "lAlignments": [
-      1,
-      0
-    ],
-    "lEquations": [
-      "(7.0 / 5.0)"
-    ],
-    "lSolutions": [
-      1.4
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857156,
-    "sQuestion": "Benny worked 3 hours for 6  days. How many hours did he work in total?",
-    "quants": [
-      3.0,
-      6.0
-    ],
-    "lAlignments": [
-      1,
-      0
-    ],
-    "lEquations": [
-      "(6.0 / 3.0)"
-    ],
-    "lSolutions": [
-      2.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857157,
-    "sQuestion": "Nancy has 9.0 between  5.0 dollars bills. How much money does she have ?",
-    "quants": [
-      9.0,
-      5.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(9.0 / 5.0)"
-    ],
-    "lSolutions": [
-      1.8
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857158,
-    "sQuestion": "Nancy has 7.0 black balloons. If Mary has 1/4 of the  black balloons than Nancy does, how many balloons does Mary have?",
+    "sQuestion": "Nancy has 7.0 black balloons. If Nancy has 4 times the  number of black balloons than Mary has, how many balloons does Mary have?",
     "quants": [
       7.0,
-      1.0,
       4.0
     ],
     "lAlignments": [
       0,
-      2
+      1
     ],
     "lEquations": [
       "(7.0 / 4.0)"
@@ -25350,27 +24739,8 @@
     "rates": []
   },
   {
-    "iIndex": 1232857159,
-    "sQuestion": "There  were 13.0 hockey games scheduled each month. The season lasts 14.0 months. How many hockey games are played each season?",
-    "quants": [
-      13.0,
-      14.0
-    ],
-    "lAlignments": [
-      1,
-      0
-    ],
-    "lEquations": [
-      "(14.0 / 13.0)"
-    ],
-    "lSolutions": [
-      1.0769230769230769
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857160,
-    "sQuestion": "Dan has 29.0 violet balloons. Tim 7.0 times more violet balloons than Dan. How many violet balloons does Tim have ?",
+    "sQuestion": "Dan has 29.0 violet balloons. Dan has 7.0 times more violet balloons than Tim. How many violet balloons does Tim have ?",
     "quants": [
       29.0,
       7.0
@@ -25389,10 +24759,11 @@
   },
   {
     "iIndex": 1232857162,
-    "sQuestion": "Melanie is selling 4.0 gumballs for 8.0 cents. How much is one gumball?",
+    "sQuestion": "Melanie is selling 4.0 gumballs for 8.0 cents. How much is 1.0 gumball?",
     "quants": [
       4.0,
-      8.0
+      8.0,
+      1.0
     ],
     "lAlignments": [
       1,
@@ -25408,7 +24779,7 @@
   },
   {
     "iIndex": 1232857163,
-    "sQuestion": "Keith loves trading cards. She sold 4.0 packs of Digimon cards for $4.45 each, and bought a deck of baseball cards for $6.06. How much did Keith spend on cards?",
+    "sQuestion": "Keith loves trading cards. She sold 4.0 packs of Digimon cards for $4.45 each, and bought a deck of baseball cards for $6.06. How much did Keith make ?",
     "quants": [
       4.0,
       4.45,
@@ -25428,36 +24799,18 @@
     "rates": []
   },
   {
-    "iIndex": 1232857164,
-    "sQuestion": "Keith loves trading cards. She bought 4.0 packs of Digimon cards for $4.45 each, and a  baseball cards for $6.06. How much did Keith spend on cards?",
-    "quants": [
-      4.0,
-      4.45,
-      6.06
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((4.0 / 4.45) + 6.06)"
-    ],
-    "lSolutions": [
-      6.958876404494381
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857165,
-    "sQuestion": "Keith loves trading cards. She and three of her friends bought a pack of Digimon cards for $4.45, dividing the cost four ways. She also bought a deck of baseball cards herself for $6.06. How much did Keith spend on cards?",
+    "sQuestion": "Keith loves trading cards. She and 3.0 of her friends bought a pack of Digimon cards for $4.45, dividing the cost 4.0 ways. She also bought a deck of baseball cards herself for $6.06. How much did Keith spend on cards?",
     "quants": [
+      3.0,
       4.45,
+      4.0,
       6.06
     ],
     "lAlignments": [
-      0,
-      1
+      1,
+      2,
+      3
     ],
     "lEquations": [
       "((4.45 / 4.0) + 6.06)"
@@ -25527,29 +24880,8 @@
     "rates": []
   },
   {
-    "iIndex": 1232857169,
-    "sQuestion": "Sandy went shopping. She bought shorts for $13.99, a shirt for $12.14 and a jacket for $7.43. How much did Sally spend in total?",
-    "quants": [
-      13.99,
-      12.14,
-      7.43
-    ],
-    "lAlignments": [
-      0,
-      2,
-      1
-    ],
-    "lEquations": [
-      "((13.99 + 7.43) - 12.14)"
-    ],
-    "lSolutions": [
-      9.28
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857170,
-    "sQuestion": "Sandy went to the maill to buy clothes. She bought a shirt for 12.14 and returned a shirt she had previously paid 13.99 for. She also spent 7.43 on a jacket. How much money did Sandy spend on clothes?",
+    "sQuestion": "Sandy went to the mall to buy clothes. She bought a shirt for 12.14 and returned a shirt she had previously paid 13.99 for. She also spent 7.43 on a jacket. How much money did Sandy spend on clothes?",
     "quants": [
       12.14,
       13.99,
@@ -25570,19 +24902,17 @@
   },
   {
     "iIndex": 1232857171,
-    "sQuestion": "Part 1 : Jason joined his school's band. He bought a flute for $142.46, a music stand for $8.89, and had a refund on a song book for $7.0. How much did Jason spend at the music store?\nPart 2 :((142.46 + 8.89) - 7.0)=144.35000000000002",
+    "sQuestion": "Jason joined his school's band. He bought a flute for $142.46, a music stand for $8.89, and had a refund on a song book for $7.0. How much did Jason spend at the music store?",
     "quants": [
-      1.0,
       142.46,
       8.89,
-      7.0,
-      2.0,
-      142.46,
-      8.89,
-      7.0,
-      144.35000000000002
+      7.0
     ],
-    "lAlignments": [],
+    "lAlignments": [
+      0, 
+      1, 
+      2
+    ],
     "lEquations": [
       "((142.46 + 8.89) - 7.0)"
     ],
@@ -25636,75 +24966,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232857174,
-    "sQuestion": "On Saturday, Sara spent $2.0 each on 10.62 tickets to a movie theater. She also rented a movie for $1.59, and bought a movie for $13.95. How much money in total did Sara spend on movies",
-    "quants": [
-      2.0,
-      10.62,
-      1.59,
-      13.95
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "lEquations": [
-      "((2.0 / 10.62) + (1.59 + 13.95))"
-    ],
-    "lSolutions": [
-      15.728323917137475
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857175,
-    "sQuestion": "On Saturday, Sara spent $2.0 each on 10.62 tickets to a movie theater. She also rented a movie for $1.59, and bought a movie for $13.95. How much money in total did Sara spend on movies",
-    "quants": [
-      2.0,
-      10.62,
-      1.59,
-      13.95
-    ],
-    "lAlignments": [
-      1,
-      0,
-      2,
-      3
-    ],
-    "lEquations": [
-      "((10.62 / 2.0) + (1.59 + 13.95))"
-    ],
-    "lSolutions": [
-      20.849999999999998
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857176,
-    "sQuestion": "On Saturday, Sara spent $2.0 each on 10.62 tickets to a movie theater. She also rented a movie for $1.59, and less a movie for $13.95. How much money in total did Sara spend on movies?",
-    "quants": [
-      2.0,
-      10.62,
-      1.59,
-      13.95
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "lEquations": [
-      "(((2.0 * 10.62) + 1.59) - 13.95)"
-    ],
-    "lSolutions": [
-      8.879999999999999
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857177,
     "sQuestion": "On Saturday, Sara spent $10.62 each on 2.0 tickets to a movie theater. She also rented a movie for $13.95 and got a rebate for 1.59 from the rental store. How much money in total did Sara spend on movies, after rebates?",
     "quants": [
@@ -25728,27 +24989,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232857178,
-    "sQuestion": "Mary likes eating fruit, She spent $7.19 on berries, $6.83 on peaches, and paid with a 20 dollar bill. How much change did Mary get back?",
-    "quants": [
-      7.19,
-      6.83,
-      20.0
-    ],
-    "lAlignments": [
-      2,
-      0,
-      1
-    ],
-    "lEquations": [
-      "(20.0 + (7.19 + 6.83))"
-    ],
-    "lSolutions": [
-      34.019999999999996
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857179,
     "sQuestion": "Mary loves eating fruits, but not peaches. She paid $7.19 for berries but returned some peaches for $6.83. If she paid with a $20.0 bill, how much change did Mary receive?",
     "quants": [
@@ -25766,40 +25006,6 @@
     ],
     "lSolutions": [
       19.64
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857180,
-    "sQuestion": "Mary loves eating fruits. How much fruit is too much fruit?",
-    "quants": [],
-    "lAlignments": [],
-    "lEquations": [
-      "((20.0 + 7.19) - 6.83)"
-    ],
-    "lSolutions": [
-      20.36
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857181,
-    "sQuestion": "Sandy spent $9.24 on pants and $8.25 on a shirt at the mall. If she paid with a $20 bill, how much change should Sandy get?",
-    "quants": [
-      9.24,
-      8.25,
-      20.0
-    ],
-    "lAlignments": [
-      2,
-      0,
-      1
-    ],
-    "lEquations": [
-      "(20.0 + (9.24 + 8.25))"
-    ],
-    "lSolutions": [
-      37.49
     ],
     "rates": []
   },
@@ -25846,48 +25052,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232857184,
-    "sQuestion": "Joan paid at the store with a $20.0 bill. She bought a cat toy for $8.77 and a cage for $10.97. How much did she get back  in change?",
-    "quants": [
-      20.0,
-      8.77,
-      10.97
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "(20.0 + (8.77 + 10.97))"
-    ],
-    "lSolutions": [
-      39.74
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857185,
-    "sQuestion": "Joan paid $8.77 on a cat toy and a cat cage of $10.97. If she paid with a $20 bill, how much should Joan receive in change?",
-    "quants": [
-      8.77,
-      10.97,
-      20.0
-    ],
-    "lAlignments": [
-      2,
-      1,
-      0
-    ],
-    "lEquations": [
-      "((20.0 + 10.97) - 8.77)"
-    ],
-    "lSolutions": [
-      22.200000000000003
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857186,
     "sQuestion": "Joan got paid $8.77 on a cat toy he sold, and a cage cost her $10.97 with a $20.0 bill. How much change did Joan receive?",
     "quants": [
@@ -25910,7 +25074,7 @@
   },
   {
     "iIndex": 1232857187,
-    "sQuestion": "On Friday, Fred paid $5.92 each on 2.0 tickets to a movie theater. He also borrowed a movie for $6.79 and paid $20.0 for food. How much did Fraid paid?",
+    "sQuestion": "On Friday, Fred paid $5.92 each on 2.0 tickets to a movie theater. He also borrowed a movie for $6.79 and paid $20.0 for food. How much did Fred pay?",
     "quants": [
       5.92,
       2.0,
@@ -25955,50 +25119,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232857190,
-    "sQuestion": "On Friday Fred had a $20.0 bill, earlier Fred got 5.92kilos of fish for $2.0 in a fish shop but decided to buy half that kilos of fish instead. He also borrowed a movie for $6.79. Fred paid with a $20.0 bill. How much change will Fred have?",
-    "quants": [
-      20.0,
-      5.92,
-      2.0,
-      6.79,
-      20.0
-    ],
-    "lAlignments": [
-      2,
-      1,
-      3
-    ],
-    "lEquations": [
-      "(20.0 - ((2.0 / 5.92) + 6.79))"
-    ],
-    "lSolutions": [
-      12.872162162162162
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857191,
-    "sQuestion": "Fred paid $5.92 each for two tickets to a movie. He also borrowed a movie for $6.79, and paid with a $20. How much was his change?",
-    "quants": [
-      5.92,
-      6.79,
-      20.0
-    ],
-    "lAlignments": [
-      2,
-      0,
-      1
-    ],
-    "lEquations": [
-      "(20.0 - ((5.92 / 2.0) + 6.79))"
-    ],
-    "lSolutions": [
-      10.25
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857192,
     "sQuestion": "Sandy bought some toys. She bought a football for $9.14, and paid $6.81 on a baseball. She has $20.0 left. How much money did she start with ?",
     "quants": [
@@ -26016,27 +25136,6 @@
     ],
     "lSolutions": [
       35.95
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857193,
-    "sQuestion": "Sandy bought some toys. She bought a football for $9.14, less a gif $6.81 on a baseball with a $20.0 bill. How much change did he receive from the purchase?",
-    "quants": [
-      9.14,
-      6.81,
-      20.0
-    ],
-    "lAlignments": [
-      2,
-      1,
-      0
-    ],
-    "lEquations": [
-      "((20.0 + 6.81) - 9.14)"
-    ],
-    "lSolutions": [
-      17.669999999999998
     ],
     "rates": []
   },
@@ -26129,12 +25228,13 @@
   },
   {
     "iIndex": 1232857203,
-    "sQuestion": "Dana made 9.0 dollars on Friday, 10.0 dollars on Saturday and 3.0 dollars on Sunday. If she worked for 13 hours over the three days, what is her hourly wage?",
+    "sQuestion": "Dana made 9.0 dollars on Friday, 10.0 dollars on Saturday and 3.0 dollars on Sunday. If she worked for 13 hours over the 3.0 days, what is her hourly wage?",
     "quants": [
       9.0,
       10.0,
       3.0,
-      13.0
+      13.0,
+      3.0
     ],
     "lAlignments": [
       0,
@@ -26147,52 +25247,6 @@
     ],
     "lSolutions": [
       1.6923076923076923
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857204,
-    "sQuestion": "Dana earns $13.0 per hour. She worked 9.0 hours on Friday, 10.0 hours on Saturday, and 3.0 hours on Sunday. How much money did Dana earn?",
-    "quants": [
-      13.0,
-      9.0,
-      10.0,
-      3.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "lEquations": [
-      "(13.0 * ((9.0 + 10.0) - 3.0))"
-    ],
-    "lSolutions": [
-      208.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857205,
-    "sQuestion": "Dana earns $13.0 per hour. She worked 9.0 hours on Friday, 10.0 hours on Saturday, and 3.0 hours on Sunday. How much time did Dana earn in all?",
-    "quants": [
-      13.0,
-      9.0,
-      10.0,
-      3.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      3,
-      2
-    ],
-    "lEquations": [
-      "(13.0 * ((9.0 + 3.0) - 10.0))"
-    ],
-    "lSolutions": [
-      26.0
     ],
     "rates": []
   },
@@ -26216,27 +25270,6 @@
     ],
     "lSolutions": [
       52.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857207,
-    "sQuestion": "Tanner saved $17 one month. He saved $48 the next month, and $25 the following month. He then spent $48 on a game. How much money does he have left?",
-    "quants": [
-      17.0,
-      48.0,
-      25.0,
-      48.0
-    ],
-    "lAlignments": [
-      0,
-      2
-    ],
-    "lEquations": [
-      "(((17.0 + 48.0) + 25.0) + 49.0)"
-    ],
-    "lSolutions": [
-      139.0
     ],
     "rates": []
   },
@@ -26287,43 +25320,14 @@
     "rates": []
   },
   {
-    "iIndex": 1232857210,
-    "sQuestion": "Mika had 20.0 stickers. She bought 26.0 stickers from a store in the mall and 20.0 stickers for her birthday. Then Mika gave 6.0 of the stickers to her sister",
-    "quants": [
-      20.0,
-      26.0,
-      20.0,
-      6.0
-    ],
-    "lAlignments": [
-      1,
-      3
-    ],
-    "lEquations": [
-      "((((20.0 + 26.0) + 20.0) + 58.0) - 6.0)"
-    ],
-    "lSolutions": [
-      118.0
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857211,
-    "sQuestion": "Part 1 : Mika had 20.0 stickers. She bought 26.0 stickers from a store in the mall and got 20.0 stickers for her birthday. Then Mika gave 6.0 of the stickers to her sister and used 58.0 to decorate a greeting card. How many stickers does Mika have left?\nPart 2 :(((20.0 + 26.0) + 20.0) - (58.0 - 6.0))=14.0",
+    "sQuestion": "Mika had 20.0 stickers. She bought 26.0 stickers from a store in the mall and got 20.0 stickers for her birthday. Then Mika's sister gave Mika 6.0 stickers, and then Mika used 58.0 to decorate a greeting card. How many stickers does Mika have left?",
     "quants": [
-      1.0,
       20.0,
       26.0,
       20.0,
       6.0,
-      58.0,
-      2.0,
-      20.0,
-      26.0,
-      20.0,
-      58.0,
-      6.0,
-      14.0
+      58.0
     ],
     "lAlignments": [],
     "lEquations": [
@@ -26345,57 +25349,15 @@
     ],
     "lAlignments": [
       1,
-      3
+      3,
+      0, 
+      2
     ],
     "lEquations": [
       "((8.0 * 18.0) - (6.0 * 6.0))"
     ],
     "lSolutions": [
       108.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857213,
-    "sQuestion": "A group of science students went on a field trip. They took 6.0 vans and 8.0 buses. There were 6.0 people in van and 18.0 people in each bus. How many people went on the field trip?",
-    "quants": [
-      6.0,
-      8.0,
-      6.0,
-      18.0
-    ],
-    "lAlignments": [
-      1,
-      3
-    ],
-    "lEquations": [
-      "((6.0 / 6.0) + (8.0 * 18.0))"
-    ],
-    "lSolutions": [
-      145.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857214,
-    "sQuestion": "A group of science students went on a field trip. They took 6.0 vans and 8.0 buses. There were 1 person in total in the vans and 18.0 people in each bus. How many people went on the field trip?",
-    "quants": [
-      6.0,
-      8.0,
-      1.0,
-      18.0
-    ],
-    "lAlignments": [
-      0,
-      0,
-      1,
-      3
-    ],
-    "lEquations": [
-      "((6.0 / 6.0) + (8.0 * 18.0))"
-    ],
-    "lSolutions": [
-      145.0
     ],
     "rates": []
   },
@@ -26421,29 +25383,8 @@
     "rates": []
   },
   {
-    "iIndex": 1232857216,
-    "sQuestion": "A group of science students went on a field trip. They took 6.0 ham sandwiches for each of 6.0 teachers, but the 18.0 cheese sandwiches that had been prepared for the students had been shared amongst 8.0 people before departure, with all apart from one share  being eaten already. How many sandwiches were available on the field trip?",
-    "quants": [
-      6.0,
-      6.0,
-      18.0,
-      8.0
-    ],
-    "lAlignments": [
-      2,
-      3
-    ],
-    "lEquations": [
-      "((6.0 * 6.0) + (18.0 / 8.0))"
-    ],
-    "lSolutions": [
-      38.25
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857217,
-    "sQuestion": "Carrie's mom gave her money to go shopping. She bought a jeans for $91.00, a sweater for $24.0, a T-shirt for $6.0, and a pair of shoes for $11.0. How much money gave Carrie's mom?",
+    "sQuestion": "Carrie's mom gave her money to go shopping. She bought a jeans for $91.00, a sweater for $24.0, a T-shirt for $6.0, and a pair of shoes for $11.0. How much money did Carrie spend ?",
     "quants": [
       91.0,
       24.0,
@@ -26535,21 +25476,19 @@
   },
   {
     "iIndex": 1232857222,
-    "sQuestion": "Part 1 : Kylie was collecting coins. She got 15.0 coins from her piggy bank and 13.0 coins from her brother. Her father gave Kylie 8.0 coins. Kylie gave 21.0 of the coins to her friend Laura. How many coins did Kylie have left?\nPart 2 :(((15.0 + 13.0) + 8.0) + 21.0)=57.0",
+    "sQuestion": "Kylie was collecting coins. She got 15.0 coins from her piggy bank and 13.0 coins from her brother. Her father gave Kylie 8.0 coins. Laura gave 21.0 coins to Kylie. How many coins did Kylie have left?",
     "quants": [
-      1.0,
       15.0,
       13.0,
       8.0,
-      21.0,
-      2.0,
-      15.0,
-      13.0,
-      8.0,
-      21.0,
-      57.0
+      21.0
     ],
-    "lAlignments": [],
+    "lAlignments": [
+      0,
+      1,
+      2,
+      3
+    ],
     "lEquations": [
       "(((15.0 + 13.0) + 8.0) + 21.0)"
     ],
@@ -26580,27 +25519,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232857224,
-    "sQuestion": "For Justin's birthday party, he needs 61.0 paper plates. He already has 26.0 blue plates and 7.0 red ones. How many more plates does Justin need for his party?",
-    "quants": [
-      61.0,
-      26.0,
-      7.0
-    ],
-    "lAlignments": [
-      0,
-      2,
-      1
-    ],
-    "lEquations": [
-      "((61.0 + 7.0) - 26.0)"
-    ],
-    "lSolutions": [
-      42.0
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857225,
     "sQuestion": "Justin has 61.0 paper plates for a birthday party. He broke 7.0 red plates already and received 26.0 blue plates from john. How many plates will Justin have altogether?",
     "quants": [
@@ -26623,7 +25541,7 @@
   },
   {
     "iIndex": 1232857226,
-    "sQuestion": "Mark's father gave him $85.0. Mark 10.0 books, each of which cost $5.0. How much money does Mark have left?",
+    "sQuestion": "Mark's father gave him $85.0. Mark sold 10.0 books, each of which cost $5.0. How much money does Mark have left?",
     "quants": [
       85.0,
       10.0,
@@ -26639,50 +25557,6 @@
     ],
     "lSolutions": [
       135.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857227,
-    "sQuestion": "Part 1 : Mark's father gave him $85.0. Mark bought 10.0 books, each of which cost $5.0. How much money does Mark have left?\nPart 2 :(85.0 - (10.0 / 5.0))=83.0",
-    "quants": [
-      1.0,
-      85.0,
-      10.0,
-      5.0,
-      2.0,
-      85.0,
-      10.0,
-      5.0,
-      83.0
-    ],
-    "lAlignments": [],
-    "lEquations": [
-      "(85.0 - (10.0 / 5.0))"
-    ],
-    "lSolutions": [
-      83.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857228,
-    "sQuestion": "Mark's father gave him $85. He bought 10 books each with a cost of $5. How much money does Mark have left?",
-    "quants": [
-      85.0,
-      10.0,
-      5.0
-    ],
-    "lAlignments": [
-      0,
-      2,
-      1
-    ],
-    "lEquations": [
-      "(85.0 - (5.0 / 10.0))"
-    ],
-    "lSolutions": [
-      84.5
     ],
     "rates": []
   },
@@ -26779,31 +25653,8 @@
     "rates": []
   },
   {
-    "iIndex": 1232857233,
-    "sQuestion": "A carton of ice cream costs $6.0 and a carton of yogurt costs $1. Seth bought 20.0 cartons of ice cream and 2.0 cartons of yogurt. How much more did Seth spend buying ice cream than yogurt?",
-    "quants": [
-      6.0,
-      1.0,
-      20.0,
-      2.0
-    ],
-    "lAlignments": [
-      2,
-      0,
-      3,
-      1
-    ],
-    "lEquations": [
-      "((20.0 / 6.0) - (2.0 * 1.0))"
-    ],
-    "lSolutions": [
-      1.3333333333333335
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857235,
-    "sQuestion": "Dalton wants to buy a jump rope that costs $7.0, a board game that costs $12.0, and a playground ball that costs $4.0. He also $6.0 to his sister and $13.0 to his uncle. How much money does Dalton need to buy the jump rope, the game, and the ball and repay his relatives?",
+    "sQuestion": "Dalton wants to buy a jump rope that costs $7.0, a board game that costs $12.0, and a playground ball that costs $4.0. He also needs to pay $6.0 to his sister and $13.0 to his uncle. How much money does Dalton need to buy the jump rope, the game, and the ball and repay his relatives?",
     "quants": [
       7.0,
       12.0,
@@ -26828,7 +25679,7 @@
   },
   {
     "iIndex": 1232857236,
-    "sQuestion": "Dalton wants to buy a jump rope that costs $7.0, a board game that costs $12.0, and a playground ball that costs $4.0. He has saved $6.0 from his allowance, and his uncle asked him $13.0. How much more money does Dalton need to buy the jump rope, the game, and the ball?",
+    "sQuestion": "Dalton wants to buy a jump rope that costs $7.0, a board game that costs $12.0, and a playground ball that costs $4.0. He has saved $6.0 from his allowance, and his uncle asked him for $13.0. How much more money does Dalton need to buy the jump rope, the game, and the ball?",
     "quants": [
       7.0,
       12.0,
@@ -26852,33 +25703,8 @@
     "rates": []
   },
   {
-    "iIndex": 1232857237,
-    "sQuestion": "Dalton wants to buy a jump rope that costs $7.0, a board game that costs $13.0, and a playground ball that costs $4.0. He has saved $6.0 from his allowance, and his uncle gave him $12.0. How much more money does Dalton need to buy the jump rope, the game, and the ball?",
-    "quants": [
-      7.0,
-      13.0,
-      4.0,
-      6.0,
-      12.0
-    ],
-    "lAlignments": [
-      0,
-      4,
-      2,
-      3,
-      1
-    ],
-    "lEquations": [
-      "((((7.0 + 12.0) + 4.0) + 6.0) - 13.0)"
-    ],
-    "lSolutions": [
-      16.0
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857238,
-    "sQuestion": "Vincent bought 10.0 books about animals, 1.0 book about outer space, and 3.0 books about trains. He paid $16.0 for alle the books combined. What was the average price for one book?",
+    "sQuestion": "Vincent bought 10.0 books about animals, 1.0 book about outer space, and 3.0 books about trains. He paid $16.0 for all the books combined. What was the average price for one book?",
     "quants": [
       10.0,
       1.0,
@@ -26965,206 +25791,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232857243,
-    "sQuestion": "Priya has 15.0 chocolate cupcakes and 25.0 vanilla cupcakes. She needs 54.0 cupcakes for a birthday party. How many more cupcakes does Priya need?",
-    "quants": [
-      15.0,
-      25.0,
-      54.0
-    ],
-    "lAlignments": [
-      2,
-      0,
-      1
-    ],
-    "lEquations": [
-      "((54.0 + 15.0) - 25.0)"
-    ],
-    "lSolutions": [
-      44.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857244,
-    "sQuestion": "Maria needs 21.0 cartons of berries to make a berry cobbler. She  buy 8.0 cartons of and 4.0 cartons of blueberries. How many more cartons of berries should Maria buy?",
-    "quants": [
-      21.0,
-      8.0,
-      4.0
-    ],
-    "lAlignments": [
-      0,
-      2,
-      1
-    ],
-    "lEquations": [
-      "(21.0 + (4.0 + 8.0))"
-    ],
-    "lSolutions": [
-      33.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857245,
-    "sQuestion": "Maria have 21.0 cartons of berries to make a berry cobbler. If she lost 4.0 cartons of strawberries and 8.0 cartons of blueberries. How many cartons of berries does Maria have?",
-    "quants": [
-      21.0,
-      4.0,
-      8.0
-    ],
-    "lAlignments": [
-      0,
-      2,
-      1
-    ],
-    "lEquations": [
-      "((21.0 + 8.0) - 4.0)"
-    ],
-    "lSolutions": [
-      25.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857246,
-    "sQuestion": "Maria needs 21.0 cartons of berries to make a berry cobbler. She already has 8.0 cartons of blueberries and needs 4.0 cartons of strawberries. How many more cartons of berries should Maria buy?",
-    "quants": [
-      21.0,
-      8.0,
-      4.0
-    ],
-    "lAlignments": [
-      0,
-      2,
-      1
-    ],
-    "lEquations": [
-      "((21.0 + 4.0) - 8.0)"
-    ],
-    "lSolutions": [
-      17.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857247,
-    "sQuestion": "Danny's apartment building has a storage area. In the storage area there are 24.0 bicycles and 14.0 tricycles. Each of the bicycles has 2.0 wheels, and each of the tricycles has 3.0 wheels. How many wheels are there in total?",
-    "quants": [
-      24.0,
-      14.0,
-      2.0,
-      3.0
-    ],
-    "lAlignments": [
-      0,
-      2,
-      1,
-      3
-    ],
-    "lEquations": [
-      "((24.0 * 2.0) - (14.0 * 3.0))"
-    ],
-    "lSolutions": [
-      6.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857248,
-    "sQuestion": "In the storage area of Danny's apartment, there are 24.0 bicycles and 14.0 tricycles.There are 2.0 wheels on each bicycle and  3.0 wheels on each tricycle. How many wheels are there all together?",
-    "quants": [
-      24.0,
-      14.0,
-      2.0,
-      3.0
-    ],
-    "lAlignments": [
-      0,
-      2,
-      1,
-      3
-    ],
-    "lEquations": [
-      "((24.0 / 2.0) + (14.0 * 3.0))"
-    ],
-    "lSolutions": [
-      54.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857249,
-    "sQuestion": "There are 24.0 bicycles and 20 tricycles in the storage area at Danny's apartment building. Each bicycle has 14..0 wheels, and each tricycle has 3.0 wheels. How many wheels are there in all?",
-    "quants": [
-      24.0,
-      20.0,
-      14.0,
-      0.0,
-      3.0
-    ],
-    "lAlignments": [
-      0,
-      2,
-      4
-    ],
-    "lEquations": [
-      "((2.0 / 24.0) + (14.0 * 3.0))"
-    ],
-    "lSolutions": [
-      42.083333333333336
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857250,
-    "sQuestion": "There are 24.0 girls and 14.0 shorts in the storage area at Danny's apartment building. Each girl bought 2.0 shirts, and each boy need to take 3.0 shorts each. what the total number of bags that leaves the shop considering each person carries a for the clothing item bought?",
-    "quants": [
-      24.0,
-      14.0,
-      2.0,
-      3.0
-    ],
-    "lAlignments": [
-      0,
-      2,
-      1,
-      3
-    ],
-    "lEquations": [
-      "((24.0 * 2.0) + (14.0 / 3.0))"
-    ],
-    "lSolutions": [
-      52.666666666666664
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857251,
-    "sQuestion": "There are 24 bikes with 2 wheels each in Danny's apartment storage area. There are also 3 tricycles disassembled into pieces evenly across 14 boxes. What is the total of tricycle pieces in 1 box in addition to the number of bike wheels in the storage area?",
-    "quants": [
-      24.0,
-      2.0,
-      3.0,
-      14.0,
-      1.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "lEquations": [
-      "((24.0 * 2.0) + (3.0 / 14.0))"
-    ],
-    "lSolutions": [
-      48.214285714285715
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857252,
     "sQuestion": "Paula's aunt gave her $109.0 to spend on clothes at the mall. She had refunds for 2.0 shirts that cost $11.0 each and a pair of pants that cost $13.0. How much money does Paula have left to buy more clothes?",
     "quants": [
@@ -27189,16 +25815,16 @@
   },
   {
     "iIndex": 1232857253,
-    "sQuestion": "Paula's had $13.0 and her aunt gave her 109.0 to spend on clothes at the mall. She bought 2.0 shirts that cost $11.0 each and a pair of pants that cost $13.0. How much money does Paula have left to buy more clothes?",
+    "sQuestion": "Paula's had $13.0 and her aunt gave her 109.0 to spend on clothes at the mall. She bought 2.0 shirts that cost $11.0 each. How much money does Paula have left to buy more clothes?",
     "quants": [
       13.0,
       109.0,
       2.0,
-      11.0,
-      13.0
+      11.0
     ],
     "lAlignments": [
       1,
+      0,
       2,
       3
     ],
@@ -27211,31 +25837,8 @@
     "rates": []
   },
   {
-    "iIndex": 1232857256,
-    "sQuestion": "Paula's aunt gave her $109.0 to spend on clothes at the mall. She bought 2.0 shirts that cost $11.0 total and a pair of pants that cost $13.0. How much money does Paula have left to buy more clothes?",
-    "quants": [
-      109.0,
-      2.0,
-      11.0,
-      13.0
-    ],
-    "lAlignments": [
-      0,
-      2,
-      1,
-      3
-    ],
-    "lEquations": [
-      "(109.0 - ((11.0 / 2.0) + 13.0))"
-    ],
-    "lSolutions": [
-      90.5
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857257,
-    "sQuestion": "Mary has 9.0 yellow marbles, she gave Joan 3.0 yellow marbles. How many yellow marbles will Mary have left?",
+    "sQuestion": "Mary has 9.0 yellow marbles. She gave Joan 3.0 yellow marbles. How many yellow marbles will Mary have left?",
     "quants": [
       9.0,
       3.0
@@ -27249,25 +25852,6 @@
     ],
     "lSolutions": [
       6.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857258,
-    "sQuestion": "Jason gave away 9.0 Pokemon cards. He now has 4.0 Pokemon cards left. How many Pokemon cards did Jason have before giving any away?",
-    "quants": [
-      9.0,
-      4.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(9.0 - 4.0)"
-    ],
-    "lSolutions": [
-      5.0
     ],
     "rates": []
   },
@@ -27295,71 +25879,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232857260,
-    "sQuestion": "Adam bought 9.0 packages of cat food and 7.0 packages of dog food. Each packet of cat food contained 10.0 cans, and Adam divided each package of dog food five ways. How many more cans of cat food than dog food did Adam buy.",
-    "quants": [
-      9.0,
-      7.0,
-      10.0
-    ],
-    "lAlignments": [
-      0,
-      2,
-      1
-    ],
-    "lEquations": [
-      "((9.0 * 10.0) - (7.0 / 5.0))"
-    ],
-    "lSolutions": [
-      88.6
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857261,
-    "sQuestion": "Adam bought 9 packs of cat food and 7 packs of dog food. Each pack of cad food had 10 cans in it, and each pack of dog food had 5 cans in it. How many more cans of cat food did Adam buy compared to dog food.",
-    "quants": [
-      9.0,
-      7.0,
-      10.0,
-      5.0
-    ],
-    "lAlignments": [
-      0,
-      2,
-      3,
-      1
-    ],
-    "lEquations": [
-      "((9.0 * 10.0) - (5.0 / 7.0))"
-    ],
-    "lSolutions": [
-      89.28571428571429
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857262,
-    "sQuestion": "It costs 2.0 tickets to ride the Ferris wheel, 7.0 tickets to ride the roller coaster and 1.0 ticket to ride the log ride. Zach wants to ride the Ferris wheel, the roller coaster and the log ride, but he only has 1.0 ticket. How many more tickets does Zach need to buy?",
-    "quants": [
-      2.0,
-      7.0,
-      1.0,
-      1.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(((2.0 + 7.0) + 1.0) + 1.0)"
-    ],
-    "lSolutions": [
-      11.0
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857263,
     "sQuestion": "Zach wants to ride on the Ferris wheel and the roller coaster. The Ferris wheel costs 2.0 tickets, the roller coaster costs 7.0 tickets, and there is a discount of 1.0 ticket for going on multiple rides. Zach also has a newspaper coupon for a free 1.0  ticket. How many tickets did Zach need to buy to go on both rides?",
     "quants": [
@@ -27370,55 +25889,15 @@
     ],
     "lAlignments": [
       0,
-      1
+      1,
+      2,
+      3
     ],
     "lEquations": [
       "((2.0 + 7.0) - (1.0 + 1.0))"
     ],
     "lSolutions": [
       7.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857264,
-    "sQuestion": "Zach wants to ride the Ferris wheel, the roller coaster, and the log ride. The Ferris wheel costs 2 tickets, the roller coaster costs 7 tickets, and the log ride costs 1 ticket. Zach has 1 ticket. How many more tickets does Zach need to buy to go on the other rides?",
-    "quants": [
-      2.0,
-      7.0,
-      1.0,
-      1.0
-    ],
-    "lAlignments": [
-      1,
-      0
-    ],
-    "lEquations": [
-      "((7.0 + 1.0) - (2.0 + 1.0))"
-    ],
-    "lSolutions": [
-      5.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857266,
-    "sQuestion": "Maggie bought 4.0 packs of red bouncy balls, 8.0 packs of yellow bouncy balls, 4.0 packs of green bouncy balls. There were 10.0 bouncy balls in each package. How many bouncy balls did Maggie buy in all?",
-    "quants": [
-      4.0,
-      8.0,
-      4.0,
-      10.0
-    ],
-    "lAlignments": [
-      1,
-      3
-    ],
-    "lEquations": [
-      "(((4.0 + 8.0) - 4.0) * 10.0)"
-    ],
-    "lSolutions": [
-      80.0
     ],
     "rates": []
   },
@@ -27433,6 +25912,8 @@
     ],
     "lAlignments": [
       0,
+      2,
+      1,
       3
     ],
     "lEquations": [
@@ -27483,7 +25964,7 @@
   },
   {
     "iIndex": 1232857270,
-    "sQuestion": "If books came from all the 4.0 continents that Bryan had been into and he collected 122.0 books per continent, how many books came from each continent on average?",
+    "sQuestion": "If books came from all the 4.0 continents that Bryan had been into and he collected 122.0 books, how many books came from each continent on average?",
     "quants": [
       4.0,
       122.0
@@ -27502,7 +25983,7 @@
   },
   {
     "iIndex": 1232857271,
-    "sQuestion": "Bryan had 8.0 precious stones in his collection which he sold to his friend from the jewelry store. If all the stones were sold at 1785.0, how much money did Bryan get for every stone?",
+    "sQuestion": "Bryan had 8.0 precious stones in his collection which he sold to his friend from the jewelry store. If all the stones were sold at 1785.0 $, how much money did Bryan get for every stone?",
     "quants": [
       8.0,
       1785.0
@@ -27540,7 +26021,7 @@
   },
   {
     "iIndex": 1232857273,
-    "sQuestion": "After 6.0 days of harvesting. Lewis found they had 83.0 sacks of oranges. How many sacks of oranges do they harvest each day?",
+    "sQuestion": "After 6.0 days of harvesting, Lewis found they had 83.0 sacks of oranges. How many sacks of oranges do they harvest each day?",
     "quants": [
       6.0,
       83.0
@@ -27574,44 +26055,6 @@
     ],
     "lSolutions": [
       36.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857275,
-    "sQuestion": "At the circus the tickets cost 44.0 dollars each in the ticket booth. How much money does it cost to buy 7.0 tickets?",
-    "quants": [
-      44.0,
-      7.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(44.0 / 7.0)"
-    ],
-    "lSolutions": [
-      6.285714285714286
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857276,
-    "sQuestion": "The circus tent has 4 sections for the audience. If each section can seat 246 people, how many people can the tent accommodate in total?",
-    "quants": [
-      4.0,
-      246.0
-    ],
-    "lAlignments": [
-      1,
-      0
-    ],
-    "lEquations": [
-      "(246.0 / 4.0)"
-    ],
-    "lSolutions": [
-      61.5
     ],
     "rates": []
   },
@@ -27654,106 +26097,21 @@
     "rates": []
   },
   {
-    "iIndex": 1232857280,
-    "sQuestion": "The library has books everyone. How would you count them all?",
-    "quants": [],
-    "lAlignments": [],
-    "lEquations": [
-      "(478.0 / 8.0)"
-    ],
-    "lSolutions": [
-      59.75
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857281,
-    "sQuestion": "Jack has a section filled with short story booklets. If there are 49.0 booklets in the short story section, and Jack needs to share them out equally between himself and 8 other friends, how many booklets will Jack end up with?",
+    "sQuestion": "Jack has a section filled with short story booklets. If there are 49.0 booklets in the short story section, and Jack needs to share them out equally among 9 friends, how many booklets will each end up with?",
     "quants": [
       49.0,
-      8.0
+      9.0
     ],
     "lAlignments": [
-      0
+      0,
+      1
     ],
     "lEquations": [
       "(49.0 / 9.0)"
     ],
     "lSolutions": [
       5.444444444444445
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857282,
-    "sQuestion": "The mini library also has a section for the classics. If Jack has 33.0 books by 6 different authors, how many will he place on each shelf, assuming they are evenly split?",
-    "quants": [
-      33.0,
-      6.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(33.0 / 6.0)"
-    ],
-    "lSolutions": [
-      5.5
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857283,
-    "sQuestion": "She counted her crayons and found out that she has 80.0 crayons which she will place in crayon boxes. Every box can contain 8.0 crayons. How many boxes does she fill?",
-    "quants": [
-      80.0,
-      8.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(80.0 * 8.0)"
-    ],
-    "lSolutions": [
-      640.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857284,
-    "sQuestion": "Sam has 5 apples. He got 4 apples from Adam. How many does he have now ?",
-    "quants": [
-      5.0,
-      4.0
-    ],
-    "lAlignments": [],
-    "lEquations": [
-      "(700.0 * 100.0)"
-    ],
-    "lSolutions": [
-      70000.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857285,
-    "sQuestion": "Lexies has 32.0 watercolor paintings. Her mom wanted to place an equal number of paintings in the 4.0 rooms in the house. How many paintings were to be placed in each room?",
-    "quants": [
-      32.0,
-      4.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(32.0 * 4.0)"
-    ],
-    "lSolutions": [
-      128.0
     ],
     "rates": []
   },
@@ -27773,25 +26131,6 @@
     ],
     "lSolutions": [
       729.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857287,
-    "sQuestion": "The junior ranger asked Christian to help him place 420.0 seedlings in packets. If every packet to contain 7.0 seeds, how many packets do they need?",
-    "quants": [
-      420.0,
-      7.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(420.0 * 7.0)"
-    ],
-    "lSolutions": [
-      2940.0
     ],
     "rates": []
   },
@@ -27835,13 +26174,13 @@
   },
   {
     "iIndex": 1232857292,
-    "sQuestion": "Shiela has 6.0 neighbors who like to collect animal drawings. Shiela drew 54.0 animals on small pieces of paper. If she gives 54.0 to each neighbor, how many did she give?",
+    "sQuestion": "Shiela has 6.0 neighbors who like to collect animal drawings. If she gives 54.0 to each neighbor, how many did she give?",
     "quants": [
       6.0,
-      54.0,
       54.0
     ],
     "lAlignments": [
+      1,
       0
     ],
     "lEquations": [
@@ -27849,44 +26188,6 @@
     ],
     "lSolutions": [
       324.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857293,
-    "sQuestion": "Shiela's brother like to play with blocks. She repainted all of his old blocks in different colors. If he has 49 identical blocks, and there is 7 blocks for every color of paint used how man blocks did she use?",
-    "quants": [
-      49.0,
-      7.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(49.0 * 7.0)"
-    ],
-    "lSolutions": [
-      343.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857294,
-    "sQuestion": "It has been tradition in Shiela’s home to hang a sock above the fireplace for each member of the family. This year, she placed a cinnamon ball every day in the socks for 50.0 of her family members. How long can she do this if she bought 5.0 cinnamon balls?",
-    "quants": [
-      50.0,
-      5.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(50.0 * 5.0)"
-    ],
-    "lSolutions": [
-      250.0
     ],
     "rates": []
   },
@@ -27906,25 +26207,6 @@
     ],
     "lSolutions": [
       648.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857296,
-    "sQuestion": "In Haley’s class, 35.0 are boys who love to play marbles. If Haley has 5.0 marbles, how many will each of the boys receive?",
-    "quants": [
-      35.0,
-      5.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(35.0 * 5.0)"
-    ],
-    "lSolutions": [
-      175.0
     ],
     "rates": []
   },
@@ -27949,7 +26231,7 @@
   },
   {
     "iIndex": 1232857298,
-    "sQuestion": "A large bag of balls was kept under Haley’s bed. Her mom placed the balls in bags for children in foster homes. If every bag can contain 4.0 balls, and Haley has 36.0 balls, how many balls total will be donated?",
+    "sQuestion": "A large bag of balls was kept under Haley’s bed. Her mom placed the balls in bags for children in foster homes. If every bag can contain 4.0 balls, and Haley has 36.0 bags, how many balls total will be donated?",
     "quants": [
       4.0,
       36.0
@@ -27963,25 +26245,6 @@
     ],
     "lSolutions": [
       144.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857299,
-    "sQuestion": "Haley has 63.0 magazines in her cabinet. She plans to send it to the recycling office in their area. If she places it in boxes which can contain 9.0 magazines, how many boxes will?",
-    "quants": [
-      63.0,
-      9.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(63.0 * 9.0)"
-    ],
-    "lSolutions": [
-      567.0
     ],
     "rates": []
   },
@@ -28005,44 +26268,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232857301,
-    "sQuestion": "Betty also bought 140.0 shiny blue round stones. If 14.0 pieces of this stone is in each bracelet, how many bracelets  will there be?",
-    "quants": [
-      140.0,
-      14.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(140.0 * 14.0)"
-    ],
-    "lSolutions": [
-      1960.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857302,
-    "sQuestion": "Brenda, Betty’s sister, wanted to have 3 bracelets with star-shaped stones. She also bought 36 star-shaped stones from the local store and gave them to Betty. How many star-shaped stones will there be in each of the bracelets Betty makes for Brenda?",
-    "quants": [
-      3.0,
-      36.0
-    ],
-    "lAlignments": [
-      1,
-      0
-    ],
-    "lEquations": [
-      "(36.0 * 3.0)"
-    ],
-    "lSolutions": [
-      108.0
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857303,
     "sQuestion": "Shannon is making bracelets. If she needs to make 48 bracelets with 8 heart-shaped stones each, how many stones will she need in all?",
     "quants": [
@@ -28058,82 +26283,6 @@
     ],
     "lSolutions": [
       384.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857304,
-    "sQuestion": "Brenda's mom baked cookies for 5.0 kids. She baked a total of 35.0 cookies. If each of Brenda's friends had the same amount of cookies, how many cookies did each friend have?",
-    "quants": [
-      5.0,
-      35.0
-    ],
-    "lAlignments": [
-      1,
-      0
-    ],
-    "lEquations": [
-      "(35.0 * 5.0)"
-    ],
-    "lSolutions": [
-      175.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857305,
-    "sQuestion": "Jane has 54.0 sunflower seeds and needs to place an equal number of seeds into 9.0 cans. How many seeds will she place into each can?",
-    "quants": [
-      54.0,
-      9.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(54.0 * 9.0)"
-    ],
-    "lSolutions": [
-      486.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857306,
-    "sQuestion": "Jane’s mom picked cherry tomatoes from their backyard. If she gathered 56.0 cherry tomatoes and is about to place them in small jars which can contain 8.0 cherry tomatoes at a time, how many jars will she need",
-    "quants": [
-      56.0,
-      8.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(56.0 * 8.0)"
-    ],
-    "lSolutions": [
-      448.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857307,
-    "sQuestion": "Jane was fixing lemonade and figured out that each glass needed 2 lemons. How many glasses of lemonade can be made with 18 lemons.",
-    "quants": [
-      2.0,
-      18.0
-    ],
-    "lAlignments": [
-      1,
-      0
-    ],
-    "lEquations": [
-      "(18.0 * 2.0)"
-    ],
-    "lSolutions": [
-      36.0
     ],
     "rates": []
   },
@@ -28157,81 +26306,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232857309,
-    "sQuestion": "Ellen had 380 lego pieces, but lost 57. How many legos is she left with now?",
-    "quants": [
-      380.0,
-      57.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(380.0 + 57.0)"
-    ],
-    "lSolutions": [
-      437.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857310,
-    "sQuestion": "Part 1 : Carla has some marbles. Carla bought 489.0 marbles. Now Carla has 2778.0 marbles all together. How many did Carla start with?\nPart 2 :(2778.0 + 489.0)=3267.0",
-    "quants": [
-      1.0,
-      489.0,
-      2778.0,
-      2.0,
-      2778.0,
-      489.0,
-      3267.0
-    ],
-    "lAlignments": [],
-    "lEquations": [
-      "(2778.0 + 489.0)"
-    ],
-    "lSolutions": [
-      3267.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857311,
-    "sQuestion": "Paco had 93.0 cookies. Paco ate 15.0 of them. How many cookies did Paco ate ?",
-    "quants": [
-      93.0,
-      15.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(93.0 + 15.0)"
-    ],
-    "lSolutions": [
-      108.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857312,
-    "sQuestion": "Sam has 5 apples. He got 4 apples from Adam. How many does he have now ?",
-    "quants": [
-      5.0,
-      4.0
-    ],
-    "lAlignments": [],
-    "lEquations": [
-      "(121.0 + 22.0)"
-    ],
-    "lSolutions": [
-      143.0
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857313,
     "sQuestion": "Connie had 593.0 marbles. Connie gave 183.0 to Juan.  How many did Connie have left?",
     "quants": [
@@ -28247,69 +26321,6 @@
     ],
     "lSolutions": [
       410.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857314,
-    "sQuestion": "Tony went to the baseball game with $20.0. He paid $8.0 for a ticket and later bought a hot dog for $3.0. How much money did he have left afterwards?",
-    "quants": [
-      20.0,
-      8.0,
-      3.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "(20.0 + (8.0 + 3.0))"
-    ],
-    "lSolutions": [
-      31.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857315,
-    "sQuestion": "Tony had $20. Tony paid $8 for a ticket to a baseball game. At the game, Tony bought a hot dog for $3. How much money does Tony have left?",
-    "quants": [
-      20.0,
-      8.0,
-      3.0
-    ],
-    "lAlignments": [
-      0,
-      2,
-      1
-    ],
-    "lEquations": [
-      "((20.0 + 3.0) - 8.0)"
-    ],
-    "lSolutions": [
-      15.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857316,
-    "sQuestion": "Tony had $20.0. Tony paid $3.0 for a ticket to a baseball game. At the game, Tony bought a hot dog for $8.0. What amount of money did Tony have then?",
-    "quants": [
-      20.0,
-      3.0,
-      8.0
-    ],
-    "lAlignments": [
-      0,
-      2,
-      1
-    ],
-    "lEquations": [
-      "((20.0 + 8.0) - 3.0)"
-    ],
-    "lSolutions": [
-      25.0
     ],
     "rates": []
   },
@@ -28335,7 +26346,7 @@
   },
   {
     "iIndex": 1232857318,
-    "sQuestion": "1,250  people visited the zoo on Friday. 3 times as many people visited on Saturday than on Friday. How many people visited the zoo on Saturday?",
+    "sQuestion": "1,250  people visited the zoo on Friday. 3 times as many people visited on Friday than on Saturday. How many people visited the zoo on Saturday?",
     "quants": [
       1250.0,
       3.0
@@ -28354,43 +26365,23 @@
   },
   {
     "iIndex": 1232857319,
-    "sQuestion": "In 1.0 week and airplane pilot flew 1134.0 miles on Tuesday and 1475.0 mils on Thursday.  He doesn't fly on Friday.  How many miles does the pilot average a day over a three-day period?",
+    "sQuestion": "In 1.0 week, an airplane pilot flew 1134.0 miles on Tuesday and 1475.0 miles on Thursday.  He doesn't fly on Friday.  How many miles does the pilot average a day over a 3-day period?",
     "quants": [
       1.0,
       1134.0,
-      1475.0
+      1475.0,
+      3.0
     ],
     "lAlignments": [
       1,
-      2
+      2,
+      3
     ],
     "lEquations": [
       "((1134.0 + 1475.0) / 3.0)"
     ],
     "lSolutions": [
       869.6666666666666
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857320,
-    "sQuestion": "In 1.0 week, an airplane pilot flew  1475.0  miles on Tuesday and 1134.0  miles on Thursday. If the pilot flies the same  miles 3.0 weeks in a row, how many miles does the pilot fly in all?",
-    "quants": [
-      1.0,
-      1475.0,
-      1134.0,
-      3.0
-    ],
-    "lAlignments": [
-      3,
-      1,
-      2
-    ],
-    "lEquations": [
-      "(3.0 * (1475.0 - 1134.0))"
-    ],
-    "lSolutions": [
-      1023.0
     ],
     "rates": []
   },
@@ -28414,87 +26405,6 @@
     "rates": []
   },
   {
-    "iIndex": 1232857322,
-    "sQuestion": "The Spurs basketball team has 22.0 players. The number of player is 11.0. How many basketballs will go round?",
-    "quants": [
-      22.0,
-      11.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(22.0 / 11.0)"
-    ],
-    "lSolutions": [
-      2.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857323,
-    "sQuestion": "Mrs. Hilt bakes bread. She needs 5 cups of flour to bake 2 loaves of bread. How much flour will she need for 1 loaf?",
-    "quants": [
-      5.0,
-      2.0,
-      1.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(5.0 * 2.0)"
-    ],
-    "lSolutions": [
-      10.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857324,
-    "sQuestion": "Mrs. Hilt saw a rollercoaster with 7 students every 5 minutes. How frightened is she for the kids?",
-    "quants": [
-      7.0,
-      5.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "((7.0 * 15.0) * 5.0)"
-    ],
-    "lSolutions": [
-      525.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857325,
-    "sQuestion": "Chris has been saving his allowance to buy a new pair of soccer cleats and a ball. His grandmother gave Chris $25 for his birthday. His aunt and uncle gave Chris $20, and his parents gave him $75. Now Chris had $279. How much money did Chris have before his birthday?",
-    "quants": [
-      25.0,
-      20.0,
-      75.0,
-      279.0
-    ],
-    "lAlignments": [
-      3,
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "(279.0 + ((25.0 + 20.0) + 75.0))"
-    ],
-    "lSolutions": [
-      399.0
-    ],
-    "rates": []
-  },
-  {
     "iIndex": 1232857326,
     "sQuestion": "Chris has been saving his allowance to buy a new pair of soccer cleats and a ball. His grandmother gave Chris $25.0 for his birthday. His aunt and uncle gave Chris $20.0 , and his parents took $75.0 from him. Now Chris had $279.0. How much money did Chris have before his birthday?",
     "quants": [
@@ -28514,75 +26424,6 @@
     ],
     "lSolutions": [
       309.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857327,
-    "sQuestion": "Chris had been saving his money for a new ball and soccer cleats. He got $25 for his birthday. $20 from his uncle, and $75 from his parents.In all Chris now had $279, how much money did he have before his birthday?",
-    "quants": [
-      25.0,
-      20.0,
-      75.0,
-      279.0
-    ],
-    "lAlignments": [
-      3,
-      0,
-      1,
-      2
-    ],
-    "lEquations": [
-      "((279.0 + (25.0 + 20.0)) - 75.0)"
-    ],
-    "lSolutions": [
-      249.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857328,
-    "sQuestion": "Chris has been saving his allowance to buy a new pair of soccer cleats and a ball. His grandmother gave Chris $279.0 for his birthday. His aunt and uncle gave Chris $20.0 , and his parents gave him $75.0. Now Chris had $25.0. How much money did Chris have before his birthday?",
-    "quants": [
-      279.0,
-      20.0,
-      75.0,
-      25.0
-    ],
-    "lAlignments": [
-      0,
-      1,
-      3,
-      2
-    ],
-    "lEquations": [
-      "((279.0 + 20.0) - (25.0 + 75.0))"
-    ],
-    "lSolutions": [
-      199.0
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857329,
-    "sQuestion": "Chris has been saving his allowance to buy a new pair of soccer cleats and a ball. His grandmother gave Chris $20.0 for his birthday. His brother borrowed $25.0 from Chris, and his parents collected$75.0 from him . So Chris was supposed to have saved up $279.0 all together. but How much money does Chris nowhave ?",
-    "quants": [
-      20.0,
-      25.0,
-      75.0,
-      279.0
-    ],
-    "lAlignments": [
-      3,
-      1,
-      0,
-      2
-    ],
-    "lEquations": [
-      "((279.0 + 25.0) - (20.0 + 75.0))"
-    ],
-    "lSolutions": [
-      209.0
     ],
     "rates": []
   },
@@ -28621,25 +26462,6 @@
     ],
     "lSolutions": [
       87.25
-    ],
-    "rates": []
-  },
-  {
-    "iIndex": 1232857332,
-    "sQuestion": "A 84.0 ounce can of cranberry juice sells for 12.0 cents. What is the cost in cents per ounce.",
-    "quants": [
-      84.0,
-      12.0
-    ],
-    "lAlignments": [
-      0,
-      1
-    ],
-    "lEquations": [
-      "(84.0 * 12.0)"
-    ],
-    "lSolutions": [
-      1008.0
     ],
     "rates": []
   }
