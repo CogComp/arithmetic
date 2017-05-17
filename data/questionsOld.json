@@ -6672,11 +6672,11 @@
       }
     ],
     "lAlignments": [
-      0,
-      1
+      2,
+      0
     ],
     "lEquations": [
-      "X=(9.0-3.0)"
+      "X=(15.0-9.0)"
     ],
     "lSolutions": [
       6.0
@@ -13256,13 +13256,14 @@
     ],
     "lAlignments": [
       0,
-      1
+      1,
+      2
     ],
     "lEquations": [
-      "X=(4.0*10.0)"
+      "X=((4.0*10.0)+6.0)"
     ],
     "lSolutions": [
-      40.0
+      46.0
     ]
   },
   {
@@ -13734,13 +13735,14 @@
     ],
     "lAlignments": [
       0,
-      1
+      1,
+      2
     ],
     "lEquations": [
-      "X=(3.0*4.0)"
+      "X=((3.0*4.0)-5.0)"
     ],
     "lSolutions": [
-      12.0
+      7.0
     ]
   },
   {
@@ -14415,13 +14417,14 @@
     ],
     "lAlignments": [
       0,
-      1
+      1,
+      2
     ],
     "lEquations": [
-      "X=(16.0+14.0)"
+      "X=((16.0+14.0)/5.0)"
     ],
     "lSolutions": [
-      30.0
+      6.0
     ]
   },
   {
@@ -16344,7 +16347,7 @@
   },
   {
     "iIndex": 907,
-    "sQuestion": " Rachel bought 2.0 coloring books. 1.0 had 23.0 pictures, and the other had 32.0. After 1.0 week she had already colored 44.0 of the pictures. How many pictures does she still have to color? ",
+    "sQuestion": " Rachel bought 2.0 coloring books. 1.0 had 23.0 pictures, and the other had 32.0. After 1.0 week, she had already colored 44.0 of the pictures. How many pictures does she still have to color? ",
     "quantities": [
       {
         "start": 15,
@@ -19360,7 +19363,7 @@
   },
   {
     "iIndex": 1220,
-    "sQuestion": " A pet store had 18.0 puppies. In 1.0 day they sold 3.0 of them and put the rest into cages with 5.0 in each cage. How many cages did they use? ",
+    "sQuestion": " A pet store had 18.0 puppies. In 1.0 day, they sold 3.0 of them and put the rest into cages with 5.0 in each cage. How many cages did they use? ",
     "quantities": [
       {
         "start": 17,
