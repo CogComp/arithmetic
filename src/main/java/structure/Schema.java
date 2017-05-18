@@ -165,7 +165,9 @@ public class Schema {
 					prob.ta.getToken(i).equalsIgnoreCase("per") ||
 					prob.ta.getToken(i).equalsIgnoreCase("every")) {
 				chunkId = QuantitySchema.getChunkIndex(prob, i+1);
-				questionSchema.rateUnit = prob.chunks.get(chunkId);
+				if(chunkId >= 0) {
+					questionSchema.rateUnit = prob.chunks.get(chunkId);
+				}
 			}
 		}
 

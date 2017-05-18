@@ -117,7 +117,7 @@ public class Driver {
             System.out.println("CV: " + cvFolds);
         }
         System.out.println("Model Dir: " + Params.modelDir);
-        System.out.println("*****************************************");
+        System.out.println("*****************************************\n\n");
 
         List<List<Integer>> cvIndices = new ArrayList<>();
         if(doCV) {

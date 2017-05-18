@@ -122,23 +122,25 @@ public class ConsInfSolver {
 			beam2.add(new Pair<>(state.getFirst(), state.getSecond()));
 		}
 		// Adding Run scores
-		beam1.clear();
-		beam1.addAll(beam2);
-		beam2.clear();
-		for(Pair<List<Node>, Double> state : beam1) {
-			beam2.add(new Pair<>(state.getFirst(), state.getSecond()+
-                getRunScore(quantities, state.getFirst().get(0), new ArrayList<Integer>(), runScores)));
-			for(int i=-1; i<quantities.size(); ++i) {
-				if(isRateListAllowable(state.getFirst().get(0), Arrays.asList(i))) {
-					beam2.add(new Pair<>(state.getFirst(), state.getSecond()+
-							getRunScore(quantities, state.getFirst().get(0), Arrays.asList(i), runScores)+
-							getRateScore(quantities, state.getFirst().get(0), Arrays.asList(i), rateScores)));
-				}
-				for(int j=i+1; j<quantities.size(); ++j) {
-					if(isRateListAllowable(state.getFirst().get(0), Arrays.asList(i, j))) {
-						beam2.add(new Pair<>(state.getFirst(), state.getSecond()+
-								getRunScore(quantities, state.getFirst().get(0), Arrays.asList(i, j), runScores)+
-								getRateScore(quantities, state.getFirst().get(0), Arrays.asList(i, j), rateScores)));
+		if(!Params.noUDG) {
+			beam1.clear();
+			beam1.addAll(beam2);
+			beam2.clear();
+			for (Pair<List<Node>, Double> state : beam1) {
+				beam2.add(new Pair<>(state.getFirst(), state.getSecond() +
+						getRunScore(quantities, state.getFirst().get(0), new ArrayList<Integer>(), runScores)));
+				for (int i = -1; i < quantities.size(); ++i) {
+					if (isRateListAllowable(state.getFirst().get(0), Arrays.asList(i))) {
+						beam2.add(new Pair<>(state.getFirst(), state.getSecond() +
+								getRunScore(quantities, state.getFirst().get(0), Arrays.asList(i), runScores) +
+								getRateScore(quantities, state.getFirst().get(0), Arrays.asList(i), rateScores)));
+					}
+					for (int j = i + 1; j < quantities.size(); ++j) {
+						if (isRateListAllowable(state.getFirst().get(0), Arrays.asList(i, j))) {
+							beam2.add(new Pair<>(state.getFirst(), state.getSecond() +
+									getRunScore(quantities, state.getFirst().get(0), Arrays.asList(i, j), runScores) +
+									getRateScore(quantities, state.getFirst().get(0), Arrays.asList(i, j), rateScores)));
+						}
 					}
 				}
 			}

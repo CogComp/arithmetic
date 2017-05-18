@@ -70,8 +70,11 @@ public class ConsDriver {
 	public static void tune(List<Problem> devProbs, int id) throws Exception {
 		SLModel relModel = SLModel.loadModel(Params.modelDir+Params.relPrefix+id+Params.modelSuffix);
 		SLModel pairModel = SLModel.loadModel(Params.modelDir+Params.pairPrefix+id+Params.modelSuffix);
-		SLModel runModel = SLModel.loadModel(Params.modelDir+Params.runPrefix+id+Params.modelSuffix);
-		SLModel rateModel = SLModel.loadModel(Params.modelDir+Params.ratePrefix+id+Params.modelSuffix);
+		SLModel runModel = null, rateModel = null;
+		if(!Params.noUDG) {
+			runModel = SLModel.loadModel(Params.modelDir + Params.runPrefix + id + Params.modelSuffix);
+			rateModel = SLModel.loadModel(Params.modelDir + Params.ratePrefix + id + Params.modelSuffix);
+		}
 		tune(devProbs, relModel, pairModel, runModel, rateModel);
 	}
 	
@@ -102,12 +105,14 @@ public class ConsDriver {
 		System.out.println("Training Pair model ... ");
 		PairDriver.trainModel(Params.modelDir+Params.pairPrefix+id+Params.modelSuffix,
 				PairDriver.getSP(split.get(0)));
-		System.out.println("Training Run model ... ");
-		RunDriver.trainModel(Params.modelDir+Params.runPrefix+id+Params.modelSuffix,
-				Annotations.getSP(split.get(0)));
-		System.out.println("Training Rate model ... ");
-		RateDriver.trainModel(Params.modelDir+Params.ratePrefix+id+Params.modelSuffix,
-				RateDriver.getSP(split.get(0)));
+		if(!Params.noUDG) {
+			System.out.println("Training Run model ... ");
+			RunDriver.trainModel(Params.modelDir + Params.runPrefix + id + Params.modelSuffix,
+					Annotations.getSP(split.get(0)));
+			System.out.println("Training Rate model ... ");
+			RateDriver.trainModel(Params.modelDir + Params.ratePrefix + id + Params.modelSuffix,
+					RateDriver.getSP(split.get(0)));
+		}
 		tune(split.get(1), id);
 		System.out.println("Tuned parameters");
 		System.out.println("wRate : "+ConsInfSolver.wRate);
@@ -122,12 +127,14 @@ public class ConsDriver {
 		System.out.println("Training Pair model ... ");
 		PairDriver.trainModel(Params.modelDir+Params.pairPrefix+id+Params.modelSuffix,
 				PairDriver.getSP(split.get(0)));
-		System.out.println("Training Run model ... ");
-		RunDriver.trainModel(Params.modelDir+Params.runPrefix+id+Params.modelSuffix,
-				Annotations.getSP(split.get(0)));
-		System.out.println("Training Rate model ... ");
-		RateDriver.trainModel(Params.modelDir+Params.ratePrefix+id+Params.modelSuffix,
-				RateDriver.getSP(split.get(0)));
+		if(!Params.noUDG) {
+			System.out.println("Training Run model ... ");
+			RunDriver.trainModel(Params.modelDir + Params.runPrefix + id + Params.modelSuffix,
+					Annotations.getSP(split.get(0)));
+			System.out.println("Training Rate model ... ");
+			RateDriver.trainModel(Params.modelDir + Params.ratePrefix + id + Params.modelSuffix,
+					RateDriver.getSP(split.get(0)));
+		}
 		return doTest(split.get(2), id);
 	}
  
