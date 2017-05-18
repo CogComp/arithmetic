@@ -309,7 +309,6 @@ public class Dataset {
 				newP += prob.id + "\n";
 			}
 		}
-
 		Collections.shuffle(indices);
 		double n = indices.size()*1.0 / 5;
 		for(int i=0; i<5; ++i) {
