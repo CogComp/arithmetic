@@ -94,6 +94,8 @@ public class Driver {
         if(dataFile == null) {
             Params.questionsFile = "data/questions.json";
             System.err.println("Data File not provided. Using data/questions.json");
+        } else {
+            Params.questionsFile = dataFile;
         }
         if(modelDir == null) {
             Params.modelDir = "models/";
@@ -103,7 +105,7 @@ public class Driver {
             Params.modelDir = modelDir+"/";
         }
         System.out.println("\n\n********* Command Details ***********");
-        System.out.println("DataFile: " + dataFile);
+        System.out.println("DataFile: " + Params.questionsFile);
         System.out.println("Mode: " + mode);
         if(trainFolds != null) {
             System.out.println("Train: " + Arrays.asList(trainFolds));
@@ -114,7 +116,7 @@ public class Driver {
         if(cvFolds != null) {
             System.out.println("CV: " + cvFolds);
         }
-        System.out.println("Model Dir: " + modelDir);
+        System.out.println("Model Dir: " + Params.modelDir);
         System.out.println("*****************************************");
 
         List<List<Integer>> cvIndices = new ArrayList<>();
