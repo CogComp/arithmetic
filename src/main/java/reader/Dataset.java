@@ -2,6 +2,7 @@ package reader;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
@@ -11,11 +12,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import run.Annotations;
 import structure.DataFormat;
 import structure.Node;
 import structure.QuantSpan;
-import utils.Params;
+import structure.StanfordProblem;
 import utils.Tools;
 
 public class Dataset {
@@ -25,8 +25,8 @@ public class Dataset {
 		String json = FileUtils.readFileToString(new File("data/questions.json"));
 		List<DataFormat> oldProbs = new Gson().fromJson(json,
 				new TypeToken<List<DataFormat>>(){}.getType());
-		Map<Integer, List<Integer>> rateAnns =
-				Annotations.readRateAnnotations(Params.ratesFile);
+		Map<Integer, List<Integer>> rateAnns = null;
+//				Annotations.readRateAnnotations(Params.ratesFile);
 		List<DataFormat> newProbs = new ArrayList<>();
 		for(DataFormat kushmanProb : oldProbs) {
 			DataFormat ks = new DataFormat();
@@ -34,6 +34,7 @@ public class Dataset {
 			ks.sQuestion = kushmanProb.sQuestion;
 			ks.lEquations = kushmanProb.lEquations;
 			ks.lSolutions = kushmanProb.lSolutions;
+			ks.lAlignments = kushmanProb.lAlignments;
 			ks.quants = new ArrayList<>();
 			for(QuantSpan qs : Tools.quantifier.getSpans(ks.sQuestion)) {
 				ks.quants.add(qs.val);
@@ -185,8 +186,48 @@ public class Dataset {
 		}
 		return expr.toString();
 	}
-	
-	public static void main(String args[]) throws Exception {
+
+	public static void makeExpressionEquation() throws IOException {
+		String json = FileUtils.readFileToString(new File("data/questionsNew.json"));
+		List<DataFormat> probs = new Gson().fromJson(json,
+				new TypeToken<List<DataFormat>>(){}.getType());
+		for(DataFormat prob : probs) {
+			if(prob.lEquations.get(0).contains("=")) continue;
+			prob.lEquations.add("X="+prob.lEquations.get(0));
+			prob.lEquations.remove(0);
+		}
+		Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+		json = gson.toJson(probs);
+		FileUtils.writeStringToFile(new File("data/questions.json"), json);
+	}
+
+	public static void addRateAnnotations() throws IOException {
+		String json = FileUtils.readFileToString(new File("data/questionsOld.json"));
+		List<DataFormat> oldProbs = new Gson().fromJson(json,
+				new TypeToken<List<DataFormat>>(){}.getType());
+		json = FileUtils.readFileToString(new File("data/questions.json"));
+		List<DataFormat> probs = new Gson().fromJson(json,
+				new TypeToken<List<DataFormat>>(){}.getType());
+		int count = 0;
+		for(DataFormat prob : probs) {
+			if(prob.lAlignments == null || prob.lAlignments.size() == 0) {
+				for(DataFormat oldProb : oldProbs) {
+					if(prob.iIndex == oldProb.iIndex) {
+						System.out.println("Alignment added from "+prob.iIndex);
+						prob.lAlignments = oldProb.lAlignments;
+						count++;
+						break;
+					}
+				}
+			}
+		}
+		System.out.println("Changes made: "+count);
+		Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+		json = gson.toJson(probs);
+		FileUtils.writeStringToFile(new File("data/questions.json"), json);
+	}
+
+	public static void combineTwoSetsToOneDataset() throws Exception {
 		List<DataFormat> probs1 = createDatasetFromOldFormat();
 		System.out.println("Probs1: "+probs1.size());
 		List<DataFormat> probs2 = createDatasetFromCrowdFlower("data/job_1012604.json");
@@ -197,6 +238,62 @@ public class Dataset {
 		Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
 		String json = gson.toJson(probs);
 		FileUtils.writeStringToFile(new File("data/questionsNew.json"), json);
+	}
+
+	public static void consistencyChecks() throws Exception {
+		String json = FileUtils.readFileToString(new File("data/questions.json"));
+		List<DataFormat> kushmanProbs = new Gson().fromJson(json,
+				new TypeToken<List<DataFormat>>(){}.getType());
+//		for(DataFormat prob : probs) {
+//			Node expr = Node.parseNode(prob.lEquations.get(0).split("=")[1].trim());
+//			if(expr.getLeaves().size() != prob.lAlignments.size()) {
+//				System.out.println("Id: "+prob.iIndex);
+//			}
+//		}
+		List<StanfordProblem> probs = Reader.readStanfordProblemsFromJson();
+		for(int i=0; i<probs.size(); ++i) {
+			StanfordProblem prob = probs.get(i);
+			DataFormat df = kushmanProbs.get(i);
+			List<Node> leaves = prob.expr.getLeaves();
+			if(leaves.size() != df.lAlignments.size()) {
+				System.out.println("Alignment size mismatch "+prob.id);
+			}
+			if(df.quants.size() != prob.quantities.size()) {
+				System.out.println("Number list size mismatch "+prob.id);
+			}
+			if(df.quants.size() == prob.quantities.size()) {
+				for(int j=0; j<prob.quantities.size(); ++j) {
+					if(!Tools.safeEquals(prob.quantities.get(j).val, df.quants.get(j))) {
+						System.out.println("Number not matching "+prob.id);
+					}
+				}
+			}
+			if(leaves.size() == df.lAlignments.size()) {
+				for (int j = 0; j < leaves.size(); ++j) {
+					if(!Tools.safeEquals(leaves.get(j).val,
+							prob.quantities.get(df.lAlignments.get(j)).val)) {
+						System.out.println("Alignment entry does not match number "+prob.id);
+					}
+				}
+			}
+			if(!Tools.safeEquals(prob.expr.getValue(), prob.answer)) {
+				System.out.println("Answer not matching with expression "+prob.id);
+			}
+			for(Node node : prob.expr.getAllSubNodes()) {
+				if(node.label.equals("MUL") || node.label.equals("DIV")) {
+					if(prob.rates.size() == 0) {
+						System.out.println("Rates absent "+prob.id);
+						break;
+					}
+				}
+			}
+		}
+		System.out.println("Problems read: "+probs.size());
+	}
+
+	public static void main(String args[]) throws Exception {
+		Tools.initStanfordTools();
+		consistencyChecks();
 	}
  	
 }

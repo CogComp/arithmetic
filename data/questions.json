@@ -17815,6 +17815,7 @@
       33.0
     ],
     "lAlignments": [
+      0,
       1
     ],
     "lEquations": [
@@ -18599,13 +18600,14 @@
   },
   {
     "iIndex": 1232856482,
-    "sQuestion": "6522.0 liters  of oil,  minus 5156.0 liters of oil, leaked into the water from a broken oil pipe in the sea. How many liters of oil were leaked into the water?",
+    "sQuestion": "6522.0 liters  of oil,  minus 5165.0 liters of oil, leaked into the water from a broken oil pipe in the sea. How many liters of oil were leaked into the water?",
     "quants": [
       6522.0,
-      5156.0
+      5165.0
     ],
     "lAlignments": [
-      0
+	0,
+	1
     ],
     "lEquations": [
       "X=(6522.0 - 5165.0)"
@@ -18731,12 +18733,15 @@
   },
   {
     "iIndex": 1232856490,
-    "sQuestion": "A dust storm sweeps across the prairie. It covers 6435.0 acres of the prairie in the dust, and leaves 552.0 acres untouched.  How many acres are in the prarie?",
+    "sQuestion": "A dust storm sweeps across the prairie. It covers 64535.0 acres of the prairie in the dust, and leaves 522.0 acres untouched.  How many acres are in the prarie?",
     "quants": [
-      6435.0,
-      552.0
+      64535.0,
+      522.0
     ],
-    "lAlignments": [],
+      "lAlignments": [
+	  0,
+	  1
+      ],
     "lEquations": [
       "X=(64535.0 + 522.0)"
     ],
@@ -19413,13 +19418,14 @@
   },
   {
     "iIndex": 1232856528,
-    "sQuestion": "On a hot day , Sam poured 8.9 buckets of water into a plastic wading pool . A few minutes later he removed 1.0 buckets of water . How much water did Sam pour into the pool ?",
+    "sQuestion": "On a hot day , Sam poured 8.8 buckets of water into a plastic wading pool . A few minutes later he removed 1.0 buckets of water . How much water did Sam pour into the pool ?",
     "quants": [
-      8.9,
+      8.8,
       1.0
     ],
-    "lAlignments": [
-      1
+      "lAlignments": [
+	  0,
+	  1
     ],
     "lEquations": [
       "X=(8.8 - 1.0)"
@@ -19940,8 +19946,9 @@
       57.0,
       41.0
     ],
-    "lAlignments": [
-      2
+      "lAlignments": [
+	  1,
+	  2
     ],
     "lEquations": [
       "X=(57.0 - 41.0)"
@@ -20804,16 +20811,16 @@
   },
   {
     "iIndex": 1232856607,
-    "sQuestion": "There were 13.0 soccer games this year, but Alyssa missed to go to 11.0 of them. She went to 15.0 games last year and plans to go to 15.0 games next year . How many soccer games will Alyssa go to?",
+    "sQuestion": "There were 13.0 soccer games this year, but Alyssa missed to go to 11.0 of them. She plans to go to 15.0 games next year . How many soccer games will Alyssa go to?",
     "quants": [
       13.0,
       11.0,
-      15.0,
       15.0
     ],
     "lAlignments": [
-      0,
-      1
+	0,
+	2,
+	1
     ],
     "lEquations": [
       "X=((13.0 + 15.0) - 11.0)"
@@ -20832,9 +20839,10 @@
       16.0,
       10.0
     ],
-    "lAlignments": [
-      1,
-      2
+      "lAlignments": [
+	  0,
+	  1,
+	  2
     ],
     "lEquations": [
       "X=((10.0 + 46.0) - 16.0)"
@@ -20854,8 +20862,9 @@
       10.0
     ],
     "lAlignments": [
-      0,
-      2
+	0,
+	2,
+	1
     ],
     "lEquations": [
       "X=((46.0 + 16.0) - 10.0)"
@@ -21530,7 +21539,7 @@
     "lSolutions": [
       1.5
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856645,
@@ -21549,7 +21558,7 @@
     "lSolutions": [
       3.0
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856646,
@@ -21568,7 +21577,7 @@
     "lSolutions": [
       1.3333333333333333
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856647,
@@ -21587,7 +21596,7 @@
     "lSolutions": [
       1.4
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856649,
@@ -21606,7 +21615,7 @@
     "lSolutions": [
       5.0
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856650,
@@ -21625,16 +21634,18 @@
     "lSolutions": [
       28.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856651,
-    "sQuestion": "Betty has three boxes containing 24 oranges each. How many oranges does Betty have?",
-    "quants": [
-      24.0
+    "sQuestion": "Betty has 3.0 boxes containing 24 oranges each. How many oranges does Betty have?",
+      "quants": [
+	  3.0,
+	  24.0
     ],
     "lAlignments": [
-      0
+	1,
+	0
     ],
     "lEquations": [
       "X=(24.0 * 3.0)"
@@ -21642,7 +21653,7 @@
     "lSolutions": [
       72.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856652,
@@ -21661,7 +21672,7 @@
     "lSolutions": [
       36.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856653,
@@ -21680,7 +21691,7 @@
     "lSolutions": [
       245.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856654,
@@ -21699,7 +21710,7 @@
     "lSolutions": [
       24.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856655,
@@ -21718,7 +21729,7 @@
     "lSolutions": [
       48.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856656,
@@ -21737,7 +21748,7 @@
     "lSolutions": [
       63.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856657,
@@ -21746,14 +21757,17 @@
       12.0,
       12.0
     ],
-    "lAlignments": [],
+      "lAlignments": [
+	  0,
+	  1
+      ],
     "lEquations": [
       "X=(12.0 * 12.0)"
     ],
     "lSolutions": [
       144.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856658,
@@ -21772,7 +21786,7 @@
     "lSolutions": [
       432.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856659,
@@ -21791,7 +21805,7 @@
     "lSolutions": [
       45.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856660,
@@ -21810,7 +21824,7 @@
     "lSolutions": [
       192.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856661,
@@ -21829,7 +21843,7 @@
     "lSolutions": [
       100.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856662,
@@ -21848,7 +21862,7 @@
     "lSolutions": [
       80.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856663,
@@ -21867,7 +21881,7 @@
     "lSolutions": [
       324.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856664,
@@ -22104,7 +22118,7 @@
     "lSolutions": [
       3.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856677,
@@ -22124,7 +22138,7 @@
     "lSolutions": [
       320.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232856678,
@@ -22164,7 +22178,7 @@
     "lSolutions": [
       200.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856680,
@@ -22203,7 +22217,7 @@
     "lSolutions": [
       1.5
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856683,
@@ -22222,7 +22236,7 @@
     "lSolutions": [
       18.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856685,
@@ -22241,7 +22255,7 @@
     "lSolutions": [
       72.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856686,
@@ -22260,7 +22274,7 @@
     "lSolutions": [
       144.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856687,
@@ -22279,7 +22293,7 @@
     "lSolutions": [
       80.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856688,
@@ -22298,7 +22312,7 @@
     "lSolutions": [
       1280.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856689,
@@ -22317,7 +22331,7 @@
     "lSolutions": [
       800.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856690,
@@ -22355,7 +22369,7 @@
     "lSolutions": [
       20.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856692,
@@ -22374,26 +22388,26 @@
     "lSolutions": [
       125.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856693,
     "sQuestion": "If Benjamin skated at 80.0 kilometers per hour, how far would Benjamin skate in 10 hours?",
     "quants": [
-      10.0,
       80.0,
       10.0
     ],
-    "lAlignments": [
-      1
-    ],
+      "lAlignments": [
+	  0,
+	  1
+      ],
     "lEquations": [
       "X=(80.0 * 10.0)"
     ],
     "lSolutions": [
       800.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856694,
@@ -22412,7 +22426,7 @@
     "lSolutions": [
       320.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856695,
@@ -22431,7 +22445,7 @@
     "lSolutions": [
       12.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856697,
@@ -22507,7 +22521,7 @@
     "lSolutions": [
       3.0
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856701,
@@ -22640,7 +22654,7 @@
     "lSolutions": [
       1.6666666666666667
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856708,
@@ -22659,7 +22673,7 @@
     "lSolutions": [
       1.5
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856709,
@@ -22697,7 +22711,7 @@
     "lSolutions": [
       1.6666666666666667
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856712,
@@ -23195,7 +23209,7 @@
     "lSolutions": [
       1.5
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856741,
@@ -23861,7 +23875,7 @@
     "lSolutions": [
       2.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856778,
@@ -24127,7 +24141,7 @@
     "lSolutions": [
       49.5
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856793,
@@ -24184,7 +24198,7 @@
     "lSolutions": [
       8.333333333333334
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856796,
@@ -24203,7 +24217,7 @@
     "lSolutions": [
       250.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856797,
@@ -24222,7 +24236,7 @@
     "lSolutions": [
       2.6666666666666665
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856798,
@@ -24241,7 +24255,7 @@
     "lSolutions": [
       2.3333333333333335
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856799,
@@ -24317,7 +24331,7 @@
     "lSolutions": [
       1.25
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856803,
@@ -24355,7 +24369,7 @@
     "lSolutions": [
       1.6666666666666667
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856805,
@@ -24545,7 +24559,7 @@
     "lSolutions": [
       33.083333333333336
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856815,
@@ -24564,7 +24578,7 @@
     "lSolutions": [
       1.9473684210526316
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856816,
@@ -24583,7 +24597,7 @@
     "lSolutions": [
       7.555555555555555
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856817,
@@ -24602,7 +24616,7 @@
     "lSolutions": [
       1.6875
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856818,
@@ -24640,7 +24654,7 @@
     "lSolutions": [
       3.466666666666667
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856820,
@@ -24697,7 +24711,7 @@
     "lSolutions": [
       11.347826086956522
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856823,
@@ -24716,7 +24730,7 @@
     "lSolutions": [
       2.625
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856824,
@@ -24735,7 +24749,7 @@
     "lSolutions": [
       10.821428571428571
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856826,
@@ -24754,7 +24768,7 @@
     "lSolutions": [
       1.6547619047619047
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856827,
@@ -24773,7 +24787,7 @@
     "lSolutions": [
       17.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856828,
@@ -24792,7 +24806,7 @@
     "lSolutions": [
       1.25
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856829,
@@ -24813,7 +24827,7 @@
     "lSolutions": [
       34.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856830,
@@ -24853,7 +24867,7 @@
     "lSolutions": [
       75.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856833,
@@ -24872,7 +24886,7 @@
     "lSolutions": [
       83.33333333333333
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856834,
@@ -24891,7 +24905,7 @@
     "lSolutions": [
       54.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856835,
@@ -24910,7 +24924,7 @@
     "lSolutions": [
       1573.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856836,
@@ -24948,7 +24962,7 @@
     "lSolutions": [
       750.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856838,
@@ -24967,7 +24981,7 @@
     "lSolutions": [
       240.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856839,
@@ -24986,7 +25000,7 @@
     "lSolutions": [
       2.4
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856840,
@@ -25005,7 +25019,7 @@
     "lSolutions": [
       4.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856841,
@@ -25025,7 +25039,7 @@
     "lSolutions": [
       1.75
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856843,
@@ -25044,7 +25058,7 @@
     "lSolutions": [
       12.0
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856844,
@@ -25063,7 +25077,7 @@
     "lSolutions": [
       30.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856845,
@@ -25082,7 +25096,7 @@
     "lSolutions": [
       25.0
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856847,
@@ -25101,7 +25115,7 @@
     "lSolutions": [
       189.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856848,
@@ -25120,7 +25134,7 @@
     "lSolutions": [
       320.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856849,
@@ -25141,7 +25155,7 @@
     "lSolutions": [
       17.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856851,
@@ -25160,7 +25174,7 @@
     "lSolutions": [
       36.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856852,
@@ -25179,7 +25193,7 @@
     "lSolutions": [
       1008.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856853,
@@ -25217,7 +25231,7 @@
     "lSolutions": [
       2.2
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856855,
@@ -25236,7 +25250,7 @@
     "lSolutions": [
       768.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856856,
@@ -25247,7 +25261,8 @@
       6.0
     ],
     "lAlignments": [
-      1
+	1,
+	0
     ],
     "lEquations": [
       "X=(71.0 / 6.0)"
@@ -25255,7 +25270,7 @@
     "lSolutions": [
       11.833333333333334
     ],
-    "rates": []
+      "rates": [0, 2]
   },
   {
     "iIndex": 1232856857,
@@ -25274,7 +25289,7 @@
     "lSolutions": [
       2592.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856858,
@@ -25293,7 +25308,7 @@
     "lSolutions": [
       1573.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856860,
@@ -25331,7 +25346,7 @@
     "lSolutions": [
       192.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856863,
@@ -25350,7 +25365,7 @@
     "lSolutions": [
       50.0
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856864,
@@ -25388,7 +25403,7 @@
     "lSolutions": [
       19.2
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856866,
@@ -25426,7 +25441,7 @@
     "lSolutions": [
       5.625
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856868,
@@ -25445,7 +25460,7 @@
     "lSolutions": [
       41.333333333333336
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856869,
@@ -25464,7 +25479,7 @@
     "lSolutions": [
       5.666666666666667
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856870,
@@ -25483,7 +25498,7 @@
     "lSolutions": [
       3.0
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856871,
@@ -25521,7 +25536,7 @@
     "lSolutions": [
       4.625
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856875,
@@ -25561,7 +25576,7 @@
     "lSolutions": [
       11.25
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856877,
@@ -25580,7 +25595,7 @@
     "lSolutions": [
       4.25
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856879,
@@ -25599,7 +25614,7 @@
     "lSolutions": [
       7.5
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856880,
@@ -25713,7 +25728,7 @@
     "lSolutions": [
       1.9565217391304348
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856887,
@@ -25732,7 +25747,7 @@
     "lSolutions": [
       1.25
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856888,
@@ -25771,7 +25786,7 @@
     "lSolutions": [
       1.25
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856890,
@@ -25790,7 +25805,7 @@
     "lSolutions": [
       2.5833333333333335
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856891,
@@ -25810,7 +25825,7 @@
     "lSolutions": [
       1.5277777777777777
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856892,
@@ -25830,7 +25845,7 @@
     "lSolutions": [
       126.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856893,
@@ -25849,7 +25864,7 @@
     "lSolutions": [
       144.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856894,
@@ -25868,7 +25883,7 @@
     "lSolutions": [
       1200.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856895,
@@ -25887,7 +25902,7 @@
     "lSolutions": [
       36.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856896,
@@ -25906,7 +25921,7 @@
     "lSolutions": [
       126.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856899,
@@ -25925,7 +25940,7 @@
     "lSolutions": [
       2.0
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856902,
@@ -25944,7 +25959,7 @@
     "lSolutions": [
       7.0
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856904,
@@ -25963,7 +25978,7 @@
     "lSolutions": [
       11.5
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856906,
@@ -25983,7 +25998,7 @@
     "lSolutions": [
       4.0
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856907,
@@ -26003,7 +26018,7 @@
     "lSolutions": [
       5.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856908,
@@ -26022,7 +26037,7 @@
     "lSolutions": [
       9.88
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856910,
@@ -26042,7 +26057,7 @@
     "lSolutions": [
       26500.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232856912,
@@ -26099,7 +26114,7 @@
     "lSolutions": [
       113920.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856915,
@@ -26118,7 +26133,7 @@
     "lSolutions": [
       657.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856917,
@@ -26251,7 +26266,7 @@
     "lSolutions": [
       7308.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232856929,
@@ -26290,7 +26305,7 @@
     "lSolutions": [
       5.66
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856935,
@@ -26321,7 +26336,11 @@
       2.0,
       2.0
     ],
-    "lAlignments": [],
+      "lAlignments": [
+	  0,
+	  1,
+	  2
+      ],
     "lEquations": [
       "X=((2.0 + 2.0) + 2.0)"
     ],
@@ -26752,14 +26771,16 @@
   },
   {
     "iIndex": 1232856977,
-    "sQuestion": "Maria picked 48.0 carrots from her garden. If she threw out 15.0 of them and then threw away another 15.0 more the next day, how many carrots would she have left?",
+    "sQuestion": "Maria picked 48.0 carrots from her garden. If she threw out 15.0 of them and then threw away another 11.0 more the next day, how many carrots would she have left?",
     "quants": [
       48.0,
       15.0,
-      15.0
+      11.0
     ],
     "lAlignments": [
-      0
+	0,
+	1,
+	2
     ],
     "lEquations": [
       "X=(48.0 - (15.0 + 11.0))"
@@ -26798,9 +26819,11 @@
       2.0,
       5.0
     ],
-    "lAlignments": [
-      1
-    ],
+      "lAlignments": [
+	  0,
+	  2,
+	  1
+      ],
     "lEquations": [
       "X=((5.0 + 5.0) + 2.0)"
     ],
@@ -26954,7 +26977,7 @@
     "lSolutions": [
       20.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232856995,
@@ -26975,7 +26998,7 @@
     "lSolutions": [
       1.1111111111111112
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232856998,
@@ -26996,7 +27019,7 @@
     "lSolutions": [
       1.2
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857000,
@@ -27017,7 +27040,7 @@
     "lSolutions": [
       1.4
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857001,
@@ -27038,7 +27061,7 @@
     "lSolutions": [
       5.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232857004,
@@ -27059,7 +27082,7 @@
     "lSolutions": [
       1.1111111111111112
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857005,
@@ -27080,7 +27103,7 @@
     "lSolutions": [
       18.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857006,
@@ -27091,7 +27114,9 @@
       2.0
     ],
     "lAlignments": [
-      2
+	1,
+	2,
+	0
     ],
     "lEquations": [
       "X=((6.0 + 2.0) / 6.0)"
@@ -27099,7 +27124,7 @@
     "lSolutions": [
       1.3333333333333333
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857007,
@@ -27120,7 +27145,7 @@
     "lSolutions": [
       24.0
     ],
-    "rates": []
+      "rates": [1, 2]
   },
   {
     "iIndex": 1232857013,
@@ -27141,7 +27166,7 @@
     "lSolutions": [
       24.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857018,
@@ -27162,7 +27187,7 @@
     "lSolutions": [
       32.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232857020,
@@ -27184,7 +27209,7 @@
     "lSolutions": [
       0.5
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857021,
@@ -27205,7 +27230,7 @@
     "lSolutions": [
       25.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232857023,
@@ -27226,7 +27251,7 @@
     "lSolutions": [
       42.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857025,
@@ -27247,7 +27272,7 @@
     "lSolutions": [
       28.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857030,
@@ -27289,7 +27314,7 @@
     "lSolutions": [
       3.111111111111111
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232857034,
@@ -27310,7 +27335,7 @@
     "lSolutions": [
       3.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857037,
@@ -27331,7 +27356,7 @@
     "lSolutions": [
       567.0
     ],
-    "rates": []
+      "rates": [0, 1]
   },
   {
     "iIndex": 1232857043,
@@ -27352,7 +27377,7 @@
     "lSolutions": [
       64.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857045,
@@ -27373,7 +27398,7 @@
     "lSolutions": [
       6.666666666666667
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232857049,
@@ -27394,7 +27419,7 @@
     "lSolutions": [
       98.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857060,
@@ -27415,7 +27440,7 @@
     "lSolutions": [
       115.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857064,
@@ -27425,8 +27450,10 @@
       5.0,
       5.0
     ],
-    "lAlignments": [
-      0
+      "lAlignments": [
+	  2,
+	  0,
+	  1
     ],
     "lEquations": [
       "X=(5.0 * (11.0 + 5.0))"
@@ -27434,7 +27461,7 @@
     "lSolutions": [
       80.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857066,
@@ -27455,28 +27482,28 @@
     "lSolutions": [
       2.0
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857076,
     "sQuestion": "At a restaurant, each meal costs $3.0 . If a group of 12.0 adults and 7.0 kids came in, how much would it cost for the group to eat?",
     "quants": [
       3.0,
-      3.0,
       12.0,
       7.0
     ],
-    "lAlignments": [
-      2,
-      3
-    ],
+      "lAlignments": [
+	  0,
+	  1,
+	  2
+      ],
     "lEquations": [
       "X=(3.0 * (12.0 + 7.0))"
     ],
     "lSolutions": [
       57.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232857080,
@@ -27497,7 +27524,7 @@
     "lSolutions": [
       168.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857084,
@@ -27518,7 +27545,7 @@
     "lSolutions": [
       153.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857085,
@@ -27539,7 +27566,7 @@
     "lSolutions": [
       1.6666666666666667
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857086,
@@ -27560,7 +27587,7 @@
     "lSolutions": [
       15.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232857088,
@@ -27581,7 +27608,7 @@
     "lSolutions": [
       1.4
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857092,
@@ -27602,7 +27629,7 @@
     "lSolutions": [
       180.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232857093,
@@ -27623,7 +27650,7 @@
     "lSolutions": [
       14.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857094,
@@ -27645,7 +27672,7 @@
     "lSolutions": [
       75.0
     ],
-    "rates": []
+    "rates": [3]
   },
   {
     "iIndex": 1232857095,
@@ -27667,7 +27694,7 @@
     "lSolutions": [
       4.2
     ],
-    "rates": []
+    "rates": [3]
   },
   {
     "iIndex": 1232857096,
@@ -27709,7 +27736,7 @@
     "lSolutions": [
       392.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857100,
@@ -27730,7 +27757,7 @@
     "lSolutions": [
       14.571428571428571
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857102,
@@ -27751,7 +27778,7 @@
     "lSolutions": [
       13.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857104,
@@ -27773,7 +27800,7 @@
     "lSolutions": [
       14.25
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857106,
@@ -27794,7 +27821,7 @@
     "lSolutions": [
       24.6
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857107,
@@ -27815,7 +27842,7 @@
     "lSolutions": [
       200.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857114,
@@ -27836,7 +27863,7 @@
     "lSolutions": [
       8.666666666666666
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857115,
@@ -27878,7 +27905,7 @@
     "lSolutions": [
       14.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857118,
@@ -27899,7 +27926,7 @@
     "lSolutions": [
       17.5
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857119,
@@ -27920,7 +27947,7 @@
     "lSolutions": [
       384.0
     ],
-    "rates": []
+      "rates": [0, 2]
   },
   {
     "iIndex": 1232857120,
@@ -27941,7 +27968,7 @@
     "lSolutions": [
       10.25
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857122,
@@ -27963,7 +27990,7 @@
     "lSolutions": [
       9.5
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232857123,
@@ -27984,7 +28011,7 @@
     "lSolutions": [
       648.0
     ],
-    "rates": []
+      "rates": [1, 2]
   },
   {
     "iIndex": 1232857125,
@@ -28005,7 +28032,7 @@
     "lSolutions": [
       128.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857128,
@@ -28026,7 +28053,7 @@
     "lSolutions": [
       10.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857129,
@@ -28047,7 +28074,7 @@
     "lSolutions": [
       256.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857130,
@@ -28068,7 +28095,7 @@
     "lSolutions": [
       7.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857131,
@@ -28089,7 +28116,7 @@
     "lSolutions": [
       80.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857132,
@@ -28110,7 +28137,7 @@
     "lSolutions": [
       15.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857133,
@@ -28167,7 +28194,7 @@
     "lSolutions": [
       225.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232857143,
@@ -28205,7 +28232,7 @@
     "lSolutions": [
       11700.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232857147,
@@ -28224,7 +28251,7 @@
     "lSolutions": [
       12696.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232857148,
@@ -28244,7 +28271,7 @@
     "lSolutions": [
       5491.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232857150,
@@ -28263,7 +28290,7 @@
     "lSolutions": [
       1.6666666666666667
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857158,
@@ -28321,7 +28348,7 @@
     "lSolutions": [
       2.0
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857163,
@@ -28342,7 +28369,7 @@
     "lSolutions": [
       11.740000000000002
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232857165,
@@ -28509,7 +28536,7 @@
     "lSolutions": [
       5.699999999999999
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232857177,
@@ -28532,7 +28559,7 @@
     "lSolutions": [
       33.599999999999994
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232857179,
@@ -28639,7 +28666,7 @@
     "lSolutions": [
       38.629999999999995
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232857188,
@@ -28662,7 +28689,7 @@
     "lSolutions": [
       14.95
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232857192,
@@ -28794,7 +28821,7 @@
     "lSolutions": [
       1.6923076923076923
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857206,
@@ -28817,7 +28844,7 @@
     "lSolutions": [
       52.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232857208,
@@ -28852,11 +28879,13 @@
       6.0,
       58.0
     ],
-    "lAlignments": [
-      1,
-      3,
-      4
-    ],
+      "lAlignments": [
+	  0,
+	  1,
+	  2,
+	  3,
+	  4
+      ],
     "lEquations": [
       "X=(((20.0 + 26.0) + 20.0) + (6.0 + 58.0))"
     ],
@@ -28875,7 +28904,13 @@
       6.0,
       58.0
     ],
-    "lAlignments": [],
+      "lAlignments": [
+	  0,
+	  1,
+	  2,
+	  3,
+	  4
+      ],
     "lEquations": [
       "X=((((20.0 + 26.0) + 20.0) + 6.0) - 58.0)"
     ],
@@ -28905,7 +28940,7 @@
     "lSolutions": [
       108.0
     ],
-    "rates": []
+      "rates": [2, 3]
   },
   {
     "iIndex": 1232857215,
@@ -28916,17 +28951,19 @@
       6.0,
       18.0
     ],
-    "lAlignments": [
-      1,
-      3
-    ],
+      "lAlignments": [
+	  0,
+	  2,
+	  1,
+	  3
+      ],
     "lEquations": [
       "X=((6.0 * 6.0) + (8.0 / 18.0))"
     ],
     "lSolutions": [
       36.44444444444444
     ],
-    "rates": []
+      "rates": [2, 3]
   },
   {
     "iIndex": 1232857217,
@@ -29104,7 +29141,7 @@
     "lSolutions": [
       135.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857229,
@@ -29196,7 +29233,7 @@
     "lSolutions": [
       122.0
     ],
-    "rates": []
+      "rates": [2, 3]
   },
   {
     "iIndex": 1232857235,
@@ -29269,7 +29306,7 @@
     "lSolutions": [
       1.1428571428571428
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857239,
@@ -29292,7 +29329,7 @@
     "lSolutions": [
       128.0
     ],
-    "rates": []
+    "rates": [3]
   },
   {
     "iIndex": 1232857241,
@@ -29357,7 +29394,7 @@
     "lSolutions": [
       144.0
     ],
-    "rates": []
+    "rates": [2]
   },
   {
     "iIndex": 1232857253,
@@ -29380,7 +29417,7 @@
     "lSolutions": [
       100.0
     ],
-    "rates": []
+    "rates": [3]
   },
   {
     "iIndex": 1232857257,
@@ -29422,7 +29459,7 @@
     "lSolutions": [
       125.0
     ],
-    "rates": []
+      "rates": [1, 3]
   },
   {
     "iIndex": 1232857263,
@@ -29468,7 +29505,7 @@
     "lSolutions": [
       80.0
     ],
-    "rates": []
+    "rates": [3]
   },
   {
     "iIndex": 1232857268,
@@ -29506,7 +29543,7 @@
     "lSolutions": [
       6.222222222222222
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857270,
@@ -29525,7 +29562,7 @@
     "lSolutions": [
       30.5
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857271,
@@ -29544,7 +29581,7 @@
     "lSolutions": [
       223.125
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857272,
@@ -29563,7 +29600,7 @@
     "lSolutions": [
       5.625
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857273,
@@ -29582,7 +29619,7 @@
     "lSolutions": [
       13.833333333333334
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857274,
@@ -29602,7 +29639,7 @@
     "lSolutions": [
       36.0
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857277,
@@ -29621,7 +29658,7 @@
     "lSolutions": [
       5.6
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857278,
@@ -29640,7 +29677,7 @@
     "lSolutions": [
       63.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232857281,
@@ -29659,7 +29696,7 @@
     "lSolutions": [
       5.444444444444445
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857286,
@@ -29697,7 +29734,7 @@
     "lSolutions": [
       150.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232857289,
@@ -29716,7 +29753,7 @@
     "lSolutions": [
       1600.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232857292,
@@ -29735,7 +29772,7 @@
     "lSolutions": [
       324.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232857295,
@@ -29754,7 +29791,7 @@
     "lSolutions": [
       648.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232857297,
@@ -29773,7 +29810,7 @@
     "lSolutions": [
       288.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232857298,
@@ -29792,7 +29829,7 @@
     "lSolutions": [
       144.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232857300,
@@ -29811,7 +29848,7 @@
     "lSolutions": [
       704.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232857303,
@@ -29830,7 +29867,7 @@
     "lSolutions": [
       384.0
     ],
-    "rates": []
+    "rates": [1]
   },
   {
     "iIndex": 1232857308,
@@ -29849,7 +29886,7 @@
     "lSolutions": [
       36.0
     ],
-    "rates": []
+    "rates": [0]
   },
   {
     "iIndex": 1232857313,
@@ -29888,7 +29925,7 @@
     "lSolutions": [
       8.5
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857318,
@@ -29929,7 +29966,7 @@
     "lSolutions": [
       869.6666666666666
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857321,
@@ -29990,7 +30027,7 @@
     "lSolutions": [
       1.75
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 1232857331,
