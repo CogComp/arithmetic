@@ -55,13 +55,18 @@ public class CorefDriver {
 	public static SLProblem getSP(List<StanfordProblem> problemList, boolean train)
 			throws Exception{
 		SLProblem problem = new SLProblem();
+		boolean reasonsFound = true;
 		for(StanfordProblem prob : problemList){
             if(prob.id == 793 || prob.id == 838 || prob.id == 777 ||
                     prob.id == 778 || prob.id == 837 || prob.id == 1600 ||
-					prob.id == 1610) continue;
+					prob.id == 1610 || prob.id == 1232857115 || prob.id == 1232856836 ||
+					prob.id == 1232856820 || prob.id == 1232856830 || prob.id == 1232857096 ||
+					prob.id == 1232857165 || prob.id == 1232857252) continue;
 			logic.LogicX x = new logic.LogicX(prob);
 			logic.LogicY y = new logic.LogicY(x, prob.expr, prob.rates);
 			List<Node> nodes = y.expr.getAllSubNodes();
+			List<CorefX> xList = new ArrayList<>();
+			List<CorefY> yList = new ArrayList<>();
             for(Node node : nodes) {
                 if(node.children.size() == 0) continue;
                 int quantLeft = node.children.get(0).quantIndex < node.children.get(1).quantIndex ?
@@ -75,8 +80,11 @@ public class CorefDriver {
                     label += "_REV";
                 }
                 CorefY logicY = new CorefY(label, null);
-                problem.addExample(logicX, logicY);
+				xList.add(logicX);
+				yList.add(logicY);
+				reasonsFound = true;
                 if(node.infRuleType == null) {
+					reasonsFound = false;
 					System.out.println("==========================================");
                     System.out.println(prob.id+" : "+prob.question);
                     System.out.println();
@@ -92,8 +100,14 @@ public class CorefDriver {
                     System.out.println("Quant of Interest: "+quantLeft+" "+quantRight);
                     System.out.println();
 					System.out.println("==========================================");
+					break;
                 }
             }
+            if(reasonsFound) {
+				for(int i=0; i<xList.size(); ++i) {
+					problem.addExample(xList.get(i), yList.get(i));
+				}
+			}
 		}
 		return problem;
 	}

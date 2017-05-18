@@ -61,7 +61,9 @@ public class LogicDriver {
 		for(StanfordProblem prob : problemList){
 			if(train && (prob.id == 793 || prob.id == 838 || prob.id == 777 ||
 					prob.id == 778 || prob.id == 837 || prob.id == 1600 ||
-					prob.id == 1610)) continue;
+					prob.id == 1610 || prob.id == 1232857115 || prob.id == 1232856836 ||
+					prob.id == 1232856820 || prob.id == 1232856830 || prob.id == 1232857096 ||
+					prob.id == 1232857165 || prob.id == 1232857252)) continue;
 			LogicX x = new LogicX(prob);
 			LogicY y = new LogicY(x, prob.expr, prob.rates);
 			problem.addExample(x, y);

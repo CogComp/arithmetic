@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
+import net.didion.jwnl.data.IndexWord;
+import org.apache.commons.collections.collection.CompositeCollection;
 import org.apache.commons.io.FileUtils;
 
 import com.google.gson.Gson;
@@ -291,9 +293,44 @@ public class Dataset {
 		System.out.println("Problems read: "+probs.size());
 	}
 
+	public static void createFoldFiles() throws Exception {
+		List<StanfordProblem> probs = Reader.readStanfordProblemsFromJson();
+		List<Integer> indices = new ArrayList<>();
+		List<Integer> oldIndices = new ArrayList<>();
+		List<Integer> newIndices = new ArrayList<>();
+		String oldP = "", newP = "";
+		for(StanfordProblem prob : probs) {
+			indices.add(prob.id);
+			if(prob.id < 100000) {
+				oldIndices.add(prob.id);
+				oldP += prob.id + "\n";
+			} else {
+				newIndices.add(prob.id);
+				newP += prob.id + "\n";
+			}
+		}
+
+		Collections.shuffle(indices);
+		double n = indices.size()*1.0 / 5;
+		for(int i=0; i<5; ++i) {
+			String str = "";
+			int min = (int)(i*n);
+			int max = (int)((i+1)*n);
+			if(i == 4) max = indices.size();
+			for(int j=min; j<max; ++j) {
+				str += indices.get(j) + "\n";
+			}
+			FileUtils.writeStringToFile(new File("fold"+i+".txt"), str);
+		}
+		FileUtils.writeStringToFile(new File("old.txt"), oldP);
+		FileUtils.writeStringToFile(new File("new.txt"), newP);
+	}
+
 	public static void main(String args[]) throws Exception {
 		Tools.initStanfordTools();
-		consistencyChecks();
+//		consistencyChecks();
+		createFoldFiles();
 	}
+
  	
 }

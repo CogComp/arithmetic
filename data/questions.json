@@ -24221,7 +24221,7 @@
   },
   {
     "iIndex": 1232856797,
-    "sQuestion": "Mrs. Hilt bought 3.0 pizzas for $8.0 each. What does every pizza cost on average?",
+    "sQuestion": "Mrs. Hilt bought 3.0 pizzas for a total of $8.0. What does every pizza cost on average?",
     "quants": [
       3.0,
       8.0
@@ -24236,7 +24236,7 @@
     "lSolutions": [
       2.6666666666666665
     ],
-    "rates": [1]
+    "rates": [-1]
   },
   {
     "iIndex": 1232856798,

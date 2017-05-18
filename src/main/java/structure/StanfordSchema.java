@@ -152,7 +152,8 @@ public class StanfordSchema {
 		}
 		boolean realMath = false;
 		for(int i=start; i<end; ++i) {
-			if(tokens.get(i).word().equals("as") || tokens.get(i).word().equals("than")) {
+			if(tokens.get(i).word().equals("as") || tokens.get(i).word().equals("than") ||
+					Logic.mulTokens.contains(tokens.get(math).word())) {
 				realMath = true;
 				break;
 			}

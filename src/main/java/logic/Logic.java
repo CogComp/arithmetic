@@ -116,10 +116,12 @@ public class Logic {
                 flipVerbOrder = true;
             }
         }
-        String before = tokens.get(num2.sentId).get(num2.verb-1).word().toLowerCase();
-        if(num2.verb >= 1 && (before.equals("not") || before.equals("hadn't") ||
-                before.equals("didn't"))) {
-            flipVerbOrder = true;
+        if(num2.verb >= 1) {
+            String before = tokens.get(num2.sentId).get(num2.verb - 1).word().toLowerCase();
+            if (num2.verb >= 1 && (before.equals("not") || before.equals("hadn't") ||
+                    before.equals("didn't"))) {
+                flipVerbOrder = true;
+            }
         }
         return  Logic.verb(
                 tokens.get(num1.sentId).get(num1.verb).lemma(),
