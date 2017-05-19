@@ -33,6 +33,7 @@ public class Node implements Serializable {
 		this();
 		this.quantIndex = quantindex;
 		this.qs = qs;
+		this.val = qs.val;
 		this.label = label;
 	}
 

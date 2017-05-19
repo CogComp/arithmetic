@@ -4,6 +4,8 @@ public class Params {
 	
 	public static String spConfigFile = "config/DCD.config";
 	public static boolean printMistakes = false;
+	public static boolean printCorrect = true;
+
 	public static String pipelineConfig = "config/pipeline.config";
 	
 	public static String patternsFile = "data/patterns.txt";

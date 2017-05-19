@@ -98,10 +98,14 @@ public class LogicDriver {
 							Tools.safeEquals(-gold.expr.getValue(), pred.expr.getValue()))) {
 				overAllAcc += 1;
 			}
+			boolean correct = false;
 			if(Tools.safeEquals(gold.expr.getValue(), pred.expr.getValue()) ||
 					Tools.safeEquals(-gold.expr.getValue(), pred.expr.getValue())) {
 				answerAcc += 1;
-			} else if(Params.printMistakes){
+				correct = true;
+			}
+			if((!correct && Params.printMistakes) ||
+					(correct && Params.printCorrect)) {
 				System.out.println(prob.problemId+" : "+prob.text);
 				for(List<CoreLabel> tokens : prob.tokens) {
 					for(CoreLabel token : tokens) {
