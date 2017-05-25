@@ -96,6 +96,31 @@ public class FeatGen {
 		}
 		return feats;
 	}
+
+	public static List<String> getUnigramBigramFeatures(
+			List<CoreLabel> tokens, int index, int window) {
+		List<String> feats = new ArrayList<>();
+		List<String> lemmas = new ArrayList<>();
+		int start = Math.max(0, index-window);
+		int end = Math.min(tokens.size()-1, index+window);
+		for(int i=start; i<=end; ++i) {
+//			if(tokens.get(i).tag().startsWith("N")) {
+//				lemmas.add("N");
+//			} else
+			if(tokens.get(i).tag().startsWith("CD")) {
+				lemmas.add("CD");
+			} else {
+				lemmas.add(tokens.get(i).lemma());
+			}
+		}
+		for(String tkn : lemmas) {
+			feats.add("Unigram_"+tkn);
+		}
+//		for(int i=0; i<lemmas.size()-1; ++i) {
+//			feats.add("Bigram_"+lemmas.get(i)+"_"+lemmas.get(i+1));
+//		}
+		return feats;
+	}
 	
 	public static List<String> getNeighborhoodFeatures(
 			TextAnnotation ta, List<Constituent> posTags, int index, int window) {

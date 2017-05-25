@@ -18,6 +18,7 @@ import structure.DataFormat;
 import structure.Node;
 import structure.QuantSpan;
 import structure.StanfordProblem;
+import utils.FeatGen;
 import utils.Tools;
 
 public class Dataset {
@@ -325,10 +326,68 @@ public class Dataset {
 		FileUtils.writeStringToFile(new File("new.txt"), newP);
 	}
 
+	public static void computePMI() throws Exception {
+		List<StanfordProblem> probs = Reader.readStanfordProblemsFromJson();
+		int newCount = 0;
+		Map<String, Integer> countsOp = new HashMap<>();
+		Map<String, Integer> countsFeats = new HashMap<>();
+		Map<String, Integer> countsJoint = new HashMap<>();
+		for(StanfordProblem prob : probs) {
+			if(prob.id < 10000) {
+				continue;
+			}
+			newCount++;
+			for(Node node : prob.expr.getAllSubNodes()) {
+				Set<String> feats = new HashSet<>();
+				if(node.children.size() > 0 &&
+						node.children.get(0).children.size() == 0) {
+					int sentId = Tools.getSentenceIdFromCharOffset(
+							prob.tokens, node.children.get(0).qs.start);
+					int tokenId = Tools.getTokenIdFromCharOffset(
+							prob.tokens.get(sentId), node.children.get(0).qs.start);
+					feats.addAll(FeatGen.getUnigramBigramFeatures(
+							prob.tokens.get(sentId), tokenId, 3));
+				}
+				if(node.children.size() > 0 &&
+						node.children.get(1).children.size() == 0) {
+					int sentId = Tools.getSentenceIdFromCharOffset(
+							prob.tokens, node.children.get(1).qs.start);
+					int tokenId = Tools.getTokenIdFromCharOffset(
+							prob.tokens.get(sentId), node.children.get(1).qs.start);
+					feats.addAll(FeatGen.getUnigramBigramFeatures(
+							prob.tokens.get(sentId), tokenId, 3));
+				}
+				if(feats.size() > 0) {
+					countsOp.put(node.label, countsOp.getOrDefault(node.label, 0) + 1);
+					for(String feat : feats) {
+						countsFeats.put(feat, countsFeats.getOrDefault(feat, 0) + 1);
+						countsJoint.put(node.label+"_"+feat,
+								countsJoint.getOrDefault(node.label+"_"+feat, 0) + 1);
+					}
+				}
+			}
+		}
+		System.out.println("NewCount: "+newCount);
+		double aggregate = 0.0;
+		for(String feat : countsFeats.keySet()) {
+			int max = 0;
+			for(String op : countsOp.keySet()) {
+				if(countsJoint.getOrDefault(op+"_"+feat, 0) > max) {
+					max = countsJoint.getOrDefault(op+"_"+feat, 0);
+				}
+			}
+			aggregate += (max * 1.0 / countsFeats.get(feat));
+		}
+		System.out.println("Average Best Choice Prob: "+
+				(aggregate / countsFeats.keySet().size()));
+	}
+
+
 	public static void main(String args[]) throws Exception {
 		Tools.initStanfordTools();
 //		consistencyChecks();
-		createFoldFiles();
+//		createFoldFiles();
+		computePMI();
 	}
 
  	
