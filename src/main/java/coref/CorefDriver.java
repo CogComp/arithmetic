@@ -123,13 +123,15 @@ public class CorefDriver {
 			CorefY gold = (CorefY) sp.goldStructureList.get(i);
 			CorefY pred = (CorefY) model.infSolver.getBestStructure(model.wv, prob);
 			total.add(prob.problemId);
+			boolean correct = false;
 			if(CorefY.getLoss(gold, pred) < 0.0001) {
 				acc += 1;
+				correct = true;
 			} else {
 				incorrect.add(prob.problemId);
-//			}
-//			CorefY ruleBased = CorefInfSolver.ruleBasedKey(prob);
-//			if(ruleBased != null && CorefY.getLoss(gold, ruleBased) > 0.5) {
+			}
+			if((correct && Params.printCorrect) ||
+					(!correct && Params.printMistakes)){
 				System.out.println(prob.problemId+" : "+prob.text);
 				for(List<CoreLabel> tokens : prob.tokens) {
 					for(CoreLabel token : tokens) {

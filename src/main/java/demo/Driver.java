@@ -21,16 +21,25 @@ public class Driver {
         String dataFile = null, mode = null, modelDir = null;
         List<String> trainFolds = null, testFolds = null, cvFolds = null;
         List<String> commands = Arrays.asList("--data", "--mode", "--train",
-                "--test", "--cv", "--model_dir");
+                "--test", "--cv", "--model_dir", "--print_mistakes", "--print_correct");
         boolean doCV = false;
+        Params.printMistakes = false;
+        Params.printCorrect = false;
 
         String str = "Usage: \n";
-        str += "--mode\t\tRequired\tMode of operation\n";
-        str += "--data\t\tOptional\tData file with questions and answers\n";
-        str += "--train\t\tOptional\tTrain folds (Required if cv not provided)\n";
-        str += "--test\t\tOptional\tTest folds (Required if cv not provided)\n";
-        str += "--cv\t\tOptional\tCV folds (Required if train and test not provided)\n";
-        str += "--model_dir\tOptional\tModel Directory\n";
+        str += "--mode\t\t\tMode of operation (one of Rel, Pair, " +
+                "Vertex, Edge, LCA, UnitDep, Coref, Logic, E2ELogic)\n";
+        str += "--data\t\t\tData file with questions and answers\n";
+        str += "--train\t\t\tTrain folds (Required if cv not provided; follow it by " +
+                "any number of fold files separated by space)\n";
+        str += "--test\t\t\tTest folds (Required if cv not provided; follow it by " +
+                "any number of fold files separated by space)\n";
+        str += "--cv\t\t\tCV folds (Required if train and test not provided; follow it by " +
+                "any number of fold files separated by space)\n";
+        str += "--model_dir\t\tModel Directory\n";
+        str += "--print_mistakes\tPrints examples which the model got wrong\n";
+        str += "--print_correct\t\tPrints examples which the model got correct\n";
+        str += "\nAll arguments except mode are optional\n";
 
         if(args.length == 0) {
             System.err.println(str);
@@ -79,13 +88,21 @@ public class Driver {
                 }
                 continue;
             }
+            if(args[i].equals("--print_mistakes")) {
+                Params.printMistakes = true;
+                continue;
+            }
+            if(args[i].equals("--print_correct")) {
+                Params.printCorrect = true;
+                continue;
+            }
         }
         if(mode == null) {
             System.err.println("Mode not provided");
             System.exit(0);
         }
         if((trainFolds == null || testFolds == null) && cvFolds == null) {
-            System.err.println("Either both train and test needs to be provided, or" +
+            System.err.println("Either both train and test needs to be provided, or " +
                     "cv needs to be provided");
             System.exit(0);
         } else if(cvFolds != null) {
@@ -104,7 +121,7 @@ public class Driver {
         } else {
             Params.modelDir = modelDir+"/";
         }
-        System.out.println("\n\n********* Command Details ***********");
+        System.out.println("\n\n*********** Command Details *************");
         System.out.println("DataFile: " + Params.questionsFile);
         System.out.println("Mode: " + mode);
         if(trainFolds != null) {
@@ -117,6 +134,8 @@ public class Driver {
             System.out.println("CV: " + cvFolds);
         }
         System.out.println("Model Dir: " + Params.modelDir);
+        System.out.println("Print Mistakes: " + Params.printMistakes);
+        System.out.println("Print Correct: " + Params.printCorrect);
         System.out.println("*****************************************\n\n");
 
         List<List<Integer>> cvIndices = new ArrayList<>();
@@ -135,8 +154,8 @@ public class Driver {
                 testIndices.addAll(Folds.readFoldIndices(testFold));
             }
         }
-        if (mode.equals("Rel") || mode.equals("Pair") || mode.equals("Run") ||
-                mode.equals("Rate") || mode.equals("GraphDecompose") ||
+        if (mode.equals("Rel") || mode.equals("Pair") || mode.equals("Vertex") ||
+                mode.equals("Edge") || mode.equals("GraphDecompose") ||
                 mode.equals("GraphJoint") || mode.equals("LCA") || mode.equals("UnitDep")) {
             Params.useIllinoisTools = true;
             Tools.initIllinoisTools();

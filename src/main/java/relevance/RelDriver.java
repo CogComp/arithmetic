@@ -68,10 +68,15 @@ public class RelDriver {
 			RelY gold = (RelY) sp.goldStructureList.get(i);
 			RelY pred = (RelY) model.infSolver.getBestStructure(model.wv, prob);
 			total.add(prob.problemId);
+			boolean correct = false;
 			if(RelY.getLoss(gold, pred) < 0.0001) {
 				acc += 1;
+				correct = true;
 			} else {
 				incorrect.add(prob.problemId);
+			}
+			if((correct && Params.printCorrect) ||
+					(!correct && Params.printMistakes)){
 				System.out.println(prob.problemId+" : "+prob.ta.getText());
 				System.out.println();
 				System.out.println("Schema : "+prob.schema);

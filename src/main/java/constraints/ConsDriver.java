@@ -23,7 +23,7 @@ public class ConsDriver {
 			runModel = SLModel.loadModel(Params.modelDir + Params.runPrefix + id + Params.modelSuffix);
 			rateModel = SLModel.loadModel(Params.modelDir + Params.ratePrefix + id + Params.modelSuffix);
 		}
-		return ConsInfSolver.constrainedInf(testProblems, relModel, pairModel, runModel, rateModel);
+		return ConsInfSolver.constrainedInf(testProblems, relModel, pairModel, runModel, rateModel, false);
 	}
 	
 	public static void tune(List<Problem> validation, SLModel relModel, SLModel pairModel,
@@ -37,7 +37,7 @@ public class ConsDriver {
 			for(int c=0; c<vals.length; ++c) {
 				ConsInfSolver.wRel = vals[c];
 				double acc = ConsInfSolver.constrainedInf(validation, relModel, 
-						pairModel, runModel, rateModel);
+						pairModel, runModel, rateModel, true);
 				if(acc > bestAcc) {
 					bestAcc = acc;
 					bestRel = ConsInfSolver.wRel;
@@ -51,7 +51,7 @@ public class ConsDriver {
 						ConsInfSolver.wRate = vals[b];
 						ConsInfSolver.wRel = vals[c];
 						double acc = ConsInfSolver.constrainedInf(
-								validation, relModel, pairModel, runModel, rateModel);
+								validation, relModel, pairModel, runModel, rateModel, true);
 						if(acc > bestAcc) {
 							bestAcc = acc;
 							bestRun = ConsInfSolver.wRun;

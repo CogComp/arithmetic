@@ -62,20 +62,20 @@ public class ConsInfSolver {
 	}
 	
 	public static double constrainedInf(List<Problem> testData, SLModel relModel, 
-			SLModel pairModel, SLModel runModel, SLModel rateModel) throws Exception {
+			SLModel pairModel, SLModel runModel, SLModel rateModel, boolean isTune) throws Exception {
 		double correct = 0.0, total = 0.0;
 		for(Problem prob : testData) {
 			total += 1.0;
 			Node node = ConsInfSolver.constrainedInf(prob, relModel, pairModel,
 					runModel, rateModel);
 			double ans = node.getValue();
+			boolean corr = false;
 			if(Tools.safeEquals(ans, prob.answer)) {
 				correct += 1.0;
+				corr = true;
 			}
-			if(Params.printMistakes) {
-				if(Tools.safeEquals(ans, prob.answer)) {
-					System.out.println("Correct Below");
-				}
+			if(!isTune && ((corr && Params.printCorrect) ||
+					(!corr && Params.printMistakes))) {
 				System.out.println(prob.id+" : "+prob.ta.getText());
 				System.out.println("Gold : "+prob.expr);
 				System.out.println("Predicted : "+node);

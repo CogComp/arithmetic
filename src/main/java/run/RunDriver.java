@@ -65,10 +65,15 @@ public class RunDriver {
 				counts.put(new Pair<>(gold.label, pred.label),
 						counts.get(new Pair<>(gold.label, pred.label))+1);
 			}
+			boolean correct = false;
 			if(RunY.getLoss(gold, pred) < 0.0001) {
 				acc += 1;
+				correct = true;
 			} else {
 				incorrect.add(prob.problemId);
+			}
+			if((correct && Params.printCorrect) ||
+					(!correct && Params.printMistakes)){
 				System.out.println(prob.problemId+" : "+prob.ta.getText());
 				System.out.println();
 				System.out.println("Schema : "+prob.schema);

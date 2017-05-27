@@ -73,10 +73,15 @@ public class PairDriver {
 			PairY gold = (PairY) sp.goldStructureList.get(i);
 			PairY pred = (PairY) model.infSolver.getBestStructure(model.wv, prob);
 			total.add(prob.problemId);
+			boolean correct = false;
 			if(PairY.getLoss(gold, pred) < 0.0001) {
 				acc += 1;
+				correct = true;
 			} else {
 				incorrect.add(prob.problemId);
+			}
+			if((correct && Params.printCorrect) ||
+					(!correct && Params.printMistakes)){
 				System.out.println(prob.problemId+" : "+prob.ta.getText());
 				System.out.println();
 				System.out.println("Schema : "+prob.schema);

@@ -279,8 +279,8 @@ public class Tools {
 		}
 		for(int i=span.getFirst(); i<span.getSecond(); ++i) {
 			if(tokens.get(i).lemma().equals("more") ||
-					tokens.get(i).lemma().equals("much") ||
-					tokens.get(i).lemma().equals("many") ||
+//					tokens.get(i).lemma().equals("much") ||
+//					tokens.get(i).lemma().equals("many") ||
 					tokens.get(i).word().equals("his") ||
 					(tokens.get(i).word().equals("her") &&
 							span.getSecond()-span.getFirst()>1)) {

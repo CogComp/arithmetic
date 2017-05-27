@@ -72,10 +72,15 @@ public class RateDriver {
 					rateDetectedByRule += 1.0;
 				}
 			}
+			boolean correct = false;
 			if(RateY.getLoss(gold, pred) < 0.0001) {
 				acc += 1;
+				correct = true;
 			} else {
 				incorrect.add(prob.problemId);
+			}
+			if((correct && Params.printCorrect) ||
+					(!correct && Params.printMistakes)){
 				System.out.println(prob.problemId+" : "+prob.ta.getText());
 				System.out.println();
 				System.out.println("Schema : "+prob.schema);
