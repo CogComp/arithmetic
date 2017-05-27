@@ -326,17 +326,20 @@ public class Dataset {
 		FileUtils.writeStringToFile(new File("new.txt"), newP);
 	}
 
-	public static void computePMI() throws Exception {
+	public static void computePMI(int startIndex, int endIndex) throws Exception {
 		List<StanfordProblem> probs = Reader.readStanfordProblemsFromJson();
-		int newCount = 0;
+		int count = 0;
 		Map<String, Integer> countsOp = new HashMap<>();
 		Map<String, Integer> countsFeats = new HashMap<>();
 		Map<String, Integer> countsJoint = new HashMap<>();
 		for(StanfordProblem prob : probs) {
-			if(prob.id < 10000) {
+			if(prob.id > endIndex && endIndex != -1) {
 				continue;
 			}
-			newCount++;
+			if(prob.id < startIndex && startIndex != -1) {
+				continue;
+			}
+			count++;
 			for(Node node : prob.expr.getAllSubNodes()) {
 				Set<String> feats = new HashSet<>();
 				if(node.children.size() > 0 &&
@@ -367,8 +370,8 @@ public class Dataset {
 				}
 			}
 		}
-		System.out.println("NewCount: "+newCount);
-		double aggregate = 0.0;
+		System.out.println("Count: "+count);
+		double aggregate = 0.0, aggEntropy = 0.0;
 		for(String feat : countsFeats.keySet()) {
 			int max = 0;
 			for(String op : countsOp.keySet()) {
@@ -377,9 +380,19 @@ public class Dataset {
 				}
 			}
 			aggregate += (max * 1.0 / countsFeats.get(feat));
+			double entropy = 0.0;
+			for(String op : countsOp.keySet()) {
+				double p = countsJoint.getOrDefault(op+"_"+feat, 0) *1.0 / countsFeats.get(feat);
+				if(p > 0.00001) {
+					entropy += -p * Math.log(p);
+				}
+			}
+			aggEntropy += entropy;
 		}
 		System.out.println("Average Best Choice Prob: "+
 				(aggregate / countsFeats.keySet().size()));
+		System.out.println("Average Entropy: "+
+				(aggEntropy / countsFeats.keySet().size()));
 	}
 
 
@@ -387,7 +400,9 @@ public class Dataset {
 		Tools.initStanfordTools();
 //		consistencyChecks();
 //		createFoldFiles();
-		computePMI();
+		computePMI(0, 10000);
+		computePMI(10000, -1);
+		computePMI(-1, -1);
 	}
 
  	
