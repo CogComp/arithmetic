@@ -75,7 +75,7 @@ public class Verbs {
                 "increase", "take", "collect", "add", "score", "save", "win", "build");
         List<String> negative = Arrays.asList("give", "lose", "lend", "eat",
                 "decrease", "reduce", "spend", "pay", "remove", "use", "throw",
-                "leave", "defeat", "destroy", "need");
+                "leave", "defeat", "destroy", "need", "share");
         Map<String, Double> map = new HashMap<>();
         map.put("STATE", -Double.MAX_VALUE);
         map.put("POSITIVE", -Double.MAX_VALUE);

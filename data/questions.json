@@ -6418,16 +6418,16 @@
       3.0
     ],
     "lAlignments": [
-      1,
-      0
+      0,
+      2
     ],
     "lEquations": [
-      "X=(12.0-9.0)"
+      "X=(9.0/3.0)"
     ],
     "lSolutions": [
       3.0
     ],
-    "rates": []
+    "rates": [-1]
   },
   {
     "iIndex": 605,
@@ -11915,7 +11915,7 @@
   },
   {
     "iIndex": 916,
-    "sQuestion": " Chloe was playing a trivia game. In the first round she scored 40.0 points, and in the second round she scored 50.0 points. In the last round she lost 4.0 points. How many points did she have at the end of the game? ",
+    "sQuestion": " Chloe was playing a trivia game. In the first round, she scored 40.0 points, and in the second round, she scored 50.0 points. In the last round, she lost 4.0 points. How many points did she have at the end of the game? ",
     "quants": [
       40.0,
       50.0,

@@ -352,21 +352,15 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 			features.addAll(FeatGen.getFeaturesConjWithLabels(
 					getPartitionFeatures(x, num1, num2), key.equals("SIBLING")?"SIBLING":"H"));
 		}
-		if(infRuleType.equals("Verb")) {
-			if(num1.sentId == num2.sentId) {
-				features.add(key+"SameSentence");
-			}
-			if(tokenId1 < 2 || tokenId2 < 2) {
-				features.add(key+"StartOfSentence");
-			}
-			if(num1.verb < tokens1.size()-1 && tokens1.get(num1.verb+1).tag().startsWith("R")) {
-				features.add(key+"PhrasalVerb");
-			}
-		}
 		for (int i = Math.max(0, tokenId2 - 3); i < Math.min(tokenId2 + 4, tokens2.size()); ++i) {
-			if (!tokens2.get(i).tag().startsWith("N")) {
+			if (!tokens2.get(i).tag().startsWith("CD") &&
+					!tokens2.get(i).tag().startsWith("N")) {
 				features.add(infRuleType.substring(0,4)+key+"2_Unigram_" + tokens2.get(i).lemma());
 			}
+		}
+		if(infRuleType.equals("Verb")) {
+			features.add(infRuleType.substring(0, 4) + key + "2_Verb_" +
+					tokens2.get(num2.verb).lemma());
 		}
 		return features;
 	}
@@ -389,6 +383,20 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		}
 		if(phrase1.size() == 0) features.add(mode1+"_Empty");
 		if(phrase2.size() == 0) features.add(mode2+"_Empty");
+		if(mode2.equals("OBJ") && phrase2.size() == 0) {
+			features.add("Object_Empty");
+		}
+		if(mode1.equals("OBJ") && phrase1.size() == 0) {
+			features.add("Object_Empty");
+		}
+		if((phrase1.contains("he") || phrase1.contains("she")) &&
+				phrase2.size() > 0) {
+			features.add("Pronoun_Person_Present");
+		}
+		if((phrase2.contains("he") || phrase2.contains("she")) &&
+				phrase1.size() > 0) {
+			features.add("Pronoun_Person_Present");
+		}
 		double sim;
 		if(mode1.equals("SUBJ") && mode2.equals("SUBJ")) {
 			sim = Math.max(Tools.jaccardSim(phrase1, phrase2), Tools.jaccardSim(
@@ -400,7 +408,6 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		}
 		if(sim > 0.2) features.add("NonZeroSimilarity");
 		if(sim < 0.2) features.add("AbsolutelyNoMatch");
-
 		List<Pair<String, String>> subjObjCandidates = Arrays.asList(
 				new Pair<>("SUBJ", "SUBJ"),
 				new Pair<>("SUBJ", "OBJ"),
