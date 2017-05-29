@@ -30,13 +30,17 @@ public class CorefFeatGen extends AbstractFeatureGenerator implements Serializab
 
 	public static List<String> getFeatures(CorefX x, CorefY y) {
 		List<String> features = new ArrayList<>();
-		features.addAll(logic.LogicFeatGen.getKeyFeatures(
-				x,
-				x.schema.get(x.quantIndex1),
-				x.schema.get(x.quantIndex2),
-				x.questionSchema,
-				x.infType,
-				y.key));
+		try {
+			features.addAll(logic.LogicFeatGen.getKeyFeatures(
+					x,
+					x.schema.get(x.quantIndex1),
+					x.schema.get(x.quantIndex2),
+					x.questionSchema,
+					x.infType,
+					y.key));
+		} catch (Exception e) {
+			System.out.println("Exception in "+x.text);
+		}
 		features.addAll(FeatGen.getConjunctions(features));
 		return features;
 	}

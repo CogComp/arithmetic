@@ -358,10 +358,6 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				features.add(infRuleType.substring(0,4)+key+"2_Unigram_" + tokens2.get(i).lemma());
 			}
 		}
-		if(infRuleType.equals("Verb")) {
-			features.add(infRuleType.substring(0, 4) + key + "2_Verb_" +
-					tokens2.get(num2.verb).lemma());
-		}
 		return features;
 	}
 
@@ -381,21 +377,15 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 			StanfordSchema prevSchema = x.schema.get(schema2.quantId-1);
 			phrase2 = Tools.spanToLemmaList(x.tokens.get(prevSchema.sentId), prevSchema.unit);
 		}
-		if(phrase1.size() == 0) features.add(mode1+"_Empty");
-		if(phrase2.size() == 0) features.add(mode2+"_Empty");
-		if(mode2.equals("OBJ") && phrase2.size() == 0) {
-			features.add("Object_Empty");
-		}
-		if(mode1.equals("OBJ") && phrase1.size() == 0) {
-			features.add("Object_Empty");
-		}
-		if((phrase1.contains("he") || phrase1.contains("she")) &&
-				phrase2.size() > 0) {
-			features.add("Pronoun_Person_Present");
-		}
-		if((phrase2.contains("he") || phrase2.contains("she")) &&
-				phrase1.size() > 0) {
-			features.add("Pronoun_Person_Present");
+		if(mode1.equals("SUBJ") || mode1.equals("OBJ")) {
+			if ((phrase1.contains("he") || phrase1.contains("she")) &&
+					phrase2.size() > 0) {
+				features.add("Pronoun_Person_Present");
+			}
+			if ((phrase2.contains("he") || phrase2.contains("she")) &&
+					phrase1.size() > 0) {
+				features.add("Pronoun_Person_Present");
+			}
 		}
 		double sim;
 		if(mode1.equals("SUBJ") && mode2.equals("SUBJ")) {

@@ -87,7 +87,7 @@ public class StanfordSchema {
 		IndexedWord prev;
 		int verbIndex;
 		while(true) {
-			if (word.tag().startsWith("V")) {
+			if (word.tag().startsWith("V") || word.lemma().equals("cost")) {
 				verbIndex = word.index()-1;
 				break;
 			}

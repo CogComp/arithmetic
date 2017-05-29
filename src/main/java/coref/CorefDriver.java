@@ -55,7 +55,6 @@ public class CorefDriver {
 	public static SLProblem getSP(List<StanfordProblem> problemList, boolean train)
 			throws Exception{
 		SLProblem problem = new SLProblem();
-		boolean reasonsFound = true;
 		for(StanfordProblem prob : problemList){
             if(prob.id == 793 || prob.id == 838 || prob.id == 777 ||
                     prob.id == 778 || prob.id == 837 || prob.id == 1600 ||
@@ -67,6 +66,7 @@ public class CorefDriver {
 			List<Node> nodes = y.expr.getAllSubNodes();
 			List<CorefX> xList = new ArrayList<>();
 			List<CorefY> yList = new ArrayList<>();
+			boolean reasonsFound = true;
             for(Node node : nodes) {
                 if(node.children.size() == 0) continue;
                 int quantLeft = node.children.get(0).quantIndex < node.children.get(1).quantIndex ?

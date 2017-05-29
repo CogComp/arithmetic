@@ -75,22 +75,25 @@ public class Logic {
         String op = null;
         if(vc1.equals("STATE")) {
             if(vc2.equals("STATE")) op = "SUB";
-            if(vc2.equals("POSITIVE")) op = "ADD";
-            if(vc2.equals("NEGATIVE")) op = "SUB";
+            if(vc2.equals("POSITIVE") || vc2.equals("CONSTRUCT")) op = "ADD";
+            if(vc2.equals("NEGATIVE") || vc2.equals("DESTROY")) op = "SUB";
         }
-        if(vc1.equals("POSITIVE")) {
+        if(vc1.equals("POSITIVE") || vc1.equals("CONSTRUCT")) {
             if(vc2.equals("STATE")) op = "SUB";
-            if(vc2.equals("POSITIVE")) op = "ADD";
-            if(vc2.equals("NEGATIVE")) op = "SUB";
+            if(vc2.equals("POSITIVE") || vc2.equals("CONSTRUCT")) op = "ADD";
+            if(vc2.equals("NEGATIVE") || vc2.equals("DESTROY")) op = "SUB";
         }
-        if(vc1.equals("NEGATIVE")) {
+        if(vc1.equals("NEGATIVE") || vc1.equals("DESTROY")) {
             if(vc2.equals("STATE")) op = "ADD";
-            if(vc2.equals("POSITIVE")) op = "SUB";
-            if(vc2.equals("NEGATIVE")) op = "ADD";
+            if(vc2.equals("POSITIVE") || vc2.equals("CONSTRUCT")) op = "SUB";
+            if(vc2.equals("NEGATIVE") || vc2.equals("DESTROY")) op = "ADD";
         }
-        if(key.equals("0_1") || key.equals("1_0")) {
-            if(op.startsWith("SUB")) return "ADD";
-            if(op.startsWith("ADD")) return "SUB";
+        if(!vc1.equals("CONSTRUCT") && !vc1.equals("DESTROY") &&
+                !vc2.equals("CONSTRUCT") && !vc2.equals("DESTROY")) {
+            if (key.equals("0_1") || key.equals("1_0")) {
+                if (op.startsWith("SUB")) return "ADD";
+                if (op.startsWith("ADD")) return "SUB";
+            }
         }
         if(flipVerbOrder) {
             if(op.equals("SUB")) {

@@ -59,6 +59,8 @@ public class Verbs {
             map.put("STATE", 0.0);
             map.put("POSITIVE", 0.0);
             map.put("NEGATIVE", 0.0);
+            map.put("CONSTRUCT", 0.0);
+            map.put("DESTROY", 0.0);
             for(String verb : verbCluster.keySet()) {
                 if(verbCluster.get(verb) != index) continue;
                 String clusterCategory = verbCategory(verb);
@@ -70,16 +72,21 @@ public class Verbs {
     }
 
     public static String verbCategory(String verb) {
-        List<String> state = Arrays.asList("be", "have", "own", "start", "worth");
+        List<String> state = Arrays.asList("be", "have", "own", "start", "worth", "remain");
         List<String> positive = Arrays.asList("get", "gain", "borrow", "receive",
-                "increase", "take", "collect", "add", "score", "save", "win", "build");
-        List<String> negative = Arrays.asList("give", "lose", "lend", "eat",
-                "decrease", "reduce", "spend", "pay", "remove", "use", "throw",
-                "leave", "defeat", "destroy", "need", "share");
+                "take", "collect");
+        List<String> negative = Arrays.asList("give", "lose", "lend", "spend", "pay",
+                "share", "leave");
+        List<String> construct = Arrays.asList( "add", "increase", "build",
+                "score", "save", "win", "arrive", "fill");
+        List<String> destroy = Arrays.asList("defeat", "destroy", "need", "eat",
+                "decrease", "reduce", "remove", "use", "throw");
         Map<String, Double> map = new HashMap<>();
         map.put("STATE", -Double.MAX_VALUE);
         map.put("POSITIVE", -Double.MAX_VALUE);
         map.put("NEGATIVE", -Double.MAX_VALUE);
+        map.put("CONSTRUCT", -Double.MAX_VALUE);
+        map.put("DESTROY", -Double.MAX_VALUE);
         for(String s : state) {
             if(getVectorSim(verb, s) > map.get("STATE")) {
                 map.put("STATE", getVectorSim(verb, s));
@@ -95,6 +102,16 @@ public class Verbs {
                 map.put("NEGATIVE", getVectorSim(verb, s));
             }
         }
+        for(String s : construct) {
+            if(getVectorSim(verb, s) > map.get("CONSTRUCT")) {
+                map.put("CONSTRUCT", getVectorSim(verb, s));
+            }
+        }
+        for(String s : destroy) {
+            if(getVectorSim(verb, s) > map.get("DESTROY")) {
+                map.put("DESTROY", getVectorSim(verb, s));
+            }
+        }
         return Tools.getKeyForMaxValue(map);
     }
 
@@ -103,6 +120,8 @@ public class Verbs {
         map.put("STATE", 0.0);
         map.put("POSITIVE", 0.0);
         map.put("NEGATIVE", 0.0);
+        map.put("CONSTRUCT", 0.0);
+        map.put("DESTROY", 0.0);
 
         // Hard decision for now
         if(verbCluster.containsKey(verbLemma)) {
@@ -118,7 +137,7 @@ public class Verbs {
                 }
                 return map;
             }
-            if (verbLemma.equals("sell")) {
+            if (verbLemma.equals("sell") || verbLemma.equals("return")) {
                 if (unit != null && (unit.contains("$") ||
                         unit.contains("dollar") ||
                         unit.contains("cent") ||
