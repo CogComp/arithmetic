@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-import net.didion.jwnl.data.IndexWord;
-import org.apache.commons.collections.collection.CompositeCollection;
 import org.apache.commons.io.FileUtils;
 
 import com.google.gson.Gson;

@@ -62,7 +62,7 @@ public class Node implements Serializable {
 		}
 		return "("+children.get(0).toString() + " " +
 				labelSym +
-//				"_" + infRuleType + "_" + key +
+				"_" + infRuleType + "_" + key +
 				" " + children.get(1).toString()+")";
 	}
 
