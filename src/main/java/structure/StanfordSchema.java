@@ -87,7 +87,8 @@ public class StanfordSchema {
 		IndexedWord prev;
 		int verbIndex;
 		while(true) {
-			if (word.tag().startsWith("V") || word.lemma().equals("cost")) {
+			if (word.tag().startsWith("V") || word.lemma().equals("cost") ||
+					word.lemma().equals("baked")) {
 				verbIndex = word.index()-1;
 				break;
 			}
@@ -109,7 +110,11 @@ public class StanfordSchema {
 //			if(tokens.get(i).word().equals("at") ||
 //					tokens.get(i).word().equals("during") ||
 //					tokens.get(i).tag().startsWith("V")) break;
-			if(tokens.get(i).word().equals("many") ||
+			if(tokens.get(i).word().equals("each") || tokens.get(i).word().equals("every") ||
+					tokens.get(i).word().equals("per")) {
+				break;
+			}
+ 			if(tokens.get(i).word().equals("many") ||
 					tokens.get(i).word().equals("much")) continue;
 			if(tokens.get(i).word().equals("to") || tokens.get(i).word().equals("from")) {
 				return new Pair<>(new IntPair(-1, -1), Tools.getMaximalNounPhraseSpan(tokens, i+1));

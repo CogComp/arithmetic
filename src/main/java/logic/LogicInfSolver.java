@@ -182,7 +182,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				mathOp = Logic.getMathInfType(x.tokens, num1, num2, ques, isTopmost);
 			}
 			if(infRuleType.contains("Ques") && !isTopmost) continue;
-			if(mathOp != null && !mathOp.contains("Mul") && !infRuleType.equals(mathOp)) continue;
+			if(mathOp != null /* && !mathOp.contains("Mul") */ && !infRuleType.equals(mathOp)) continue;
 			if(mathOp == null && infRuleType.startsWith("Math")) continue;
 			if(num1.rate.getFirst()>=0 || num2.rate.getFirst()>=0 ||
 					(isTopmost && ques.rate.getFirst()>=0)) {

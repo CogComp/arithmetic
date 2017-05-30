@@ -132,6 +132,12 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				features.add("MulConnectingAdd");
 			}
 		}
+		if(mulDiv.contains(node.label)) {
+			if((mulDiv.contains(node.children.get(0).label) ||
+					mulDiv.contains(node.children.get(1).label))) {
+				features.add("MulConnectingMul");
+			}
+		}
 		features.add("MidNumber:"+LogicY.midNumber(x.tokens, num1, num2));
 		List<CoreLabel> tokens1 = x.tokens.get(num1.sentId);
 		int tokenId1 = Tools.getTokenIdFromCharOffset(tokens1, num1.qs.start);

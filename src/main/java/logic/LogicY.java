@@ -241,23 +241,23 @@ public class LogicY implements IStructure {
 				return true;
 			}
 		}
-		if(label.equals("ADD")) {
-			for(int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
-				CoreLabel token = x.tokens.get(x.questionSchema.sentId).get(i);
-				if(token.word().equals("all") || token.word().equals("altogether") ||
-						token.word().equals("overall") || token.word().equals("total") ||
-						token.word().equals("sum")) {
-					return true;
-				}
-			}
-			for(int i=0; i<2; ++i) {
-				CoreLabel token = x.tokens.get(x.questionSchema.sentId).get(i);
-				if(token.word().equals("all") || token.word().equals("altogether") ||
-						token.word().equals("overall") || token.word().equals("total")) {
-					return true;
-				}
-			}
-		}
+//		if(label.equals("ADD")) {
+//			for(int i=x.questionSpan.getFirst(); i<x.questionSpan.getSecond(); ++i) {
+//				CoreLabel token = x.tokens.get(x.questionSchema.sentId).get(i);
+//				if(token.word().equals("all") || token.word().equals("altogether") ||
+//						token.word().equals("overall") || token.word().equals("total") ||
+//						token.word().equals("sum")) {
+//					return true;
+//				}
+//			}
+//			for(int i=0; i<2; ++i) {
+//				CoreLabel token = x.tokens.get(x.questionSchema.sentId).get(i);
+//				if(token.word().equals("all") || token.word().equals("altogether") ||
+//						token.word().equals("overall") || token.word().equals("total")) {
+//					return true;
+//				}
+//			}
+//		}
 		return false;
 	}
 
