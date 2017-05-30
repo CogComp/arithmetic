@@ -415,12 +415,14 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		}
 		if(maxSim > sim+0.001) {
 			features.add("BetterCandidatePresent");
+			features.add("BetterCandidatePresent_"+mode1+mode2);
 		} else if(maxSim > 0.1){
 			features.add("BestOption");
+			features.add("BestOption_"+mode1+mode2);
 		}
 		if(maxSim < 0.1) {
 			features.add("NoGoodOption");
-//			features.add("NoGoodOption_"+mode1+mode2);
+			features.add("NoGoodOption_"+mode1+mode2);
 		}
 		if(Params.printLog) {
 			System.out.println("Features: " + Arrays.asList(features));

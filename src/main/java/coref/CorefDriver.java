@@ -50,7 +50,7 @@ public class CorefDriver {
 		System.out.println("Train : "+train.instanceList.size()+" Test : "+test.instanceList.size());
 		Params.printLog = false;
 		trainModel(Params.modelDir+Params.corefPrefix+id+Params.modelSuffix, train);
-		Params.printLog = false;
+		Params.printLog = true;
 		return testModel(Params.modelDir+Params.corefPrefix+id+Params.modelSuffix, test);
 	}
 
