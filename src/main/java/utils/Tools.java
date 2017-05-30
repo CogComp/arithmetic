@@ -175,11 +175,11 @@ public class Tools {
 		}
 		if(phrase1 != null && (phrase1.contains("he") || phrase1.contains("she") ||
 				phrase1.contains("this") || phrase1.contains("they"))) {
-			return 1.0;
+			if(phrase2.size() > 0) return 1.0;
 		}
 		if(phrase2 != null && (phrase2.contains("he") || phrase2.contains("she") ||
 				phrase2.contains("this") || phrase2.contains("they"))) {
-			return 1.0;
+			if(phrase1.size() > 0) return 1.0;
 		}
 		Set<String> tokens1 = new HashSet<>();
 		tokens1.addAll(phrase1);

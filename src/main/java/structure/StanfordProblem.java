@@ -154,10 +154,11 @@ public class StanfordProblem {
 	}
 
 	public static void main(String args[]) throws Exception {
+		Tools.initStanfordTools();
 		List<StanfordProblem> probs =
 				Reader.readStanfordProblemsFromJson();
 		for(StanfordProblem prob : probs) {
-			if(prob.id != 750) continue;
+			System.out.println(prob.id);
 			System.out.println(prob);
 			for(List<CoreLabel> tokens : prob.tokens) {
 				for(CoreLabel token : tokens) {

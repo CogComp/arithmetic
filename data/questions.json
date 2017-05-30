@@ -17522,7 +17522,7 @@
   },
   {
     "iIndex": 1232856426,
-    "sQuestion": "Fred went to 36.0 basketball games last year and 35.0 basketball games the year before.  This year he went to 11.0 less games than he did last year. How many basketball games did Fred go to this year?",
+    "sQuestion": "Fred went to 36.0 basketball games last year and 35.0 basketball games the year before.  This year, he went to 11.0 less games than he did last year. How many basketball games did Fred go to this year?",
     "quants": [
       36.0,
       35.0,
@@ -17626,7 +17626,7 @@
   },
   {
     "iIndex": 1232856431,
-    "sQuestion": "Keith picked 47.0 pears  and Mike picked 12.0 pears from the pear tree . Keith gave away 46.0 pears. How many pears does Keith and Mike have left ?",
+    "sQuestion": "Keith picked 47.0 pears,  and Mike picked 12.0 pears from the pear tree . Keith gave away 46.0 pears. How many pears does Keith and Mike have left ?",
     "quants": [
       47.0,
       12.0,
@@ -19960,7 +19960,7 @@
   },
   {
     "iIndex": 1232856557,
-    "sQuestion": "Mike picked 32.0 limes and Alyssa ate 25.0 limes . Tom picked 12.0 plums . How many limes were left?",
+    "sQuestion": "Mike picked 32.0 limes, and Alyssa ate 25.0 limes . Tom picked 12.0 plums . How many limes were left?",
     "quants": [
       32.0,
       25.0,
@@ -20452,7 +20452,7 @@
   },
   {
     "iIndex": 1232856584,
-    "sQuestion": "How many slice of pie are served today, if 7 are sold in total of which 5 where sold yesterday?",
+    "sQuestion": "How many slice of pie are served today, if 7 are sold in total of which 5 were sold yesterday?",
     "quants": [
       7.0,
       5.0

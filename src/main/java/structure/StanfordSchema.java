@@ -194,8 +194,22 @@ public class StanfordSchema {
 	public static IntPair getObject(List<CoreLabel> tokens,
 									SemanticGraph dependency,
 									int verbIndex) {
+		if(verbIndex < tokens.size() - 1 &&
+				tokens.get(verbIndex + 1).lemma().equals("he")) {
+			return new IntPair(verbIndex + 1, verbIndex + 2);
+		}
+		if(verbIndex < tokens.size() - 2 &&
+				tokens.get(verbIndex + 1).lemma().equals("she") &&
+				(tokens.get(verbIndex + 2).tag().equals("CD") ||
+						tokens.get(verbIndex + 2).tag().equals("$"))) {
+			return new IntPair(verbIndex + 1, verbIndex + 2);
+		}
 		IndexedWord word = dependency.getNodeByIndexSafe(verbIndex+1);
 		if (word == null) return new IntPair(-1, -1);
+//		for(SemanticGraphEdge edge : dependency.edgeListSorted()) {
+//			System.out.println(edge.getRelation().getShortName()+":"+
+//					edge.getSource()+"-->"+edge.getTarget());
+//		}
 		for(SemanticGraphEdge edge : dependency.getOutEdgesSorted(word)) {
 //			System.out.println(edge.getRelation().getShortName()+":"+
 //					edge.getSource()+"-->"+edge.getTarget());

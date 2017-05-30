@@ -48,7 +48,9 @@ public class CorefDriver {
 		SLProblem train = getSP(trainProbs, true);
 		SLProblem test = getSP(testProbs, false);
 		System.out.println("Train : "+train.instanceList.size()+" Test : "+test.instanceList.size());
+		Params.trainingNow = true;
 		trainModel(Params.modelDir+Params.corefPrefix+id+Params.modelSuffix, train);
+		Params.trainingNow = false;
 		return testModel(Params.modelDir+Params.corefPrefix+id+Params.modelSuffix, test);
 	}
 
@@ -119,6 +121,7 @@ public class CorefDriver {
 		Set<Integer> total = new HashSet<>();
 		double acc = 0.0;
 		for (int i = 0; i < sp.instanceList.size(); i++) {
+			System.out.println("==========================================");
 			CorefX prob = (CorefX) sp.instanceList.get(i);
 			CorefY gold = (CorefY) sp.goldStructureList.get(i);
 			CorefY pred = (CorefY) model.infSolver.getBestStructure(model.wv, prob);
@@ -157,6 +160,7 @@ public class CorefDriver {
 				System.out.println("Loss : "+ CorefY.getLoss(gold, pred));
 				System.out.println();
 			}
+			System.out.println("==========================================");
 		}
 		System.out.println("Accuracy : = " + acc + " / " + sp.instanceList.size()
 				+ " = " + (acc/sp.instanceList.size()));

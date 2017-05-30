@@ -39,7 +39,7 @@ public class CorefFeatGen extends AbstractFeatureGenerator implements Serializab
 					x.infType,
 					y.key));
 		} catch (Exception e) {
-			System.out.println("Exception in "+x.text);
+//			System.out.println("Exception in "+x.text);
 		}
 		features.addAll(FeatGen.getConjunctions(features));
 		return features;

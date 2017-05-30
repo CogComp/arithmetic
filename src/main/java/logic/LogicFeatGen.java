@@ -10,6 +10,7 @@ import edu.stanford.nlp.ling.CoreLabel;
 import structure.Node;
 import structure.StanfordSchema;
 import utils.FeatGen;
+import utils.Params;
 import utils.Tools;
 
 import java.io.Serializable;
@@ -291,9 +292,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		int tokenId1 = Tools.getTokenIdFromCharOffset(tokens1, num1.qs.start);
 		List<CoreLabel> tokens2 = x.tokens.get(num2.sentId);
 		int tokenId2 = Tools.getTokenIdFromCharOffset(tokens2, num2.qs.start);
-		if(!key.equals("0_1") && !key.equals("1_0")) {
-			features.add(infRuleType.substring(0, 3) + "_" + key);
-		}
+		features.add(infRuleType.substring(0, 4) + "_" + key);
 		if(infRuleType.startsWith("Verb") || infRuleType.startsWith("Math")) {
 			if(key.equals("0_0")) {
 				features.addAll(getPairSchemaFeatures(x, num1, num2, "SUBJ", "SUBJ", infRuleType));
@@ -316,12 +315,12 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				features.addAll(getPairSchemaFeatures(x, num1, num2, "UNIT", "UNIT", infRuleType));
 				if(infRuleType.contains("Rate0") && Tools.jaccardSim(
 						Tools.spanToLemmaList(x.tokens.get(num1.sentId), num1.rate),
-						Tools.spanToLemmaList(x.tokens.get(ques.sentId), ques.unit)) > 0) {
+						Tools.spanToLemmaList(x.tokens.get(ques.sentId), ques.unit)) > 0.2) {
 					features.add("SupportFromQuestion");
 				}
 				if(infRuleType.contains("Rate1") && Tools.jaccardSim(
 						Tools.spanToLemmaList(x.tokens.get(num2.sentId), num2.rate),
-						Tools.spanToLemmaList(x.tokens.get(ques.sentId), ques.unit)) > 0) {
+						Tools.spanToLemmaList(x.tokens.get(ques.sentId), ques.unit)) > 0.2) {
 					features.add("SupportFromQuestion");
 				}
 			}
@@ -329,7 +328,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				features.addAll(getPairSchemaFeatures(x, num1, num2, "UNIT", "RATE", infRuleType));
 				if(Tools.jaccardSim(
 						Tools.spanToLemmaList(x.tokens.get(num2.sentId), num2.unit),
-						Tools.spanToLemmaList(x.tokens.get(ques.sentId), ques.unit)) > 0) {
+						Tools.spanToLemmaList(x.tokens.get(ques.sentId), ques.unit)) > 0.2) {
 					features.add("SupportFromQuestion");
 				}
 			}
@@ -337,7 +336,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 				features.addAll(getPairSchemaFeatures(x, num1, num2, "RATE", "UNIT", infRuleType));
 				if(Tools.jaccardSim(
 						Tools.spanToLemmaList(x.tokens.get(num1.sentId), num1.unit),
-						Tools.spanToLemmaList(x.tokens.get(ques.sentId), ques.unit)) > 0) {
+						Tools.spanToLemmaList(x.tokens.get(ques.sentId), ques.unit)) > 0.2) {
 					features.add("SupportFromQuestion");
 				}
 			}
@@ -355,7 +354,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		for (int i = Math.max(0, tokenId2 - 3); i < Math.min(tokenId2 + 4, tokens2.size()); ++i) {
 			if (!tokens2.get(i).tag().startsWith("CD") &&
 					!tokens2.get(i).tag().startsWith("N")) {
-				features.add(infRuleType.substring(0,4)+key+"2_Unigram_" + tokens2.get(i).lemma());
+				features.add(infRuleType.substring(0, 4) + key + "2_Unigram_" + tokens2.get(i).lemma());
 			}
 		}
 		return features;
@@ -377,24 +376,19 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 			StanfordSchema prevSchema = x.schema.get(schema2.quantId-1);
 			phrase2 = Tools.spanToLemmaList(x.tokens.get(prevSchema.sentId), prevSchema.unit);
 		}
-		if(mode1.equals("SUBJ") || mode1.equals("OBJ")) {
-			if ((phrase1.contains("he") || phrase1.contains("she")) &&
-					phrase2.size() > 0) {
-				features.add("Pronoun_Person_Present");
-			}
-			if ((phrase2.contains("he") || phrase2.contains("she")) &&
-					phrase1.size() > 0) {
-				features.add("Pronoun_Person_Present");
-			}
-		}
 		double sim;
 		if(mode1.equals("SUBJ") && mode2.equals("SUBJ")) {
 			sim = Math.max(Tools.jaccardSim(phrase1, phrase2), Tools.jaccardSim(
 					getPhraseByMode(x.tokens, schema1, "OBJ"),
-					getPhraseByMode(x.tokens, schema1, "OBJ")
+					getPhraseByMode(x.tokens, schema2, "OBJ")
 			));
 		} else {
 			sim = Tools.jaccardSim(phrase1, phrase2);
+		}
+		if(!Params.trainingNow) {
+			System.out.println(mode1 + " Phrase1: " + phrase1);
+			System.out.println(mode2 + " Phrase2: " + phrase2);
+			System.out.println("Similarity: " + sim);
 		}
 		if(sim > 0.2) features.add("NonZeroSimilarity");
 		if(sim < 0.2) features.add("AbsolutelyNoMatch");
@@ -421,13 +415,15 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		}
 		if(maxSim > sim+0.001) {
 			features.add("BetterCandidatePresent");
-			features.add("BetterCandidatePresent"+mode1+mode2);
 		} else if(maxSim > 0.1){
 			features.add("BestOption");
-			features.add("BestOption"+mode1+mode2);
 		}
 		if(maxSim < 0.1) {
-			features.add("NoGoodOption_"+mode1+mode2);
+			features.add("NoGoodOption");
+//			features.add("NoGoodOption_"+mode1+mode2);
+		}
+		if(!Params.trainingNow) {
+			System.out.println("Features: " + Arrays.asList(features));
 		}
         return features;
 	}
