@@ -5,13 +5,8 @@ import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 import logic.Logic;
-import logic.Verbs;
-import structure.StanfordSchema;
-import utils.Tools;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CorefInfSolver extends AbstractInferenceSolver implements Serializable {
 

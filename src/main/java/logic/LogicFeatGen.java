@@ -385,7 +385,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		} else {
 			sim = Tools.jaccardSim(phrase1, phrase2);
 		}
-		if(!Params.trainingNow) {
+		if(Params.printLog) {
 			System.out.println(mode1 + " Phrase1: " + phrase1);
 			System.out.println(mode2 + " Phrase2: " + phrase2);
 			System.out.println("Similarity: " + sim);
@@ -422,7 +422,7 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 			features.add("NoGoodOption");
 //			features.add("NoGoodOption_"+mode1+mode2);
 		}
-		if(!Params.trainingNow) {
+		if(Params.printLog) {
 			System.out.println("Features: " + Arrays.asList(features));
 		}
         return features;

@@ -48,9 +48,9 @@ public class CorefDriver {
 		SLProblem train = getSP(trainProbs, true);
 		SLProblem test = getSP(testProbs, false);
 		System.out.println("Train : "+train.instanceList.size()+" Test : "+test.instanceList.size());
-		Params.trainingNow = true;
+		Params.printLog = false;
 		trainModel(Params.modelDir+Params.corefPrefix+id+Params.modelSuffix, train);
-		Params.trainingNow = false;
+		Params.printLog = false;
 		return testModel(Params.modelDir+Params.corefPrefix+id+Params.modelSuffix, test);
 	}
 
