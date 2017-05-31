@@ -272,7 +272,7 @@
     "key": "QUES"
   },
   {
-    "iIndex": 100017,
+    "iIndex": 100018,
     "sQuestion": "There are 5 boxes. There are 20 marbles. The marbles need to be equally distributed among the boxes. How many marbles will be there in each box ?",
     "lAlignments": [
       0,
@@ -288,7 +288,7 @@
     "key": "QUES"
   },
   {
-    "iIndex": 100018,
+    "iIndex": 100019,
     "sQuestion": "There are 5 red apples. There are 6 green apples. How many apples are there in all ?",
     "lAlignments": [
       0,
@@ -304,7 +304,7 @@
     "key": "SIBLING"
   },
   {
-    "iIndex": 100019,
+    "iIndex": 100020,
     "sQuestion": "There are 11 apples. Each apple is either green or red. There are 6 green apples. How many red apples are there ?",
     "lAlignments": [
       0,
@@ -320,7 +320,7 @@
     "key": "HYPER"
   },
   {
-    "iIndex": 100020,
+    "iIndex": 100021,
     "sQuestion": "Each apples is either green or red. There are 6 green apples. There are 11 apples in all. How many red apples are there ?",
     "lAlignments": [
       1,
