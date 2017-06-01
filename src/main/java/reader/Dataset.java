@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import org.h2.engine.Right;
 import structure.DataFormat;
 import structure.Node;
 import structure.QuantSpan;
@@ -393,14 +394,69 @@ public class Dataset {
 				(aggEntropy / countsFeats.keySet().size()));
 	}
 
+	public static void analyzeErrors(String fileName1, String fileName2, int total)
+			throws IOException {
+		List<String> lines1 = FileUtils.readLines(new File(fileName1));
+		List<String> lines2 = FileUtils.readLines(new File(fileName2));
+		Set<Integer> err1 = new HashSet<>();
+		Set<Integer> err2 = new HashSet<>();
+		Set<Integer> bothWrong = new HashSet<>();
+		Set<Integer> RightWrong = new HashSet<>();
+		Set<Integer> WrongRight = new HashSet<>();
+		for(String line : lines1) {
+			Integer i;
+			try {
+				i = Integer.parseInt(line.split(" : ")[0].trim());
+			} catch (Exception e) {
+				continue;
+			}
+			err1.add(i);
+		}
+		for(String line : lines2) {
+			Integer i;
+			try {
+				i = Integer.parseInt(line.split(" : ")[0].trim());
+			} catch (Exception e) {
+				continue;
+			}
+			err2.add(i);
+		}
+		double b = 0, c = 0, union = err2.size(), intersection = 0;
+		for(Integer i : err1) {
+			if(!err2.contains(i)) {
+				b++;
+				WrongRight.add(i);
+			}
+			if(err2.contains(i)) {
+				intersection += 1;
+				bothWrong.add(i);
+			}
+			if(!err2.contains(i)) union += 1;
+		}
+		for(Integer i : err2) {
+			if(!err1.contains(i)) {
+				c++;
+				RightWrong.add(i);
+			}
+		}
+		System.out.println("Yes Yes : "+(total - union));
+		System.out.println("Yes No : "+c);
+		System.out.println("No Yes : "+b);
+		System.out.println("No No : "+intersection);
+		System.out.println("RightWrong: "+Arrays.asList(RightWrong));
+		System.out.println("WrongRight: "+Arrays.asList(WrongRight));
+		System.out.println("bothWrong: "+Arrays.asList(bothWrong));
+	}
+
 
 	public static void main(String args[]) throws Exception {
 		Tools.initStanfordTools();
 //		consistencyChecks();
 //		createFoldFiles();
-		computePMI(0, 10000);
-		computePMI(10000, -1);
-		computePMI(-1, -1);
+//		computePMI(0, 10000);
+//		computePMI(10000, -1);
+//		computePMI(-1, -1);
+		analyzeErrors(args[0], args[1], Integer.parseInt(args[2]));
 	}
 
  	
