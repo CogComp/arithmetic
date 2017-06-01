@@ -19304,10 +19304,11 @@
   },
   {
     "iIndex": 1232856521,
-    "sQuestion": "Mandy made an apple pie . She used 0.6666666666666666 tablespoon of cinnamon and 0.5 tablespoon of nutmeg . How much did she use the two ingredients in total?",
+    "sQuestion": "Mandy made an apple pie . She used 0.6666666666666666 tablespoon of cinnamon and 0.5 tablespoon of nutmeg . How much did she use the 2.0 ingredients in total?",
     "quants": [
       0.6666666666666666,
-      0.5
+	0.5,
+	2.0
     ],
     "lAlignments": [
       0,
@@ -19399,14 +19400,16 @@
   },
   {
     "iIndex": 1232856527,
-    "sQuestion": "The Paving company used 10.0 tons to pave one street and 5.1 tons to pave another.  How much was the difference between the two streets?",
+    "sQuestion": "The Paving company used 10.0 tons to pave 1.0 street and 5.1 tons to pave another.  How much was the difference between the 2.0 streets?",
     "quants": [
-      10.0,
-      5.1
+	10.0,
+	1.0,
+	5.1,
+	2.0
     ],
     "lAlignments": [
       0,
-      1
+      2
     ],
     "lEquations": [
       "X=(10.0 - 5.1)"
@@ -19552,14 +19555,15 @@
   },
   {
     "iIndex": 1232856536,
-    "sQuestion": "Irene went out and bought a new lamp for her bedside table. Her old lamp was 2.3333333333333335 feet tall, the new one is 1.0 foot taller. How tall is the new lamp?",
+    "sQuestion": "Irene went out and bought a new lamp for her bedside table. Her old lamp was 2.3333333333333335 feet tall, the new 1.0 is 1.0 foot taller. How tall is the new lamp?",
     "quants": [
       2.3333333333333335,
-      1.0
+	1.0,
+	1.0
     ],
     "lAlignments": [
-      0,
-      1
+	0,
+	2
     ],
     "lEquations": [
       "X=(2.3333333333333335 + 1.0)"
@@ -19628,15 +19632,17 @@
   },
   {
     "iIndex": 1232856540,
-    "sQuestion": "Kevin had 2.0 watermelons. Together they weighted 9.91 pounds. He eats one of them that was 4.11 pounds. How much does the other one weigh?",
+    "sQuestion": "Kevin had 2.0 watermelons. Together they weighted 9.91 pounds. He eats 1.0 of them that was 4.11 pounds. How much does the other 1.0 weigh?",
     "quants": [
-      2.0,
-      9.91,
-      4.11
+	2.0,
+	9.91,
+	1.0,
+	4.11,
+	1.0
     ],
     "lAlignments": [
       1,
-      2
+      3
     ],
     "lEquations": [
       "X=(9.91 - 4.11)"
@@ -20598,17 +20604,18 @@
   },
   {
     "iIndex": 1232856591,
-    "sQuestion": "In one part of the park, there are 5.0 dogwood trees. Park workers plan to cut down 7.0 dogwood trees today. In another part of the park, there are 4.0 dogwood trees. 8.0 park workers are on the job. After they are done with their work, how many dogwood tress will be left in the park?",
-    "quants": [
-      5.0,
-      7.0,
-      4.0,
-      8.0
+    "sQuestion": "In 1.0 part of the park, there are 5.0 dogwood trees. Park workers plan to cut down 7.0 dogwood trees today. In another part of the park, there are 4.0 dogwood trees. 8.0 park workers are on the job. After they are done with their work, how many dogwood tress will be left in the park?",
+      "quants": [
+	  1.0,
+	  5.0,
+	  7.0,
+	  4.0,
+	  8.0
     ],
     "lAlignments": [
-      0,
-      2,
-      1
+      1,
+      3,
+      2
     ],
     "lEquations": [
       "X=((5.0 + 4.0) - 7.0)"
@@ -25062,10 +25069,11 @@
   },
   {
     "iIndex": 1232856844,
-    "sQuestion": "Johnny ran 10.0 laps.  It takes him 3.0 minutes to run one lap.  How long did Johnny run?",
+    "sQuestion": "Johnny ran 10.0 laps.  It takes him 3.0 minutes to run 1.0 lap.  How long did Johnny run?",
     "quants": [
-      10.0,
-      3.0
+	10.0,
+	3.0,
+	1.0
     ],
     "lAlignments": [
       0,
@@ -25521,10 +25529,11 @@
   },
   {
     "iIndex": 1232856872,
-    "sQuestion": "Jill invited 37.0 people to her birthday party. If each pizza is divided into 8 equal parts, and each person eats one slice, how many pizzas were eaten?",
+    "sQuestion": "Jill invited 37.0 people to her birthday party. If each pizza is divided into 8 equal parts, and each person eats 1.0 slice, how many pizzas were eaten?",
     "quants": [
-      37.0,
-      8.0
+	37.0,
+	8.0,
+	1.0
     ],
     "lAlignments": [
       0,
@@ -26393,16 +26402,17 @@
   },
   {
     "iIndex": 1232856943,
-    "sQuestion": "On one trip, Rachel bought a coloring book worth $23 and pencils worth $32. Later, she returned to buy tools that totaled $44. How much did she spend?",
-    "quants": [
-      23.0,
-      32.0,
-      44.0
+    "sQuestion": "On 1.0 trip, Rachel bought a coloring book worth $23 and pencils worth $32. Later, she returned to buy tools that totaled $44. How much did she spend?",
+      "quants": [
+	  1.0,
+	  23.0,
+	  32.0,
+	  44.0
     ],
     "lAlignments": [
-      0,
       1,
-      2
+      2,
+      3
     ],
     "lEquations": [
       "X=((23.0 + 32.0) + 44.0)"
@@ -27107,11 +27117,12 @@
   },
   {
     "iIndex": 1232857006,
-    "sQuestion": "A pet store has 6.0 bird cages. If the pet store has 6.0 parrots and 2.0 parakeets, how many birds can occupy one cage on average ?",
+    "sQuestion": "A pet store has 6.0 bird cages. If the pet store has 6.0 parrots and 2.0 parakeets, how many birds can occupy 1.0 cage on average ?",
     "quants": [
-      6.0,
-      6.0,
-      2.0
+	6.0,
+	6.0,
+	2.0,
+	1.0
     ],
     "lAlignments": [
 	1,
@@ -27402,16 +27413,17 @@
   },
   {
     "iIndex": 1232857049,
-    "sQuestion": "A toy store had 4.0 giant stuffed bears in stock when they got another shipment with 10.0 bears in it. One bear costs $7.0. How much money do you need if you want to buy all the bears in stock?",
+    "sQuestion": "A toy store had 4.0 giant stuffed bears in stock when they got another shipment with 10.0 bears in it. 1.0 bear costs $7.0. How much money do you need if you want to buy all the bears in stock?",
     "quants": [
       4.0,
-      10.0,
+	10.0,
+	1.0,
       7.0
     ],
     "lAlignments": [
       0,
       1,
-      2
+      3
     ],
     "lEquations": [
       "X=((4.0 + 10.0) * 7.0)"
@@ -27419,7 +27431,7 @@
     "lSolutions": [
       98.0
     ],
-    "rates": [2]
+    "rates": [3]
   },
   {
     "iIndex": 1232857060,
@@ -29036,18 +29048,19 @@
   },
   {
     "iIndex": 1232857221,
-    "sQuestion": "Carrie's mom gave her $91 for shopping. In one store, she bought a 6$ shirt and was given $24 back in error. Afterwards, she spent another $11 on shoes. How much money does Carrie have now?",
+    "sQuestion": "Carrie's mom gave her $91 for shopping. In 1.0 store, she bought a 6$ shirt and was given $24 back in error. Afterwards, she spent another $11 on shoes. How much money does Carrie have now?",
     "quants": [
-      91.0,
+	91.0,
+	1.0,
       6.0,
       24.0,
       11.0
     ],
     "lAlignments": [
       0,
+      3,
       2,
-      1,
-      3
+      4
     ],
     "lEquations": [
       "X=((91.0 + 24.0) - (6.0 + 11.0))"
@@ -29287,12 +29300,13 @@
   },
   {
     "iIndex": 1232857238,
-    "sQuestion": "Vincent bought 10.0 books about animals, 1.0 book about outer space, and 3.0 books about trains. He paid $16.0 for all the books combined. What was the average price for one book?",
+    "sQuestion": "Vincent bought 10.0 books about animals, 1.0 book about outer space, and 3.0 books about trains. He paid $16.0 for all the books combined. What was the average price for 1.0 book?",
     "quants": [
       10.0,
       1.0,
       3.0,
-      16.0
+	16.0,
+	1.0
     ],
     "lAlignments": [
       3,
@@ -29662,14 +29676,15 @@
   },
   {
     "iIndex": 1232857278,
-    "sQuestion": "If you have 378 balls, and one juggler is able to juggle 6 balls at a time, how many jugglers do you need?",
+    "sQuestion": "If you have 378 balls, and 1.0 juggler is able to juggle 6 balls at a time, how many jugglers do you need?",
     "quants": [
-      378.0,
+	378.0,
+	1.0,
       6.0
     ],
     "lAlignments": [
       0,
-      1
+      2
     ],
     "lEquations": [
       "X=(378.0 / 6.0)"
@@ -29677,7 +29692,7 @@
     "lSolutions": [
       63.0
     ],
-    "rates": [1]
+    "rates": [2]
   },
   {
     "iIndex": 1232857281,
@@ -29795,14 +29810,15 @@
   },
   {
     "iIndex": 1232857297,
-    "sQuestion": "When relatives visit Haley and her family, she and her cousins do origami. She gives 48.0 origami papers to every one of her 6.0 cousins. How many papers has she given away?",
+    "sQuestion": "When relatives visit Haley and her family, she and her cousins do origami. She gives 48.0 origami papers to every 1.0 of her 6.0 cousins. How many papers has she given away?",
     "quants": [
-      48.0,
+	48.0,
+	1.0,
       6.0
     ],
     "lAlignments": [
       0,
-      1
+      2
     ],
     "lEquations": [
       "X=(48.0 * 6.0)"
