@@ -19,7 +19,7 @@ public class Relevance {
             List<String> unit = Tools.spanToLemmaList(
                     x.tokens.get(x.schema.get(i).sentId), x.schema.get(i).unit);
             List<CoreLabel> tokens = x.tokens.get(s.sentId);
-            if(unit.size() == -1 && i >= 1 &&
+            if(unit.size() == 0 && i >= 1 &&
                     unitRates.get(new IntPair(i-1, 0)).size() > 0) {
                 unit.addAll(unitRates.get(new IntPair(i-1, 0)));
             }
@@ -278,6 +278,7 @@ public class Relevance {
     }
 
     public static void main(String[] args) throws Exception {
+        Tools.initStanfordTools();
         testIrrelevanceWithDefaultExtraction();
     }
 
