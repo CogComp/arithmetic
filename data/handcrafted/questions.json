@@ -12,8 +12,7 @@
     "lSolutions": [
       43.0
     ],
-    "infType": 0,
-    "key": "0_0"
+    "rates": []
   },
   {
     "iIndex": 100002,
@@ -28,8 +27,7 @@
     "lSolutions": [
       97.0
     ],
-    "infType": 0,
-    "key": "0_1"
+    "rates": []
   },
   {
     "iIndex": 100003,
@@ -44,8 +42,7 @@
     "lSolutions": [
       43.0
     ],
-    "infType": 0,
-    "key": "0_1"
+    "rates": []
   },
   {
     "iIndex": 100004,
@@ -60,8 +57,7 @@
     "lSolutions": [
       43.0
     ],
-    "infType": 0,
-    "key": "1_0"
+    "rates": []
   },
   {
     "iIndex": 100005,
@@ -76,8 +72,7 @@
     "lSolutions": [
       97.0
     ],
-    "infType": 0,
-    "key": "1_0"
+    "rates": []
   },
   {
     "iIndex": 100006,
@@ -92,8 +87,7 @@
     "lSolutions": [
       43.0
     ],
-    "infType": 0,
-    "key": "0_1"
+    "rates": []
   },
   {
     "iIndex": 100007,
@@ -108,8 +102,7 @@
     "lSolutions": [
       97.0
     ],
-    "infType": 0,
-    "key": "0_1"
+    "rates": []
   },
   {
     "iIndex": 100008,
@@ -124,8 +117,7 @@
     "lSolutions": [
       97.0
     ],
-    "infType": 0,
-    "key": "1_0"
+    "rates": []
   },
   {
     "iIndex": 100009,
@@ -140,8 +132,7 @@
     "lSolutions": [
       43.0
     ],
-    "infType": 0,
-    "key": "1_0"
+    "rates": []
   },
   {
     "iIndex": 100010,
@@ -156,8 +147,7 @@
     "lSolutions": [
       5
     ],
-    "infType": 2,
-    "key": "0_0"
+    "rates": []
   },
   {
     "iIndex": 100011,
@@ -172,8 +162,7 @@
     "lSolutions": [
       11
     ],
-    "infType": 2,
-    "key": "0_1"
+    "rates": []
   },
   {
     "iIndex": 100012,
@@ -188,8 +177,7 @@
     "lSolutions": [
       5
     ],
-    "infType": 2,
-    "key": "0_0"
+    "rates": []
   },
   {
     "iIndex": 100013,
@@ -204,8 +192,7 @@
     "lSolutions": [
       11
     ],
-    "infType": 2,
-    "key": "0_1"
+    "rates": []
   },
   {
     "iIndex": 100014,
@@ -220,8 +207,7 @@
     "lSolutions": [
       1
     ],
-    "infType": 2,
-    "key": "1"
+    "rates": []
   },
   {
     "iIndex": 100015,
@@ -236,8 +222,7 @@
     "lSolutions": [
       20
     ],
-    "infType": 3,
-    "key": "1_DEN"
+    "rates": [1]
   },
   {
     "iIndex": 100016,
@@ -252,8 +237,7 @@
     "lSolutions": [
       4
     ],
-    "infType": 3,
-    "key": "0_NUM"
+    "rates": [1]
   },
   {
     "iIndex": 100017,
@@ -268,8 +252,7 @@
     "lSolutions": [
       4
     ],
-    "infType": 3,
-    "key": "QUES"
+    "rates": [-1]
   },
   {
     "iIndex": 100018,
@@ -284,8 +267,7 @@
     "lSolutions": [
       4
     ],
-    "infType": 3,
-    "key": "QUES"
+    "rates": [-1]
   },
   {
     "iIndex": 100019,
@@ -300,8 +282,7 @@
     "lSolutions": [
       11
     ],
-    "infType": 2,
-    "key": "SIBLING"
+    "rates": []
   },
   {
     "iIndex": 100020,
@@ -316,8 +297,7 @@
     "lSolutions": [
       5
     ],
-    "infType": 2,
-    "key": "HYPER"
+    "rates": []
   },
   {
     "iIndex": 100021,
@@ -332,8 +312,7 @@
     "lSolutions": [
       5
     ],
-    "infType": 2,
-    "key": "HYPO"
+    "rates": []
   }
 ]
   

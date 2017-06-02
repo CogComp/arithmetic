@@ -165,8 +165,9 @@ public class Relevance {
         double maxSim = 0.0, minSim = 1.0, maxSimForIndex = 0.0;
         for(int i=0; i<n; ++i) {
             for(int j=i+1; j<n; ++j) {
-                double sim = Tools.jaccardSim(unitRates.get(new IntPair(i, 0)),
-                                unitRates.get(new IntPair(j, 0)));
+                double sim = Math.max(
+                        Tools.jaccardSim(unitRates.get(new IntPair(i, 0)), unitRates.get(new IntPair(j, 0))),
+                        Tools.jaccardSim(unitRates.get(new IntPair(i, 0)), unitRates.get(new IntPair(j, 1))));
                 if (i == quantIndex || j == quantIndex) {
                     if(sim > maxSimForIndex) maxSimForIndex = sim;
                 } else {
@@ -179,11 +180,11 @@ public class Relevance {
                 }
             }
         }
-        System.out.println("ProblemId: "+x.problemId+"|| QuantIndex: "+quantIndex+
-                "|| MaxSimForIndex: "+maxSimForIndex+"|| MaxSim: "+maxSim+
-                "|| MinSim: "+minSim);
-        System.out.println("Extractions: "+Arrays.asList(unitRates));
-        System.out.println();
+//        System.out.println("ProblemId: "+x.problemId+"|| QuantIndex: "+quantIndex+
+//                "|| MaxSimForIndex: "+maxSimForIndex+"|| MaxSim: "+maxSim+
+//                "|| MinSim: "+minSim);
+//        System.out.println("Extractions: "+Arrays.asList(unitRates));
+//        System.out.println();
         if(minSim - maxSimForIndex > 0.51 && !otherDependentNumber) {
             if(Tools.jaccardSim(quesUnit, unitRates.get(
                         new IntPair(quantIndex, 0))) < minSim-0.01) {

@@ -243,6 +243,7 @@ public class Dataset {
 	}
 
 	public static void consistencyChecks() throws Exception {
+		System.out.println("Running consistency checks");
 		String json = FileUtils.readFileToString(new File("data/questions.json"));
 		List<DataFormat> kushmanProbs = new Gson().fromJson(json,
 				new TypeToken<List<DataFormat>>(){}.getType());
@@ -403,7 +404,11 @@ public class Dataset {
 		Set<Integer> bothWrong = new HashSet<>();
 		Set<Integer> RightWrong = new HashSet<>();
 		Set<Integer> WrongRight = new HashSet<>();
-		for(String line : lines1) {
+		Map<Integer, String> probIdToString1 = new HashMap<>();
+		Map<Integer, String> probIdToString2 = new HashMap<>();
+		String bW = "", RW = "", WR = "";
+		for(int j=0; j<lines1.size(); ++j) {
+			String line = lines1.get(j);
 			Integer i;
 			try {
 				i = Integer.parseInt(line.split(" : ")[0].trim());
@@ -411,8 +416,16 @@ public class Dataset {
 				continue;
 			}
 			err1.add(i);
+			String s = lines1.get(j) + "\n";
+			do {
+				j++;
+				s += lines1.get(j) + "\n";
+			} while(!lines1.get(j).startsWith("Pred"));
+
+			probIdToString1.put(i, s);
 		}
-		for(String line : lines2) {
+		for(int j=0; j<lines2.size(); ++j) {
+			String line = lines2.get(j);
 			Integer i;
 			try {
 				i = Integer.parseInt(line.split(" : ")[0].trim());
@@ -420,6 +433,13 @@ public class Dataset {
 				continue;
 			}
 			err2.add(i);
+			String s = lines2.get(j) + "\n";
+			do {
+				j++;
+				s += lines2.get(j) + "\n";
+			} while(!lines2.get(j).startsWith("Pred"));
+
+			probIdToString2.put(i, s);
 		}
 		double b = 0, c = 0, union = err2.size(), intersection = 0;
 		for(Integer i : err1) {
@@ -439,13 +459,30 @@ public class Dataset {
 				RightWrong.add(i);
 			}
 		}
+		System.out.println("Acc1: "+(1.0 - (err1.size()*1.0/total)));
+		System.out.println("Acc2: "+(1.0 - (err2.size()*1.0/total)));
 		System.out.println("Yes Yes : "+(total - union));
 		System.out.println("Yes No : "+c);
 		System.out.println("No Yes : "+b);
 		System.out.println("No No : "+intersection);
-		System.out.println("RightWrong: "+Arrays.asList(RightWrong));
-		System.out.println("WrongRight: "+Arrays.asList(WrongRight));
-		System.out.println("bothWrong: "+Arrays.asList(bothWrong));
+//		System.out.println("RightWrong: "+Arrays.asList(RightWrong));
+//		System.out.println("WrongRight: "+Arrays.asList(WrongRight));
+//		System.out.println("bothWrong: "+Arrays.asList(bothWrong));
+		String str = "";
+		for(Integer i : RightWrong) {
+			str += probIdToString2.get(i)+"\n";
+		}
+		FileUtils.writeStringToFile(new File("right_wrong.txt"), str);
+		str = "";
+		for(Integer i : WrongRight) {
+			str += probIdToString1.get(i)+"\n";
+		}
+		FileUtils.writeStringToFile(new File("wrong_right.txt"), str);
+		str = "";
+		for(Integer i : bothWrong) {
+			str += probIdToString2.get(i)+"\n";
+		}
+		FileUtils.writeStringToFile(new File("both_wrong.txt"), str);
 	}
 
 
