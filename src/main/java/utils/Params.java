@@ -15,7 +15,7 @@ public class Params {
 	public static String verbnetDir = "/shared/austen/sroy9/new_vn/";
 
 	public static boolean useIllinoisTools, useStanfordTools, noUDG, printLog = false,
-			simpleInterest = false;
+			simpleInterest = true;
 
 	public static String modelDir = "models/";
 	public static String relPrefix = "Rel";

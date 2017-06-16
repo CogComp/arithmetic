@@ -1,6 +1,8 @@
 target/*
 .*
 log/*
+log_*
+models*
 data/vector*
 data/train*
 data/test*
