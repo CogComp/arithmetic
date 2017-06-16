@@ -138,6 +138,12 @@ public class SimpleQuantifier {
 				quantities.add(span);
 			}
 		}
+		for(QuantSpan qs : quantities) {
+			if(text.substring(Math.min(qs.end, text.length()-1),
+					Math.min(qs.end+2, text.length())).contains("%")) {
+				qs.val *= 0.01;
+			}
+		}
 		return quantities;
 	}
 	

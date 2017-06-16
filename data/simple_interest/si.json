@@ -1,0 +1,1031 @@
+[
+  {
+    "iIndex": 110000,
+    "sQuestion": "How much interest is earned on $269 at 10% for 5 years?",
+    "quants": [
+      269.0,
+      0.1,
+      5.0
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(269.0*(0.1*5.0))"
+    ],
+    "lSolutions": [
+      134.5
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110001,
+    "sQuestion": "How much interest does a $482 investment earn at 5% over 3 years?",
+    "quants": [
+      482.0,
+      0.05,
+      3.0
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(482.0*(0.05*3.0))"
+    ],
+    "lSolutions": [
+      72.3
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110002,
+    "sQuestion": "How much interest is earned on $583 at 8% for 6 years?",
+    "quants": [
+      583.0,
+      0.08,
+      6.0
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(583.0*(0.08*6.0))"
+    ],
+    "lSolutions": [
+      279.84
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110003,
+    "sQuestion": "How long must $542 be invested at a rate of 7% to earn $303.52 in interest?",
+    "quants": [
+      542.0,
+      0.07,
+      303.52
+    ],
+    "lAlignments": [
+      2,
+      0,
+      1
+    ],
+    "lEquations": [
+      "X=(303.52*(542.0*0.07))"
+    ],
+    "lSolutions": [
+      8.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110004,
+    "sQuestion": "How much interest does a $775 investment earn at 7% over 8 years?",
+    "quants": [
+      775.0,
+      0.07,
+      8.0
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(775.0*(0.07*8.0))"
+    ],
+    "lSolutions": [
+      434.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110005,
+    "sQuestion": "How much interest is earned on a principal of $267 invested at an interest rate of 6% for 6 years?",
+    "quants": [
+      267.0,
+      0.06,
+      6.0
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(267.0*(0.06*6.0))"
+    ],
+    "lSolutions": [
+      96.12
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110006,
+    "sQuestion": "At what rate was an investment made that obtains $125.37 on $597 over 3 years?",
+    "quants": [
+      125.37,
+      597.0,
+      3.0
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(125.37/(597.0*3.0))"
+    ],
+    "lSolutions": [
+      0.07
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110007,
+    "sQuestion": "How much interest is earned on $140 at 7% for 5 years?",
+    "quants": [
+      140.0,
+      0.07,
+      5.0
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(140.0*(0.07*5.0))"
+    ],
+    "lSolutions": [
+      49.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110008,
+    "sQuestion": "If you borrow $758 for 2 years at an interest rate of 6%, how much interest will you pay?",
+    "quants": [
+      758.0,
+      2.0,
+      0.06
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(758.0*(2.0*0.06))"
+    ],
+    "lSolutions": [
+      90.96
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110009,
+    "sQuestion": "How much interest is earned on $939 at 7% for 6 years?",
+    "quants": [
+      939.0,
+      0.07,
+      6.0
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(939.0*(0.07*6.0))"
+    ],
+    "lSolutions": [
+      394.38
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110010,
+    "sQuestion": "You put $399 into a savings account with an interest rate of 4% which earns $31.92 over a period of time. How long was the period of time?",
+    "quants": [
+      399.0,
+      0.04,
+      31.92
+    ],
+    "lAlignments": [
+      2,
+      0,
+      1
+    ],
+    "lEquations": [
+      "X=(31.92*(399.0*0.04))"
+    ],
+    "lSolutions": [
+      2.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110011,
+    "sQuestion": "How much interest is earned on a principal of $420 invested at an interest rate of 3% for 7 years?",
+    "quants": [
+      420.0,
+      0.03,
+      7.0
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(420.0*(0.03*7.0))"
+    ],
+    "lSolutions": [
+      88.2
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110012,
+    "sQuestion": "$74.76 is earned on funds invested at a rate of 4% over 3 years. What was the amount of the original funds?",
+    "quants": [
+      74.76,
+      0.04,
+      3.0
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(74.76/(0.04*3.0))"
+    ],
+    "lSolutions": [
+      623.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110013,
+    "sQuestion": "How much interest is earned on a principal of $863 invested at an interest rate of 4% for 5 years?",
+    "quants": [
+      863.0,
+      0.04,
+      5.0
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(863.0*(0.04*5.0))"
+    ],
+    "lSolutions": [
+      172.6
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110014,
+    "sQuestion": "How much interest does a $732 investment earn at 5% over 1 year?",
+    "quants": [
+      732.0,
+      0.05,
+      1.0
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(732.0*(0.05*1.0))"
+    ],
+    "lSolutions": [
+      36.6
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110015,
+    "sQuestion": "How much interest is earned on a principal of $217 invested at an interest rate of 6% for 6 years?",
+    "quants": [
+      217.0,
+      0.06,
+      6.0
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(217.0*(0.06*6.0))"
+    ],
+    "lSolutions": [
+      78.12
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110016,
+    "sQuestion": "How much principal must be invested to earn $403.20 in 7 years at an interest rate of 9%?",
+    "quants": [
+      403.2,
+      7.0,
+      0.09
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(403.2/(7.0*0.09))"
+    ],
+    "lSolutions": [
+      640.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110017,
+    "sQuestion": "If you received $60.00 on $150 invested at a rate of 10%, for how long did you invest the principal?",
+    "quants": [
+      60.0,
+      150.0,
+      0.1
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(60.0/(150.0*0.1))"
+    ],
+    "lSolutions": [
+      4.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110018,
+    "sQuestion": "How long must $217 be invested at a rate of 6% to earn $78.12 in interest?",
+    "quants": [
+      217.0,
+      0.06,
+      78.12
+    ],
+    "lAlignments": [
+      2,
+      0,
+      1
+    ],
+    "lEquations": [
+      "X=(78.12*(217.0*0.06))"
+    ],
+    "lSolutions": [
+      6.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110019,
+    "sQuestion": "How much interest is earned on a principal of $374 invested at an interest rate of 3% for 9 years?",
+    "quants": [
+      374.0,
+      0.03,
+      9.0
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(374.0*(0.03*9.0))"
+    ],
+    "lSolutions": [
+      100.98
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110020,
+    "sQuestion": "If you borrow $894 for 4 years at an interest rate of 3%, how much interest will you pay?",
+    "quants": [
+      894.0,
+      4.0,
+      0.03
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(894.0*(4.0*0.03))"
+    ],
+    "lSolutions": [
+      107.28
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110021,
+    "sQuestion": "If you received $47.16 on $393 invested at a rate of 3%, for how long did you invest the principal?",
+    "quants": [
+      47.16,
+      393.0,
+      0.03
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(47.16/(393.0*0.03))"
+    ],
+    "lSolutions": [
+      4.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110022,
+    "sQuestion": "How much principal must be invested to earn $51.30 in 9 years at an interest rate of 3%?",
+    "quants": [
+      51.3,
+      9.0,
+      0.03
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(51.3/(9.0*0.03))"
+    ],
+    "lSolutions": [
+      190.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110023,
+    "sQuestion": "If you received $47.76 on $199 invested at a rate of 4%, for how long did you invest the principal?",
+    "quants": [
+      47.76,
+      199.0,
+      0.04
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(47.76/(199.0*0.04))"
+    ],
+    "lSolutions": [
+      6.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110024,
+    "sQuestion": "If you put money into a savings account that earns $26.22 over 1 year at a rate of 6%, how much money did you put into the account?",
+    "quants": [
+      26.22,
+      1.0,
+      0.06
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(26.22/(1.0*0.06))"
+    ],
+    "lSolutions": [
+      437.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110025,
+    "sQuestion": "How much interest is earned on a principal of $850 invested at an interest rate of 4% for 1 year?",
+    "quants": [
+      850.0,
+      0.04,
+      1.0
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(850.0*(0.04*1.0))"
+    ],
+    "lSolutions": [
+      34.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110026,
+    "sQuestion": "If you borrow $902 for 6 years at an interest rate of 7%, how much interest will you pay?",
+    "quants": [
+      902.0,
+      6.0,
+      0.07
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(902.0*(6.0*0.07))"
+    ],
+    "lSolutions": [
+      378.84
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110027,
+    "sQuestion": "How long must $771 be invested at a rate of 10% to earn $154.20 in interest?",
+    "quants": [
+      771.0,
+      0.1,
+      154.2
+    ],
+    "lAlignments": [
+      2,
+      0,
+      1
+    ],
+    "lEquations": [
+      "X=(154.2*(771.0*0.1))"
+    ],
+    "lSolutions": [
+      2.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110028,
+    "sQuestion": "You put $474 into a savings account with an interest rate of 4% which earns $56.88 over a period of time. How long was the period of time?",
+    "quants": [
+      474.0,
+      0.04,
+      56.88
+    ],
+    "lAlignments": [
+      2,
+      0,
+      1
+    ],
+    "lEquations": [
+      "X=(56.88*(474.0*0.04))"
+    ],
+    "lSolutions": [
+      3.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110029,
+    "sQuestion": "How much principal must be invested to earn $30.88 in 1 year at an interest rate of 4%?",
+    "quants": [
+      30.88,
+      1.0,
+      0.04
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(30.88/(1.0*0.04))"
+    ],
+    "lSolutions": [
+      772.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110030,
+    "sQuestion": "$28.40 is earned on funds invested at a rate of 5% over 4 years. What was the amount of the original funds?",
+    "quants": [
+      28.4,
+      0.05,
+      4.0
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(28.4/(0.05*4.0))"
+    ],
+    "lSolutions": [
+      142.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110031,
+    "sQuestion": "The cost of a loan for $294 over 1 year is $8.82. What was the rate on the loan?",
+    "quants": [
+      294.0,
+      1.0,
+      8.82
+    ],
+    "lAlignments": [
+      2,
+      0,
+      1
+    ],
+    "lEquations": [
+      "X=(8.82*(294.0*1.0))"
+    ],
+    "lSolutions": [
+      0.03
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110032,
+    "sQuestion": "How much interest does a $301 investment earn at 5% over 5 years?",
+    "quants": [
+      301.0,
+      0.05,
+      5.0
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(301.0*(0.05*5.0))"
+    ],
+    "lSolutions": [
+      75.25
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110033,
+    "sQuestion": "What is the interest rate if a principal of $883 earns $635.76 in interest in 8 years?",
+    "quants": [
+      883.0,
+      635.76,
+      8.0
+    ],
+    "lAlignments": [
+      1,
+      0,
+      2
+    ],
+    "lEquations": [
+      "X=(635.76*(883.0*8.0))"
+    ],
+    "lSolutions": [
+      0.09
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110034,
+    "sQuestion": "How much principal must be invested to earn $495.00 in 6 years at an interest rate of 10%?",
+    "quants": [
+      495.0,
+      6.0,
+      0.1
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(495.0/(6.0*0.1))"
+    ],
+    "lSolutions": [
+      825.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110035,
+    "sQuestion": "The cost of a loan for $183 over 9 years is $164.70. What was the rate on the loan?",
+    "quants": [
+      183.0,
+      9.0,
+      164.7
+    ],
+    "lAlignments": [
+      2,
+      0,
+      1
+    ],
+    "lEquations": [
+      "X=(164.7*(183.0*9.0))"
+    ],
+    "lSolutions": [
+      0.1
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110036,
+    "sQuestion": "If you received $32.64 on $136 invested at a rate of 4%, for how long did you invest the principal?",
+    "quants": [
+      32.64,
+      136.0,
+      0.04
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(32.64/(136.0*0.04))"
+    ],
+    "lSolutions": [
+      6.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110037,
+    "sQuestion": "$28.00 is earned on funds invested at a rate of 7% over 4 years. What was the amount of the original funds?",
+    "quants": [
+      28.0,
+      0.07,
+      4.0
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(28.0/(0.07*4.0))"
+    ],
+    "lSolutions": [
+      100.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110038,
+    "sQuestion": "How much principal must be invested to earn $9.80 in 1 year at an interest rate of 7%?",
+    "quants": [
+      9.8,
+      1.0,
+      0.07
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(9.8/(1.0*0.07))"
+    ],
+    "lSolutions": [
+      140.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110039,
+    "sQuestion": "If you put $759 into a savings account that earns 6%, how much interest will you receive at the end of 4 years?",
+    "quants": [
+      759.0,
+      0.06,
+      4.0
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(759.0*(0.06*4.0))"
+    ],
+    "lSolutions": [
+      182.16
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110040,
+    "sQuestion": "If you received $389.20 on $695 invested at a rate of 7%, for how long did you invest the principal?",
+    "quants": [
+      389.2,
+      695.0,
+      0.07
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(389.2/(695.0*0.07))"
+    ],
+    "lSolutions": [
+      8.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110041,
+    "sQuestion": "The cost of a loan for $430 over 5 years is $193.50. What was the rate on the loan?",
+    "quants": [
+      430.0,
+      5.0,
+      193.5
+    ],
+    "lAlignments": [
+      2,
+      0,
+      1
+    ],
+    "lEquations": [
+      "X=(193.5*(430.0*5.0))"
+    ],
+    "lSolutions": [
+      0.09
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110042,
+    "sQuestion": "How much interest is earned on a principal of $694 invested at an interest rate of 8% for 1 year?",
+    "quants": [
+      694.0,
+      0.08,
+      1.0
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(694.0*(0.08*1.0))"
+    ],
+    "lSolutions": [
+      55.52
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110043,
+    "sQuestion": "If a loan is taken out for $910 at 7% and costs $509.60, how long was the loan for?",
+    "quants": [
+      910.0,
+      0.07,
+      509.6
+    ],
+    "lAlignments": [
+      2,
+      0,
+      1
+    ],
+    "lEquations": [
+      "X=(509.6*(910.0*0.07))"
+    ],
+    "lSolutions": [
+      8.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110044,
+    "sQuestion": "How much interest is earned on a principal of $810 invested at an interest rate of 10% for 5 years?",
+    "quants": [
+      810.0,
+      0.1,
+      5.0
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(810.0*(0.1*5.0))"
+    ],
+    "lSolutions": [
+      405.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110045,
+    "sQuestion": "How much interest does a $571 investment earn at 5% over 4 years?",
+    "quants": [
+      571.0,
+      0.05,
+      4.0
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(571.0*(0.05*4.0))"
+    ],
+    "lSolutions": [
+      114.2
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110046,
+    "sQuestion": "If you borrow $365 for 6 years at an interest rate of 3%, how much interest will you pay?",
+    "quants": [
+      365.0,
+      6.0,
+      0.03
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(365.0*(6.0*0.03))"
+    ],
+    "lSolutions": [
+      65.7
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110047,
+    "sQuestion": "How much principal must be invested to earn $80.08 in 7 years at an interest rate of 4%?",
+    "quants": [
+      80.08,
+      7.0,
+      0.04
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(80.08/(7.0*0.04))"
+    ],
+    "lSolutions": [
+      286.0
+    ],
+    "rates": []
+  },
+  {
+    "iIndex": 110048,
+    "sQuestion": "How much principal must be invested to earn $314.10 in 5 years at an interest rate of 9%?",
+    "quants": [
+      314.1,
+      5.0,
+      0.09
+    ],
+    "lAlignments": [
+      0,
+      1,
+      2
+    ],
+    "lEquations": [
+      "X=(314.1/(5.0*0.09))"
+    ],
+    "lSolutions": [
+      698.0
+    ],
+    "rates": []
+  }
+]

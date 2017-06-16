@@ -12,7 +12,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import org.h2.engine.Right;
 import structure.DataFormat;
 import structure.Node;
 import structure.QuantSpan;
@@ -485,6 +484,86 @@ public class Dataset {
 		FileUtils.writeStringToFile(new File("both_wrong.txt"), str);
 	}
 
+	public static void createDataForSimpleInterest(String rawProblemFile, String outputJsonFile)
+			throws IOException {
+		List<String> lines = FileUtils.readLines(new File(rawProblemFile));
+		List<DataFormat> probs = new ArrayList<>();
+		for(int i=0; i<lines.size(); i+=3) {
+			String question = lines.get(i+2).trim();
+			List<QuantSpan> quantities = Tools.quantifier.getSpans(question);
+			Double ans = Tools.quantifier.getSpans(lines.get(i+1).trim()).get(0).val;
+			List<Double> nums = new ArrayList<>();
+			nums.add(ans);
+			for(QuantSpan qs : quantities) {
+				nums.add(qs.val);
+			}
+			boolean allow = false;
+			int prod = -1;
+			if(nums.size() == 4) {
+				if(Tools.safeEquals(nums.get(0), nums.get(1)*nums.get(2)*nums.get(3))) {
+					allow = true;
+					prod = 0;
+				}
+				if(Tools.safeEquals(nums.get(1), nums.get(0)*nums.get(2)*nums.get(3))) {
+					allow = true;
+					prod = 1;
+				}
+				if(Tools.safeEquals(nums.get(2), nums.get(1)*nums.get(0)*nums.get(3))) {
+					allow = true;
+					prod = 2;
+				}
+				if(Tools.safeEquals(nums.get(3), nums.get(1)*nums.get(2)*nums.get(0))) {
+					allow = true;
+					prod = 3;
+				}
+			}
+			if(!allow) {
+				System.out.println("Problem: "+question);
+				System.out.println("Extracted answer: "+ans);
+			}
+			if(allow) {
+				DataFormat df = new DataFormat();
+				df.sQuestion = question;
+				df.lSolutions = new ArrayList<>();
+				df.lSolutions.add(ans);
+				df.quants = new ArrayList<>();
+				for(QuantSpan qs : quantities) {
+					df.quants.add(qs.val);
+				}
+				df.iIndex = 110000+(i/3);
+				df.rates = new ArrayList<>();
+				df.lAlignments = new ArrayList<>();
+
+				// First find the right equation
+				String eq = "X=";
+				if(prod == 0) {
+					eq += "("+nums.get(1)+"*("+nums.get(2)+"*"+nums.get(3)+"))";
+					df.lAlignments.addAll(Arrays.asList(0,1,2));
+				}
+				if(prod == 1) {
+					eq += "("+nums.get(1)+"/("+nums.get(2)+"*"+nums.get(3)+"))";
+					df.lAlignments.addAll(Arrays.asList(0,1,2));
+				}
+				if(prod == 2) {
+					eq += "("+nums.get(2)+"*("+nums.get(1)+"*"+nums.get(3)+"))";
+					df.lAlignments.addAll(Arrays.asList(1,0,2));
+				}
+				if(prod == 3) {
+					eq += "("+nums.get(3)+"*("+nums.get(1)+"*"+nums.get(2)+"))";
+					df.lAlignments.addAll(Arrays.asList(2,0,1));
+				}
+				df.lEquations = new ArrayList<>();
+				df.lEquations.add(eq);
+				probs.add(df);
+			}
+		}
+		Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+		String json = gson.toJson(probs);
+		FileUtils.writeStringToFile(new File(outputJsonFile), json);
+
+
+	}
+
 
 	public static void main(String args[]) throws Exception {
 		Tools.initStanfordTools();
@@ -493,7 +572,8 @@ public class Dataset {
 //		computePMI(0, 10000);
 //		computePMI(10000, -1);
 //		computePMI(-1, -1);
-		analyzeErrors(args[0], args[1], Integer.parseInt(args[2]));
+//		analyzeErrors(args[0], args[1], Integer.parseInt(args[2]));
+		createDataForSimpleInterest("si.txt", "si.json");
 	}
 
  	
