@@ -17,6 +17,7 @@ import structure.Node;
 import structure.QuantSpan;
 import structure.StanfordProblem;
 import utils.FeatGen;
+import utils.Params;
 import utils.Tools;
 
 public class Dataset {
@@ -545,11 +546,11 @@ public class Dataset {
 					df.lAlignments.addAll(Arrays.asList(0,1,2));
 				}
 				if(prod == 2) {
-					eq += "("+nums.get(2)+"*("+nums.get(1)+"*"+nums.get(3)+"))";
+					eq += "("+nums.get(2)+"/("+nums.get(1)+"*"+nums.get(3)+"))";
 					df.lAlignments.addAll(Arrays.asList(1,0,2));
 				}
 				if(prod == 3) {
-					eq += "("+nums.get(3)+"*("+nums.get(1)+"*"+nums.get(2)+"))";
+					eq += "("+nums.get(3)+"/("+nums.get(1)+"*"+nums.get(2)+"))";
 					df.lAlignments.addAll(Arrays.asList(2,0,1));
 				}
 				df.lEquations = new ArrayList<>();
@@ -573,7 +574,15 @@ public class Dataset {
 //		computePMI(10000, -1);
 //		computePMI(-1, -1);
 //		analyzeErrors(args[0], args[1], Integer.parseInt(args[2]));
-		createDataForSimpleInterest("si.txt", "si.json");
+//		createDataForSimpleInterest("si.txt", "si.json");
+		Params.questionsFile = "data/simple_interest/si.json";
+		List<StanfordProblem> probs = Reader.readStanfordProblemsFromJson();
+		for(StanfordProblem prob : probs) {
+			if(!Tools.safeEquals(prob.expr.getValue(), prob.answer)) {
+				System.out.println("Problem in "+prob.id);
+			}
+		}
+
 	}
 
  	

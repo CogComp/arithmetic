@@ -85,12 +85,11 @@ public class SimpleQuantifier {
 					matcher.start(), matcher.end());
 			qsList.add(qs);
 		}
-		if(Params.useIllinoisTools) {
+		if(Params.useIllinoisTools && Params.runDemo) {
 			TextAnnotation ta = null;
 			try {
 				ta = Tools.pipeline.createBasicTextAnnotation("", "", text);
 			} catch (AnnotatorException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			for (int i = 0; i < ta.size(); ++i) {
@@ -113,6 +112,7 @@ public class SimpleQuantifier {
 				}
 			}
 		}
+		// TODO: Similar block for Stanford Annotations
 		Collections.sort(qsList, new Comparator<QuantSpan>() {
 			@Override
 			public int compare(QuantSpan o1, QuantSpan o2) {
