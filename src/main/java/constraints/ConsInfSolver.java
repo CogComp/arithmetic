@@ -64,8 +64,12 @@ public class ConsInfSolver {
 	public static double constrainedInf(List<Problem> testData, SLModel relModel, 
 			SLModel pairModel, SLModel runModel, SLModel rateModel, boolean isTune) throws Exception {
 		double correct = 0.0, total = 0.0;
+		double siCorrect = 0.0, siTotal = 0.0;
 		for(Problem prob : testData) {
 			total += 1.0;
+			if(Params.simpleInterest && prob.id >= 110000 && prob.id < 110100) {
+				siTotal += 1.0;
+			}
 			Node node = ConsInfSolver.constrainedInf(prob, relModel, pairModel,
 					runModel, rateModel);
 			double ans = node.getValue();
@@ -73,6 +77,9 @@ public class ConsInfSolver {
 			if(Tools.safeEquals(ans, prob.answer)) {
 				correct += 1.0;
 				corr = true;
+				if(Params.simpleInterest && prob.id >= 110000 && prob.id < 110100) {
+					siCorrect += 1.0;
+				}
 			}
 			if(!isTune && ((corr && Params.printCorrect) ||
 					(!corr && Params.printMistakes))) {
@@ -85,6 +92,8 @@ public class ConsInfSolver {
 		if(Params.printMistakes) System.out.print("Final ");
 		System.out.println("Constrained Inference : "+correct+" / "+
 				total+" = "+(correct/total));
+		if(Params.simpleInterest) System.out.println("SI Inference : "+siCorrect+" / "+siTotal
+				+" = "+(siCorrect/siTotal));
 		return (correct/total);
 	}
 	

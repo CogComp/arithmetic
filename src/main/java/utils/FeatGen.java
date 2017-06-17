@@ -116,9 +116,28 @@ public class FeatGen {
 		for(String tkn : lemmas) {
 			feats.add("Unigram_"+tkn);
 		}
-//		for(int i=0; i<lemmas.size()-1; ++i) {
-//			feats.add("Bigram_"+lemmas.get(i)+"_"+lemmas.get(i+1));
-//		}
+		for(int i=0; i<lemmas.size()-1; ++i) {
+			feats.add("Bigram_"+lemmas.get(i)+"_"+lemmas.get(i+1));
+		}
+		return feats;
+	}
+
+	public static List<String> getUnigramBigramFeatures(List<CoreLabel> tokens) {
+		List<String> feats = new ArrayList<>();
+		List<String> lemmas = new ArrayList<>();
+		for(int i=0; i<tokens.size(); ++i) {
+			if(tokens.get(i).tag().startsWith("CD")) {
+				lemmas.add("CD");
+			} else {
+				lemmas.add(tokens.get(i).lemma());
+			}
+		}
+		for(String tkn : lemmas) {
+			feats.add("Unigram_"+tkn);
+		}
+		for(int i=0; i<lemmas.size()-1; ++i) {
+			feats.add("Bigram_"+lemmas.get(i)+"_"+lemmas.get(i+1));
+		}
 		return feats;
 	}
 	

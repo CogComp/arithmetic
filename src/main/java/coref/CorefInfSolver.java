@@ -5,6 +5,7 @@ import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 import logic.Logic;
+import utils.Params;
 
 import java.io.Serializable;
 
@@ -56,6 +57,9 @@ public class CorefInfSolver extends AbstractInferenceSolver implements Serializa
 			}
 			if(x.infType.startsWith("Rate")) {
 				label = Logic.unitDependency(x.infType, key);
+			}
+			if(Params.simpleInterest && x.infType.startsWith("SimpleInterest")) {
+				label = Logic.simpleInterest(key);
 			}
 			if(label == null) continue;
 			if(labelCompletion) {

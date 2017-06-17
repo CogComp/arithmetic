@@ -16,7 +16,6 @@ public class Params {
 
 	public static boolean useIllinoisTools, useStanfordTools, noUDG, printLog = false,
 			simpleInterest = false, runDemo = false;
-
 	public static String modelDir = "models/";
 	public static String relPrefix = "Rel";
 	public static String pairPrefix = "Pair";

@@ -185,7 +185,13 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(node.label.equals("ADD") || node.label.equals("SUB")) {
 			features.add("PartitionOrVerb:"+partitionOrVerb);
 		}
-
+		if(Params.simpleInterest && infRuleType.startsWith("SimpleInterest")) {
+			for(int i=0; i<x.tokens.size(); ++i) {
+				List<CoreLabel> words = x.tokens.get(i);
+				features.addAll(FeatGen.getFeaturesConjWithLabels(
+						FeatGen.getUnigramBigramFeatures(words), infRuleType));
+			}
+		}
 		return FeatGen.getFeaturesConjWithLabels(
 				features,
 				"InfRule:"+infRuleType.substring(0,4));
@@ -356,6 +362,16 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(infRuleType.equals("Partition")) {
 			features.addAll(FeatGen.getFeaturesConjWithLabels(
 					getPartitionFeatures(x, num1, num2), key.equals("SIBLING")?"SIBLING":"H"));
+		}
+		if(infRuleType.equals("SimpleInterest")) {
+			if(key.equals("InterestFirst")) {
+				features.addAll(FeatGen.getFeaturesConjWithLabels(
+						FeatGen.getUnigramBigramFeatures(tokens1, tokenId1, 3), "Interest"));
+			}
+			if(key.equals("InterestSecond")) {
+				features.addAll(FeatGen.getFeaturesConjWithLabels(
+						FeatGen.getUnigramBigramFeatures(tokens2, tokenId2, 3), "Interest"));
+			}
 		}
 		for (int i = Math.max(0, tokenId2 - 3); i < Math.min(tokenId2 + 4, tokens2.size()); ++i) {
 			if (!tokens2.get(i).tag().startsWith("CD") &&
