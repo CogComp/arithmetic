@@ -527,6 +527,33 @@ public class Tools {
 		Tools.stanfordPipeline = new StanfordCoreNLP(props);
 	}
 
+
+	public static double getLexicalSimilarity(List<List<CoreLabel>> tokens1,
+											  List<List<CoreLabel>> tokens2) {
+		List<String> lemmas1 = new ArrayList<>();
+		for(List<CoreLabel> t : tokens1) {
+			lemmas1.addAll(FeatGen.getUnigramBigramFeatures(t));
+		}
+		List<String> lemmas2 = new ArrayList<>();
+		for(List<CoreLabel> t : tokens2) {
+			lemmas2.addAll(FeatGen.getUnigramBigramFeatures(t));
+		}
+		Set<String> t1 = new HashSet<>();
+		t1.addAll(lemmas1);
+		Set<String> t2 = new HashSet<>();
+		t2.addAll(lemmas2);
+		int union = t1.size();
+		int intersection = 0;
+		for (String token : t2) {
+			if (t1.contains(token)) {
+				intersection++;
+			} else {
+				union++;
+			}
+		}
+		return intersection*1.0/union;
+	}
+
 	public static void main(String args[]) {
 		String wn = wordnetIndicator(Arrays.asList("red", "apples"),
 				Arrays.asList("green", "apples"), Arrays.asList("N", "N"),

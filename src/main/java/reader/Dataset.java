@@ -6,16 +6,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
+import edu.stanford.nlp.ling.CoreLabel;
 import org.apache.commons.io.FileUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import structure.DataFormat;
-import structure.Node;
-import structure.QuantSpan;
-import structure.StanfordProblem;
+import structure.*;
 import utils.FeatGen;
 import utils.Params;
 import utils.Tools;
@@ -565,6 +563,25 @@ public class Dataset {
 
 	}
 
+	public static void findLexicallyVariedSubset(List<StanfordProblem> problems) {
+		boolean flag;
+		List<Integer> ids = new ArrayList<>();
+		for(int i=0; i<problems.size(); ++i) {
+			StanfordProblem prob = problems.get(i);
+			flag = false;
+			for(int j=0; j<i; ++j) {
+				double sim = Tools.getLexicalSimilarity(prob.tokens, problems.get(j).tokens);
+//				System.out.println(prob.id+" "+problems.get(j).id+" "+sim);
+				if(sim > 0.9) {
+					flag = true;
+					break;
+				}
+			}
+			if(!flag) ids.add(prob.id);
+		}
+		System.out.println(ids.size());
+		System.out.println(ids);
+	}
 
 	public static void main(String args[]) throws Exception {
 		Tools.initStanfordTools();
@@ -577,11 +594,12 @@ public class Dataset {
 //		createDataForSimpleInterest("si.txt", "si.json");
 		Params.questionsFile = "data/simple_interest/si.json";
 		List<StanfordProblem> probs = Reader.readStanfordProblemsFromJson();
-		for(StanfordProblem prob : probs) {
-			if(!Tools.safeEquals(prob.expr.getValue(), prob.answer)) {
-				System.out.println("Problem in "+prob.id);
-			}
-		}
+		findLexicallyVariedSubset(probs);
+//		for(StanfordProblem prob : probs) {
+//			if(!Tools.safeEquals(prob.expr.getValue(), prob.answer)) {
+//				System.out.println("Problem in "+prob.id);
+//			}
+//		}
 
 	}
 
