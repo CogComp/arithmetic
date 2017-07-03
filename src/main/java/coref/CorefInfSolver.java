@@ -58,9 +58,6 @@ public class CorefInfSolver extends AbstractInferenceSolver implements Serializa
 			if(x.infType.startsWith("Rate")) {
 				label = Logic.unitDependency(x.infType, key);
 			}
-			if(Params.simpleInterest && x.infType.startsWith("SimpleInterest")) {
-				label = Logic.simpleInterest(key);
-			}
 			if(label == null) continue;
 			if(labelCompletion) {
 				if(!label.equals(gold.label)) {
