@@ -1,0 +1,10 @@
+{
+  "sFullQuestionFile"="data/questions.json",
+  "sStanfordParseDirectory"="stanford-parser/parses/",
+  "sFoldFilePrefix"="data/allArithLex/fold",
+  "iPercentageEquationAnnotations"=100,
+  "iNumFolds"=5,
+  "iNumThreads"=64,
+  "iMaxBeamSize"=1000,
+  "iMaxNumPerSystemInBeam"=100
+}
