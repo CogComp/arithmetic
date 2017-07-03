@@ -185,13 +185,6 @@ public class LogicFeatGen extends AbstractFeatureGenerator implements Serializab
 		if(node.label.equals("ADD") || node.label.equals("SUB")) {
 			features.add("PartitionOrVerb:"+partitionOrVerb);
 		}
-		if(Params.simpleInterest && infRuleType.startsWith("SimpleInterest")) {
-			for(int i=0; i<x.tokens.size(); ++i) {
-				List<CoreLabel> words = x.tokens.get(i);
-				features.addAll(FeatGen.getFeaturesConjWithLabels(
-						FeatGen.getUnigramBigramFeatures(words), infRuleType));
-			}
-		}
 		return FeatGen.getFeaturesConjWithLabels(
 				features,
 				"InfRule:"+infRuleType.substring(0,4));

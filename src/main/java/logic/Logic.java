@@ -20,7 +20,7 @@ public class Logic {
     public static List<String> inferenceTypes = Arrays.asList(
             "Math0_Add", "Math0_Sub", "Math0_Mul", "Math1_Add", "Math1_Sub",
             "Math1_Mul", "MathQues_Add", "MathQues_Sub", "MathQues_Mul",
-            "Partition", "Verb", "Rate0", "Rate1", "RateQues", "SimpleInterest");
+            "Partition", "Verb", "Rate0", "Rate1", "RateQues");
 
     // Classification for partition: 0_0, 1_0, 0_0, QUES, QUES_REV
     public static String unitDependency(String infType, String key) {
@@ -137,15 +137,6 @@ public class Logic {
 
     }
 
-    // Classification for partition: SIBLING, HYPO, HYPER
-    public static String simpleInterest(String key) {
-        if(key.equals("NotInterest")) return "MUL";
-        if(key.equals("InterestFirst")) return "DIV";
-        if(key.equals("InterestSecond")) return "DIV_REV";
-        return null;
-    }
-
-
     public static List<String> getRelevantKeys(String infType) {
         List<String> keys = new ArrayList<>();
         if(infType.equals("Verb")) {
@@ -165,9 +156,6 @@ public class Logic {
                     keys.add("1_0");
                 }
             }
-        }
-        if(Params.simpleInterest && infType.equals("SimpleInterest")) {
-            keys.addAll(Arrays.asList("NotInterest", "InterestFirst", "InterestSecond"));
         }
         return keys;
     }
