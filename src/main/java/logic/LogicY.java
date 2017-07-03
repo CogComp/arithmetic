@@ -131,11 +131,6 @@ public class LogicY implements IStructure {
 		StanfordSchema num1 = x.schema.get(quantIndex1);
 		StanfordSchema num2 = x.schema.get(quantIndex2);
 		StanfordSchema ques= x.questionSchema;
-		if(Params.simpleInterest && x.problemId >= 110000 && x.problemId <= 110100) {
-			expr.infRuleType = "SimpleInterest";
-			expr.quantIndex = quantIndex1;
-			return;
-		}
 		int mathIndex = -1;
 		String mathInfType = Logic.getMathInfType(x.tokens, num1, num2, ques, isTopmost);
 		if(mathInfType != null) {

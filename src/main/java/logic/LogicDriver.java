@@ -81,14 +81,11 @@ public class LogicDriver {
 				1164, 1613, 1167, 1174, 951, 794, 117, 758, 1098, 1594, 1163, 140,
 				1229, 1102, 831));
 		double answerAcc = 0.0, relAcc = 0.0, infTypeAcc = 0.0, oldAcc = 0.0, newAcc = 0.0,
-		oldTot = 0.0, newTot = 0.0, siCorrect = 0.0, siTotal = 0.0;
+		oldTot = 0.0, newTot = 0.0;
 		for (int i = 0; i < sp.instanceList.size(); i++) {
 			LogicX prob = (LogicX) sp.instanceList.get(i);
 			LogicY gold = (LogicY) sp.goldStructureList.get(i);
 			LogicY pred = (LogicY) model.infSolver.getBestStructure(model.wv, prob);
-			if(Params.simpleInterest && prob.problemId >= 110000 && prob.problemId < 110100) {
-				siTotal += 1.0;
-			}
 			if(prob.problemId < 10000) {
 				oldTot += 1;
 			} else {
@@ -105,9 +102,6 @@ public class LogicDriver {
 					Tools.safeEquals(-gold.expr.getValue(), pred.expr.getValue())) {
 				answerAcc += 1;
 				correct = true;
-				if(Params.simpleInterest && prob.problemId >= 110000 && prob.problemId < 110100) {
-					siCorrect += 1.0;
-				}
 				if(prob.problemId < 10000) {
 					oldAcc += 1;
 				} else {
@@ -150,8 +144,6 @@ public class LogicDriver {
 //				newTot + " = " + (newAcc/newTot));
 		System.out.println("Answer Accuracy : = " + answerAcc + " / " +
 				sp.instanceList.size() + " = " + (answerAcc/sp.instanceList.size()));
-		if(Params.simpleInterest) System.out.println("SI Inference : "+siCorrect+" / "+siTotal
-				+" = "+(siCorrect/siTotal));
 		return new Pair<>(answerAcc/sp.instanceList.size(), answerAcc/sp.instanceList.size());
 	}
 
