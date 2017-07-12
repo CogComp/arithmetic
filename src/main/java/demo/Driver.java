@@ -12,16 +12,21 @@ import utils.Folds;
 import utils.Params;
 import utils.Tools;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class Driver {
 
+    public static String mode;
+
     public static void main(String args[]) throws Exception {
 
-        String dataFile = null, mode = null, modelDir = null;
+        String dataFile = null, modelDir = null;
         List<String> trainFolds = null, testFolds = null, cvFolds = null;
         List<String> commands = Arrays.asList("--data", "--mode", "--train",
-                "--test", "--cv", "--model_dir", "--print_mistakes", "--print_correct");
+                "--test", "--cv", "--model_dir", "--print_mistakes", "--print_correct",
+                "--demo", "--demo_server");
         boolean doCV = false;
         Params.printMistakes = false;
         Params.printCorrect = false;
@@ -96,6 +101,15 @@ public class Driver {
                 Params.printCorrect = true;
                 continue;
             }
+            if(args[i].equals("--demo")) {
+                Params.runDemo = true;
+                continue;
+            }
+            if(args[i].equals("--demo_server")) {
+                Params.startDemoServer = true;
+                Params.runDemo = true;
+                continue;
+            }
         }
         if(mode == null) {
             System.err.println("Mode not provided");
@@ -107,6 +121,10 @@ public class Driver {
             System.exit(0);
         } else if(cvFolds != null) {
             doCV = true;
+        }
+        if(Params.runDemo && trainFolds == null) {
+            System.err.println("Demo requires train folds");
+            System.exit(0);
         }
         if(dataFile == null) {
             Params.questionsFile = "data/questions.json";
@@ -206,6 +224,20 @@ public class Driver {
             if(mode.equals("E2ELogic")) {
                 if(doCV) logic.Driver.crossVal(probs, cvIndices);
                 else logic.Driver.doTrainTest(probs, trainIndices, testIndices, 100);
+            }
+        }
+        if(Params.runDemo) {
+            Demo.loadModels();
+            if (Params.startDemoServer) {
+                Server.startServer(8182);
+            } else {
+                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                while (true) {
+                    System.out.println("Enter question for " + mode + ": (Type END to exit)");
+                    String question = br.readLine();
+                    if (question.trim().equals("END")) break;
+                    System.out.println("Answer: " + Demo.answerQuestion(question.trim()));
+                }
             }
         }
     }

@@ -82,7 +82,7 @@ public class ConsInfSolver {
 				System.out.println();
 			}
 		}
-		if(Params.printMistakes) System.out.print("Final ");
+		if(!isTune) System.out.print("Final ");
 		System.out.println("Constrained Inference : "+correct+" / "+
 				total+" = "+(correct/total));
 		return (correct/total);
@@ -117,8 +117,6 @@ public class ConsInfSolver {
 		for(Pair<List<Node>, Double> state : beam1) {
 			boolean isPositive = Constraints.isPositive(state.getFirst().get(0).getValue());
 			if(!isPositive) continue;
-//			boolean isInteger = Constraints.isInteger(ta, state.getFirst().get(0).getValue());
-//			if(!isInteger) continue;
 			beam2.add(new Pair<>(state.getFirst(), state.getSecond()));
 		}
 		// Adding Run scores

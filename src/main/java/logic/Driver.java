@@ -18,11 +18,11 @@ public class Driver {
                                      int id) throws Exception {
         List<List<StanfordProblem>> split = Folds.getDataSplitForStanford(
                 probs, trainIndices, testIndices, 0.0);
+        LogicDriver.useGoldRelevance = true;
         System.out.println("Training Coreference model ... ");
         CorefDriver.trainModel(Params.modelDir+Params.corefPrefix+id+Params.modelSuffix,
                 CorefDriver.getSP(split.get(0), true));
         System.out.println("Training Logic model ... ");
-        LogicDriver.useGoldRelevance = true;
         LogicDriver.trainModel(Params.modelDir+Params.logicPrefix+id+Params.modelSuffix,
                 LogicDriver.getSP(split.get(0), true),
                 Params.modelDir+Params.corefPrefix+id+Params.modelSuffix);

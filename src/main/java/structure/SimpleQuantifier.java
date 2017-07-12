@@ -7,6 +7,10 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import edu.stanford.nlp.ling.CoreAnnotations;
+import edu.stanford.nlp.ling.CoreLabel;
+import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
+import edu.stanford.nlp.util.CoreMap;
 import utils.Params;
 import utils.Tools;
 
@@ -112,7 +116,35 @@ public class SimpleQuantifier {
 				}
 			}
 		}
-		// TODO: Similar block for Stanford Annotations
+		if(Params.useStanfordTools && Params.runDemo) {
+			List<CoreMap> sentences = Tools.annotateWithStanfordCoreNLP(text);
+			List<List<CoreLabel>> tokens = new ArrayList<>();
+			for(CoreMap sentence: sentences) {
+				tokens.add(sentence.get(CoreAnnotations.TokensAnnotation.class));
+			}
+			for(int i=0; i<tokens.size(); ++i) {
+				List<CoreLabel> ta = tokens.get(i);
+				for(int j=0; j<ta.size(); ++j) {
+					if (j < ta.size() - 1 && tens.containsKey(ta.get(j).word().toLowerCase()) &&
+							units.containsKey(ta.get(j + 1).word().toLowerCase())) {
+						QuantSpan qs = new QuantSpan(1.0 * tens.get(ta.get(j).word().toLowerCase()) +
+								units.get(ta.get(j + 1).word().toLowerCase()),
+								ta.get(j).beginPosition(),
+								ta.get(j + 1).endPosition());
+						qsList.add(qs);
+						i++;
+						continue;
+					}
+					if (numberWords.containsKey(ta.get(j).word().toLowerCase())) {
+						QuantSpan qs = new QuantSpan(
+								1.0 * numberWords.get(ta.get(j).word().toLowerCase()),
+								ta.get(j).beginPosition(),
+								ta.get(i).endPosition());
+						qsList.add(qs);
+					}
+				}
+			}
+		}
 		Collections.sort(qsList, new Comparator<QuantSpan>() {
 			@Override
 			public int compare(QuantSpan o1, QuantSpan o2) {

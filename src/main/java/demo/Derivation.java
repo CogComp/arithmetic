@@ -8,10 +8,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import edu.stanford.nlp.ling.CoreLabel;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
-import structure.Problem;
+import structure.StanfordProblem;
 import structure.QuantSpan;
 import utils.Params;
 import utils.Tools;
@@ -30,21 +31,21 @@ public class Derivation {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		rules = new ArrayList<Pair<List<String>, List<String>>>();
-		allTriggers = new HashSet<String>();
-		Set<String> vars = new HashSet<String>();
+		rules = new ArrayList<>();
+		allTriggers = new HashSet<>();
+		Set<String> vars = new HashSet<>();
 		for(String ruleString : str.split("\n")) {
 			if(!ruleString.contains("-->")) continue;
-			List<String> lhs = new ArrayList<String>();
-			List<String> rhs = new ArrayList<String>();
+			List<String> lhs = new ArrayList<>();
+			List<String> rhs = new ArrayList<>();
 			lhs.addAll(Arrays.asList(ruleString.split("-->")[0].trim().split(" ")));
 			rhs.addAll(Arrays.asList(ruleString.split("-->")[1].trim().split(" ")));
 			for(String var : lhs) if(var.contains("EXPR")) vars.add(var); else allTriggers.add(var);
 			if(rhs.get(rhs.size()-1).equals("REPEAT")) {
 				rhs.remove(rhs.size()-1);
 				for(int i=0; i<2; ++i) {
-					List<String> l = new ArrayList<String>();
-					List<String> r = new ArrayList<String>();
+					List<String> l = new ArrayList<>();
+					List<String> r = new ArrayList<>();
 					l.addAll(lhs);
 					r.addAll(rhs);
 					for(int j=0; j<i; ++j) {
@@ -52,16 +53,16 @@ public class Derivation {
 						r.add(rhs.get(rhs.size()-2));
 						r.add(rhs.get(rhs.size()-1));
 					}
-					rules.add(new Pair<List<String>, List<String>>(l, r));
+					rules.add(new Pair<>(l, r));
 				}
 			} else {
-				rules.add(new Pair<List<String>, List<String>>(lhs, rhs));
+				rules.add(new Pair<>(lhs, rhs));
 			}
 		}
 	}
 	
 	public static List<Pair<String, Double>> parse(List<String> triggers) {
-		List<List<List<Pair<String, Double>>>> cky = new ArrayList<List<List<Pair<String,Double>>>>();
+		List<List<List<Pair<String, Double>>>> cky = new ArrayList<>();
 		int n = triggers.size();
 		for(int i=0; i<=n; ++i) {
 			cky.add(new ArrayList<List<Pair<String,Double>>>());
@@ -71,7 +72,7 @@ public class Derivation {
 		}
 		for(int i=0; i<n; ++i) {
 			if(NumberUtils.isNumber(triggers.get(i).trim())) {
-				cky.get(i).get(i+1).add(new Pair<String, Double>(
+				cky.get(i).get(i+1).add(new Pair<>(
 						triggers.get(i).trim(), Double.parseDouble(triggers.get(i).trim())));
 			}
 		}
@@ -102,7 +103,7 @@ public class Derivation {
 						if(isMatch(rule.getFirst().get(0), start, i, cky, triggers) &&
 								isMatch(rule.getFirst().get(1), i, j, cky, triggers) &&
 								isMatch(rule.getFirst().get(2), j, end, cky, triggers)) {
-							List<Pair<String, Double>> exprs = new ArrayList<Pair<String,Double>>();
+							List<Pair<String, Double>> exprs = new ArrayList<>();
 							if(rule.getFirst().get(0).contains("EXPR")) exprs.add(cky.get(start).get(i).get(0));
 							if(rule.getFirst().get(1).contains("EXPR")) exprs.add(cky.get(i).get(j).get(0));
 							if(rule.getFirst().get(2).contains("EXPR")) exprs.add(cky.get(j).get(end).get(0));
@@ -120,7 +121,7 @@ public class Derivation {
 									isMatch(rule.getFirst().get(1), i, j, cky, triggers) &&
 									isMatch(rule.getFirst().get(2), j, k, cky, triggers) &&
 									isMatch(rule.getFirst().get(2), k, end, cky, triggers)) {
-								List<Pair<String, Double>> exprs = new ArrayList<Pair<String,Double>>();
+								List<Pair<String, Double>> exprs = new ArrayList<>();
 								if(rule.getFirst().get(0).contains("EXPR")) exprs.add(cky.get(start).get(i).get(0));
 								if(rule.getFirst().get(1).contains("EXPR")) exprs.add(cky.get(i).get(j).get(0));
 								if(rule.getFirst().get(2).contains("EXPR")) exprs.add(cky.get(j).get(k).get(0));
@@ -149,7 +150,7 @@ public class Derivation {
 	public static Pair<String, Double> getCombinations(
 			List<Pair<String, Double>> candidates, String op, Pair<List<String>, List<String>> rule) {
 		if(!rule.getSecond().get(0).contains("EXPR1")) {
-			List<Pair<String, Double>> candidatesTmp = new ArrayList<Pair<String,Double>>();
+			List<Pair<String, Double>> candidatesTmp = new ArrayList<>();
 			candidatesTmp.addAll(candidates);
 			candidates.clear();
 			for(Pair<String, Double> candi : candidatesTmp) {
@@ -176,19 +177,22 @@ public class Derivation {
 				}
 			}
 		}
-		return new Pair<String, Double>(str, d);
+		return new Pair<>(str, d);
 	}
 	
-	public static List<String> getTriggers(Problem prob) {
-		List<String> triggers = new ArrayList<String>();
-		for(int i=0; i<prob.ta.size(); ++i) {
-			if(allTriggers.contains(prob.ta.getToken(i).toLowerCase())) {
-				triggers.add(prob.ta.getToken(i).toLowerCase());
-			} else {
-				for(QuantSpan qs : prob.quantities) {
-					if(prob.ta.getTokenIdFromCharacterOffset(qs.start) == i) {
-						triggers.add(prob.ta.getToken(i).toLowerCase());
-						break;
+	public static List<String> getTriggers(StanfordProblem prob) {
+		List<String> triggers = new ArrayList<>();
+		for(int i=0; i<prob.tokens.size(); ++i) {
+			List<CoreLabel> sent = prob.tokens.get(i);
+			for(int j=0; j<sent.size(); ++j) {
+				if (allTriggers.contains(sent.get(j).word().toLowerCase())) {
+					triggers.add(sent.get(j).word().toLowerCase());
+				} else {
+					for (QuantSpan qs : prob.quantities) {
+						if (Tools.getTokenIdFromCharOffset(sent, qs.start) == i) {
+							triggers.add(""+qs.val);
+							break;
+						}
 					}
 				}
 			}
@@ -196,18 +200,11 @@ public class Derivation {
 		return triggers;
 	}
 	
-	public static String solveByDerivation(Problem prob) {
+	public static String solveByDerivation(StanfordProblem prob) {
 		List<String> triggers = getTriggers(prob);
 		List<Pair<String, Double>> results = parse(triggers);
 		if(results.size() == 0) return "";
 		else return results.get(0).getFirst()+"="+results.get(0).getSecond();
-	}
-	
-	public static void main(String args[]) throws Exception {
-		Problem problem = new Problem(0, "What is 3 plus two ?", 0);
-		problem.quantities = Tools.quantifier.getSpans(problem.question);
-		System.out.println(Arrays.asList(problem.quantities));
-		System.out.println(Derivation.solveByDerivation(problem));
 	}
 
 }

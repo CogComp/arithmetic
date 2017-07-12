@@ -21,7 +21,7 @@ public class LogicDriver {
 
 	public static SLModel corefModel;
 	public static boolean useInfModel = true;
-	public static boolean useGoldRelevance = true;
+	public static boolean useGoldRelevance;
 
 	public static void crossVal(List<StanfordProblem> probs, List<List<Integer>> foldIndices)
 			throws Exception {
@@ -80,33 +80,16 @@ public class LogicDriver {
 				907, 1227, 142, 158, 1231, 161, 3, 644, 1189, 902, 968, 1450, 747,
 				1164, 1613, 1167, 1174, 951, 794, 117, 758, 1098, 1594, 1163, 140,
 				1229, 1102, 831));
-		double answerAcc = 0.0, relAcc = 0.0, infTypeAcc = 0.0, oldAcc = 0.0, newAcc = 0.0,
-		oldTot = 0.0, newTot = 0.0;
+		double answerAcc = 0.0;
 		for (int i = 0; i < sp.instanceList.size(); i++) {
 			LogicX prob = (LogicX) sp.instanceList.get(i);
 			LogicY gold = (LogicY) sp.goldStructureList.get(i);
 			LogicY pred = (LogicY) model.infSolver.getBestStructure(model.wv, prob);
-			if(prob.problemId < 10000) {
-				oldTot += 1;
-			} else {
-				newTot += 1;
-			}
-			if(LogicY.getLoss(pred, gold) < 0.01) {
-				infTypeAcc += 1;
-			}
-			if(pred.expr.getAllSubNodes().size() == gold.expr.getAllSubNodes().size()) {
-				relAcc += 1;
-			}
 			boolean correct = false;
 			if(Tools.safeEquals(gold.expr.getValue(), pred.expr.getValue()) ||
 					Tools.safeEquals(-gold.expr.getValue(), pred.expr.getValue())) {
 				answerAcc += 1;
 				correct = true;
-				if(prob.problemId < 10000) {
-					oldAcc += 1;
-				} else {
-					newAcc += 1;
-				}
 			}
 			if((!correct && Params.printMistakes) ||
 					(correct && Params.printCorrect)) {
@@ -134,14 +117,6 @@ public class LogicDriver {
 				System.out.println();
 			}
 		}
-//		System.out.println("Relevance Accuracy : = " + relAcc + " / " +
-//				sp.instanceList.size() + " = " + (relAcc/sp.instanceList.size()));
-//		System.out.println("Inference Type Accuracy : = " + infTypeAcc + " / " +
-//				sp.instanceList.size() + " = " + (infTypeAcc/sp.instanceList.size()));
-//		System.out.println("Old Accuracy : = " + oldAcc + " / " +
-//				oldTot + " = " + (oldAcc/oldTot));
-//		System.out.println("New Accuracy : = " + newAcc + " / " +
-//				newTot + " = " + (newAcc/newTot));
 		System.out.println("Answer Accuracy : = " + answerAcc + " / " +
 				sp.instanceList.size() + " = " + (answerAcc/sp.instanceList.size()));
 		return new Pair<>(answerAcc/sp.instanceList.size(), answerAcc/sp.instanceList.size());
