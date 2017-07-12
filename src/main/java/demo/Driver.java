@@ -154,6 +154,9 @@ public class Driver {
         System.out.println("Model Dir: " + Params.modelDir);
         System.out.println("Print Mistakes: " + Params.printMistakes);
         System.out.println("Print Correct: " + Params.printCorrect);
+        System.out.println("Run Demo: " + Params.runDemo);
+        System.out.println("Start Demo Server: " + Params.startDemoServer);
+        System.out.println();
         System.out.println("*****************************************\n\n");
 
         List<List<Integer>> cvIndices = new ArrayList<>();
