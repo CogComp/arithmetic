@@ -92,7 +92,7 @@ The main interface to the code is the script run.sh. It has the
 following arguments:
 
 * --data <data_file> : Data file containing all the questions (uses data/questions.json if not provided)  
-* --mode <mode> : Mode takes one of the following options
+* --mode < mode > : Mode takes one of the following options
     * Rel : Trains and tests the relevance classifier. Output file log/Rel.out
     * Pair : Trains and tests the LCA classifier. Output file log/Pair.out
     * Vertex : Trains and tests the vertex label classifier. Output file log/Vertex.out
@@ -104,11 +104,11 @@ following arguments:
     * Coref : Trains and tests the coreference model or the rule selection model. Output file log/Coref.out
     * Logic : Trains and tests the logic model with gold rule selection and relevance. Output file log/Logic.out
     * E2ELogic : Trains and tests the end to end logic system. Output file log/E2ELogic.out
-* --train <train_fold_1> <train_fold2> ... <train_fold_n> : List of fold files for training.
-* --test <test_fold_1> <test_fold2> ... <test_fold_n> : List of fold files for testing.
-* --cv <cv_fold_1> <cv_fold2> ... <cv_fold_n> : List of fold files for n-fold cross validation. Will not 
+* --train <train_fold_1> <train_fold_2> ... <train_fold_n> : List of fold files for training.
+* --test <test_fold_1> <test_fold_2> ... <test_fold_n> : List of fold files for testing.
+* --cv <cv_fold_1> <cv_fold_2> ... <cv_fold_n> : List of fold files for n-fold cross validation. Will not 
   work when train and test are provided.
-* --model_dir <dir> : Location to save model files (uses models/ if not provided).
+* --model_dir < dir > : Location to save model files (uses models/ if not provided).
 * --print_mistakes : Option to print test questions the system got wrong.
 * --print_correct : Option to print test questions the system got correct.
 * --demo : Option to run terminal based demo of the system.
