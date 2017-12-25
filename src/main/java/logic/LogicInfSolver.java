@@ -50,7 +50,7 @@ public class LogicInfSolver extends AbstractInferenceSolver implements Serializa
 				System.out.println(schema);
 			}
 			System.out.println(x.questionSchema);
-
+			return goldStructure;
 		}
 		Node node = topExpressions.element().getFirst().get(0);
 		LogicY y = new LogicY(node);

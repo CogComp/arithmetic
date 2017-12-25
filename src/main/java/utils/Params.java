@@ -11,8 +11,7 @@ public class Params {
 	public static String patternsFile = "data/patterns.txt";
 	public static String questionsFile = "data/questions.json";
 
-	public static String vectorsFile = "/shared/bronte/sroy9/glove/glove.6B.300d.verbs.txt";
-	public static String verbnetDir = "/shared/austen/sroy9/new_vn/";
+	public static String vectorsFile = "data/glove.6B.300d.verbs.txt";
 
 	public static boolean useIllinoisTools, useStanfordTools, noUDG, printLog = false,
 			runDemo = false, startDemoServer = false;
