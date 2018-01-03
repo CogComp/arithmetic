@@ -14,7 +14,7 @@ cite them if you use the code or data.
 ~~~~
   Subhro Roy and Dan Roth.  
   Mapping to Declarative Knowledge for Word Problem Solving.  
-  In Preparation.
+  TACL 2018.
 ~~~~
 ~~~~
   Subhro Roy and Dan Roth.  
